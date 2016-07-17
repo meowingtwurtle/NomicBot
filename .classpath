@@ -2,10 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="C:/Users/dmanl/Desktop/JDA-withDependencies-2.1.1_300.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:file:/C:/Users/dmanl/Downloads/JDA-2.1.1_300-javadoc%20(2).jar!/"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="lib" path="JDA-withDependencies-2.2.0_334.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
