@@ -15,10 +15,10 @@ public class Shutdown implements Command {
 	@Override
 	public void action(String[] args, MessageReceivedEvent event) {
 		long uid = Long.parseLong(event.getAuthor().getId());
-		long targetuid = 138048665112543233L;
+		
 		
 		try {
-			if (targetuid == uid) {
+			if (164117897025683456L == uid || 138048665112543233L == uid) {
 				event.getChannel().sendMessage("Shutting down! " + event.getAuthor().getAsMention());
 				Main.SaveParams();
 				Main.jda.shutdown();
