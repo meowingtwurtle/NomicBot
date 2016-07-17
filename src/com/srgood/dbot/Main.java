@@ -146,7 +146,7 @@ public class Main {
 			input = new FileInputStream("config.properties");
 			HashFIS = new FileInputStream("servers.ser");
 			HashOIS = new ObjectInputStream(HashFIS);
-			servers = (HashMap)HashOIS.readObject();
+			servers = (HashMap<String, Map<String, String>>)HashOIS.readObject();
 			
 			if (servers == null) {
 				servers = new HashMap<String, Map<String, String>>();

@@ -77,7 +77,7 @@ public class Play implements Command {
              String msg = "";
              String url = message.substring("!play ".length());
              Playlist playlist = Playlist.getPlaylist(url);
-             List<AudioSource> sources = new LinkedList(playlist.getSources());
+             List<AudioSource> sources = new LinkedList<AudioSource>(playlist.getSources());
 //             AudioSource source = new RemoteSource(url);
 //             AudioSource source = new LocalSource(new File(url));
 //             AudioInfo info = source.getInfo();   //Preload the audio info.
