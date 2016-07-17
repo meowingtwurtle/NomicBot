@@ -1,4 +1,4 @@
-package com.derek.commands.player;
+package com.derek.commands.audio;
 
 import com.derek.Command;
 import com.derek.Main;
@@ -7,10 +7,10 @@ import com.derek.MusicPlayer;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.managers.AudioManager;
 
-public class Skip implements Command {
-	
-	private final String help = "Used to skip the current audio Use: " + Main.prefix + "skip";
-	
+public class Leave implements Command {
+
+	private final String help = "Makes " + Main.jda.getSelfInfo().getUsername()+ " leave the connected voice channel Use: " + Main.prefix + "leave";
+			
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {
 		// TODO Auto-generated method stub
@@ -21,7 +21,7 @@ public class Skip implements Command {
 	public void action(String[] args, MessageReceivedEvent event) {
 		// TODO Auto-generated method stub
 		
-		float defvol = 0.35f;
+float defvol = 0.35f;
 		
 		AudioManager manager = event.getGuild().getAudioManager();
         MusicPlayer player;
@@ -35,10 +35,8 @@ public class Skip implements Command {
         {
             player = (MusicPlayer) manager.getSendingHandler();
         }
-        
-        player.skipToNext();
-        event.getChannel().sendMessage("Skipped the current song.");
-        
+		
+		manager.closeAudioConnection();
 	}
 
 	@Override

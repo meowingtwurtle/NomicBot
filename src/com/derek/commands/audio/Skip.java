@@ -1,4 +1,4 @@
-package com.derek.commands.player;
+package com.derek.commands.audio;
 
 import com.derek.Command;
 import com.derek.Main;
@@ -7,12 +7,10 @@ import com.derek.MusicPlayer;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.managers.AudioManager;
 
-
-
-public class Pause implements Command {
-
-	private final String help = "Used to pause the audio that is playing Use: " + Main.prefix + "pause";
-			
+public class Skip implements Command {
+	
+	private final String help = "Used to skip the current audio Use: " + Main.prefix + "skip";
+	
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {
 		// TODO Auto-generated method stub
@@ -23,7 +21,7 @@ public class Pause implements Command {
 	public void action(String[] args, MessageReceivedEvent event) {
 		// TODO Auto-generated method stub
 		
-float defvol = 0.35f;
+		float defvol = 0.35f;
 		
 		AudioManager manager = event.getGuild().getAudioManager();
         MusicPlayer player;
@@ -38,8 +36,9 @@ float defvol = 0.35f;
             player = (MusicPlayer) manager.getSendingHandler();
         }
         
-		player.pause();
-        event.getChannel().sendMessage("Playback has been paused.");
+        player.skipToNext();
+        event.getChannel().sendMessage("Skipped the current song.");
+        
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package com.derek.commands.player;
+package com.derek.commands.audio;
 
 import com.derek.Command;
 import com.derek.MusicPlayer;

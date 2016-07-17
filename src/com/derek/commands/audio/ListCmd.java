@@ -1,4 +1,4 @@
-package com.derek.commands.player;
+package com.derek.commands.audio;
 
 import java.util.List;
 

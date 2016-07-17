@@ -15,7 +15,7 @@ import java.util.Properties;
 import javax.security.auth.login.LoginException;
 
 import com.derek.commands.*;
-import com.derek.commands.player.*;
+import com.derek.commands.audio.*;
 import com.derek.utils.CommandParser;
 import com.derek.utils.SecureOkeyGen;
 
