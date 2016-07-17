@@ -20,7 +20,6 @@ public class Repeat implements Command {
 		
 		float defvol = 0.35f;
 
-		 String message = event.getMessage().getContent();
 		 event.getMessage().deleteMessage();
 	        AudioManager manager = event.getGuild().getAudioManager();
 	        MusicPlayer player;
