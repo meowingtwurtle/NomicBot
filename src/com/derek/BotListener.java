@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Map;
 
+import com.derek.ref.RefStrings;
+
 import net.dv8tion.jda.audio.player.Player;
 import net.dv8tion.jda.entities.TextChannel;
 import net.dv8tion.jda.events.ReadyEvent;
@@ -43,8 +45,8 @@ public class BotListener extends ListenerAdapter {
 				Main.servers.get(event.getGuild().getId()).put("prefix", Main.prefix);
 			}
 			
-			if (event.getMessage().getContent().equals("(\u256F\u00B0\u25A1\u00B0\uFF09\u256F\uFE35 \u253B\u2501\u253B")) {
-				event.getChannel().sendMessage("\u252C\u2500\u252C\uFEFF \u30CE( \u309C-\u309C\u30CE) \n\nCalm down!");
+			if (event.getMessage().getContent().equals(RefStrings.TABLE_FLIP)) {
+				event.getChannel().sendMessage(RefStrings.TABLE_UNFLIP + " \n\nCalm down!");
 			}
 			
 			
