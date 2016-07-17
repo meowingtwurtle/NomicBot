@@ -1,13 +1,11 @@
 package com.derek.source;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class RemoteStream extends AudioStream
 {

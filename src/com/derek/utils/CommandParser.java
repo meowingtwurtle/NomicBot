@@ -3,7 +3,6 @@ package com.derek.utils;
 import java.util.ArrayList;
 
 import com.derek.BotListener;
-import com.derek.Main;
 
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 

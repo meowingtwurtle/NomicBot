@@ -1,11 +1,9 @@
 package com.derek;
 
 import java.util.HashMap;
-import java.util.ArrayList;
 import java.util.Map;
 
 import net.dv8tion.jda.audio.player.Player;
-import net.dv8tion.jda.entities.TextChannel;
 import net.dv8tion.jda.events.ReadyEvent;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.hooks.ListenerAdapter;
