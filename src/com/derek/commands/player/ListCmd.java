@@ -1,14 +1,13 @@
 package com.derek.commands.player;
 
+import java.util.List;
+
 import com.derek.Command;
 import com.derek.Main;
 import com.derek.MusicPlayer;
-import com.derek.source.*;
-
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
+import com.derek.source.AudioInfo;
+import com.derek.source.AudioSource;
+import com.derek.source.AudioTimestamp;
 
 import net.dv8tion.jda.MessageBuilder;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
