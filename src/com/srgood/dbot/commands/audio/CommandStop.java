@@ -1,13 +1,13 @@
 package com.srgood.dbot.commands.audio;
 
-import com.srgood.dbot.Command;
 import com.srgood.dbot.Main;
 import com.srgood.dbot.MusicPlayer;
+import com.srgood.dbot.commands.Command;
 
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.managers.AudioManager;
 
-public class Stop implements Command {
+public class CommandStop implements Command {
 
 	private final String help = "Used to stop the current audio Use: " + Main.prefix + "stop";
 	

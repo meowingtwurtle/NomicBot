@@ -1,27 +1,26 @@
 package com.srgood.dbot.commands.audio;
 
-import com.srgood.dbot.Command;
 import com.srgood.dbot.Main;
 import com.srgood.dbot.MusicPlayer;
+import com.srgood.dbot.commands.Command;
 
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.managers.AudioManager;
 
-public class Leave implements Command {
-
-	private final String help = "Makes " + Main.jda.getSelfInfo().getUsername()+ " leave the connected voice channel Use: " + Main.prefix + "leave";
-			
+public class CommandVolume implements Command {
+	
+	private final String help = "Used to set the audio volume Use: " + Main.prefix + "volume [0-1]";
+	
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {
-		// TODO Auto-generated method stub
 		return true;
+		// TODO Auto-generated method stubn 
 	}
 
 	@Override
 	public void action(String[] args, MessageReceivedEvent event) {
 		// TODO Auto-generated method stub
-		
-float defvol = 0.35f;
+		float defvol = 0.35f;
 		
 		AudioManager manager = event.getGuild().getAudioManager();
         MusicPlayer player;
@@ -35,8 +34,15 @@ float defvol = 0.35f;
         {
             player = (MusicPlayer) manager.getSendingHandler();
         }
-		
-		manager.closeAudioConnection();
+
+		try {
+			float volume = Float.parseFloat(args[0]);
+	        volume = Math.min(20F, Math.max(0F, volume));
+	        player.setVolume(volume);
+	        event.getChannel().sendMessage("Volume was changed to: " + volume);
+		} catch (Exception e) {
+			event.getChannel().sendMessage("Volume is: " + player.getVolume());
+		}
 	}
 
 	@Override

@@ -73,23 +73,23 @@ public class Main {
 		
 		//catch null pointer exceptions when creating commands
 		try {
-			commands.put("ping", new Ping());
-			commands.put("pong", new Pong());
-			commands.put("shutdown", new Shutdown());
-			commands.put("setprefix", new SetPrefix());
-			commands.put("debug",  new debug());
-			commands.put("volume", new Volume());
-			commands.put("list", new ListCmd());
-			commands.put("now-playing", new NowPlaying());
-			commands.put("join", new Join());
-			commands.put("leave", new Leave());
-			commands.put("play", new Play());
-			commands.put("skip", new  Skip());
-			commands.put("stop", new Stop());
-			commands.put("pause", new Pause());
-			commands.put("help", new Help());
-			commands.put("repeat", new Repeat());
-			commands.put("getprefix", new GetPrefix());
+			commands.put("ping", new CommandPing());
+			commands.put("pong", new CommandPong());
+			commands.put("shutdown", new CommandShutdown());
+			commands.put("setprefix", new CommandSetPrefix());
+			commands.put("getprefix", new CommandGetPrefix());
+			commands.put("debug",  new CommandDebug());
+			commands.put("volume", new CommandVolume());
+			commands.put("list", new CommandListCmd());
+			commands.put("now-playing", new CommandNowPlaying());
+			commands.put("join", new CommandJoin());
+			commands.put("leave", new CommandLeave());
+			commands.put("play", new CommandPlay());
+			commands.put("skip", new  CommandSkip());
+			commands.put("stop", new CommandStop());
+			commands.put("pause", new CommandPause());
+			commands.put("help", new CommandHelp());
+			commands.put("repeat", new CommandRepeat());
 			
 		} catch (Exception e) {
 			SimpleLog.getLog("Reasons").warn("One or more of the commands failed to map");

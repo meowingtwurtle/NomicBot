@@ -1,15 +1,15 @@
 package com.srgood.dbot.commands.audio;
 
-import com.srgood.dbot.Command;
 import com.srgood.dbot.Main;
 import com.srgood.dbot.MusicPlayer;
+import com.srgood.dbot.commands.Command;
 
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.managers.AudioManager;
 
 
 
-public class Pause implements Command {
+public class CommandPause implements Command {
 
 	private final String help = "Used to pause the audio that is playing Use: " + Main.prefix + "pause";
 			

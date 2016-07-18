@@ -1,15 +1,15 @@
 package com.srgood.dbot.commands.audio;
 
-import com.srgood.dbot.Command;
 import com.srgood.dbot.Main;
 import com.srgood.dbot.MusicPlayer;
+import com.srgood.dbot.commands.Command;
 import com.srgood.dbot.source.AudioInfo;
 import com.srgood.dbot.source.AudioTimestamp;
 
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.managers.AudioManager;
 
-public class NowPlaying implements Command {
+public class CommandNowPlaying implements Command {
 
 	public final String help = "Displays information about the song that is playing Use: " + Main.prefix + "now-playing";
 	@Override

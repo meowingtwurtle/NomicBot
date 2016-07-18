@@ -1,14 +1,11 @@
 package com.srgood.dbot.commands;
 
-import com.srgood.dbot.Command;
 import com.srgood.dbot.Main;
 
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 
-public class Pong implements Command {
-	
-	private final String help = "Usage: " + Main.prefix + "pong";
-	
+public class CommandGetPrefix implements Command {
+
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {
 		// TODO Auto-generated method stub
@@ -18,14 +15,13 @@ public class Pong implements Command {
 	@Override
 	public void action(String[] args, MessageReceivedEvent event) {
 		// TODO Auto-generated method stub
-		event.getChannel().sendMessage("Ping " + event.getAuthor().getAsMention());
-		
+		event.getChannel().sendMessage(Main.servers.get(event.getGuild().getId()).get("prefix"));
 	}
 
 	@Override
 	public String help() {
 		// TODO Auto-generated method stub
-		return help;
+		return null;
 	}
 
 	@Override
@@ -33,5 +29,5 @@ public class Pong implements Command {
 		// TODO Auto-generated method stub
 		return;
 	}
-	
+
 }

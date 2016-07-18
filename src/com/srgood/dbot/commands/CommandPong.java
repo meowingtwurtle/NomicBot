@@ -1,13 +1,12 @@
 package com.srgood.dbot.commands;
 
-import com.srgood.dbot.Command;
 import com.srgood.dbot.Main;
 
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 
-public class Ping implements Command {
+public class CommandPong implements Command {
 	
-	private final String help = "Usage: " +Main.prefix+ "ping";
+	private final String help = "Usage: " + Main.prefix + "pong";
 	
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {
@@ -18,8 +17,7 @@ public class Ping implements Command {
 	@Override
 	public void action(String[] args, MessageReceivedEvent event) {
 		// TODO Auto-generated method stub
-		event.getChannel().sendMessage("Pong " + event.getAuthor().getAsMention());
-		
+		event.getChannel().sendMessage("Ping " + event.getAuthor().getAsMention());
 		
 	}
 

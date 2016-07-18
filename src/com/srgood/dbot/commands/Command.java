@@ -1,4 +1,4 @@
-package com.srgood.dbot;
+package com.srgood.dbot.commands;
 
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 

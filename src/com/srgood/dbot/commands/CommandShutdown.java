@@ -1,11 +1,10 @@
 package com.srgood.dbot.commands;
 
-import com.srgood.dbot.Command;
 import com.srgood.dbot.Main;
 
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 
-public class Shutdown implements Command {
+public class CommandShutdown implements Command {
 	private final String help = "Used to shutdown Reasons. Use: " + Main.prefix + "shutdown -OR- " + Main.prefix + "shutdown override [override key]";
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {

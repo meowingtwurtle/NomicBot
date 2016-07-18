@@ -1,12 +1,12 @@
 package com.srgood.dbot.commands;
 
-import com.srgood.dbot.Command;
 import com.srgood.dbot.Main;
 
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 
-public class GetPrefix implements Command {
-
+public class CommandSetPrefix implements Command{
+	private final String help = "Sets the global prefix Use: " + Main.prefix + "setprefix [prefix]";
+	
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {
 		// TODO Auto-generated method stub
@@ -16,13 +16,19 @@ public class GetPrefix implements Command {
 	@Override
 	public void action(String[] args, MessageReceivedEvent event) {
 		// TODO Auto-generated method stub
-		event.getChannel().sendMessage(Main.servers.get(event.getGuild().getId()).get("prefix"));
-	}
+		try {
+			Main.servers.get(event.getGuild().getId()).put("prefix",args[0].toString());
+			event.getChannel().sendMessage("Prefix set to: " + args[0].toString());
+		} catch (Exception e){
+			event.getChannel().sendMessage(help().toString());
+		}
+		
+		}
 
 	@Override
 	public String help() {
 		// TODO Auto-generated method stub
-		return null;
+		return help;
 	}
 
 	@Override

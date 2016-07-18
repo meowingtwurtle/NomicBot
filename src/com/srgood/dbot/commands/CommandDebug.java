@@ -1,11 +1,10 @@
 package com.srgood.dbot.commands;
 
-import com.srgood.dbot.Command;
 import com.srgood.dbot.Main;
 
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 
-public class debug implements Command {
+public class CommandDebug implements Command {
 	private final String help = "Used internally for debugging. Use: " + Main.prefix + "debug [debug arg]";
 	private boolean exe = true;
 	@Override

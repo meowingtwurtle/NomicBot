@@ -4,17 +4,17 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.srgood.dbot.Command;
 import com.srgood.dbot.Main;
 import com.srgood.dbot.MusicPlayer;
 import com.srgood.dbot.Playlist;
+import com.srgood.dbot.commands.Command;
 import com.srgood.dbot.source.AudioInfo;
 import com.srgood.dbot.source.AudioSource;
 
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.managers.AudioManager;
 
-public class Play implements Command {
+public class CommandPlay implements Command {
 	
 	private final String help = "Used to play audio Use: " + Main.prefix + "play [URL]";
 	

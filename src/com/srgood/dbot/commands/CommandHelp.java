@@ -2,12 +2,11 @@ package com.srgood.dbot.commands;
 
 import java.util.Set;
 
-import com.srgood.dbot.Command;
 import com.srgood.dbot.Main;
 
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 
-public class Help implements Command {
+public class CommandHelp implements Command {
 	private final String help = "Lists all commands. Use: " + Main.prefix + "help";
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {
