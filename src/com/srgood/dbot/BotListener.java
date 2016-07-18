@@ -3,6 +3,9 @@ package com.srgood.dbot;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+
 import com.srgood.dbot.ref.RefStrings;
 
 import net.dv8tion.jda.audio.player.Player;
@@ -29,19 +32,13 @@ public class BotListener extends ListenerAdapter {
 		public void onMessageReceived(MessageReceivedEvent event){
 			
 
-			if(Main.servers.containsKey(event.getGuild().getId()) && event.getJDA().getSelfInfo().getId() != event.getAuthor().getId()){
-				if(Main.servers.get(event.getGuild().getId()).containsKey("prefix")) {
-					localPrefix = Main.servers.get(event.getGuild().getId()).get("prefix");
-					SimpleLog.getLog("Reasons").info("Found server with valid prefix ("+ localPrefix +")");
-				} else {
-					SimpleLog.getLog("Reasons").info("Found server without valid prefix");
-					Main.servers.get(event.getGuild().getId()).put("prefix", Main.prefix);
-				}
-			} else if (event.getJDA().getSelfInfo().getId() != event.getAuthor().getId()) {
-				SimpleLog.getLog("Reasons").info("Found nothing");
-				Main.servers.put(event.getGuild().getId(),new HashMap<String, String>());
-				Main.servers.get(event.getGuild().getId()).put("prefix", Main.prefix);
-			}
+			if (Main.servers.containsKey(event.getGuild().getId())) {
+				Node ServerNode = Main.servers.get(event.getGuild().getId());
+				Element NodeElement = (Element)ServerNode;
+				localPrefix = NodeElement.getElementsByTagName("prefix").item(0).getTextContent();
+			} else localPrefix = Main.prefix;
+			
+			System.out.println(localPrefix);
 			
 			if (event.getMessage().getContent().equals(RefStrings.TABLE_FLIP)) {
 				event.getChannel().sendMessage(RefStrings.TABLE_UNFLIP_JOKE);

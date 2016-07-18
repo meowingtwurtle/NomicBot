@@ -13,6 +13,18 @@ import java.util.Map;
 import java.util.Properties;
 
 import javax.security.auth.login.LoginException;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
 
 import com.srgood.dbot.commands.*;
 import com.srgood.dbot.commands.audio.*;
@@ -33,18 +45,12 @@ public class Main {
 	
 	public static final CommandParser parser = new CommandParser();
 	public static HashMap<String, Command> commands = new HashMap<String, Command>(); 
-	public static Map<String, Map<String, String>> servers = new HashMap<String, Map<String, String>>();
+	public static HashMap<String,Node> servers = new HashMap<String,Node>();
 	
-	//.properties streams
-	public static Properties prop = new Properties();
-	public static OutputStream out = null;
-	public static InputStream input = null;
+	//XML variables
+	public static DocumentBuilderFactory DomFactory;
+	public static DocumentBuilder DomInput;
 	
-	//hash streams
-	public static OutputStream HashFOS = null;
-	public static InputStream HashFIS = null;
-	public static ObjectOutputStream HashOOS = null;
-	public static ObjectInputStream HashOIS = null;
 	
 	public static void main(String[] args) {
 		//catch exceptions when building JDA
@@ -60,16 +66,16 @@ public class Main {
 		}
 		
 		//load global paramaters
-		boolean loaded = LoadParams();
+		try {
+			PutNodes();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		//TODO make the null checks modular and in the LoadParams method, not here
-		if (loaded & Okey != null & prefix 	!= null) {
-			SimpleLog.getLog("Reasons").info("Paramaters loaded successfully!");
-		} else {
-			SimpleLog.getLog("Reasons").warn("Paramaters not loaded! Setting to defaults!");
-			prefix = "#!";
-		}
-		SimpleLog.getLog("Reasons").info("Override Key: " + Okey);
+		
+		//SimpleLog.getLog("Reasons").info("Override Key: " + Okey);
 		
 		//catch null pointer exceptions when creating commands
 		try {
@@ -100,87 +106,34 @@ public class Main {
 	
 	}
 	
+	
 	//TODO fix the exceptions here
-	public static void SaveParams() {
-		try {
-			out = new FileOutputStream("config.properties");
-			HashFOS = new FileOutputStream("servers.ser");
-			HashOOS = new ObjectOutputStream(HashFOS);
-			// set the properties value 
-			Okey = SecureOkeyGen.nextSessionId();
-			prop.setProperty("GlobalPrefix", prefix);
-			prop.setProperty("Override", Okey);
-			prop.store(out, null);
-			HashOOS.writeObject(servers);
-			HashFOS.close();
-			HashOOS.close();
-
-		} catch (IOException io) {
-			SimpleLog.getLog("Reasons").warn("Error when saving paramaters, no file exists");
-				try {
-					@SuppressWarnings("unused")
-					File file = new File("config.properties");
-					prop.setProperty("GlobalPrefix", prefix);
-					prop.setProperty("Override", Okey);
-					//prop.setProperty("server-settings", servers);
-					prop.store(out, null);
-					
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-		} finally {
-			if (out != null) {
-				try {
-					out.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
+	public static void SaveParams(){
+		
+		
+		
 	}
 	
 	
 	//TODO fix the exceptions here, too
-	public static Boolean LoadParams() {
-		try {
-			input = new FileInputStream("config.properties");
-			HashFIS = new FileInputStream("servers.ser");
-			HashOIS = new ObjectInputStream(HashFIS);
-			servers = (HashMap<String, Map<String, String>>)HashOIS.readObject();
-			
-			if (servers == null) {
-				servers = new HashMap<String, Map<String, String>>();
+	public static void PutNodes() throws Exception  {
+		DomFactory = DocumentBuilderFactory.newInstance();
+		DomInput = DomFactory.newDocumentBuilder();
+		
+		File InputFile = new File("servers.xml");
+		
+		Document PInputFile = DomInput.parse(InputFile);
+		PInputFile.getDocumentElement().normalize();
+		SimpleLog.getLog("Reasons.").info(PInputFile.getDocumentElement().getNodeName());
+		NodeList ServerNodes = PInputFile.getElementsByTagName("server");
+			for(int i = 0; i < ServerNodes.getLength(); i++) {
+				Node ServerNode = ServerNodes.item(i);
+				Element ServerNodeElement = (Element) ServerNode;
+				
+				servers.put(ServerNodeElement.getAttribute("id"), ServerNode);
 			}
-			
-			
-			// load a properties file
-			prop.load(input);
-			// get the property value and print it out
-			String preprefix = prop.getProperty("GlobalPrefix");
-			if (preprefix != null) {
-				prefix = preprefix;
-				}
-			Okey = prop.getProperty("Override");
-
-		} catch (IOException ex) {
-			ex.printStackTrace();
-			return false;
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			if (input != null) {
-				try {
-					input.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-					return false;
-				}
-			} else {
-				return true;
-			}
-		}
-		return true;
+		
+		
 	}
 	
 	public static void handleCommand (CommandParser.CommandContainer cmd) {
