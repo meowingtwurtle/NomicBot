@@ -9,7 +9,7 @@ import com.srgood.dbot.source.AudioTimestamp;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.managers.AudioManager;
 
-public class CommandNowPlaying implements Command {
+public class CommandAudioNowPlaying implements AudioCommand {
 
 	public final String help = "Displays information about the song that is playing Use: " + Main.prefix + "now-playing";
 	@Override

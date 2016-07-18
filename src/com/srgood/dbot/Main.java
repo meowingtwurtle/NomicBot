@@ -79,17 +79,17 @@ public class Main {
 			commands.put("setprefix", new CommandSetPrefix());
 			commands.put("getprefix", new CommandGetPrefix());
 			commands.put("debug",  new CommandDebug());
-			commands.put("volume", new CommandVolume());
-			commands.put("list", new CommandListCmd());
-			commands.put("now-playing", new CommandNowPlaying());
-			commands.put("join", new CommandJoin());
-			commands.put("leave", new CommandLeave());
-			commands.put("play", new CommandPlay());
-			commands.put("skip", new  CommandSkip());
-			commands.put("stop", new CommandStop());
-			commands.put("pause", new CommandPause());
+			commands.put("volume", new CommandAudioVolume());
+			commands.put("list", new CommandAudioList());
+			commands.put("now-playing", new CommandAudioNowPlaying());
+			commands.put("join", new CommandAudioJoin());
+			commands.put("leave", new CommandAudioLeave());
+			commands.put("play", new CommandAudioPlay());
+			commands.put("skip", new  CommandAudioSkip());
+			commands.put("stop", new CommandAudioStop());
+			commands.put("pause", new CommandAudioPause());
 			commands.put("help", new CommandHelp());
-			commands.put("repeat", new CommandRepeat());
+			commands.put("repeat", new CommandAudioRepeat());
 			
 		} catch (Exception e) {
 			SimpleLog.getLog("Reasons").warn("One or more of the commands failed to map");

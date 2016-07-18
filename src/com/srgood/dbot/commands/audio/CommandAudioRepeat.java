@@ -6,7 +6,7 @@ import com.srgood.dbot.commands.Command;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.managers.AudioManager;
 
-public class CommandRepeat implements Command {
+public class CommandAudioRepeat implements AudioCommand {
 
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {

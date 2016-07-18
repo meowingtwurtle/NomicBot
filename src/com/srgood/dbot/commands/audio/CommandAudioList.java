@@ -13,7 +13,7 @@ import net.dv8tion.jda.MessageBuilder;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.managers.AudioManager;
 
-public class CommandListCmd implements Command {
+public class CommandAudioList implements AudioCommand {
 
 	private final String help = "Lists the current Audio queue Use: " + Main.prefix + "list";
 			

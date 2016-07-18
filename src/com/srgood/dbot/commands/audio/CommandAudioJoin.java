@@ -9,7 +9,7 @@ import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.managers.AudioManager;
 import net.dv8tion.jda.utils.SimpleLog;
 
-public class CommandJoin implements Command {
+public class CommandAudioJoin implements AudioCommand {
 
 	
 	private final String help = "Adds Reasons to a voice channel Use: " + Main.prefix + "join [channel name]";

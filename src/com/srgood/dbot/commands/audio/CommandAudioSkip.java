@@ -7,7 +7,7 @@ import com.srgood.dbot.commands.Command;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.managers.AudioManager;
 
-public class CommandSkip implements Command {
+public class CommandAudioSkip implements AudioCommand {
 	
 	private final String help = "Used to skip the current audio Use: " + Main.prefix + "skip";
 	

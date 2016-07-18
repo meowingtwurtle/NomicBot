@@ -7,10 +7,10 @@ import com.srgood.dbot.commands.Command;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.managers.AudioManager;
 
-public class CommandStop implements Command {
+public class CommandAudioLeave implements AudioCommand {
 
-	private final String help = "Used to stop the current audio Use: " + Main.prefix + "stop";
-	
+	private final String help = "Makes " + Main.jda.getSelfInfo().getUsername()+ " leave the connected voice channel Use: " + Main.prefix + "leave";
+			
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {
 		// TODO Auto-generated method stub
@@ -21,7 +21,7 @@ public class CommandStop implements Command {
 	public void action(String[] args, MessageReceivedEvent event) {
 		// TODO Auto-generated method stub
 		
-		float defvol = 0.35f;
+float defvol = 0.35f;
 		
 		AudioManager manager = event.getGuild().getAudioManager();
         MusicPlayer player;
@@ -36,9 +36,7 @@ public class CommandStop implements Command {
             player = (MusicPlayer) manager.getSendingHandler();
         }
 		
-        player.stop();
-        event.getChannel().sendMessage("Playback has been completely stopped. Forever. and ever. its never coming back");
-        
+		manager.closeAudioConnection();
 	}
 
 	@Override
