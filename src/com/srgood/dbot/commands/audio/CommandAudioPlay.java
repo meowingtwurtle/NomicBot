@@ -26,27 +26,11 @@ public class CommandAudioPlay implements AudioCommand {
 
 	@Override
 	public void action(String[] args, MessageReceivedEvent event) {
-		// TODO Auto-generated method stub
-		
-		
-		
-		float defvol = 0.35f;
+		AudioManager manager = event.getGuild().getAudioManager();
+		MusicPlayer player = AudioCommand.initAndGetPlayer(manager);
 
 		 String message = event.getMessage().getContent();
 		 event.getMessage().deleteMessage();
-	        AudioManager manager = event.getGuild().getAudioManager();
-	        MusicPlayer player;
-	        if (manager.getSendingHandler() == null)
-	        {
-	            player = new MusicPlayer();
-	            player.setVolume(defvol);
-	            manager.setSendingHandler(player);
-	        }
-	        else
-	        {
-	            player = (MusicPlayer) manager.getSendingHandler();
-	        }
-
 		
 		 if (message.equals("!play"))
          {

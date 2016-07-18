@@ -7,12 +7,10 @@ import com.srgood.dbot.commands.Command;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.managers.AudioManager;
 
-
-
 public class CommandAudioPause implements AudioCommand {
 
 	private final String help = "Used to pause the audio that is playing Use: " + Main.prefix + "pause";
-			
+
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {
 		// TODO Auto-generated method stub
@@ -21,25 +19,11 @@ public class CommandAudioPause implements AudioCommand {
 
 	@Override
 	public void action(String[] args, MessageReceivedEvent event) {
-		// TODO Auto-generated method stub
-		
-float defvol = 0.35f;
-		
 		AudioManager manager = event.getGuild().getAudioManager();
-        MusicPlayer player;
-        if (manager.getSendingHandler() == null)
-        {
-            player = new MusicPlayer();
-            player.setVolume(defvol);
-            manager.setSendingHandler(player);
-        }
-        else
-        {
-            player = (MusicPlayer) manager.getSendingHandler();
-        }
-        
+		MusicPlayer player = AudioCommand.initAndGetPlayer(manager);
+
 		player.pause();
-        event.getChannel().sendMessage("Playback has been paused.");
+		event.getChannel().sendMessage("Playback has been paused.");
 	}
 
 	@Override
