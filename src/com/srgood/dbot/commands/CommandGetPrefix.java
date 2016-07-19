@@ -1,6 +1,6 @@
 package com.srgood.dbot.commands;
 
-import com.srgood.dbot.Main;
+import com.srgood.dbot.BotMain;
 
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 
@@ -15,7 +15,7 @@ public class CommandGetPrefix implements Command {
 	@Override
 	public void action(String[] args, MessageReceivedEvent event) {
 		// TODO Auto-generated method stub
-		event.getChannel().sendMessage(Main.servers.get(event.getGuild().getId()).get("prefix"));
+		event.getChannel().sendMessage(BotMain.servers.get(event.getGuild().getId()).get("prefix"));
 	}
 
 	@Override

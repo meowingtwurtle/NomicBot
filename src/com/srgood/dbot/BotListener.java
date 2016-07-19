@@ -32,11 +32,11 @@ public class BotListener extends ListenerAdapter {
 		public void onMessageReceived(MessageReceivedEvent event){
 			
 
-			if (Main.servers.containsKey(event.getGuild().getId())) {
-				Node ServerNode = Main.servers.get(event.getGuild().getId());
+			if (BotMain.servers.containsKey(event.getGuild().getId())) {
+				Node ServerNode = BotMain.servers.get(event.getGuild().getId());
 				Element NodeElement = (Element)ServerNode;
 				localPrefix = NodeElement.getElementsByTagName("prefix").item(0).getTextContent();
-			} else localPrefix = Main.prefix;
+			} else localPrefix = BotMain.prefix;
 			
 			System.out.println(localPrefix);
 			
@@ -47,7 +47,7 @@ public class BotListener extends ListenerAdapter {
 			
 			
 			if(event.getMessage().getContent().startsWith(localPrefix) && event.getMessage().getAuthor().getId() != event.getJDA().getSelfInfo().getId()){
-				Main.handleCommand(Main.parser.parse(event.getMessage().getContent().toLowerCase(),event));
+				BotMain.handleCommand(BotMain.parser.parse(event.getMessage().getContent().toLowerCase(),event));
 				//if (event.getMessage().getContent().toString().substring(1,7).equals("compile"))
 				SimpleLog.getLog("Reasons").info("Got Valid Input");
 			} else {
@@ -56,7 +56,7 @@ public class BotListener extends ListenerAdapter {
 					if(event.getJDA().getSelfInfo().getAsMention().equals(event.getMessage().getMentionedUsers().get(0).getAsMention())) {
 						
 						SimpleLog.getLog("Reasons").info("Got Valid Input (mention)");
-						Main.handleCommand(Main.parser.parse(event.getMessage().getContent().toLowerCase(),event));
+						BotMain.handleCommand(BotMain.parser.parse(event.getMessage().getContent().toLowerCase(),event));
 					}
 				} catch (Exception e) {
 					

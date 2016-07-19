@@ -1,6 +1,6 @@
 package com.srgood.dbot.commands.audio;
 
-import com.srgood.dbot.Main;
+import com.srgood.dbot.BotMain;
 import com.srgood.dbot.MusicPlayer;
 import com.srgood.dbot.commands.Command;
 
@@ -9,7 +9,7 @@ import net.dv8tion.jda.managers.AudioManager;
 
 public class CommandAudioSkip implements AudioCommand {
 	
-	private final String help = "Used to skip the current audio Use: " + Main.prefix + "skip";
+	private final String help = "Used to skip the current audio Use: " + BotMain.prefix + "skip";
 	
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {

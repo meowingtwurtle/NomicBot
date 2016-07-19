@@ -35,7 +35,7 @@ import net.dv8tion.jda.JDA;
 import net.dv8tion.jda.JDABuilder;
 import net.dv8tion.jda.utils.SimpleLog;
 
-public class Main {
+public class BotMain {
 	
 	public static JDA jda;
 	

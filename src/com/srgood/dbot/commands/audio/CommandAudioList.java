@@ -2,7 +2,7 @@ package com.srgood.dbot.commands.audio;
 
 import java.util.List;
 
-import com.srgood.dbot.Main;
+import com.srgood.dbot.BotMain;
 import com.srgood.dbot.MusicPlayer;
 import com.srgood.dbot.commands.Command;
 import com.srgood.dbot.source.AudioInfo;
@@ -15,7 +15,7 @@ import net.dv8tion.jda.managers.AudioManager;
 
 public class CommandAudioList implements AudioCommand {
 
-	private final String help = "Lists the current Audio queue Use: " + Main.prefix + "list";
+	private final String help = "Lists the current Audio queue Use: " + BotMain.prefix + "list";
 			
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {

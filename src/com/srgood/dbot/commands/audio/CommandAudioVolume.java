@@ -1,6 +1,6 @@
 package com.srgood.dbot.commands.audio;
 
-import com.srgood.dbot.Main;
+import com.srgood.dbot.BotMain;
 import com.srgood.dbot.MusicPlayer;
 import com.srgood.dbot.commands.Command;
 
@@ -9,7 +9,7 @@ import net.dv8tion.jda.managers.AudioManager;
 
 public class CommandAudioVolume implements AudioCommand {
 	
-	private final String help = "Used to set the audio volume Use: " + Main.prefix + "volume [0-1]";
+	private final String help = "Used to set the audio volume Use: " + BotMain.prefix + "volume [0-1]";
 	
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {

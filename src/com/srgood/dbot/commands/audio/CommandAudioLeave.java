@@ -1,6 +1,6 @@
 package com.srgood.dbot.commands.audio;
 
-import com.srgood.dbot.Main;
+import com.srgood.dbot.BotMain;
 import com.srgood.dbot.MusicPlayer;
 import com.srgood.dbot.commands.Command;
 
@@ -9,8 +9,8 @@ import net.dv8tion.jda.managers.AudioManager;
 
 public class CommandAudioLeave implements AudioCommand {
 
-	private final String help = "Makes " + Main.jda.getSelfInfo().getUsername()
-			+ " leave the connected voice channel Use: " + Main.prefix + "leave";
+	private final String help = "Makes " + BotMain.jda.getSelfInfo().getUsername()
+			+ " leave the connected voice channel Use: " + BotMain.prefix + "leave";
 
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {

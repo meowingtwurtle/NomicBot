@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.srgood.dbot.Main;
+import com.srgood.dbot.BotMain;
 import com.srgood.dbot.MusicPlayer;
 import com.srgood.dbot.Playlist;
 import com.srgood.dbot.commands.Command;
@@ -16,7 +16,7 @@ import net.dv8tion.jda.managers.AudioManager;
 
 public class CommandAudioPlay implements AudioCommand {
 	
-	private final String help = "Used to play audio Use: " + Main.prefix + "play [URL]";
+	private final String help = "Used to play audio Use: " + BotMain.prefix + "play [URL]";
 	
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {
