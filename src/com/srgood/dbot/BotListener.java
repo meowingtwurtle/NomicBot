@@ -3,6 +3,7 @@ package com.srgood.dbot;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -36,7 +37,27 @@ public class BotListener extends ListenerAdapter {
 				Node ServerNode = BotMain.servers.get(event.getGuild().getId());
 				Element NodeElement = (Element)ServerNode;
 				localPrefix = NodeElement.getElementsByTagName("prefix").item(0).getTextContent();
-			} else localPrefix = BotMain.prefix;
+			} else {
+				Node root = BotMain.PInputFile.getDocumentElement();
+				
+				Element server = BotMain.PInputFile.createElement("server");
+				
+				Attr attr = BotMain.PInputFile.createAttribute("id");
+				attr.setValue(event.getGuild().getId());
+				server.setAttributeNode(attr);
+				
+				Element prefixElement = BotMain.PInputFile.createElement("prefix");
+				
+				
+				prefixElement.appendChild(BotMain.PInputFile.createTextNode("#!"));
+				
+				server.appendChild(prefixElement);
+				root.appendChild(server);
+				
+				BotMain.servers.put(event.getGuild().getId(), server);
+				
+				localPrefix = server.getElementsByTagName("prefix").item(0).getTextContent();
+			}
 			
 			System.out.println(localPrefix);
 			
