@@ -1,5 +1,7 @@
 package com.srgood.dbot.commands;
 
+import javax.xml.transform.TransformerException;
+
 import com.srgood.dbot.BotMain;
 
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
@@ -20,13 +22,23 @@ public class CommandShutdown implements Command {
 		try {
 			if (164117897025683456L == uid || 138048665112543233L == uid) {
 				event.getChannel().sendMessage("Shutting down! " + event.getAuthor().getAsMention());
-				BotMain.SaveParams();
+				try {
+					BotMain.WriteXML();
+				} catch (TransformerException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				BotMain.jda.shutdown();
 			} else {
 				if (args[0].toLowerCase().equals("override")) {
 					if (BotMain.Okey.equals(args[1])) {
 						event.getChannel().sendMessage("Valid key. Shutting down! " + event.getAuthor().getAsMention());
-						BotMain.SaveParams();
+						try {
+							BotMain.WriteXML();
+						} catch (TransformerException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						BotMain.jda.shutdown();
 					} else {
 						event.getChannel().sendMessage("Bad key " + event.getAuthor().getAsMention());

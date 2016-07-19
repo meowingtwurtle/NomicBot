@@ -17,6 +17,12 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -50,6 +56,7 @@ public class BotMain {
 	//XML variables
 	public static DocumentBuilderFactory DomFactory;
 	public static DocumentBuilder DomInput;
+	public static Document PInputFile;
 	
 	
 	public static void main(String[] args) {
@@ -108,10 +115,12 @@ public class BotMain {
 	
 	
 	//TODO fix the exceptions here
-	public static void SaveParams(){
-		
-		
-		
+	public static void WriteXML() throws TransformerException{
+		TransformerFactory transformerFactory = TransformerFactory.newInstance();
+		Transformer transformer = transformerFactory.newTransformer();
+		DOMSource source = new DOMSource(PInputFile);
+		StreamResult result = new StreamResult(new File("servers.xml"));
+		transformer.transform(source, result);
 	}
 	
 	
@@ -122,7 +131,7 @@ public class BotMain {
 		
 		File InputFile = new File("servers.xml");
 		
-		Document PInputFile = DomInput.parse(InputFile);
+		PInputFile = DomInput.parse(InputFile);
 		PInputFile.getDocumentElement().normalize();
 		SimpleLog.getLog("Reasons.").info(PInputFile.getDocumentElement().getNodeName());
 		NodeList ServerNodes = PInputFile.getElementsByTagName("server");
