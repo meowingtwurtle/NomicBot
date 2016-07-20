@@ -30,9 +30,10 @@ public class CommandAudioPlay implements AudioCommand {
 		MusicPlayer player = AudioCommand.initAndGetPlayer(manager);
 
 		 String message = event.getMessage().getContent();
+		 message = message.substring(message.indexOf("play"));
 		 event.getMessage().deleteMessage();
 		
-		 if (message.equals("!play"))
+		 if (message.equals("play"))
          {
              if (player.isPlaying())
              {
@@ -55,11 +56,11 @@ public class CommandAudioPlay implements AudioCommand {
                  }
              }
          }
-         else if (message.startsWith("!play "))
+         else if (message.startsWith("play "))
          {
         	 
              String msg = "";
-             String url = message.substring("!play ".length());
+             String url = message.substring("play ".length());
              Playlist playlist = Playlist.getPlaylist(url);
              List<AudioSource> sources = new LinkedList<AudioSource>(playlist.getSources());
 //             AudioSource source = new RemoteSource(url);
