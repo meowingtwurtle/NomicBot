@@ -17,6 +17,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -118,6 +119,11 @@ public class BotMain {
 	public static void WriteXML() throws TransformerException{
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
 		Transformer transformer = transformerFactory.newTransformer();
+		// Beautify XML
+		// Set do indents
+		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+		// Set indent amount
+		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 		DOMSource source = new DOMSource(PInputFile);
 		StreamResult result = new StreamResult(new File("servers.xml"));
 		transformer.transform(source, result);
