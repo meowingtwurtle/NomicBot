@@ -2,12 +2,12 @@ package com.srgood.dbot.commands;
 
 import java.util.Set;
 
-import com.srgood.dbot.Main;
+import com.srgood.dbot.BotMain;
 
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 
 public class CommandHelp implements Command {
-	private final String help = "Lists all commands. Use: " + Main.prefix + "help";
+	private final String help = "Lists all commands. Use: " + BotMain.prefix + "help";
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {
 		// TODO Auto-generated method stub
@@ -18,7 +18,7 @@ public class CommandHelp implements Command {
 	public void action(String[] args, MessageReceivedEvent event) {
 		// TODO Auto-generated method stub
 		
-		Set<String> v = Main.commands.keySet();
+		Set<String> v = BotMain.commands.keySet();
 		StringBuilder z = new StringBuilder();
 		z.append("All commands: \n");
 		
@@ -26,7 +26,7 @@ public class CommandHelp implements Command {
 		
 		for (String i : v) {
 			String output = i.substring(0, 1).toUpperCase() + i.substring(1);
-			z.append("**" + output + ":** " + "  `" +Main.commands.get(i).help() + "`" + "\n\n");
+			z.append("**" + output + ":** " + "  `" +BotMain.commands.get(i).help() + "`" + "\n\n");
 		}
 		
 		

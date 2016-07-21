@@ -3,6 +3,10 @@ package com.srgood.dbot;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.w3c.dom.Attr;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+
 import com.srgood.dbot.ref.RefStrings;
 
 import net.dv8tion.jda.audio.player.Player;
@@ -29,19 +33,33 @@ public class BotListener extends ListenerAdapter {
 		public void onMessageReceived(MessageReceivedEvent event){
 			
 
-			if(Main.servers.containsKey(event.getGuild().getId()) && event.getJDA().getSelfInfo().getId() != event.getAuthor().getId()){
-				if(Main.servers.get(event.getGuild().getId()).containsKey("prefix")) {
-					localPrefix = Main.servers.get(event.getGuild().getId()).get("prefix");
-					SimpleLog.getLog("Reasons").info("Found server with valid prefix ("+ localPrefix +")");
-				} else {
-					SimpleLog.getLog("Reasons").info("Found server without valid prefix");
-					Main.servers.get(event.getGuild().getId()).put("prefix", Main.prefix);
-				}
-			} else if (event.getJDA().getSelfInfo().getId() != event.getAuthor().getId()) {
-				SimpleLog.getLog("Reasons").info("Found nothing");
-				Main.servers.put(event.getGuild().getId(),new HashMap<String, String>());
-				Main.servers.get(event.getGuild().getId()).put("prefix", Main.prefix);
+			if (BotMain.servers.containsKey(event.getGuild().getId())) {
+				Node ServerNode = BotMain.servers.get(event.getGuild().getId());
+				Element NodeElement = (Element)ServerNode;
+				localPrefix = NodeElement.getElementsByTagName("prefix").item(0).getTextContent();
+			} else {
+				Node root = BotMain.PInputFile.getDocumentElement();
+				
+				Element server = BotMain.PInputFile.createElement("server");
+				
+				Attr attr = BotMain.PInputFile.createAttribute("id");
+				attr.setValue(event.getGuild().getId());
+				server.setAttributeNode(attr);
+				
+				Element prefixElement = BotMain.PInputFile.createElement("prefix");
+				
+				
+				prefixElement.appendChild(BotMain.PInputFile.createTextNode("#!"));
+				
+				server.appendChild(prefixElement);
+				root.appendChild(server);
+				
+				BotMain.servers.put(event.getGuild().getId(), server);
+				
+				localPrefix = server.getElementsByTagName("prefix").item(0).getTextContent();
 			}
+			
+			System.out.println(localPrefix);
 			
 			if (event.getMessage().getContent().equals(RefStrings.TABLE_FLIP)) {
 				event.getChannel().sendMessage(RefStrings.TABLE_UNFLIP_JOKE);
@@ -50,7 +68,7 @@ public class BotListener extends ListenerAdapter {
 			
 			
 			if(event.getMessage().getContent().startsWith(localPrefix) && event.getMessage().getAuthor().getId() != event.getJDA().getSelfInfo().getId()){
-				Main.handleCommand(Main.parser.parse(event.getMessage().getContent().toLowerCase(),event));
+				BotMain.handleCommand(BotMain.parser.parse(event.getMessage().getContent().toLowerCase(),event));
 				//if (event.getMessage().getContent().toString().substring(1,7).equals("compile"))
 				SimpleLog.getLog("Reasons").info("Got Valid Input");
 			} else {
@@ -59,7 +77,7 @@ public class BotListener extends ListenerAdapter {
 					if(event.getJDA().getSelfInfo().getAsMention().equals(event.getMessage().getMentionedUsers().get(0).getAsMention())) {
 						
 						SimpleLog.getLog("Reasons").info("Got Valid Input (mention)");
-						Main.handleCommand(Main.parser.parse(event.getMessage().getContent().toLowerCase(),event));
+						BotMain.handleCommand(BotMain.parser.parse(event.getMessage().getContent().toLowerCase(),event));
 					}
 				} catch (Exception e) {
 					

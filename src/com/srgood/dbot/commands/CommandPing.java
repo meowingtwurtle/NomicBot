@@ -1,12 +1,12 @@
 package com.srgood.dbot.commands;
 
-import com.srgood.dbot.Main;
+import com.srgood.dbot.BotMain;
 
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 
 public class CommandPing implements Command {
 	
-	private final String help = "Usage: " +Main.prefix+ "ping";
+	private final String help = "Usage: " +BotMain.prefix+ "ping";
 	
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {

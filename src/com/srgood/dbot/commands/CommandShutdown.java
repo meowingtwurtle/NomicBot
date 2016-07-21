@@ -1,11 +1,13 @@
 package com.srgood.dbot.commands;
 
-import com.srgood.dbot.Main;
+import javax.xml.transform.TransformerException;
+
+import com.srgood.dbot.BotMain;
 
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 
 public class CommandShutdown implements Command {
-	private final String help = "Used to shutdown Reasons. Use: " + Main.prefix + "shutdown -OR- " + Main.prefix + "shutdown override [override key]";
+	private final String help = "Used to shutdown Reasons. Use: " + BotMain.prefix + "shutdown -OR- " + BotMain.prefix + "shutdown override [override key]";
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {
 		// TODO Auto-generated method stub
@@ -20,14 +22,24 @@ public class CommandShutdown implements Command {
 		try {
 			if (164117897025683456L == uid || 138048665112543233L == uid) {
 				event.getChannel().sendMessage("Shutting down! " + event.getAuthor().getAsMention());
-				Main.SaveParams();
-				Main.jda.shutdown();
+				try {
+					BotMain.WriteXML();
+				} catch (TransformerException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				BotMain.jda.shutdown();
 			} else {
 				if (args[0].toLowerCase().equals("override")) {
-					if (Main.Okey.equals(args[1])) {
+					if (BotMain.Okey.equals(args[1])) {
 						event.getChannel().sendMessage("Valid key. Shutting down! " + event.getAuthor().getAsMention());
-						Main.SaveParams();
-						Main.jda.shutdown();
+						try {
+							BotMain.WriteXML();
+						} catch (TransformerException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						BotMain.jda.shutdown();
 					} else {
 						event.getChannel().sendMessage("Bad key " + event.getAuthor().getAsMention());
 					}

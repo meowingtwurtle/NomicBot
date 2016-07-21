@@ -1,6 +1,6 @@
 package com.srgood.dbot.commands.audio;
 
-import com.srgood.dbot.Main;
+import com.srgood.dbot.BotMain;
 import com.srgood.dbot.MusicPlayer;
 
 import net.dv8tion.jda.entities.VoiceChannel;
@@ -11,7 +11,7 @@ import net.dv8tion.jda.utils.SimpleLog;
 public class CommandAudioJoin implements AudioCommand {
 
 	
-	private final String help = "Adds Reasons to a voice channel Use: " + Main.prefix + "join [channel name]";
+	private final String help = "Adds Reasons to a voice channel Use: " + BotMain.prefix + "join [channel name]";
 			
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {

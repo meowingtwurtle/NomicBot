@@ -1,11 +1,11 @@
 package com.srgood.dbot.commands;
 
-import com.srgood.dbot.Main;
+import com.srgood.dbot.BotMain;
 
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 
 public class CommandDebug implements Command {
-	private final String help = "Used internally for debugging. Use: " + Main.prefix + "debug [debug arg]";
+	private final String help = "Used internally for debugging. Use: " + BotMain.prefix + "debug [debug arg]";
 	private boolean exe = true;
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {
@@ -23,8 +23,8 @@ public class CommandDebug implements Command {
 			"id: " + event.getAuthor().getId() + "\n" + 
 			event.getAuthor().getAsMention() + "\n" + 
 			"Picture url: " + event.getAuthor().getAvatarUrl().toString() + "\n" + 
-			"Main.jda.getSelfInfo().getAsMention().length()" + Main.jda.getSelfInfo().getAsMention().toString().length() + "\n" + 
-			"Main.jda.getSelfInfo().getAsMention()" + Main.jda.getSelfInfo().getAsMention());
+			"BotMain.jda.getSelfInfo().getAsMention().length()" + BotMain.jda.getSelfInfo().getAsMention().toString().length() + "\n" + 
+			"BotMain.jda.getSelfInfo().getAsMention()" + BotMain.jda.getSelfInfo().getAsMention());
 			
 		} catch (Exception e) {
 			event.getChannel().sendMessage("Author Name: " + event.getAuthor().getUsername() + "\n" + 
@@ -32,8 +32,8 @@ public class CommandDebug implements Command {
 			"id: " + event.getAuthor().getId() + "\n" + 
 			event.getAuthor().getAsMention() + "\n" + 
 			"Picture url: " + event.getAuthor().getAvatarUrl().toString() + "\n" + 
-			"Main.jda.getSelfInfo().getAsMention().length()" + Main.jda.getSelfInfo().getAsMention().toString().length() + "\n" + 
-			"Main.jda.getSelfInfo().getAsMention()" + Main.jda.getSelfInfo().getAsMention());
+			"BotMain.jda.getSelfInfo().getAsMention().length()" + BotMain.jda.getSelfInfo().getAsMention().toString().length() + "\n" + 
+			"BotMain.jda.getSelfInfo().getAsMention()" + BotMain.jda.getSelfInfo().getAsMention());
 		}
 		
 	}
