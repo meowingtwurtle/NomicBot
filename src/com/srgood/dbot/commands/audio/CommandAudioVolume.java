@@ -2,7 +2,6 @@ package com.srgood.dbot.commands.audio;
 
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.MusicPlayer;
-import com.srgood.dbot.commands.Command;
 
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.managers.AudioManager;

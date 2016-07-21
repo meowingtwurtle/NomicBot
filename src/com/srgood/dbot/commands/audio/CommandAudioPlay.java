@@ -7,7 +7,6 @@ import java.util.List;
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.MusicPlayer;
 import com.srgood.dbot.Playlist;
-import com.srgood.dbot.commands.Command;
 import com.srgood.dbot.source.AudioInfo;
 import com.srgood.dbot.source.AudioSource;
 

@@ -22,6 +22,7 @@ public class CommandAudioJoin implements AudioCommand {
 	@Override
 	public void action(String[] args, MessageReceivedEvent event) {		
 		AudioManager manager = event.getGuild().getAudioManager();
+		@SuppressWarnings("unused")
 		MusicPlayer player = AudioCommand.initAndGetPlayer(manager);
         
 		VoiceChannel channel = null;
