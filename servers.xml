@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <servers>
   <server id="201020472702402560">
-    <prefix>meowmeowcatsareamazings</prefix>
+    <prefix>!</prefix>
+  </server>
+<server id="138049090826141697">
+    <prefix>#!</prefix>
   </server>
 </servers>

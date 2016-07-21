@@ -63,7 +63,7 @@ public class BotMain {
 	public static void main(String[] args) {
 		//catch exceptions when building JDA
 		try  {
-			jda = new JDABuilder().addListener(new BotListener()).setBotToken("MjAxODEwODM4MDcwMzYyMTEy.CmROfQ.8taYC1Hiv3T-GjRi1bBObAcCXlg").buildBlocking();
+			jda = new JDABuilder().addListener(new BotListener()).setBotToken("MjA1NDY1MDY3ODI5OTg1Mjgx.CnGZwQ.Z0fNGc9OOZNCxTYFrpl4q-sBgC4").buildBlocking();
 			jda.setAutoReconnect(true);
 			jda.getAccountManager().setGame("type '@Reasons help'");
 		} catch(LoginException e) {
