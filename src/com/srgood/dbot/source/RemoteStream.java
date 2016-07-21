@@ -18,8 +18,11 @@ public class RemoteStream extends AudioStream
     private Thread ytdlErrGobler;
     private Thread ffmpegErrGobler;
 
-    private List<String> ytdlLaunchArgs;
-    private List<String> ffmpegLaunchArgs;
+    @SuppressWarnings("unused")
+	private List<String> ytdlLaunchArgs;
+    
+    @SuppressWarnings("unused")
+	private List<String> ffmpegLaunchArgs;
     private AudioTimestamp timestamp = AudioTimestamp.fromSeconds(0);
 
     protected RemoteStream(List<String> ytdlLaunchArgs, List<String> ffmpegLaunchArgs)
