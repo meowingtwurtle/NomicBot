@@ -97,6 +97,7 @@ public class BotMain {
 			commands.put("repeat", new CommandAudioRepeat());
 			commands.put("delete", new CommandDelete());
 			commands.put("version", new CommandVersion());
+			commands.put("invite", new CommandInvite());
 			
 			
 		} catch (Exception e) {
