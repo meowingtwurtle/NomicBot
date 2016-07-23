@@ -54,7 +54,7 @@ public class BotMain {
 	public static void main(String[] args) {
 		//catch exceptions when building JDA
 		try  {
-			jda = new JDABuilder().addListener(new BotListener()).setBotToken("MjA1NDY1MDY3ODI5OTg1Mjgx.CnGZwQ.Z0fNGc9OOZNCxTYFrpl4q-sBgC4").buildBlocking();
+			jda = new JDABuilder().addListener(new BotListener()).setBotToken("MjAxODEwODM4MDcwMzYyMTEy.CnRUCg.knaZpyaRmVjxIPy-un0eHO4LFN8").buildBlocking();
 			jda.setAutoReconnect(true);
 			jda.getAccountManager().setGame("type '@Reasons help'");
 		} catch(LoginException e) {
@@ -116,31 +116,44 @@ public class BotMain {
 		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 		// Set indent amount
 		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+		transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+		transformer.setOutputProperty(OutputKeys.METHOD, "html");
 		DOMSource source = new DOMSource(PInputFile);
 		StreamResult result = new StreamResult(new File("servers.xml"));
 		transformer.transform(source, result);
 	}
 	
 	
-	//TODO fix the exceptions here, too
-	public static void PutNodes() throws Exception  {
+	// TODO fix the exceptions here, too
+	public static void PutNodes() throws Exception {
+	    try {
 		DomFactory = DocumentBuilderFactory.newInstance();
 		DomInput = DomFactory.newDocumentBuilder();
-		
+
 		File InputFile = new File("servers.xml");
-		
+
 		PInputFile = DomInput.parse(InputFile);
 		PInputFile.getDocumentElement().normalize();
 		SimpleLog.getLog("Reasons.").info(PInputFile.getDocumentElement().getNodeName());
-		NodeList ServerNodes = PInputFile.getElementsByTagName("server");
-			for(int i = 0; i < ServerNodes.getLength(); i++) {
-				Node ServerNode = ServerNodes.item(i);
-				Element ServerNodeElement = (Element) ServerNode;
-				
-				servers.put(ServerNodeElement.getAttribute("id"), ServerNode);
-			}
+
+		// <config> element
+		Element rootElem = PInputFile.getDocumentElement();
+		// <server> element list
+		NodeList ServerNodes = rootElem.getElementsByTagName("server");
+		for (int i = 0; i < ServerNodes.getLength(); i++) {
+			Node ServerNode = ServerNodes.item(i);
+			Element ServerNodeElement = (Element) ServerNode;
+
+			servers.put(ServerNodeElement.getAttribute("id"), ServerNode);
+		}
 		
+		Element globalElem = (Element) rootElem.getElementsByTagName("global").item(0);
 		
+		prefix = globalElem.getElementsByTagName("prefix").item(0).getTextContent();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        throw e;
+	    }
 	}
 	
 	final static int[] illegalChars = {34, 60, 62, 124, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 58, 42, 63, 92,46, 47};
