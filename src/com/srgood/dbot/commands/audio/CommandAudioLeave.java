@@ -9,8 +9,7 @@ import net.dv8tion.jda.managers.AudioManager;
 
 public class CommandAudioLeave implements AudioCommand {
 
-	private final String help = "Makes " + BotMain.jda.getSelfInfo().getUsername()
-			+ " leave the connected voice channel Use: " + BotMain.prefix + "leave";
+	private final String help = "Makes " + BotMain.jda.getSelfInfo().getUsername() + " leave the connected voice channel Use: '" + BotMain.prefix + "leave'";
 
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {

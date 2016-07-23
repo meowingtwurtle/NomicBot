@@ -174,7 +174,6 @@ public class BotMain {
 	public static void StoreMessage (MessageReceivedEvent event,Node node){
 		
 		String truePath = "messages\\guilds\\" + cleanFileName(event.getGuild().getName()) +"\\" + cleanFileName(event.getTextChannel().getName()) + "\\all\\";
-		SimpleLog.getLog("Reasons").fatal(truePath);
 		try {
 			
 			FileOutputStream fout = new FileOutputStream(truePath + event.getMessage().getId() + ".ser");

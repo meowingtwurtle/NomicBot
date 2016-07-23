@@ -14,7 +14,7 @@ import net.dv8tion.jda.managers.AudioManager;
 
 public class CommandAudioList implements AudioCommand {
 
-	private final String help = "Lists the current Audio queue Use: " + BotMain.prefix + "list";
+	private final String help = "Lists the current Audio queue Use: '" + BotMain.prefix + "list'";
 			
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {

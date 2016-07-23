@@ -15,6 +15,8 @@ import net.dv8tion.jda.entities.TextChannel;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 
 public class CommandDelete implements Command {
+	
+private final String help = "Deletes Messages Use: '" + BotMain.prefix + "delete [all|bot] [channel name]' Default is all in current channel";
 
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {
@@ -24,6 +26,7 @@ public class CommandDelete implements Command {
 
 	@Override
 	public void action(String[] args, MessageReceivedEvent event) {
+		
 		
 		String channel = null,delType = null;
 		List<String> messages = new ArrayList<String>();
@@ -85,7 +88,7 @@ public class CommandDelete implements Command {
 	@Override
 	public String help() {
 		// TODO Auto-generated method stub
-		return null;
+		return help;
 	}
 
 	@Override

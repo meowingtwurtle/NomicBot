@@ -8,7 +8,7 @@ import net.dv8tion.jda.managers.AudioManager;
 
 public class CommandAudioVolume implements AudioCommand {
 	
-	private final String help = "Used to set the audio volume Use: " + BotMain.prefix + "volume [0-1]";
+	private final String help = "Used to set the audio volume Use: '" + BotMain.prefix + "volume <0-1>'";
 	
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {
@@ -23,11 +23,11 @@ public class CommandAudioVolume implements AudioCommand {
 
 		try {
 			float volume = Float.parseFloat(args[0]);
-	        volume = Math.min(20F, Math.max(0F, volume));
-	        player.setVolume(volume);
+	        volume = Math.min(100F, Math.max(0F, volume));
+	        player.setVolume(volume/100);
 	        event.getChannel().sendMessage("Volume was changed to: " + volume);
 		} catch (Exception e) {
-			event.getChannel().sendMessage("Volume is: " + player.getVolume());
+			event.getChannel().sendMessage("Volume is: " + player.getVolume()*100);
 		}
 	}
 

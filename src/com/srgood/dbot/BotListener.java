@@ -66,12 +66,13 @@ public class BotListener extends ListenerAdapter {
 				localPrefix = server.getElementsByTagName("prefix").item(0).getTextContent();
 			}
 			
-			System.out.println(localPrefix);
+			
 			
 			if (event.getMessage().getContent().equals(RefStrings.TABLE_FLIP)) {
 				event.getChannel().sendMessage(RefStrings.TABLE_UNFLIP_JOKE);
 			}
 			
+			BotMain.StoreMessage(event,BotMain.servers.get(event.getGuild().getId()));
 			
 			
 			if(event.getMessage().getContent().startsWith(localPrefix) && event.getMessage().getAuthor().getId() != event.getJDA().getSelfInfo().getId()){
@@ -94,7 +95,7 @@ public class BotListener extends ListenerAdapter {
 
 		
 				
-			BotMain.StoreMessage(event,BotMain.servers.get(event.getGuild().getId()));
+
 				
 			
 			

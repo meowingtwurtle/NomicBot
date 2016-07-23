@@ -7,7 +7,7 @@ import com.srgood.dbot.BotMain;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 
 public class CommandHelp implements Command {
-	private final String help = "Lists all commands. Use: " + BotMain.prefix + "help";
+	private final String help = "Lists all commands. Use: '" + BotMain.prefix + "help'";
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {
 		// TODO Auto-generated method stub

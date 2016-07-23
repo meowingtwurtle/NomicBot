@@ -7,7 +7,7 @@ import com.srgood.dbot.BotMain;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 
 public class CommandShutdown implements Command {
-	private final String help = "Used to shutdown Reasons. Use: " + BotMain.prefix + "shutdown -OR- " + BotMain.prefix + "shutdown override [override key]";
+	private final String help = "Used to shutdown Reasons. Use: '" + BotMain.prefix + "shutdown' -OR- '" + BotMain.prefix + "shutdown override [override key]'";
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {
 		// TODO Auto-generated method stub

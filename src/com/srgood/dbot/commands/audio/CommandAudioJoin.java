@@ -11,7 +11,7 @@ import net.dv8tion.jda.utils.SimpleLog;
 public class CommandAudioJoin implements AudioCommand {
 
 	
-	private final String help = "Adds Reasons to a voice channel Use: " + BotMain.prefix + "join [channel name]";
+	private final String help = "Adds Reasons to a voice channel Use: '" + BotMain.prefix + "join [channel name]' Default is the channle you are currently in";
 			
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {

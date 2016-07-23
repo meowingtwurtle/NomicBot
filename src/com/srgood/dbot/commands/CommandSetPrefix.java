@@ -7,7 +7,7 @@ import com.srgood.dbot.BotMain;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 
 public class CommandSetPrefix implements Command{
-	private final String help = "Sets the global prefix Use: " + BotMain.prefix + "setprefix [prefix]";
+	private final String help = "Sets the global prefix Use: '" + BotMain.prefix + "setprefix <prefix>'";
 	
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {

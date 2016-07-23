@@ -6,7 +6,7 @@ import net.dv8tion.jda.events.message.MessageReceivedEvent;
 
 public class CommandPong implements Command {
 	
-	private final String help = "Usage: " + BotMain.prefix + "pong";
+	private final String help = "Pong! Use: '" + BotMain.prefix + "pong'";
 	
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {

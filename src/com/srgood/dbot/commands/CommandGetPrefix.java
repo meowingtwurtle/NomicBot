@@ -9,6 +9,8 @@ import net.dv8tion.jda.events.message.MessageReceivedEvent;
 
 public class CommandGetPrefix implements Command {
 
+	private final String help = "Prints the current Prefix Use: '" + BotMain.prefix + "getprefix'";
+	
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {
 		// TODO Auto-generated method stub
@@ -28,7 +30,7 @@ public class CommandGetPrefix implements Command {
 	@Override
 	public String help() {
 		// TODO Auto-generated method stub
-		return null;
+		return help;
 	}
 
 	@Override

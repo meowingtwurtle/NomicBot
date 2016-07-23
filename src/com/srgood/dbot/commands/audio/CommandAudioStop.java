@@ -8,7 +8,7 @@ import net.dv8tion.jda.managers.AudioManager;
 
 public class CommandAudioStop implements AudioCommand {
 
-	private final String help = "Used to stop the current audio Use: " + BotMain.prefix + "stop";
+	private final String help = "Used to stop the current audio Use: '" + BotMain.prefix + "stop'";
 	
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {

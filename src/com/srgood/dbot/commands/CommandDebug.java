@@ -5,7 +5,7 @@ import com.srgood.dbot.BotMain;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 
 public class CommandDebug implements Command {
-	private final String help = "Used internally for debugging. Use: " + BotMain.prefix + "debug [debug arg]";
+	private final String help = "Used internally for debugging. Use: '" + BotMain.prefix + "debug [debug arg]'";
 	private boolean exe = true;
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {

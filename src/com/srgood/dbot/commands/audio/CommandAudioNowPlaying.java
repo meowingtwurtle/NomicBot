@@ -10,7 +10,7 @@ import net.dv8tion.jda.managers.AudioManager;
 
 public class CommandAudioNowPlaying implements AudioCommand {
 
-	public final String help = "Displays information about the song that is playing Use: " + BotMain.prefix + "now-playing";
+	public final String help = "Displays information about the song that is playing Use: '" + BotMain.prefix + "now-playing'";
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {
 		// TODO Auto-generated method stub

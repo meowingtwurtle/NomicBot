@@ -15,7 +15,7 @@ import net.dv8tion.jda.managers.AudioManager;
 
 public class CommandAudioPlay implements AudioCommand {
 	
-	private final String help = "Used to play audio Use: " + BotMain.prefix + "play [URL]";
+	private final String help = "Used to play audio Use: '" + BotMain.prefix + "play [URL]'";
 	
 	@Override
 	public boolean called(String[] args, MessageReceivedEvent event) {
