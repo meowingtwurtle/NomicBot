@@ -15,7 +15,7 @@ private final String help = "Prints the link to add reasons to another server Us
 	@Override
 	public void action(String[] args, MessageReceivedEvent event) {
 		// TODO Auto-generated method stub
-		event.getChannel().sendMessage("https://discordapp.com/oauth2/authorize?client_id=201810822131875840&scope=bot");
+		event.getChannel().sendMessage("https://discordapp.com/oauth2/authorize?client_id=201810822131875840&scope=bot&permissions=0x23525237");
 	}
 
 	@Override
@@ -27,7 +27,7 @@ private final String help = "Prints the link to add reasons to another server Us
 	@Override
 	public void executed(boolean success, MessageReceivedEvent event) {
 		// TODO Auto-generated method stub
-
+		return;
 	}
 
 }
