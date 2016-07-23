@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import javax.security.auth.login.LoginException;
@@ -142,10 +143,25 @@ public class BotMain {
 		
 	}
 	
+	final static int[] illegalChars = {34, 60, 62, 124, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 58, 42, 63, 92,46, 47};
+	static {
+	    Arrays.sort(illegalChars);
+	}
+	public static String cleanFileName(String badFileName) {
+	    StringBuilder cleanName = new StringBuilder();
+	    for (int i = 0; i < badFileName.length(); i++) {
+	        int c = (int)badFileName.charAt(i);
+	        if (Arrays.binarySearch(illegalChars, c) < 0) {
+	            cleanName.append((char)c);
+	        }
+	    }
+	    return cleanName.toString();
+	}
+	
 	public static void StoreMessage (MessageReceivedEvent event,Node node){
 		
-		String truePath = "messages\\guilds\\" + event.getGuild().getName().replaceAll("[^a-zA-Z0-9.-]", "_") + "\\" + event.getTextChannel().getName().replaceAll("[^a-zA-Z0-9.-]", "_") + "\\all\\";
-		event.getTextChannel().sendMessage(truePath);
+		String truePath = "messages\\guilds\\" + cleanFileName(event.getGuild().getName()) +"\\" + cleanFileName(event.getTextChannel().getName()) + "\\all\\";
+		SimpleLog.getLog("Reasons").fatal(truePath);
 		try {
 			
 			FileOutputStream fout = new FileOutputStream(truePath + event.getMessage().getId() + ".ser");
@@ -161,7 +177,7 @@ public class BotMain {
 				}
 			}
 			if (event.getAuthor().isBot() | event.getMessage().getContent().startsWith(NodeElement.getElementsByTagName("prefix").item(0).getTextContent()) | mentioned) {
-				FileOutputStream fout2 = new FileOutputStream(truePath + event.getMessage().getId() + ".ser");
+				FileOutputStream fout2 = new FileOutputStream(truePath.replace("\\all\\", "\\bot\\") + event.getMessage().getId() + ".ser");
 				ObjectOutputStream oos2 = new ObjectOutputStream(fout2);   
 				oos2.writeObject(event.getMessage().getContent());
 				
@@ -170,11 +186,14 @@ public class BotMain {
 		} catch(FileNotFoundException e) {
 			
 			File file = new File(truePath);
+			File file2 = new File(truePath.replace("\\all\\", "\\bot\\"));
 			
-				file.setWritable(true);
-				file.mkdirs();
-				SimpleLog.getLog("Reasons").info("Successfully created a new directory");
-				StoreMessage(event,node);
+			file.setWritable(true);
+			file2.setWritable(true);
+			file.mkdirs();
+			file2.mkdirs();
+			
+			StoreMessage(event,node);
 			
 
 			
