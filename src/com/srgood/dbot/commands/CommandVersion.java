@@ -24,7 +24,7 @@ public class CommandVersion implements Command {
 				
 			}
 		} else {
-			event.getChannel().sendMessage("The current version is:" + RefStrings.VERSION);
+			event.getChannel().sendMessage("The current version is: " + RefStrings.VERSION);
 		}
 	}
 
