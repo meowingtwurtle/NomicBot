@@ -1,6 +1,11 @@
 package com.srgood.dbot;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.nio.file.Files;
 import java.util.HashMap;
 
 import javax.security.auth.login.LoginException;
@@ -24,6 +29,7 @@ import com.srgood.dbot.utils.CommandParser;
 
 import net.dv8tion.jda.JDA;
 import net.dv8tion.jda.JDABuilder;
+import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.utils.SimpleLog;
 
 public class BotMain {
@@ -88,6 +94,7 @@ public class BotMain {
 			commands.put("pause", new CommandAudioPause());
 			commands.put("help", new CommandHelp());
 			commands.put("repeat", new CommandAudioRepeat());
+			commands.put("delete", new CommandDelete());
 			
 		} catch (Exception e) {
 			SimpleLog.getLog("Reasons").warn("One or more of the commands failed to map");
@@ -133,6 +140,53 @@ public class BotMain {
 			}
 		
 		
+	}
+	
+	public static void StoreMessage (MessageReceivedEvent event,Node node){
+		
+		String truePath = "messages\\guilds\\" + event.getGuild().getName().replaceAll("[^a-zA-Z0-9.-]", "_") + "\\" + event.getTextChannel().getName().replaceAll("[^a-zA-Z0-9.-]", "_") + "\\all\\";
+		event.getTextChannel().sendMessage(truePath);
+		try {
+			
+			FileOutputStream fout = new FileOutputStream(truePath + event.getMessage().getId() + ".ser");
+			ObjectOutputStream oos = new ObjectOutputStream(fout);   
+			oos.writeObject(event.getMessage().getContent());
+			
+			oos.close();
+			Boolean mentioned = false;
+			Element NodeElement = (Element)node;
+			if (!event.getMessage().getMentionedUsers().isEmpty()) {
+				if ( event.getJDA().getSelfInfo().getAsMention().equals(event.getMessage().getMentionedUsers().get(0).getAsMention())) {
+					mentioned = true;
+				}
+			}
+			if (event.getAuthor().isBot() | event.getMessage().getContent().startsWith(NodeElement.getElementsByTagName("prefix").item(0).getTextContent()) | mentioned) {
+				FileOutputStream fout2 = new FileOutputStream(truePath + event.getMessage().getId() + ".ser");
+				ObjectOutputStream oos2 = new ObjectOutputStream(fout2);   
+				oos2.writeObject(event.getMessage().getContent());
+				
+				oos2.close();
+			}
+		} catch(FileNotFoundException e) {
+			
+			File file = new File(truePath);
+			
+				file.setWritable(true);
+				file.mkdirs();
+				SimpleLog.getLog("Reasons").info("Successfully created a new directory");
+				StoreMessage(event,node);
+			
+
+			
+
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		//TODO Rank based delete
 	}
 	
 	public static void handleCommand (CommandParser.CommandContainer cmd) {

@@ -15,6 +15,13 @@ import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.hooks.ListenerAdapter;
 import net.dv8tion.jda.utils.SimpleLog;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
 /**
  * <h1>Bot Listener</h1>
  * 
@@ -83,6 +90,13 @@ public class BotListener extends ListenerAdapter {
 					
 				}
 			}
+			
+
+		
+				
+			BotMain.StoreMessage(event,BotMain.servers.get(event.getGuild().getId()));
+				
+			
 			
 		}
 		
