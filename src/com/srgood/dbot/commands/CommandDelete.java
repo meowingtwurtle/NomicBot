@@ -47,7 +47,7 @@ private final String help = "Deletes Messages Use: '" + BotMain.prefix + "delete
 		
 		
 		if (delType.equals("all")) {
-			File dir = new File("messages\\guilds\\" + BotMain.cleanFileName(event.getGuild().getName()) + "\\" + channel + "\\all\\");
+			File dir = new File("messages/guilds/" + BotMain.cleanFileName(event.getGuild().getName()) + "/" + channel + "/all/");
 			File[] directoryListing = dir.listFiles();
 			if (directoryListing != null) {
 				for (File child : directoryListing) {
@@ -63,7 +63,7 @@ private final String help = "Deletes Messages Use: '" + BotMain.prefix + "delete
 				dir.mkdirs();
 			}
 		} else if(delType.equals("bot")){
-			File dir = new File("messages\\guilds\\" + BotMain.cleanFileName(event.getGuild().getName()) + "\\" + channel + "\\bot\\");
+			File dir = new File("messages/guilds/" + BotMain.cleanFileName(event.getGuild().getName()) + "/" + channel + "/bot/");
 			File[] directoryListing = dir.listFiles();
 			if (directoryListing != null) {
 				for (File child : directoryListing) {
