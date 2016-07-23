@@ -98,6 +98,7 @@ public class BotMain {
 			commands.put("delete", new CommandDelete());
 			commands.put("version", new CommandVersion());
 			
+			
 		} catch (Exception e) {
 			SimpleLog.getLog("Reasons").warn("One or more of the commands failed to map");
 			e.printStackTrace();
