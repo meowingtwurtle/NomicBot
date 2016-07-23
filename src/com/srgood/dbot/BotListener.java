@@ -11,10 +11,12 @@ import com.srgood.dbot.ref.RefStrings;
 
 import net.dv8tion.jda.audio.player.Player;
 import net.dv8tion.jda.events.ReadyEvent;
+import net.dv8tion.jda.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.hooks.ListenerAdapter;
 import net.dv8tion.jda.utils.SimpleLog;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -56,7 +58,7 @@ public class BotListener extends ListenerAdapter {
 				Element prefixElement = BotMain.PInputFile.createElement("prefix");
 				
 				
-				prefixElement.appendChild(BotMain.PInputFile.createTextNode("#!"));
+				prefixElement.appendChild(BotMain.PInputFile.createTextNode(BotMain.prefix));
 				
 				server.appendChild(prefixElement);
 				root.appendChild(server);
@@ -104,5 +106,28 @@ public class BotListener extends ListenerAdapter {
 		@Override
 		public void onReady(ReadyEvent event){
 			
+		}
+		
+		@Override
+		public void onGuildJoin(GuildJoinEvent event) {
+			event.getGuild().createRole().setName("Reasons Admin").setColor(Color.GREEN);
+			
+			Node root = BotMain.PInputFile.getDocumentElement();
+			
+			Element server = BotMain.PInputFile.createElement("server");
+			
+			Attr attr = BotMain.PInputFile.createAttribute("id");
+			attr.setValue(event.getGuild().getId());
+			server.setAttributeNode(attr);
+			
+			Element prefixElement = BotMain.PInputFile.createElement("prefix");
+			
+			
+			prefixElement.appendChild(BotMain.PInputFile.createTextNode(BotMain.prefix));
+			
+			server.appendChild(prefixElement);
+			root.appendChild(server);
+			
+			BotMain.servers.put(event.getGuild().getId(), server);
 		}
 }
