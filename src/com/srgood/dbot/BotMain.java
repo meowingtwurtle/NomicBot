@@ -96,6 +96,7 @@ public class BotMain {
 			commands.put("help", new CommandHelp());
 			commands.put("repeat", new CommandAudioRepeat());
 			commands.put("delete", new CommandDelete());
+			commands.put("version", new CommandVersion());
 			
 			
 		} catch (Exception e) {
@@ -174,7 +175,7 @@ public class BotMain {
 	
 	public static void StoreMessage (MessageReceivedEvent event,Node node){
 		
-		String truePath = "messages\\guilds\\" + cleanFileName(event.getGuild().getName()) +"\\" + cleanFileName(event.getTextChannel().getName()) + "\\all\\";
+		String truePath = "messages/guilds/" + cleanFileName(event.getGuild().getName()) +"/" + cleanFileName(event.getTextChannel().getName()) + "/all/";
 		try {
 			
 			FileOutputStream fout = new FileOutputStream(truePath + event.getMessage().getId() + ".ser");
@@ -190,7 +191,7 @@ public class BotMain {
 				}
 			}
 			if (event.getAuthor().isBot() | event.getMessage().getContent().startsWith(NodeElement.getElementsByTagName("prefix").item(0).getTextContent()) | mentioned) {
-				FileOutputStream fout2 = new FileOutputStream(truePath.replace("\\all\\", "\\bot\\") + event.getMessage().getId() + ".ser");
+				FileOutputStream fout2 = new FileOutputStream(truePath.replace("/all/", "/bot/") + event.getMessage().getId() + ".ser");
 				ObjectOutputStream oos2 = new ObjectOutputStream(fout2);   
 				oos2.writeObject(event.getMessage().getContent());
 				
@@ -199,7 +200,7 @@ public class BotMain {
 		} catch(FileNotFoundException e) {
 			
 			File file = new File(truePath);
-			File file2 = new File(truePath.replace("\\all\\", "\\bot\\"));
+			File file2 = new File(truePath.replace("/all/", "/bot/"));
 			
 			file.setWritable(true);
 			file2.setWritable(true);
