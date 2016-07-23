@@ -97,6 +97,7 @@ public class BotMain {
 			commands.put("repeat", new CommandAudioRepeat());
 			commands.put("delete", new CommandDelete());
 			
+			
 		} catch (Exception e) {
 			SimpleLog.getLog("Reasons").warn("One or more of the commands failed to map");
 			e.printStackTrace();
