@@ -110,9 +110,11 @@ public class BotListener extends ListenerAdapter {
             
             Element server = BotMain.PInputFile.createElement("server");
             
-            Attr attr = BotMain.PInputFile.createAttribute("id");
-            attr.setValue(guild.getId());
-            server.setAttributeNode(attr);
+            Element elementServers = (Element) BotMain.PInputFile.getDocumentElement().getElementsByTagName("servers").item(0);
+            
+            Attr idAttr = BotMain.PInputFile.createAttribute("id");
+            idAttr.setValue(guild.getId());
+            server.setAttributeNode(idAttr);
             
             Element prefixElement = BotMain.PInputFile.createElement("prefix");
             
@@ -120,8 +122,8 @@ public class BotListener extends ListenerAdapter {
             prefixElement.appendChild(BotMain.PInputFile.createTextNode(BotMain.prefix));
             
             server.appendChild(prefixElement);
-            root.appendChild(server);
             
+            elementServers.appendChild(server);            
             BotMain.servers.put(guild.getId(), server);
             
             try {
@@ -134,7 +136,8 @@ public class BotListener extends ListenerAdapter {
                 Element elementAdminRole = BotMain.PInputFile.createElement("role");
                 
                 Attr roleAttr = BotMain.PInputFile.createAttribute("name");
-                attr.setValue(RefStrings.ROLE_NAME_ADMIN_XML);
+                roleAttr.setValue(RefStrings.ROLE_NAME_ADMIN_XML);
+
                 elementAdminRole.setAttributeNode(roleAttr);
                 
                 elementAdminRole.setTextContent(role.getRole().getId());
