@@ -40,7 +40,7 @@ public class CommandDebug implements Command {
 			"BotMain.jda.getSelfInfo().getAsMention().length()" + BotMain.jda.getSelfInfo().getAsMention().toString().length() + "\n" + 
 			"BotMain.jda.getSelfInfo().getAsMention()" + BotMain.jda.getSelfInfo().getAsMention());
 			try {
-				RoleManager role = event.getGuild().
+				RoleManager role = event.getGuild().createRole();
 				role.setName("Reasons Admin");
 				role.setColor(Color.GREEN);
 				

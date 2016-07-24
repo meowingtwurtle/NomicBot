@@ -10,6 +10,7 @@ import org.w3c.dom.Node;
 import com.srgood.dbot.ref.RefStrings;
 
 import net.dv8tion.jda.audio.player.Player;
+import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.entities.User;
 import net.dv8tion.jda.events.ReadyEvent;
 import net.dv8tion.jda.events.guild.GuildJoinEvent;
@@ -50,24 +51,10 @@ public class BotListener extends ListenerAdapter {
 				Node ServerNode = BotMain.servers.get(event.getGuild().getId());
 				Element NodeElement = (Element)ServerNode;
 				localPrefix = NodeElement.getElementsByTagName("prefix").item(0).getTextContent();
-			} else {
-				Node root = BotMain.PInputFile.getDocumentElement();
-				
+			} else {				
 				Element server = BotMain.PInputFile.createElement("server");
 				
-				Attr attr = BotMain.PInputFile.createAttribute("id");
-				attr.setValue(event.getGuild().getId());
-				server.setAttributeNode(attr);
-				
-				Element prefixElement = BotMain.PInputFile.createElement("prefix");
-				
-				
-				prefixElement.appendChild(BotMain.PInputFile.createTextNode(BotMain.prefix));
-				
-				server.appendChild(prefixElement);
-				root.appendChild(server);
-				
-				BotMain.servers.put(event.getGuild().getId(), server);
+				initGuild(event.getGuild());
 				
 				localPrefix = server.getElementsByTagName("prefix").item(0).getTextContent();
 			}
@@ -114,27 +101,31 @@ public class BotListener extends ListenerAdapter {
 		
 		@Override
 		public void onGuildJoin(GuildJoinEvent event) {
+//		    initGuild(event.getGuild());
+		}
+		
+		private void initGuild(Guild guild) {
             
-			Node root = BotMain.PInputFile.getDocumentElement();
-			
-			Element server = BotMain.PInputFile.createElement("server");
-			
-			Attr attr = BotMain.PInputFile.createAttribute("id");
-			attr.setValue(event.getGuild().getId());
-			server.setAttributeNode(attr);
-			
-			Element prefixElement = BotMain.PInputFile.createElement("prefix");
-			
-			
-			prefixElement.appendChild(BotMain.PInputFile.createTextNode(BotMain.prefix));
-			
-			server.appendChild(prefixElement);
-			root.appendChild(server);
-			
-			BotMain.servers.put(event.getGuild().getId(), server);
-			
+            Node root = BotMain.PInputFile.getDocumentElement();
+            
+            Element server = BotMain.PInputFile.createElement("server");
+            
+            Attr attr = BotMain.PInputFile.createAttribute("id");
+            attr.setValue(guild.getId());
+            server.setAttributeNode(attr);
+            
+            Element prefixElement = BotMain.PInputFile.createElement("prefix");
+            
+            
+            prefixElement.appendChild(BotMain.PInputFile.createTextNode(BotMain.prefix));
+            
+            server.appendChild(prefixElement);
+            root.appendChild(server);
+            
+            BotMain.servers.put(guild.getId(), server);
+            
             try {
-                RoleManager role = event.getGuild().createRole();
+                RoleManager role = guild.createRole();
                 role.setName(RefStrings.ROLE_NAME_ADMIN_READABLE);
                 role.setColor(Color.GREEN);
                 role.update();
