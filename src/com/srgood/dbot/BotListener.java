@@ -45,8 +45,17 @@ public class BotListener extends ListenerAdapter {
 	
 		@Override
 		public void onMessageReceived(MessageReceivedEvent event){
+		    
+		    
+		    if (BotMain.servers == null) {
+		        System.out.println("servers == null");
+		        return;
+		    }
+		    if (event.getGuild() == null) {
+		        System.out.println("guild == null");
+		        return;
+		    }
 			
-
 			if (BotMain.servers.containsKey(event.getGuild().getId())) {
 				Node ServerNode = BotMain.servers.get(event.getGuild().getId());
 				Element NodeElement = (Element)ServerNode;
@@ -56,7 +65,7 @@ public class BotListener extends ListenerAdapter {
 				
 				initGuild(event.getGuild());
 				
-				localPrefix = server.getElementsByTagName("prefix").item(0).getTextContent();
+				localPrefix = BotMain.prefix;
 			}
 			
 			
