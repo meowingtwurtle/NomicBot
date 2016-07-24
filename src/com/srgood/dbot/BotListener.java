@@ -10,11 +10,18 @@ import org.w3c.dom.Node;
 import com.srgood.dbot.ref.RefStrings;
 
 import net.dv8tion.jda.audio.player.Player;
+import net.dv8tion.jda.entities.Guild;
+import net.dv8tion.jda.entities.User;
 import net.dv8tion.jda.events.ReadyEvent;
+import net.dv8tion.jda.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.exceptions.PermissionException;
 import net.dv8tion.jda.hooks.ListenerAdapter;
+import net.dv8tion.jda.managers.RoleManager;
 import net.dv8tion.jda.utils.SimpleLog;
+import net.dv8tion.jda.utils.SimpleLog.Level;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -44,24 +51,10 @@ public class BotListener extends ListenerAdapter {
 				Node ServerNode = BotMain.servers.get(event.getGuild().getId());
 				Element NodeElement = (Element)ServerNode;
 				localPrefix = NodeElement.getElementsByTagName("prefix").item(0).getTextContent();
-			} else {
-				Node root = BotMain.PInputFile.getDocumentElement();
-				
+			} else {				
 				Element server = BotMain.PInputFile.createElement("server");
 				
-				Attr attr = BotMain.PInputFile.createAttribute("id");
-				attr.setValue(event.getGuild().getId());
-				server.setAttributeNode(attr);
-				
-				Element prefixElement = BotMain.PInputFile.createElement("prefix");
-				
-				
-				prefixElement.appendChild(BotMain.PInputFile.createTextNode("#!"));
-				
-				server.appendChild(prefixElement);
-				root.appendChild(server);
-				
-				BotMain.servers.put(event.getGuild().getId(), server);
+				initGuild(event.getGuild());
 				
 				localPrefix = server.getElementsByTagName("prefix").item(0).getTextContent();
 			}
@@ -104,5 +97,56 @@ public class BotListener extends ListenerAdapter {
 		@Override
 		public void onReady(ReadyEvent event){
 			
+		}
+		
+		@Override
+		public void onGuildJoin(GuildJoinEvent event) {
+//		    initGuild(event.getGuild());
+		}
+		
+		private void initGuild(Guild guild) {
+            
+            Node root = BotMain.PInputFile.getDocumentElement();
+            
+            Element server = BotMain.PInputFile.createElement("server");
+            
+            Element elementServers = (Element) BotMain.PInputFile.getDocumentElement().getElementsByTagName("servers").item(0);
+            
+            Attr idAttr = BotMain.PInputFile.createAttribute("id");
+            idAttr.setValue(guild.getId());
+            server.setAttributeNode(idAttr);
+            
+            Element prefixElement = BotMain.PInputFile.createElement("prefix");
+            
+            
+            prefixElement.appendChild(BotMain.PInputFile.createTextNode(BotMain.prefix));
+            
+            server.appendChild(prefixElement);
+            elementServers.appendChild(server);
+            
+            BotMain.servers.put(guild.getId(), server);
+            
+            try {
+                RoleManager role = guild.createRole();
+                role.setName(RefStrings.ROLE_NAME_ADMIN_READABLE);
+                role.setColor(Color.GREEN);
+                role.update();
+                
+                Element elementRoleContainer = BotMain.PInputFile.createElement("roles");
+                Element elementAdminRole = BotMain.PInputFile.createElement("role");
+                
+                Attr roleAttr = BotMain.PInputFile.createAttribute("name");
+                roleAttr.setValue(RefStrings.ROLE_NAME_ADMIN_XML);
+                elementAdminRole.setAttributeNode(roleAttr);
+                
+                elementAdminRole.setTextContent(role.getRole().getId());
+                
+                elementRoleContainer.appendChild(elementAdminRole);
+                
+                server.appendChild(elementRoleContainer);
+                
+            } catch (PermissionException e3) {
+                SimpleLog.getLog("Reasons").warn("Could not create custom role! Possible permissions problem?");
+            }
 		}
 }

@@ -8,4 +8,7 @@ public class RefStrings {
 	public static final String BOT_TOKEN_REASONS = "MjAxODEwODM4MDcwMzYyMTEy.CnW-4w.-U2KZFTgfzXFd1HNoC_yYjF426s";
 	//see http://stackoverflow.com/questions/396429/how-do-you-know-what-version-number-to-use
 	public static final String VERSION = "0.74";
+	
+	public static final String ROLE_NAME_ADMIN_XML = "ADMIN";
+	public static final String ROLE_NAME_ADMIN_READABLE = "Reasons Admin";
 }
