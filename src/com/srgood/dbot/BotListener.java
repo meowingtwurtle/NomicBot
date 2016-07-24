@@ -10,11 +10,15 @@ import org.w3c.dom.Node;
 import com.srgood.dbot.ref.RefStrings;
 
 import net.dv8tion.jda.audio.player.Player;
+import net.dv8tion.jda.entities.User;
 import net.dv8tion.jda.events.ReadyEvent;
 import net.dv8tion.jda.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.exceptions.PermissionException;
 import net.dv8tion.jda.hooks.ListenerAdapter;
+import net.dv8tion.jda.managers.RoleManager;
 import net.dv8tion.jda.utils.SimpleLog;
+import net.dv8tion.jda.utils.SimpleLog.Level;
 
 import java.awt.Color;
 import java.io.File;
@@ -110,8 +114,7 @@ public class BotListener extends ListenerAdapter {
 		
 		@Override
 		public void onGuildJoin(GuildJoinEvent event) {
-			event.getGuild().createRole().setName("Reasons Admin").setColor(Color.GREEN);
-			
+            
 			Node root = BotMain.PInputFile.getDocumentElement();
 			
 			Element server = BotMain.PInputFile.createElement("server");
@@ -129,5 +132,28 @@ public class BotListener extends ListenerAdapter {
 			root.appendChild(server);
 			
 			BotMain.servers.put(event.getGuild().getId(), server);
+			
+            try {
+                RoleManager role = event.getGuild().createRole();
+                role.setName(RefStrings.ROLE_NAME_ADMIN_READABLE);
+                role.setColor(Color.GREEN);
+                role.update();
+                
+                Element elementRoleContainer = BotMain.PInputFile.createElement("roles");
+                Element elementAdminRole = BotMain.PInputFile.createElement("role");
+                
+                Attr roleAttr = BotMain.PInputFile.createAttribute("name");
+                attr.setValue(RefStrings.ROLE_NAME_ADMIN_XML);
+                elementAdminRole.setAttributeNode(roleAttr);
+                
+                elementAdminRole.setTextContent(role.getRole().getId());
+                
+                elementRoleContainer.appendChild(elementAdminRole);
+                
+                server.appendChild(elementRoleContainer);
+                
+            } catch (PermissionException e3) {
+                SimpleLog.getLog("Reasons").warn("Could not create custom role! Possible permissions problem?");
+            }
 		}
 }

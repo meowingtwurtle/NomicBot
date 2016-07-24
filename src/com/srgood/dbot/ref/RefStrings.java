@@ -6,4 +6,7 @@ public class RefStrings {
 	public static final String TABLE_UNFLIP_JOKE = TABLE_UNFLIP + " \n\n Calm down!";
 	//see http://stackoverflow.com/questions/396429/how-do-you-know-what-version-number-to-use
 	public static final String VERSION = "0.74";
+	
+	public static final String ROLE_NAME_ADMIN_XML = "ADMIN";
+	public static final String ROLE_NAME_ADMIN_READABLE = "Reasons Admin";
 }
