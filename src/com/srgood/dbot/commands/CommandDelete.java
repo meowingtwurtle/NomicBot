@@ -13,19 +13,20 @@ import net.dv8tion.jda.entities.Channel;
 import net.dv8tion.jda.entities.MessageChannel;
 import net.dv8tion.jda.entities.TextChannel;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
 public class CommandDelete implements Command {
 	
 private final String help = "Deletes Messages Use: '" + BotMain.prefix + "delete [all|bot] [channel name]' Default is all in current channel";
 
 	@Override
-	public boolean called(String[] args, MessageReceivedEvent event) {
+	public boolean called(String[] args, GuildMessageReceivedEvent event) {
 		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
-	public void action(String[] args, MessageReceivedEvent event) {
+	public void action(String[] args, GuildMessageReceivedEvent event) {
 		
 		
 		String channel = null,delType = null;
@@ -37,11 +38,11 @@ private final String help = "Deletes Messages Use: '" + BotMain.prefix + "delete
 			if (args.length >= 2) {
 				channel = BotMain.cleanFileName(args[1]);
 			} else {
-				channel = BotMain.cleanFileName(event.getTextChannel().getName());
+				channel = BotMain.cleanFileName(event.getChannel().getName());
 			}
 		} else {
 			delType = "all";
-			channel = BotMain.cleanFileName(event.getTextChannel().getName());
+			channel = BotMain.cleanFileName(event.getChannel().getName());
 		}
 		
 		
@@ -80,7 +81,7 @@ private final String help = "Deletes Messages Use: '" + BotMain.prefix + "delete
 			}
 		}
 		  
-		event.getTextChannel().deleteMessagesByIds(messages);
+		event.getChannel().deleteMessagesByIds(messages);
 		event.getChannel().sendMessage("Successfully Deleted **" + messages.size() + "** messages");
 		  
 	}
@@ -92,7 +93,7 @@ private final String help = "Deletes Messages Use: '" + BotMain.prefix + "delete
 	}
 
 	@Override
-	public void executed(boolean success, MessageReceivedEvent event) {
+	public void executed(boolean success, GuildMessageReceivedEvent event) {
 		// TODO Auto-generated method stub
 		return;
 	}

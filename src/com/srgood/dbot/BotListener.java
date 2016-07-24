@@ -12,6 +12,7 @@ import com.srgood.dbot.ref.RefStrings;
 import net.dv8tion.jda.audio.player.Player;
 import net.dv8tion.jda.events.ReadyEvent;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.hooks.ListenerAdapter;
 import net.dv8tion.jda.utils.SimpleLog;
 
@@ -37,7 +38,7 @@ public class BotListener extends ListenerAdapter {
 	public static Map<String,Player> players = new HashMap<>();
 	
 		@Override
-		public void onMessageReceived(MessageReceivedEvent event){
+		public void onGuildMessageReceived(GuildMessageReceivedEvent event){
 			
 
 			if (BotMain.servers.containsKey(event.getGuild().getId())) {
@@ -77,7 +78,6 @@ public class BotListener extends ListenerAdapter {
 			
 			if(event.getMessage().getContent().startsWith(localPrefix) && event.getMessage().getAuthor().getId() != event.getJDA().getSelfInfo().getId()){
 				BotMain.handleCommand(BotMain.parser.parse(event.getMessage().getContent().toLowerCase(),event));
-				//if (event.getMessage().getContent().toString().substring(1,7).equals("compile"))
 				SimpleLog.getLog("Reasons").info("Got Valid Input");
 			} else {
 				try {
@@ -91,18 +91,14 @@ public class BotListener extends ListenerAdapter {
 					
 				}
 			}
-			
 
-		
-				
-
-				
-			
-			
 		}
 		
+		//does stuff once JDA is loaded
 		@Override
 		public void onReady(ReadyEvent event){
-			
-		}
+					}
+		
+		//@Override
+		//public void 
 }

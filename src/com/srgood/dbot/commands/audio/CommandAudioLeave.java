@@ -5,6 +5,7 @@ import com.srgood.dbot.MusicPlayer;
 import com.srgood.dbot.commands.Command;
 
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.managers.AudioManager;
 
 public class CommandAudioLeave implements AudioCommand {
@@ -12,13 +13,13 @@ public class CommandAudioLeave implements AudioCommand {
 	private final String help = "Makes " + BotMain.jda.getSelfInfo().getUsername() + " leave the connected voice channel Use: '" + BotMain.prefix + "leave'";
 
 	@Override
-	public boolean called(String[] args, MessageReceivedEvent event) {
+	public boolean called(String[] args, GuildMessageReceivedEvent event) {
 		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
-	public void action(String[] args, MessageReceivedEvent event) {
+	public void action(String[] args, GuildMessageReceivedEvent event) {
 
 		AudioManager manager = event.getGuild().getAudioManager();
 		MusicPlayer player = AudioCommand.initAndGetPlayer(manager);
@@ -33,7 +34,7 @@ public class CommandAudioLeave implements AudioCommand {
 	}
 
 	@Override
-	public void executed(boolean success, MessageReceivedEvent event) {
+	public void executed(boolean success, GuildMessageReceivedEvent event) {
 		// TODO Auto-generated method stub
 		return;
 	}

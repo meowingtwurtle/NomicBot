@@ -32,6 +32,7 @@ import com.srgood.dbot.utils.CommandParser;
 import net.dv8tion.jda.JDA;
 import net.dv8tion.jda.JDABuilder;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.utils.SimpleLog;
 
 public class BotMain {
@@ -55,7 +56,7 @@ public class BotMain {
 	public static void main(String[] args) {
 		//catch exceptions when building JDA
 		try  {
-			jda = new JDABuilder().addListener(new BotListener()).setBotToken(RefStrings.BOT_TOKEN_REASONS).buildBlocking();
+			jda = new JDABuilder().addListener(new BotListener()).setBotToken(RefStrings.BOT_TOKEN_SRGOOD).buildBlocking();
 			jda.setAutoReconnect(true);
 			jda.getAccountManager().setGame("type '@Reasons help'");
 		} catch(LoginException e) {
@@ -175,9 +176,9 @@ public class BotMain {
 	    return cleanName.toString();
 	}
 	
-	public static void StoreMessage (MessageReceivedEvent event,Node node){
+	public static void StoreMessage (GuildMessageReceivedEvent event,Node node){
 		
-		String truePath = "messages/guilds/" + cleanFileName(event.getGuild().getName()) +"/" + cleanFileName(event.getTextChannel().getName()) + "/all/";
+		String truePath = "messages/guilds/" + cleanFileName(event.getGuild().getName()) +"/" + cleanFileName(event.getChannel().getName()) + "/all/";
 		try {
 			
 			FileOutputStream fout = new FileOutputStream(truePath + event.getMessage().getId() + ".ser");

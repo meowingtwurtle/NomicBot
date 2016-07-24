@@ -5,18 +5,19 @@ import org.w3c.dom.Element;
 import com.srgood.dbot.BotMain;
 
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
 public class CommandSetPrefix implements Command{
 	private final String help = "Sets the global prefix Use: '" + BotMain.prefix + "setprefix <prefix>'";
 	
 	@Override
-	public boolean called(String[] args, MessageReceivedEvent event) {
+	public boolean called(String[] args, GuildMessageReceivedEvent event) {
 		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
-	public void action(String[] args, MessageReceivedEvent event) {
+	public void action(String[] args, GuildMessageReceivedEvent event) {
 		// TODO Auto-generated method stub
 		try {
 			Element serverNode = (Element) BotMain.servers.get(event.getGuild().getId());
@@ -41,7 +42,7 @@ public class CommandSetPrefix implements Command{
 	}
 
 	@Override
-	public void executed(boolean success, MessageReceivedEvent event) {
+	public void executed(boolean success, GuildMessageReceivedEvent event) {
 		// TODO Auto-generated method stub
 		return;
 	}

@@ -3,17 +3,18 @@ package com.srgood.dbot.commands;
 import com.srgood.dbot.ref.RefStrings;
 
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
 public class CommandVersion implements Command {
 
 	@Override
-	public boolean called(String[] args, MessageReceivedEvent event) {
+	public boolean called(String[] args, GuildMessageReceivedEvent event) {
 		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
-	public void action(String[] args, MessageReceivedEvent event) {
+	public void action(String[] args, GuildMessageReceivedEvent event) {
 		// TODO Auto-generated method stub
 		
 		//see http://stackoverflow.com/questions/396429/how-do-you-know-what-version-number-to-use
@@ -35,7 +36,7 @@ public class CommandVersion implements Command {
 	}
 
 	@Override
-	public void executed(boolean success, MessageReceivedEvent event) {
+	public void executed(boolean success, GuildMessageReceivedEvent event) {
 		// TODO Auto-generated method stub
 
 	}
