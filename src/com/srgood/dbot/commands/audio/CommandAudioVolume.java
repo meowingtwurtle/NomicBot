@@ -4,6 +4,7 @@ import com.srgood.dbot.BotMain;
 import com.srgood.dbot.MusicPlayer;
 
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.managers.AudioManager;
 
 public class CommandAudioVolume implements AudioCommand {
@@ -11,13 +12,13 @@ public class CommandAudioVolume implements AudioCommand {
 	private final String help = "Used to set the audio volume Use: '" + BotMain.prefix + "volume <0-1>'";
 	
 	@Override
-	public boolean called(String[] args, MessageReceivedEvent event) {
+	public boolean called(String[] args, GuildMessageReceivedEvent event) {
 		return true;
 		// TODO Auto-generated method stubn 
 	}
 
 	@Override
-	public void action(String[] args, MessageReceivedEvent event) {
+	public void action(String[] args, GuildMessageReceivedEvent event) {
 		AudioManager manager = event.getGuild().getAudioManager();
 		MusicPlayer player = AudioCommand.initAndGetPlayer(manager);
 
@@ -38,7 +39,7 @@ public class CommandAudioVolume implements AudioCommand {
 	}
 
 	@Override
-	public void executed(boolean success, MessageReceivedEvent event) {
+	public void executed(boolean success, GuildMessageReceivedEvent event) {
 		// TODO Auto-generated method stub
 		return;
 	}

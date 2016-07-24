@@ -15,7 +15,7 @@ import net.dv8tion.jda.entities.User;
 import net.dv8tion.jda.events.ReadyEvent;
 import net.dv8tion.jda.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.exceptions.PermissionException;
+import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.hooks.ListenerAdapter;
 import net.dv8tion.jda.managers.RoleManager;
 import net.dv8tion.jda.utils.SimpleLog;
@@ -44,7 +44,7 @@ public class BotListener extends ListenerAdapter {
 	public static Map<String,Player> players = new HashMap<>();
 	
 		@Override
-		public void onMessageReceived(MessageReceivedEvent event){
+		public void onGuildMessageReceived(GuildMessageReceivedEvent event){
 		    
 		    
 		    if (BotMain.servers == null) {
@@ -79,7 +79,6 @@ public class BotListener extends ListenerAdapter {
 			
 			if(event.getMessage().getContent().startsWith(localPrefix) && event.getMessage().getAuthor().getId() != event.getJDA().getSelfInfo().getId()){
 				BotMain.handleCommand(BotMain.parser.parse(event.getMessage().getContent().toLowerCase(),event));
-				//if (event.getMessage().getContent().toString().substring(1,7).equals("compile"))
 				SimpleLog.getLog("Reasons").info("Got Valid Input");
 			} else {
 				try {
@@ -93,16 +92,10 @@ public class BotListener extends ListenerAdapter {
 					
 				}
 			}
-			
 
-		
-				
-
-				
-			
-			
 		}
 		
+		//does stuff once JDA is loaded
 		@Override
 		public void onReady(ReadyEvent event){
 			
@@ -113,26 +106,27 @@ public class BotListener extends ListenerAdapter {
 //		    initGuild(event.getGuild());
 		}
 		
-		private void initGuild(Guild guild) {
-            
+        private void initGuild(Guild guild) {
+    
             Node root = BotMain.PInputFile.getDocumentElement();
-            
+    
             Element server = BotMain.PInputFile.createElement("server");
-            
-            Element elementServers = (Element) BotMain.PInputFile.getDocumentElement().getElementsByTagName("servers").item(0);
-            
+    
+            Element elementServers = (Element) BotMain.PInputFile.getDocumentElement().getElementsByTagName("servers")
+                    .item(0);
+    
             Attr idAttr = BotMain.PInputFile.createAttribute("id");
             idAttr.setValue(guild.getId());
             server.setAttributeNode(idAttr);
-            
+    
             Element prefixElement = BotMain.PInputFile.createElement("prefix");
-            
-            
+    
             prefixElement.appendChild(BotMain.PInputFile.createTextNode(BotMain.prefix));
-            
+    
             server.appendChild(prefixElement);
             elementServers.appendChild(server);
-            
+    
             BotMain.servers.put(guild.getId(), server);
-		}
-}
+        }
+    }
+

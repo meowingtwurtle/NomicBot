@@ -1,11 +1,11 @@
 package com.srgood.dbot.commands;
 
-import net.dv8tion.jda.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
 public interface Command {
 
-		public boolean called(String[] args, MessageReceivedEvent event); 
-		public void action(String[] args, MessageReceivedEvent event);
+		public boolean called(String[] args, GuildMessageReceivedEvent event); 
+		public void action(String[] args, GuildMessageReceivedEvent event);
 		public String help();
-		public void executed(boolean success, MessageReceivedEvent event);
+		public void executed(boolean success, GuildMessageReceivedEvent event);
 }
