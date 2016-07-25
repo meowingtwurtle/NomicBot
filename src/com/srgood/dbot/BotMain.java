@@ -55,8 +55,9 @@ public class BotMain {
 	
 	public static void main(String[] args) {
 		//catch exceptions when building JDA
+		//invite temp: https://discordapp.com/oauth2/authorize?client_id=XXXX&scope=bot&permissions=0x33525237
 		try  {
-			jda = new JDABuilder().addListener(new BotListener()).setBotToken(RefStrings.BOT_TOKEN_SRGOOD).buildBlocking();
+			jda = new JDABuilder().addListener(new BotListener()).setBotToken(RefStrings.BOT_TOKEN_REASONS_DEV_1).buildBlocking();
 			jda.setAutoReconnect(true);
 			jda.getAccountManager().setGame("type '@Reasons help'");
 		} catch(LoginException e) {
