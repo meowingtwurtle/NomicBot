@@ -11,6 +11,7 @@ import com.srgood.dbot.source.AudioInfo;
 import com.srgood.dbot.source.AudioSource;
 
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.managers.AudioManager;
 
 public class CommandAudioPlay implements AudioCommand {
@@ -18,13 +19,13 @@ public class CommandAudioPlay implements AudioCommand {
 	private final String help = "Used to play audio Use: '" + BotMain.prefix + "play [URL]'";
 	
 	@Override
-	public boolean called(String[] args, MessageReceivedEvent event) {
+	public boolean called(String[] args, GuildMessageReceivedEvent event) {
 		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
-	public void action(String[] args, MessageReceivedEvent event) {
+	public void action(String[] args, GuildMessageReceivedEvent event) {
 		AudioManager manager = event.getGuild().getAudioManager();
 		MusicPlayer player = AudioCommand.initAndGetPlayer(manager);
 
@@ -129,7 +130,7 @@ public class CommandAudioPlay implements AudioCommand {
 	}
 
 	@Override
-	public void executed(boolean success, MessageReceivedEvent event) {
+	public void executed(boolean success, GuildMessageReceivedEvent event) {
 		// TODO Auto-generated method stub
 
 	}

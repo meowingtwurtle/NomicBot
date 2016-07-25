@@ -3,17 +3,18 @@ package com.srgood.dbot.commands;
 import com.srgood.dbot.BotMain;
 
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
 public class CommandInvite implements Command {
 private final String help = "Prints the link to add reasons to another server Use: '" + BotMain.prefix + "invite'";
 	@Override
-	public boolean called(String[] args, MessageReceivedEvent event) {
+	public boolean called(String[] args, GuildMessageReceivedEvent event) {
 		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
-	public void action(String[] args, MessageReceivedEvent event) {
+	public void action(String[] args, GuildMessageReceivedEvent event) {
 		// TODO Auto-generated method stub
 		event.getChannel().sendMessage("https://discordapp.com/oauth2/authorize?client_id=201810822131875840&scope=bot&permissions=0x23525237");
 	}
@@ -25,7 +26,7 @@ private final String help = "Prints the link to add reasons to another server Us
 	}
 
 	@Override
-	public void executed(boolean success, MessageReceivedEvent event) {
+	public void executed(boolean success, GuildMessageReceivedEvent event) {
 		// TODO Auto-generated method stub
 		return;
 	}
