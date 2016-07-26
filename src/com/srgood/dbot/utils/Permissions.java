@@ -21,4 +21,12 @@ public enum Permissions {
     int getLevel() {
         return level;
     }
+    
+    String getXMLName() {
+        return xmlName;
+    }
+    
+    String getReadableName() {
+        return readableName;
+    }
 }
