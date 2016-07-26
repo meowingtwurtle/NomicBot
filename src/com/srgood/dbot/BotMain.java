@@ -229,13 +229,17 @@ public class BotMain {
 	public static void handleCommand (CommandParser.CommandContainer cmd) {
 		//checks if the typed command is in the list
 		if (commands.containsKey(cmd.invoke)){
-			boolean safe = commands.get(cmd.invoke).called(cmd.args,cmd.event);
-			if (safe) {
-				commands.get(cmd.invoke).action(cmd.args,cmd.event);
-				commands.get(cmd.invoke).executed(safe,cmd.event);
-			} else {
-				commands.get(cmd.invoke).executed(safe,cmd.event);
+			
+			if (cmd.event.getGuild().getRolesForUser(cmd.event.getAuthor()).contains("") ) {
+				boolean safe = commands.get(cmd.invoke).called(cmd.args,cmd.event);
+				if (safe) {
+					commands.get(cmd.invoke).action(cmd.args,cmd.event);
+					commands.get(cmd.invoke).executed(safe,cmd.event);
+				} else {
+					commands.get(cmd.invoke).executed(safe,cmd.event);
+				}
 			}
+			
 		}
 	}
 }

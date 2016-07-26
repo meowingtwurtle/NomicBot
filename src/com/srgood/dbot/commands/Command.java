@@ -8,4 +8,5 @@ public interface Command {
 		public void action(String[] args, GuildMessageReceivedEvent event);
 		public String help();
 		public void executed(boolean success, GuildMessageReceivedEvent event);
+		public void permissionLever()
 }

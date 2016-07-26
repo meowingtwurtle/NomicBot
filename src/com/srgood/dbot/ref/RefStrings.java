@@ -7,7 +7,10 @@ public class RefStrings {
 	public static final String BOT_TOKEN_REASONS = "MjAxODEwODM4MDcwMzYyMTEy.CnW-4w.-U2KZFTgfzXFd1HNoC_yYjF426s";
 	public static final String BOT_TOKEN_REASONS_DEV_1 = "MjA3MjIyNzY5MjA3NzM4MzY4.Cnf-vg.UNECSqJIHUX_9sXL-98W27XUlIU";
 	public static final String BOT_TOKEN_REASONS_DEV_2 = "MjA3MjIzMTU4OTAwNjU0MDgw.Cnf_Gw.HKBXiCldwx57cN_1uHt6XhyNEwY";
-	
+    public static final String ROLE_NAME_ADMIN_XML = "ADMIN";
+    public static final String ROLE_NAME_ADMIN_READABLE = "Reasons Admin";
+    
 	//see http://stackoverflow.com/questions/396429/how-do-you-know-what-version-number-to-use
-	public static final String VERSION = "0.74";
+	
+    public static final String VERSION = "0.74";
 }
