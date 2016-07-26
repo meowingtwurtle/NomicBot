@@ -1,5 +1,6 @@
 package com.srgood.dbot.utils;
 
+import java.util.Collection;
 import java.util.List;
 
 import net.dv8tion.jda.entities.Guild;
@@ -12,10 +13,28 @@ public class PermissionOps {
         return guild.getRolesForUser(user);
     }
 
-    public int getHighestPermission(Guild guild, User user) {
+    public Permissions getHighestPermission(Guild guild, User user) {
         List<Role> roles = getPermissions(guild, user);
-        for (Role role : roles) {
+        
+        Permissions maxFound = Permissions.STANDARD;
+
+        for (Permissions permLevel : Permissions.values()) {
+            if ((permLevel.getLevel() > maxFound.getLevel())) {
+                if (containsAny(XMLUtils.getGuildRolesFromInternalName(permLevel.getXMLName(), guild), getPermissions(guild, user))) {
+                    maxFound = permLevel;
+                    break;
+                }
+            }
         }
-        return 0;
+        return maxFound;
+    }
+    
+    private boolean containsAny(Collection<?> container, Collection<?> checkFor) {
+        for (Object o : checkFor) {
+            if (container.contains(o)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
