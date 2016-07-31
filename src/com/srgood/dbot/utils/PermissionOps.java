@@ -9,11 +9,11 @@ import net.dv8tion.jda.entities.User;
 
 public class PermissionOps {
 
-    public List<Role> getPermissions(Guild guild, User user) {
+    public static List<Role> getPermissions(Guild guild, User user) {
         return guild.getRolesForUser(user);
     }
 
-    public Permissions getHighestPermission(Guild guild, User user) {
+    public static Permissions getHighestPermission(Guild guild, User user) {
         List<Role> roles = getPermissions(guild, user);
         
         Permissions maxFound = Permissions.STANDARD;
@@ -29,7 +29,7 @@ public class PermissionOps {
         return maxFound;
     }
     
-    private boolean containsAny(Collection<?> container, Collection<?> checkFor) {
+    public static boolean containsAny(Collection<?> container, Collection<?> checkFor) {
         for (Object o : checkFor) {
             if (container.contains(o)) {
                 return true;
@@ -37,4 +37,6 @@ public class PermissionOps {
         }
         return false;
     }
+    
+
 }

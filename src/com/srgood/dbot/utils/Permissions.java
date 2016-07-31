@@ -1,7 +1,7 @@
 package com.srgood.dbot.utils;
 
 public enum Permissions {
-    DEVELOPER(99), ADMINISTRATOR(3), STANDARD(0);
+	DEVELOPER(99, "DEV", "Bot Developer"), ADMINISTRATOR(3, "ADMIN", "Reasons Admin"), STANDARD(0, "STANDARD", null);
 
     int level;
     String xmlName;

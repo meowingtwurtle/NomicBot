@@ -28,9 +28,11 @@ import com.srgood.dbot.commands.*;
 import com.srgood.dbot.commands.audio.*;
 import com.srgood.dbot.ref.RefStrings;
 import com.srgood.dbot.utils.CommandParser;
+import com.srgood.dbot.utils.PermissionOps;
 
 import net.dv8tion.jda.JDA;
 import net.dv8tion.jda.JDABuilder;
+import net.dv8tion.jda.entities.Role;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.utils.SimpleLog;
@@ -228,9 +230,14 @@ public class BotMain {
 	
 	public static void handleCommand (CommandParser.CommandContainer cmd) {
 		//checks if the typed command is in the list
+		for (Role i : PermissionOps.getPermissions(cmd.event.getGuild(),cmd.event.getAuthor())) {
+			cmd.event.getChannel().sendMessage(i.getName());
+		}
+		
+		
 		if (commands.containsKey(cmd.invoke)){
 			
-			if (cmd.event.getGuild().getRolesForUser(cmd.event.getAuthor()).contains("") ) {
+			if (PermissionOps.containsAny(PermissionOps.getPermissions(cmd.event.getGuild(),cmd.event.getAuthor()),commands.get(cmd.invoke).permissionLevels())) {
 				boolean safe = commands.get(cmd.invoke).called(cmd.args,cmd.event);
 				if (safe) {
 					commands.get(cmd.invoke).action(cmd.args,cmd.event);
@@ -239,6 +246,7 @@ public class BotMain {
 					commands.get(cmd.invoke).executed(safe,cmd.event);
 				}
 			}
+			
 			
 		}
 	}
