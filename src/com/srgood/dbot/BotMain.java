@@ -230,14 +230,12 @@ public class BotMain {
 	
 	public static void handleCommand (CommandParser.CommandContainer cmd) {
 		//checks if the typed command is in the list
-		for (Role i : PermissionOps.getPermissions(cmd.event.getGuild(),cmd.event.getAuthor())) {
-			cmd.event.getChannel().sendMessage(i.getName());
-		}
 		
+
 		
 		if (commands.containsKey(cmd.invoke)){
 			
-			if (PermissionOps.containsAny(PermissionOps.getPermissions(cmd.event.getGuild(),cmd.event.getAuthor()),commands.get(cmd.invoke).permissionLevels())) {
+			if (PermissionOps.getHighestPermission(PermissionOps.getPermissions(cmd.event.getGuild(), cmd.event.getAuthor()), cmd.event.getGuild()).getLevel() >= commands.get(cmd.invoke).permissionLevel().getLevel()) {
 				boolean safe = commands.get(cmd.invoke).called(cmd.args,cmd.event);
 				if (safe) {
 					commands.get(cmd.invoke).action(cmd.args,cmd.event);
@@ -247,7 +245,7 @@ public class BotMain {
 				}
 			}
 			
-			
+			cmd.event.getChannel().sendMessage("" + PermissionOps.getHighestPermission(PermissionOps.getPermissions(cmd.event.getGuild(), cmd.event.getAuthor()), cmd.event.getGuild()).getLevel());
 		}
 	}
 }

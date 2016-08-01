@@ -42,10 +42,8 @@ public class CommandPing implements Command {
 	}
 
 	@Override
-	public Collection<?> permissionLevels() {
-		List<String> roles = new ArrayList<String>();
-		roles.add("Reasons Admin");
-		return roles;
+	public Permissions permissionLevel() {
+		return Permissions.ADMINISTRATOR;
 		// TODO Auto-generated method stub
 		
 	}
