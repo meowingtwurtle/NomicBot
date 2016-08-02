@@ -3,6 +3,7 @@ package com.srgood.dbot.commands;
 import org.w3c.dom.Element;
 
 import com.srgood.dbot.BotMain;
+import com.srgood.dbot.utils.Permissions;
 
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
@@ -45,6 +46,12 @@ public class CommandSetPrefix implements Command{
 	public void executed(boolean success, GuildMessageReceivedEvent event) {
 		// TODO Auto-generated method stub
 		return;
+	}
+
+	@Override
+	public Permissions permissionLevel() {
+		// TODO Auto-generated method stub
+		return Permissions.ADMINISTRATOR;
 	}
 
 }
