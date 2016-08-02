@@ -1,11 +1,11 @@
-package com.srgood.dbot;
+
+package com.srgood.dbot; 
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -32,16 +32,14 @@ import com.srgood.dbot.utils.PermissionOps;
 
 import net.dv8tion.jda.JDA;
 import net.dv8tion.jda.JDABuilder;
-import net.dv8tion.jda.entities.Role;
-import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.utils.SimpleLog;
-
 public class BotMain {
 	
 	public static JDA jda;
 	
-	//Global prefix and shutdown override key
+	//Global
+    // prefix and shutdown override key
 	public static String prefix;
 	public static String Okey;
 	
@@ -227,25 +225,26 @@ public class BotMain {
 		
 		//TODO Rank based delete
 	}
-	
-	public static void handleCommand (CommandParser.CommandContainer cmd) {
-		//checks if the typed command is in the list
-		
+    public static void handleCommand(CommandParser.CommandContainer cmd) {
+        // checks if the typed command is in the lis i
+        if (commands.containsKey(cmd.invoke)) {
+            if (PermissionOps
+                    .getHighestPermission(PermissionOps.getPermissions(cmd.event.getGuild(), cmd.event.getAuthor()),
+                            cmd.event.getGuild())
+                    .getLevel() >= commands.get(cmd.invoke).permissionLevel().getLevel()) {
+                boolean safe = commands.get(cmd.invoke).called(cmd.args, cmd.event);
+                if (safe) {
+                    commands.get(cmd.invoke).action(cmd.args, cmd.event);
+                    commands.get(cmd.invoke).executed(safe, cmd.event);
+                } else {
+                    commands.get(cmd.invoke).executed(safe, cmd.event);
+                }
+            }
 
-		
-		if (commands.containsKey(cmd.invoke)){
-			
-			if (PermissionOps.getHighestPermission(PermissionOps.getPermissions(cmd.event.getGuild(), cmd.event.getAuthor()), cmd.event.getGuild()).getLevel() >= commands.get(cmd.invoke).permissionLevel().getLevel()) {
-				boolean safe = commands.get(cmd.invoke).called(cmd.args,cmd.event);
-				if (safe) {
-					commands.get(cmd.invoke).action(cmd.args,cmd.event);
-					commands.get(cmd.invoke).executed(safe,cmd.event);
-				} else {
-					commands.get(cmd.invoke).executed(safe,cmd.event);
-				}
-			}
-			
-			cmd.event.getChannel().sendMessage("" + PermissionOps.getHighestPermission(PermissionOps.getPermissions(cmd.event.getGuild(), cmd.event.getAuthor()), cmd.event.getGuild()).getLevel());
-		}
-	}
+            cmd.event.getChannel()
+                    .sendMessage("" + PermissionOps.getHighestPermission(
+                            PermissionOps.getPermissions(cmd.event.getGuild(), cmd.event.getAuthor()),
+                            cmd.event.getGuild()).getLevel());
+        }
+    }
 }
