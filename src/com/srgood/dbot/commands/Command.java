@@ -13,4 +13,5 @@ public interface Command {
 		public String help();
 		public void executed(boolean success, GuildMessageReceivedEvent event);
 		public Permissions permissionLevel();
+		public Permissions defaultPermissionLevel();
 }

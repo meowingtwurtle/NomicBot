@@ -57,7 +57,7 @@ public class BotMain {
 		//catch exceptions when building JDA
 		//invite temp: https://discordapp.com/oauth2/authorize?client_id=XXXX&scope=bot&permissions=0x33525237
 		try  {
-			jda = new JDABuilder().addListener(new BotListener()).setBotToken(RefStrings.BOT_TOKEN_REASONS_DEV_1).buildBlocking();
+			jda = new JDABuilder().addListener(new BotListener()).setBotToken(RefStrings.BOT_TOKEN_REASONS_DEV_2).buildBlocking();
 			jda.setAutoReconnect(true);
 			jda.getAccountManager().setGame("type '@Reasons help'");
 		} catch(LoginException e) {
@@ -239,12 +239,9 @@ public class BotMain {
                 } else {
                     commands.get(cmd.invoke).executed(safe, cmd.event);
                 }
+            } else {
+            	cmd.event.getChannel().sendMessage("You lack the required permission to preform this action");
             }
-
-            cmd.event.getChannel()
-                    .sendMessage("" + PermissionOps.getHighestPermission(
-                            PermissionOps.getPermissions(cmd.event.getGuild(), cmd.event.getAuthor()),
-                            cmd.event.getGuild()).getLevel());
         }
     }
 }

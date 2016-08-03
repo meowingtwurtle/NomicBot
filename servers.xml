@@ -1,31 +1,50 @@
 <config>  
   
-  <global>
-    
-    <prefix>#!</prefix>
   
-  </global>
   
   <global>
     
+    
+    
     <prefix>#!</prefix>
   
+  
+  
   </global>
+  
+  
+  
+  <global>
+    
+    
+    
+    <prefix>#!</prefix>
+  
+  
+  
+  </global>
+  
+  
   
   <servers>
     
-    <server id="201020472702402560">
+  
+  
+    
+    <server id="206507749822038018">
       
       <prefix>#!</prefix>
       
       <roles>
         
-        <role name="ADMIN">206786562640445440</role>
+        <role name="ADMIN">210190025118318592</role>
       
       </roles>
     
     </server>
   
   </servers>
+
+
 
 </config>

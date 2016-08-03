@@ -6,7 +6,8 @@ import java.util.Map;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
- 
+
+import com.srgood.dbot.commands.Command;
 import com.srgood.dbot.ref.RefStrings;
  
 import net.dv8tion.jda.audio.player.Player;
@@ -134,7 +135,7 @@ public class BotListener extends ListenerAdapter {
                 role.setName(RefStrings.ROLE_NAME_ADMIN_READABLE);
                 role.setColor(Color.GREEN);
                 role.update();
-               
+               //shouldn't this be modular? iterating ovver all roles in the enum except the default one?
                 Element elementRoleContainer = BotMain.PInputFile.createElement("roles");
                 Element elementAdminRole = BotMain.PInputFile.createElement("role");
                
@@ -151,6 +152,29 @@ public class BotListener extends ListenerAdapter {
                
             } catch (PermissionException e3) {
                 SimpleLog.getLog("Reasons").warn("Could not create custom role! Possible permissions problem?");
+            }
+            
+            try {
+            	Element CommandContainer = BotMain.PInputFile.createElement("CommandPermissions");
+            	
+            	for (String command : BotMain.commands.keySet()) {
+            		Element CommandElement = BotMain.PInputFile.createElement("command");
+            		Attr CommandId = BotMain.PInputFile.createAttribute("name");
+            		
+            		CommandId.setValue(command);
+            		
+            		CommandElement.setAttributeNode(CommandId);
+            		
+            		Element permLevelElement = BotMain.PInputFile.createElement("permLevel");
+            		Node CommandDefault = BotMain.PInputFile.createTextNode("" + BotMain.commands.get(command).defaultPermissionLevel().getLevel());
+            		permLevelElement.appendChild(CommandDefault);
+            
+            		CommandElement.appendChild(permLevelElement);
+            		CommandContainer.appendChild(CommandElement);
+            	}
+            	BotMain.servers.get(guild.getId()).appendChild(CommandContainer);
+            } catch (Exception e4) {
+            	
             }
         }
 }
