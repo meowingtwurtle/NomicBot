@@ -65,6 +65,7 @@ public class BotListener extends ListenerAdapter {
             } else {               
                 Element server = BotMain.PInputFile.createElement("server");
                
+                System.out.println("initting Guild from message");
                 initGuild(event.getGuild());
                
                 localPrefix = BotMain.prefix;
@@ -155,7 +156,7 @@ public class BotListener extends ListenerAdapter {
             }
             
             try {
-            	Element CommandContainer = BotMain.PInputFile.createElement("CommandPermissions");
+            	Element CommandContainer = BotMain.PInputFile.createElement("commands");
             	
             	for (String command : BotMain.commands.keySet()) {
             		Element CommandElement = BotMain.PInputFile.createElement("command");

@@ -79,5 +79,11 @@ public class CommandShutdown implements Command {
 		// TODO Auto-generated method stub
 		return Permissions.ADMINISTRATOR;
 	}
+
+    @Override
+    public Permissions defaultPermissionLevel() {
+        // TODO Auto-generated method stub
+        return Permissions.STANDARD;
+    }
 	
 }

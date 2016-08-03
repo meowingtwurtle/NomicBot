@@ -43,9 +43,14 @@ public class CommandPing implements Command {
 
 	@Override
 	public Permissions permissionLevel() {
-		return Permissions.ADMINISTRATOR;
+		return Permissions.STANDARD;
 		// TODO Auto-generated method stub
 		
 	}
+
+    @Override
+    public Permissions defaultPermissionLevel() {
+        return Permissions.STANDARD;
+    }
 	
 }
