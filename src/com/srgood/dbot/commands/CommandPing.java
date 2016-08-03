@@ -4,9 +4,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.utils.Permissions;
 
+import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.entities.Role;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
@@ -42,8 +47,19 @@ public class CommandPing implements Command {
 	}
 
 	@Override
-	public Permissions permissionLevel() {
-		return Permissions.STANDARD;
+	public Permissions permissionLevel(Guild guild) {
+		
+		
+		if (BotMain.servers.containsKey(guild.getId())) {
+			Node ServerNode = BotMain.servers.get(guild.getId());
+			NodeList NodeElement = ServerNode.getChildNodes();
+			for (int i = 0; i == NodeElement.getLength(); i++) {
+				
+				
+			}
+		}
+		
+		return;
 		// TODO Auto-generated method stub
 		
 	}
