@@ -22,6 +22,10 @@ public class PermissionOps {
     public static Permissions roleToPermission(Role role, Guild guild) {
     	Permissions permission = Permissions.STANDARD;
     	
+    	if (role == null) {
+    	    return permission;
+    	}
+    	
     	//<config>
     	//  <servers>
     	//    <server>
