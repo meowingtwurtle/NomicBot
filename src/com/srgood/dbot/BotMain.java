@@ -1,11 +1,15 @@
 
 package com.srgood.dbot; 
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -24,8 +28,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.srgood.dbot.commands.*;
-import com.srgood.dbot.commands.audio.*;
+import com.srgood.dbot.commands.Command;
+import com.srgood.dbot.commands.CommandPing;
+import com.srgood.dbot.commands.CommandShutdown;
 import com.srgood.dbot.ref.RefStrings;
 import com.srgood.dbot.utils.CommandParser;
 import com.srgood.dbot.utils.PermissionOps;
@@ -127,6 +132,8 @@ public class BotMain {
 		DOMSource source = new DOMSource(PInputFile);
 		StreamResult result = new StreamResult(new File("servers.xml"));
 		transformer.transform(source, result);
+		
+		cleanFile();
 	}
 	
 	
@@ -242,6 +249,32 @@ public class BotMain {
             } else {
             	cmd.event.getChannel().sendMessage("You lack the required permission to preform this action");
             }
+        }
+    }
+    
+    public static void cleanFile() {
+        
+        try (FileReader fr = new FileReader("servers.xml"); FileWriter fw = new FileWriter("temp.xml"); ) {
+            BufferedReader br = new BufferedReader(fr); 
+            String line;
+
+            while((line = br.readLine()) != null)
+            { 
+                if (!line.trim().equals("")) // don't write out blank lines
+                {
+                    fw.write(line + "\n", 0, line.length() + 1);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        try {
+            Files.deleteIfExists(new File("servers.xml").toPath());
+            Files.move(new File("temp.xml").toPath(), new File("servers.xml").toPath());
+            Files.deleteIfExists(new File("temp.xml").toPath());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
