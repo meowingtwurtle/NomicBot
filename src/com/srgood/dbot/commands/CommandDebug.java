@@ -3,7 +3,8 @@ package com.srgood.dbot.commands;
 import java.awt.Color;
  
 import com.srgood.dbot.BotMain;
- 
+import com.srgood.dbot.utils.Permissions;
+
 import net.dv8tion.jda.entities.Role;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.exceptions.PermissionException;
@@ -67,5 +68,17 @@ public class CommandDebug implements Command {
         // TODO Auto-generated method stub
         return;
     }
+
+	@Override
+	public Permissions permissionLevel() {
+		// TODO Auto-generated method stub
+		return BotMain.servers.get();
+	}
+
+	@Override
+	public Permissions defaultPermissionLevel() {
+		// TODO Auto-generated method stub
+		return Permissions.STANDARD;
+	}
    
 }

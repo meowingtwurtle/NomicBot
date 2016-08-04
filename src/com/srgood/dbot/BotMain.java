@@ -256,7 +256,7 @@ public class BotMain {
             if (PermissionOps
                     .getHighestPermission(PermissionOps.getPermissions(cmd.event.getGuild(), cmd.event.getAuthor()),
                             cmd.event.getGuild())
-                    .getLevel() >= commands.get(cmd.invoke).permissionLevel().getLevel()) {
+                    .getLevel() >= commands.get(cmd.invoke).permissionLevel(cmd.event.getGuild()).getLevel()) {
                 boolean safe = commands.get(cmd.invoke).called(cmd.args, cmd.event);
                 if (safe) {
                     commands.get(cmd.invoke).action(cmd.args, cmd.event);

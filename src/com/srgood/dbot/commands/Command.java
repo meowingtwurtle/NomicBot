@@ -21,9 +21,10 @@ public interface Command {
 		public void action(String[] args, GuildMessageReceivedEvent event);
 		public String help();
 		public void executed(boolean success, GuildMessageReceivedEvent event);
-		public Permissions permissionLevel();
+		public Permissions permissionLevel(Guild guild);
 		public Permissions defaultPermissionLevel();
 		
+<<<<<<< HEAD
     static Permissions getPermissionXML(Guild guild, Command command) {
 
         String commandName = null;
@@ -50,5 +51,4 @@ public interface Command {
 
         return null;
     }
-
 }
