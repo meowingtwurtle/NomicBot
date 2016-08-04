@@ -91,5 +91,13 @@ public class PermissionOps {
         return false;
     }
     
+    public static Permissions intToEnum(int level) {
+        for (Permissions p : Permissions.values()) {
+            if (p.level == level) {
+                return p;
+            }
+        }
+        return null;
+    }
 
 }
