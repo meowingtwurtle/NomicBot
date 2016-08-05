@@ -24,7 +24,6 @@ public interface Command {
 		public Permissions permissionLevel(Guild guild);
 		public Permissions defaultPermissionLevel();
 		
-<<<<<<< HEAD
     static Permissions getPermissionXML(Guild guild, Command command) {
 
         String commandName = null;
@@ -44,7 +43,7 @@ public interface Command {
             for (Node n : commandList) {
                 Element elem = (Element) n;
                 if (elem.getAttribute("name").equals(commandName)) {
-                    return PermissionOps.intToEnum(Integer.parseInt(elem.getTextContent()));
+                    return PermissionOps.intToEnum(Integer.parseInt(elem.getTextContent().trim()));
                 }
             }
         }
