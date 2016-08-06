@@ -9,10 +9,12 @@ import org.w3c.dom.Node;
 
 import com.srgood.dbot.commands.Command;
 import com.srgood.dbot.ref.RefStrings;
+import com.srgood.dbot.utils.Permissions;
 import com.srgood.dbot.utils.XMLUtils;
 
 import net.dv8tion.jda.audio.player.Player;
 import net.dv8tion.jda.entities.Guild;
+import net.dv8tion.jda.entities.Role;
 import net.dv8tion.jda.entities.User;
 import net.dv8tion.jda.events.ReadyEvent;
 import net.dv8tion.jda.events.guild.GuildJoinEvent;
@@ -109,8 +111,13 @@ public class BotListener extends ListenerAdapter {
         public void onGuildJoin(GuildJoinEvent event) {
 //          initGuild(event.getGuild());
         }
-       
-        private void initGuild(Guild guild) {
+        public static void deleteGuild(Guild guild) {
+        	for (Node n : XMLUtils.nodeListToList(((Element) ((Element) BotMain.servers.get(guild.getId())).getElementsByTagName("roles").item(0)).getElementsByTagName("role"))) {
+        		guild.getRoleById(n.getTextContent()).getManager().delete();
+        	}
+        	BotMain.servers.get(guild.getId()).getParentNode().removeChild(BotMain.servers.get(guild.getId()));
+        } 
+        public static void initGuild(Guild guild) {
    
             Node root = BotMain.PInputFile.getDocumentElement();
    
@@ -133,25 +140,31 @@ public class BotListener extends ListenerAdapter {
             BotMain.servers.put(guild.getId(), server);
            
             try {
-                RoleManager role = guild.createRole();
-                role.setName(RefStrings.ROLE_NAME_ADMIN_READABLE);
-                role.setColor(Color.GREEN);
-                role.update();
-               //shouldn't this be modular? iterating ovver all roles in the enum except the default one?
                 Element elementRoleContainer = BotMain.PInputFile.createElement("roles");
-                Element elementAdminRole = BotMain.PInputFile.createElement("role");
-               
-                Attr roleAttr = BotMain.PInputFile.createAttribute("name");
-                roleAttr.setValue(RefStrings.ROLE_NAME_ADMIN_XML);
- 
-                elementAdminRole.setAttributeNode(roleAttr);
-               
-                elementAdminRole.setTextContent(role.getRole().getId());
-               
-                elementRoleContainer.appendChild(elementAdminRole);
-               
-                server.appendChild(elementRoleContainer);
-               
+            	
+            	
+            	for (Permissions permission : Permissions.values()) {
+            		if (permission.isVisible()) {
+            			RoleManager role = guild.createRole();
+                		role.setName(permission.getReadableName());
+                		role.setColor(permission.getColor());
+                		
+                        role.update();
+                        
+                        
+                        Element elementAdminRole = BotMain.PInputFile.createElement("role");
+                        Attr roleAttr = BotMain.PInputFile.createAttribute("name");
+                        roleAttr.setValue(permission.getXMLName());
+                        elementAdminRole.setAttributeNode(roleAttr);
+                        elementAdminRole.setTextContent(role.getRole().getId());
+                        
+                        elementRoleContainer.appendChild(elementAdminRole);
+                        
+                        server.appendChild(elementRoleContainer);
+            		}
+            	}
+                
+                
             } catch (PermissionException e3) {
                 SimpleLog.getLog("Reasons").warn("Could not create custom role! Possible permissions problem?");
             }

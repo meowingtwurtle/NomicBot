@@ -1,4 +1,4 @@
-package com.srgood.dbot.source;
+ package com.srgood.dbot.source;
 
 import java.io.IOException;
 import java.io.InputStream;

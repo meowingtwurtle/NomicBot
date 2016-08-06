@@ -1,7 +1,8 @@
 package com.srgood.dbot.commands;
  
 import java.awt.Color;
- 
+
+import com.srgood.dbot.BotListener;
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.utils.Permissions;
 
@@ -24,37 +25,29 @@ public class CommandDebug implements Command {
     @Override
     public void action(String[] args, GuildMessageReceivedEvent event) {
         // TODO Auto-generated method stub
-        try {
-            event.getChannel().sendMessage(args[0].toString());
+
+    	if (args.length > 0) {
+    		switch(args[0].toLowerCase()) {
+    			case "flushandinitguild":
+    				BotListener.deleteGuild(event.getGuild());
+    				BotListener.initGuild(event.getGuild());
+    				event.getChannel().sendMessage("Done");
+    				break;
+    			
+    				
+    			default:
+    				event.getChannel().sendMessage("Invalid argument");
+    				break;
+    		} 
+    	} else {
             event.getChannel().sendMessage("Author Name: " + event.getAuthor().getUsername() + "\n" +
-            "Author Nick: " + event.getAuthorNick() + "\n" +
-            "id: " + event.getAuthor().getId() + "\n" +
-            event.getAuthor().getAsMention() + "\n" +
-            "Picture url: " + event.getAuthor().getAvatarUrl().toString() + "\n" +
-            "BotMain.jda.getSelfInfo().getAsMention().length()" + BotMain.jda.getSelfInfo().getAsMention().toString().length() + "\n" +
-            "BotMain.jda.getSelfInfo().getAsMention()" + BotMain.jda.getSelfInfo().getAsMention());
-           
-        } catch (Exception e) {
-            event.getChannel().sendMessage("Author Name: " + event.getAuthor().getUsername() + "\n" +
-            "Author Nick: " + event.getAuthorNick() + "\n" +
-            "id: " + event.getAuthor().getId() + "\n" +
-            event.getAuthor().getAsMention() + "\n" +
-            "Picture url: " + event.getAuthor().getAvatarUrl().toString() + "\n" +
-            "BotMain.jda.getSelfInfo().getAsMention().length()" + BotMain.jda.getSelfInfo().getAsMention().toString().length() + "\n" +
-            "BotMain.jda.getSelfInfo().getAsMention()" + BotMain.jda.getSelfInfo().getAsMention());
-            try {
-                RoleManager role = event.getGuild().createRole();
-                role.setName("Reasons Admin");
-                role.setColor(Color.GREEN);
-               
-            } catch(PermissionException e3) {
-                event.getChannel().sendMessage("\n\n\n you done messed up\n" + e.getMessage());
-            }
- 
-           
-           
-           
-        }
+                    "Author Nick: " + event.getAuthorNick() + "\n" +
+                    "id: " + event.getAuthor().getId() + "\n" +
+                    event.getAuthor().getAsMention() + "\n" +
+                    "Picture url: " + event.getAuthor().getAvatarUrl().toString() + "\n" +
+                    "BotMain.jda.getSelfInfo().getAsMention().length()" + BotMain.jda.getSelfInfo().getAsMention().toString().length() + "\n" +
+                    "BotMain.jda.getSelfInfo().getAsMention()" + BotMain.jda.getSelfInfo().getAsMention());
+    	}
        
     }
  

@@ -1,16 +1,24 @@
 package com.srgood.dbot.utils;
 
+import java.awt.Color;
+
 public enum Permissions {
-	DEVELOPER(99, "DEV", "Bot Developer"), ADMINISTRATOR(3, "ADMIN", "Reasons Admin"), STANDARD(0, "STANDARD", "Standard");
+	DEVELOPER(99, "DEV", "Bot Developer",true,Color.red), ADMINISTRATOR(3, "ADMIN", "Reasons Admin",true,Color.green),MUSIC_DJ(2, "MUSIC_DJ", "DJ",true,Color.cyan), STANDARD(0, "STANDARD", "Standard",false,Color.BLACK);
 
     int level;
     String xmlName;
     String readableName;
+    Color color;
+    Boolean visible;
     
-    Permissions(int lvl, String xmlName, String readableName) {
+
+    
+    Permissions(int lvl, String xmlName, String readableName,Boolean visible, Color color) {
         level = lvl;
         this.xmlName = xmlName;
         this.readableName = readableName;
+        this.color = color;
+        this.visible = visible;
     }
     
 
@@ -24,5 +32,13 @@ public enum Permissions {
     
     public String getReadableName() {
         return readableName;
+    }
+    
+    public Color getColor() {
+		return color;
+    }
+    
+    public Boolean isVisible() {
+    	return visible;
     }
 }
