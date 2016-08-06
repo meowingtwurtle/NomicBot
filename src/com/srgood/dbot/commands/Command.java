@@ -24,7 +24,8 @@ public interface Command {
 		public Permissions permissionLevel(Guild guild);
 		public Permissions defaultPermissionLevel();
 		
-    static Permissions getPermissionXML(Guild guild, Command command) {
+		public static Permissions getPermissionXML(Guild guild, Command command) {
+
 
         String commandName = null;
 
