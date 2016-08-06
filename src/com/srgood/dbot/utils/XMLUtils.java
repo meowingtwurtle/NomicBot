@@ -41,4 +41,32 @@ public class XMLUtils {
         
         return ret;
     }
+    
+    public static void initGuildCommands(Guild guild) {
+        Element commandsElement = BotMain.PInputFile.createElement("commands");
+        BotMain.servers.get(guild.getId()).appendChild(commandsElement);
+        initCommandsElement(commandsElement);
+    }
+    
+    public static void initCommandsElement(Element commandsElement) {
+        try {            
+            for (String command : BotMain.commands.keySet()) {
+                initCommandElement(commandsElement, command);
+            }
+        } catch (Exception e4) {
+            e4.printStackTrace();
+        }
+    }
+    
+    public static void initCommandElement(Element commandsElement, String command) {
+        Element commandElement = BotMain.PInputFile.createElement("command");
+        
+        commandElement.setAttribute("name", command);
+        
+        Element permLevelElement = BotMain.PInputFile.createElement("permLevel");
+        permLevelElement.setTextContent("" + BotMain.commands.get(command).defaultPermissionLevel().getLevel());
+
+        commandElement.appendChild(permLevelElement);
+        commandsElement.appendChild(commandElement);
+    }
 }
