@@ -29,6 +29,7 @@ public class CommandAudioPlay implements AudioCommand {
 
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
+		event.getChannel().sendTyping();
 		AudioManager manager = event.getGuild().getAudioManager();
 		MusicPlayer player = AudioCommand.initAndGetPlayer(manager);
 

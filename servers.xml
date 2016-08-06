@@ -4,7 +4,7 @@
   </global>
   <servers>
     <server id="206507749822038018">
-      <prefix>#!</prefix>
+      <prefix>!</prefix>
       <roles>
         <role name="ADMIN">211281733117673472</role>
       </roles>
