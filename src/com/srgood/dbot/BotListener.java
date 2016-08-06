@@ -175,7 +175,7 @@ public class BotListener extends ListenerAdapter {
             	}
             	BotMain.servers.get(guild.getId()).appendChild(CommandContainer);
             } catch (Exception e4) {
-            	
+            	e4.printStackTrace();
             }
         }
 }

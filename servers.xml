@@ -2,14 +2,11 @@
   <global>
     <prefix>#!</prefix>
   </global>
-  <global>
-    <prefix>#!</prefix>
-  </global>
   <servers>
     <server id="206507749822038018">
       <prefix>#!</prefix>
       <roles>
-        <role name="ADMIN">211279921983651840</role>
+        <role name="ADMIN">211281733117673472</role>
       </roles>
       <commands>
         <command name="play">
