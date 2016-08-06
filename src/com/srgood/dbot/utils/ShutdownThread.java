@@ -16,6 +16,6 @@ public class ShutdownThread extends Thread {
 	}
 	
 	BotMain.jda.shutdown();
-	System.out.println("Dirty Shutdown");
+	
 	}
 }

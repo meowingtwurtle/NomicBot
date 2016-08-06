@@ -51,6 +51,7 @@ public class CommandPing implements Command {
 
 		return Command.getPermissionXML(guild, this);
 		
+
 	}
 
     @Override

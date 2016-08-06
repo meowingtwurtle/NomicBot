@@ -84,7 +84,7 @@ public class BotMain {
 		Runtime.getRuntime().addShutdownHook(new ShutdownThread());
 		
 		try  {
-			jda = new JDABuilder().addListener(new BotListener()).setBotToken(RefStrings.BOT_TOKEN_REASONS_DEV_2).buildBlocking();
+			jda = new JDABuilder().addListener(new BotListener()).setBotToken(RefStrings.BOT_TOKEN_REASONS).buildBlocking();
 			jda.setAutoReconnect(true);
 			jda.getAccountManager().setGame("type '@Reasons help'");
 		} catch(LoginException e) {
@@ -284,6 +284,7 @@ public class BotMain {
             { 
                 if (!line.trim().equals("")) // don't write out blank lines
                 {
+                    line = line.replace("\n", "").replace("\f", "").replace("\r", "");
                     fw.write(line + "\n", 0, line.length() + 1);
                 }
             }
