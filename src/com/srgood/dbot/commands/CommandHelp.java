@@ -3,7 +3,9 @@ package com.srgood.dbot.commands;
 import java.util.Set;
 
 import com.srgood.dbot.BotMain;
+import com.srgood.dbot.utils.Permissions;
 
+import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
@@ -48,5 +50,17 @@ public class CommandHelp implements Command {
 		// TODO Auto-generated method stub
 		return;
 	}
+	
+    @Override
+    public Permissions permissionLevel(Guild guild) {
+        // TODO Auto-generated method stub
+        return Command.getPermissionXML(guild, this);
+    }
+
+    @Override
+    public Permissions defaultPermissionLevel() {
+        // TODO Auto-generated method stub
+        return Permissions.STANDARD;
+    }
 
 }

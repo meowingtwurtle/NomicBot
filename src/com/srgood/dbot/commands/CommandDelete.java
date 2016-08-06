@@ -8,8 +8,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.srgood.dbot.BotMain;
+import com.srgood.dbot.utils.Permissions;
 
 import net.dv8tion.jda.entities.Channel;
+import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.entities.MessageChannel;
 import net.dv8tion.jda.entities.TextChannel;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
@@ -98,4 +100,16 @@ private final String help = "Deletes Messages Use: '" + BotMain.prefix + "delete
 		return;
 	}
 
+    @Override
+    public Permissions permissionLevel(Guild guild) {
+        // TODO Auto-generated method stub
+        return Command.getPermissionXML(guild, this);
+    }
+
+    @Override
+    public Permissions defaultPermissionLevel() {
+        // TODO Auto-generated method stub
+        return Permissions.STANDARD;
+    }
+	
 }

@@ -9,7 +9,10 @@ import com.srgood.dbot.MusicPlayer;
 import com.srgood.dbot.Playlist;
 import com.srgood.dbot.source.AudioInfo;
 import com.srgood.dbot.source.AudioSource;
+import com.srgood.dbot.utils.Permissions;
+import com.srgood.dbot.commands.Command;
 
+import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.managers.AudioManager;
@@ -134,5 +137,17 @@ public class CommandAudioPlay implements AudioCommand {
 		// TODO Auto-generated method stub
 
 	}
+
+    @Override
+    public Permissions permissionLevel(Guild guild) {
+        // TODO Auto-generated method stub
+        return Command.getPermissionXML(guild, this);
+    }
+
+    @Override
+    public Permissions defaultPermissionLevel() {
+        // TODO Auto-generated method stub
+        return Permissions.STANDARD;
+    }
 
 }
