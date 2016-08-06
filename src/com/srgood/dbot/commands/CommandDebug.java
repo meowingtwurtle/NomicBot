@@ -5,6 +5,7 @@ import java.awt.Color;
 import com.srgood.dbot.BotListener;
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.utils.Permissions;
+import com.srgood.dbot.utils.XMLUtils;
 
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.entities.Role;
@@ -46,7 +47,7 @@ public class CommandDebug implements Command {
                     event.getAuthor().getAsMention() + "\n" +
                     "Picture url: " + event.getAuthor().getAvatarUrl().toString() + "\n" +
                     "BotMain.jda.getSelfInfo().getAsMention().length()" + BotMain.jda.getSelfInfo().getAsMention().toString().length() + "\n" +
-                    "BotMain.jda.getSelfInfo().getAsMention()" + BotMain.jda.getSelfInfo().getAsMention());
+                    "BotMain.jda.getSelfInfo().getAsMention()" + BotMain.jda.getSelfInfo().getAsMention() + "\n" + "XMLUtils.verifyXML() = " + XMLUtils.verifyXML());
     	}
        
     }

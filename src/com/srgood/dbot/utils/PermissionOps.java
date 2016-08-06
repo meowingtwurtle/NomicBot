@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -12,6 +13,7 @@ import com.srgood.dbot.BotMain;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.entities.Role;
 import net.dv8tion.jda.entities.User;
+import net.dv8tion.jda.managers.RoleManager;
 
 public class PermissionOps {
 
@@ -20,7 +22,7 @@ public class PermissionOps {
     }
     
     public static Permissions roleToPermission(Role role, Guild guild) {
-    	Permissions permission = Permissions.STANDARD;
+    	Permissions permission = null;
     	
     	if (role == null) {
     	    return permission;
@@ -33,11 +35,9 @@ public class PermissionOps {
     	//        <role>
     	
     	// <server>
-    	Element serverElem = (Element) BotMain.servers.get(guild.getId());
+
     	
-    	Element rolesElem = (Element) serverElem.getElementsByTagName("role").item(0);
-    	
-    	List<Node> roleNodeList = XMLUtils.nodeListToList(rolesElem.getElementsByTagName("role"));
+    	List<Node> roleNodeList = XMLUtils.getRoleNodeListFromGuild(guild);
     	
     	String roleID = role.getId();
     	
@@ -50,7 +50,7 @@ public class PermissionOps {
     	    }
     	    
     	    for (Permissions permLevel : Permissions.values()) {
-    	        if (permLevel.getLevel() >= permission.getLevel() && permLevel.getXMLName().equals(roleXMLName)) {
+    	        if (permLevel.getLevel() >= (permission == null ? Permissions.STANDARD : permission).getLevel() && permLevel.getXMLName().equals(roleXMLName)) {
     	            permission = permLevel;
     	        }
     	    }
@@ -98,6 +98,58 @@ public class PermissionOps {
             }
         }
         return null;
+    }
+    
+    public static void createRoleIfNotExists(Permissions roleLevel, Guild guild) {
+        if (rolesToPermissions(guild.getRoles(), guild).contains(roleLevel)) {return;}
+        
+        if (!roleLevel.isVisible()) return;
+        
+        Element serverElement = (Element) BotMain.servers.get(guild.getId());
+        
+        Element rolesElement = (Element) serverElement.getElementsByTagName("roles");
+        
+        List<Node> roleElementList = ( XMLUtils.nodeListToList(rolesElement.getElementsByTagName("role")));
+        
+        
+        for (Node n : roleElementList) {
+            Element roleElem = (Element) n;
+            if (roleElem.getAttribute("name").equals(roleLevel.getXMLName())) {
+                return;
+            }
+        }
+        
+        createRole(roleLevel, guild, true);
+        
+    }
+    
+    public static Role createRole(Permissions roleLevel, Guild guild, boolean addToXML) {
+        if (!roleLevel.isVisible())
+            return null;
+
+        RoleManager roleMgr = guild.createRole();
+        roleMgr.setName(roleLevel.getReadableName());
+        roleMgr.setColor(roleLevel.getColor());
+
+        roleMgr.update();
+
+        Role role = roleMgr.getRole();
+
+        if (!addToXML) {
+            return role;
+        }
+
+        Element elementRoles = (Element) ((Element) BotMain.servers.get(guild.getId())).getElementsByTagName("roles").item(0);
+        
+        Element elementRole = BotMain.PInputFile.createElement("role");
+        Attr roleAttr = BotMain.PInputFile.createAttribute("name");
+        roleAttr.setValue(roleLevel.getXMLName());
+        elementRole.setAttributeNode(roleAttr);
+        elementRole.setTextContent(role.getId());
+
+        elementRoles.appendChild(elementRole);
+
+        return role;
     }
 
 }

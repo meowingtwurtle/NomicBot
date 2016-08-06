@@ -9,6 +9,7 @@ import org.w3c.dom.Node;
 
 import com.srgood.dbot.commands.Command;
 import com.srgood.dbot.ref.RefStrings;
+import com.srgood.dbot.utils.PermissionOps;
 import com.srgood.dbot.utils.Permissions;
 import com.srgood.dbot.utils.XMLUtils;
 
@@ -113,14 +114,12 @@ public class BotListener extends ListenerAdapter {
         }
         public static void deleteGuild(Guild guild) {
         	for (Node n : XMLUtils.nodeListToList(((Element) ((Element) BotMain.servers.get(guild.getId())).getElementsByTagName("roles").item(0)).getElementsByTagName("role"))) {
-        		guild.getRoleById(n.getTextContent()).getManager().delete();
+        	    guild.getRoleById(n.getTextContent()).getManager().delete();
         	}
         	BotMain.servers.get(guild.getId()).getParentNode().removeChild(BotMain.servers.get(guild.getId()));
         } 
         public static void initGuild(Guild guild) {
-   
-            Node root = BotMain.PInputFile.getDocumentElement();
-   
+      
             Element server = BotMain.PInputFile.createElement("server");
    
             Element elementServers = (Element) BotMain.PInputFile.getDocumentElement().getElementsByTagName("servers")
@@ -139,32 +138,15 @@ public class BotListener extends ListenerAdapter {
             elementServers.appendChild(server);            
             BotMain.servers.put(guild.getId(), server);
            
-            try {
+            try {            	
+            	
                 Element elementRoleContainer = BotMain.PInputFile.createElement("roles");
-            	
-            	
+                
+                server.appendChild(elementRoleContainer);
+                
             	for (Permissions permission : Permissions.values()) {
-            		if (permission.isVisible()) {
-            			RoleManager role = guild.createRole();
-                		role.setName(permission.getReadableName());
-                		role.setColor(permission.getColor());
-                		
-                        role.update();
-                        
-                        
-                        Element elementAdminRole = BotMain.PInputFile.createElement("role");
-                        Attr roleAttr = BotMain.PInputFile.createAttribute("name");
-                        roleAttr.setValue(permission.getXMLName());
-                        elementAdminRole.setAttributeNode(roleAttr);
-                        elementAdminRole.setTextContent(role.getRole().getId());
-                        
-                        elementRoleContainer.appendChild(elementAdminRole);
-                        
-                        server.appendChild(elementRoleContainer);
-            		}
+            		PermissionOps.createRole(permission, guild, true);
             	}
-                
-                
             } catch (PermissionException e3) {
                 SimpleLog.getLog("Reasons").warn("Could not create custom role! Possible permissions problem?");
             }
