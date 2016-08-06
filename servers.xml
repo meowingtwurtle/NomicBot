@@ -18,9 +18,6 @@
         <command name="debug">
           <permLevel>0</permLevel>
         </command>
-        <command name="ping">
-          <permLevel>0</permLevel>
-        </command>
         <command name="setprefix">
           <permLevel>3</permLevel>
         </command>
@@ -68,6 +65,9 @@
         </command>
         <command name="shutdown">
           <permLevel>3</permLevel>
+        </command>
+        <command name="ping">
+          <permLevel>0</permLevel>
         </command>
       </commands>
     </server>

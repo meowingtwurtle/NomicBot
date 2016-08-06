@@ -51,8 +51,10 @@ import com.srgood.dbot.commands.audio.CommandAudioStop;
 import com.srgood.dbot.commands.audio.CommandAudioVolume;
 import com.srgood.dbot.ref.RefStrings;
 import com.srgood.dbot.utils.CommandParser;
+import com.srgood.dbot.utils.CommandParser.CommandContainer;
 import com.srgood.dbot.utils.PermissionOps;
 import com.srgood.dbot.utils.ShutdownThread;
+import com.srgood.dbot.utils.XMLUtils;
 
 import net.dv8tion.jda.JDA;
 import net.dv8tion.jda.JDABuilder;
@@ -257,6 +259,9 @@ public class BotMain {
     public static void handleCommand(CommandParser.CommandContainer cmd) {
         // checks if the typed command is in the lis i
         if (commands.containsKey(cmd.invoke)) {
+            
+            createCommandNodeIfNotExists(cmd);
+            
             if (PermissionOps
                     .getHighestPermission(PermissionOps.getPermissions(cmd.event.getGuild(), cmd.event.getAuthor()),
                             cmd.event.getGuild())
@@ -274,6 +279,33 @@ public class BotMain {
         }
     }
     
+    public static void createCommandNodeIfNotExists(CommandParser.CommandContainer cmd) {
+        Element serverElement = (Element) servers.get(cmd.event.getGuild().getId());
+        Element commandsElement;
+        {
+            NodeList commandsNodeList = serverElement.getElementsByTagName("commands");
+            if (commandsNodeList.getLength() == 0) {
+                XMLUtils.initGuildCommands(cmd.event.getGuild());
+            }
+            commandsNodeList = serverElement.getElementsByTagName("commands");
+            commandsElement = (Element) commandsNodeList.item(0);
+            
+            NodeList commandNodeList = commandsElement.getElementsByTagName("command");
+            if (commandNodeList.getLength() == 0) {
+                XMLUtils.initCommandsElement(commandsElement);
+            }
+        }
+        for (Node n : XMLUtils.nodeListToList(commandsElement.getElementsByTagName("command"))) {
+            Element elem = (Element) n;
+            if (elem.getAttribute("name").equals(cmd.invoke)) {
+                return;
+            }
+        }
+        
+        XMLUtils.initCommandElement(commandsElement, cmd.invoke);
+    }
+
+
     public static void cleanFile() {
         
         try (FileReader fr = new FileReader("servers.xml"); FileWriter fw = new FileWriter("temp.xml"); ) {
