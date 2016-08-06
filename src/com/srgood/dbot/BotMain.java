@@ -52,6 +52,7 @@ import com.srgood.dbot.commands.audio.CommandAudioVolume;
 import com.srgood.dbot.ref.RefStrings;
 import com.srgood.dbot.utils.CommandParser;
 import com.srgood.dbot.utils.PermissionOps;
+import com.srgood.dbot.utils.ShutdownThread;
 
 import net.dv8tion.jda.JDA;
 import net.dv8tion.jda.JDABuilder;
@@ -79,6 +80,9 @@ public class BotMain {
 	public static void main(String[] args) {
 		//catch exceptions when building JDA
 		//invite temp: https://discordapp.com/oauth2/authorize?client_id=XXXX&scope=bot&permissions=0x33525237
+		
+		Runtime.getRuntime().addShutdownHook(new ShutdownThread());
+		
 		try  {
 			jda = new JDABuilder().addListener(new BotListener()).setBotToken(RefStrings.BOT_TOKEN_REASONS_DEV_2).buildBlocking();
 			jda.setAutoReconnect(true);

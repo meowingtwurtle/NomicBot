@@ -48,19 +48,8 @@ public class CommandPing implements Command {
 
 	@Override
 	public Permissions permissionLevel(Guild guild) {
-		
-		
-		if (BotMain.servers.containsKey(guild.getId())) {
-			Node ServerNode = BotMain.servers.get(guild.getId());
-			NodeList NodeElement = ServerNode.getChildNodes();
-			for (int i = 0; i == NodeElement.getLength(); i++) {
-				
-				
-			}
-		}
-		
-		return;
-		// TODO Auto-generated method stub
+
+		return Command.getPermissionXML(guild, this);
 		
 	}
 
