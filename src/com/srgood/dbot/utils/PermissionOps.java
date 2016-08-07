@@ -37,7 +37,7 @@ public class PermissionOps {
     	// <server>
 
     	
-    	List<Node> roleNodeList = XMLUtils.getRoleNodeListFromGuild(guild);
+    	List<Node> roleNodeList = XMLHandler.getRoleNodeListFromGuild(guild);
     	
     	String roleID = role.getId();
     	
@@ -65,7 +65,7 @@ public class PermissionOps {
 
         for (Permissions permLevel : Permissions.values()) {
             if ((permLevel.getLevel() > maxFound.getLevel())) {
-                if (containsAny(rolesToPermissions(XMLUtils.getGuildRolesFromInternalName(permLevel.getXMLName(), guild), guild), Roles)) {
+                if (containsAny(rolesToPermissions(XMLHandler.getGuildRolesFromInternalName(permLevel.getXMLName(), guild), guild), Roles)) {
                     maxFound = permLevel;
                     break;
                 }
@@ -109,7 +109,7 @@ public class PermissionOps {
         
         Element rolesElement = (Element) serverElement.getElementsByTagName("roles");
         
-        List<Node> roleElementList = ( XMLUtils.nodeListToList(rolesElement.getElementsByTagName("role")));
+        List<Node> roleElementList = ( XMLHandler.nodeListToList(rolesElement.getElementsByTagName("role")));
         
         
         for (Node n : roleElementList) {

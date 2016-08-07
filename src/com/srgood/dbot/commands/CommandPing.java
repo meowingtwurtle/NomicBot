@@ -10,6 +10,7 @@ import org.w3c.dom.NodeList;
 
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.utils.Permissions;
+import com.srgood.dbot.utils.XMLHandler;
 
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.entities.Role;
@@ -49,7 +50,7 @@ public class CommandPing implements Command {
 	@Override
 	public Permissions permissionLevel(Guild guild) {
 
-		return Command.getPermissionXML(guild, this);
+		return XMLHandler.getCommandPermissionXML(guild, this);
 		
 
 	}

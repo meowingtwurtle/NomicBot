@@ -2,6 +2,7 @@ package com.srgood.dbot.commands;
 
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.utils.Permissions;
+import com.srgood.dbot.utils.XMLHandler;
 
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
@@ -36,7 +37,7 @@ private final String help = "Prints the link to add reasons to another server Us
     @Override
     public Permissions permissionLevel(Guild guild) {
         // TODO Auto-generated method stub
-        return Command.getPermissionXML(guild, this);
+        return XMLHandler.getCommandPermissionXML(guild, this);
     }
 
     @Override

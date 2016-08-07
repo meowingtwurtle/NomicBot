@@ -5,7 +5,7 @@ import java.awt.Color;
 import com.srgood.dbot.BotListener;
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.utils.Permissions;
-import com.srgood.dbot.utils.XMLUtils;
+import com.srgood.dbot.utils.XMLHandler;
 
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.entities.Role;
@@ -30,7 +30,7 @@ public class CommandDebug implements Command {
     	if (args.length > 0) {
     		switch(args[0].toLowerCase()) {
     			case "flushandinitguild":
-    				BotListener.deleteGuild(event.getGuild());
+    				XMLHandler.deleteGuild(event.getGuild());
     				BotListener.initGuild(event.getGuild());
     				event.getChannel().sendMessage("Done");
     				break;
@@ -47,7 +47,7 @@ public class CommandDebug implements Command {
                     event.getAuthor().getAsMention() + "\n" +
                     "Picture url: " + event.getAuthor().getAvatarUrl().toString() + "\n" +
                     "BotMain.jda.getSelfInfo().getAsMention().length()" + BotMain.jda.getSelfInfo().getAsMention().toString().length() + "\n" +
-                    "BotMain.jda.getSelfInfo().getAsMention()" + BotMain.jda.getSelfInfo().getAsMention() + "\n" + "XMLUtils.verifyXML() = " + XMLUtils.verifyXML());
+                    "BotMain.jda.getSelfInfo().getAsMention()" + BotMain.jda.getSelfInfo().getAsMention() + "\n" + "XMLHandler.verifyXML() = " + XMLHandler.verifyXML());
     	}
        
     }
@@ -67,7 +67,7 @@ public class CommandDebug implements Command {
     @Override
     public Permissions permissionLevel(Guild guild) {
         // TODO Auto-generated method stub
-        return Command.getPermissionXML(guild, this);
+        return XMLHandler.getCommandPermissionXML(guild, this);
     }
 
     @Override

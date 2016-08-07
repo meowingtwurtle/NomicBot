@@ -9,10 +9,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.io.PrintStream;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.TreeMap;
 
 import javax.security.auth.login.LoginException;
@@ -26,9 +26,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import com.srgood.dbot.commands.CoinFlip;
 import com.srgood.dbot.commands.Command;
@@ -59,7 +57,7 @@ import com.srgood.dbot.ref.RefStrings;
 import com.srgood.dbot.utils.CommandParser;
 import com.srgood.dbot.utils.PermissionOps;
 import com.srgood.dbot.utils.ShutdownThread;
-import com.srgood.dbot.utils.XMLUtils;
+import com.srgood.dbot.utils.XMLHandler;
 
 import net.dv8tion.jda.JDA;
 import net.dv8tion.jda.JDABuilder;
@@ -75,9 +73,8 @@ public class BotMain {
 	public static String Okey;
 	
 	public static final CommandParser parser = new CommandParser();
-	public static TreeMap<String, Command> commands = new TreeMap<String, Command>(); 
-	public static HashMap<String,Node> servers = new HashMap<String,Node>();
-	
+	public static Map<String, Command> commands = new TreeMap<String, Command>(); 
+
 	//XML variables
 	public static DocumentBuilderFactory DomFactory;
 	public static DocumentBuilder DomInput;
@@ -104,7 +101,7 @@ public class BotMain {
 		
 		//load global paramaters
 		try {
-			PutNodes();
+			XMLHandler.putNodes();
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -154,7 +151,7 @@ public class BotMain {
 	
 	
 	//TODO fix the exceptions here
-	public static void WriteXML() throws TransformerException{
+	public static void writeXML() throws TransformerException{
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
 		Transformer transformer = transformerFactory.newTransformer();
 		// Beautify XML
@@ -172,38 +169,6 @@ public class BotMain {
 	}
 	
 	
-	// TODO fix the exceptions here, too
-	public static void PutNodes() throws Exception {
-	    try {
-		DomFactory = DocumentBuilderFactory.newInstance();
-		DomInput = DomFactory.newDocumentBuilder();
-
-		File InputFile = new File("servers.xml");
-
-		PInputFile = DomInput.parse(InputFile);
-		PInputFile.getDocumentElement().normalize();
-		SimpleLog.getLog("Reasons.").info(PInputFile.getDocumentElement().getNodeName());
-
-		// <config> element
-		Element rootElem = PInputFile.getDocumentElement();
-		// <server> element list
-		NodeList ServerNodes = rootElem.getElementsByTagName("server");
-		for (int i = 0; i < ServerNodes.getLength(); i++) {
-			Node ServerNode = ServerNodes.item(i);
-			Element ServerNodeElement = (Element) ServerNode;
-
-			servers.put(ServerNodeElement.getAttribute("id"), ServerNode);
-		}
-		
-		Element globalElem = (Element) rootElem.getElementsByTagName("global").item(0);
-		
-		prefix = globalElem.getElementsByTagName("prefix").item(0).getTextContent();
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        throw e;
-	    }
-	}
-	
 	final static int[] illegalChars = {34, 60, 62, 124, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 58, 42, 63, 92,46, 47};
 	static {
 	    Arrays.sort(illegalChars);
@@ -219,7 +184,7 @@ public class BotMain {
 	    return cleanName.toString();
 	}
 	
-	public static void StoreMessage (GuildMessageReceivedEvent event,Node node){
+	public static void storeMessage (GuildMessageReceivedEvent event){
 		
 		String truePath = "messages/guilds/" + cleanFileName(event.getGuild().getName()) +"/" + cleanFileName(event.getChannel().getName()) + "/all/";
 		try {
@@ -230,13 +195,12 @@ public class BotMain {
 			
 			oos.close();
 			Boolean mentioned = false;
-			Element NodeElement = (Element)node;
 			if (!event.getMessage().getMentionedUsers().isEmpty()) {
 				if ( event.getJDA().getSelfInfo().getAsMention().equals(event.getMessage().getMentionedUsers().get(0).getAsMention())) {
 					mentioned = true;
 				}
 			}
-			if (event.getAuthor().isBot() | event.getMessage().getContent().startsWith(NodeElement.getElementsByTagName("prefix").item(0).getTextContent()) | mentioned) {
+			if (event.getAuthor().isBot() | event.getMessage().getContent().startsWith(XMLHandler.getGuildPrefix(event.getGuild())) | mentioned) {
 				FileOutputStream fout2 = new FileOutputStream(truePath.replace("/all/", "/bot/") + event.getMessage().getId() + ".ser");
 				ObjectOutputStream oos2 = new ObjectOutputStream(fout2);   
 				oos2.writeObject(event.getMessage().getContent());
@@ -253,11 +217,7 @@ public class BotMain {
 			file.mkdirs();
 			file2.mkdirs();
 			
-			StoreMessage(event,node);
-			
-
-			
-
+			storeMessage(event);
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -271,9 +231,9 @@ public class BotMain {
         // checks if the typed command is in the lis i
         if (commands.containsKey(cmd.invoke)) {
             
-            createCommandNodeIfNotExists(cmd);
+            XMLHandler.createCommandNodeIfNotExists(cmd);
             
-            if (XMLUtils.commandIsEnabled(
+            if (XMLHandler.commandIsEnabled(
                     cmd.event.getGuild(),
                     BotMain.commands.get(cmd.invoke))) {
             	if (PermissionOps
@@ -296,32 +256,6 @@ public class BotMain {
         } 
     }
     
-    public static void createCommandNodeIfNotExists(CommandParser.CommandContainer cmd) {
-        Element serverElement = (Element) servers.get(cmd.event.getGuild().getId());
-        Element commandsElement;
-        {
-            NodeList commandsNodeList = serverElement.getElementsByTagName("commands");
-            if (commandsNodeList.getLength() == 0) {
-                XMLUtils.initGuildCommands(cmd.event.getGuild());
-            }
-            commandsNodeList = serverElement.getElementsByTagName("commands");
-            commandsElement = (Element) commandsNodeList.item(0);
-            
-            NodeList commandNodeList = commandsElement.getElementsByTagName("command");
-            if (commandNodeList.getLength() == 0) {
-                XMLUtils.initCommandsElement(commandsElement);
-            }
-        }
-        if (XMLUtils.commandElementExists(commandsElement, cmd.invoke)) {
-            System.out.println("Command element exists");
-                XMLUtils.addMissingSubElementsToCommand(commandsElement, cmd.invoke);
-                return;
-        }
-        System.out.println("Command element not exists");
-        XMLUtils.initCommandElement(commandsElement, cmd.invoke);
-    }
-
-
     public static void cleanFile() {
         
         try (FileReader fr = new FileReader("servers.xml"); FileWriter fw = new FileWriter("temp.xml"); ) {

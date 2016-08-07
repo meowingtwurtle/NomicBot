@@ -9,7 +9,7 @@ public class ShutdownThread extends Thread {
 	public void start() {
 		
 	try {
-		BotMain.WriteXML();
+		BotMain.writeXML();
 	} catch (TransformerException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();

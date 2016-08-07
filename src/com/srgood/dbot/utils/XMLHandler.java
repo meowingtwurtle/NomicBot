@@ -1,5 +1,6 @@
 package com.srgood.dbot.utils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -8,7 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
-import javax.management.modelmbean.RequiredModelMBean;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -16,16 +17,23 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.srgood.dbot.BotListener;
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.commands.Command;
 
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.entities.Role;
+import net.dv8tion.jda.utils.SimpleLog;
 
-public class XMLUtils {
+public class XMLHandler {
+    public static Map<String,Node> servers = new HashMap<String,Node>();
+    public static Node getServerNode(Guild guild) {
+        return servers.get(guild.getId());
+    }
+    
     public static Set<Role> getGuildRolesFromInternalName(String internalName, Guild guild) {
-        Element serverElem = (Element) BotMain.servers.get(guild.getId());
-        Element rolesElem = (Element) serverElem.getElementsByTagName("roles").item(0);
+        Element rolesElem = getRolesElement(guild);
+        
         List<Node> roleNodes = nodeListToList(rolesElem.getElementsByTagName("role"));
         
         Set<Role> ret = new HashSet<>();
@@ -37,6 +45,12 @@ public class XMLUtils {
         }
         
         return ret;
+    }
+    
+    public static Element getRolesElement(Guild guild) {
+        Element serverElem = (Element) getServerNode(guild);
+        Element rolesElem = (Element) serverElem.getElementsByTagName("roles").item(0);
+        return rolesElem;
     }
     
     public static List<Node> nodeListToList(NodeList nl) {
@@ -51,9 +65,17 @@ public class XMLUtils {
     
     public static void initGuildCommands(Guild guild) {
         Element commandsElement = BotMain.PInputFile.createElement("commands");
-        BotMain.servers.get(guild.getId()).appendChild(commandsElement);
+        getServerNode(guild).appendChild(commandsElement);
         initCommandsElement(commandsElement);
     }
+    
+    public static Element getCommandsElement(Guild guild) {
+        return (Element) ((Element) getServerNode(guild)).getElementsByTagName("commands").item(0);
+    }
+//    
+//    public static Element getCommandsElement(Guild guild) {
+//        
+//    }
     
     public static void initCommandsElement(Element commandsElement) {
         try {            
@@ -75,7 +97,33 @@ public class XMLUtils {
         addMissingSubElementsToCommand(commandsElement, command);
     }
     
-    
+    public static void initGuildXML(Guild guild) {
+        Element server = BotMain.PInputFile.createElement("server");
+
+        Element elementServers = (Element) BotMain.PInputFile.getDocumentElement().getElementsByTagName("servers")
+                .item(0);
+
+        Attr idAttr = BotMain.PInputFile.createAttribute("id");
+        idAttr.setValue(guild.getId());
+        server.setAttributeNode(idAttr);
+
+        Element globalElement = (Element) BotMain.PInputFile.getDocumentElement().getElementsByTagName("global")
+                .item(0);
+
+        for (Node n : XMLHandler.nodeListToList(globalElement.getChildNodes())) {
+            if (n instanceof Element) {
+                Element elem = (Element) n;
+                server.appendChild(elem.cloneNode(true));
+            }
+        }
+
+        elementServers.appendChild(server);
+        servers.put(guild.getId(), server);
+
+        Element elementRoleContainer = BotMain.PInputFile.createElement("roles");
+
+        server.appendChild(elementRoleContainer);
+    }
     
     public static boolean verifyXML() {
 
@@ -153,7 +201,7 @@ public class XMLUtils {
     }
     
     public static List<Node> getRoleNodeListFromGuild(Guild guild) {
-        Element serverElem = (Element) BotMain.servers.get(guild.getId());
+        Element serverElem = (Element) getServerNode(guild);
         
         Element rolesElem = (Element) serverElem.getElementsByTagName("roles").item(0);
                 
@@ -172,10 +220,9 @@ public class XMLUtils {
         }
 
         if (BotMain.commands.values().contains(command)) {
-            Element commandsElement = (Element) ((Element) BotMain.servers.get(guild.getId()))
-                    .getElementsByTagName("commands").item(0);
+            Element commandsElement = getCommandsElement(guild) ;
             
-            List<Node> commandList = XMLUtils.nodeListToList(commandsElement.getElementsByTagName("command"));
+            List<Node> commandList = XMLHandler.nodeListToList(commandsElement.getElementsByTagName("command"));
             
             for (Node n : commandList) {
                 Element elem = (Element) n;
@@ -230,5 +277,119 @@ public class XMLUtils {
                 targetCommand.appendChild(subElement);
             }
         }
+    }
+
+    
+    public static void deleteGuild(Guild guild) {
+        for (Node n : nodeListToList(
+                ((Element) ((Element) getServerNode(guild)).getElementsByTagName("roles").item(0))
+                        .getElementsByTagName("role"))) {
+            guild.getRoleById(n.getTextContent()).getManager().delete();
+        }
+        getServerNode(guild).getParentNode().removeChild(getServerNode(guild));
+    }
+
+    public static String getGuildPrefix(Guild guild) {
+        if (!servers.containsKey(guild.getId())) {
+            System.out.println("initting Guild from message");
+            BotListener.initGuild(guild);
+        }
+        return getGuildPrefixNode(guild).getTextContent();
+    }
+    
+    public static void setGuildPrefix(Guild guild, String newPrefix) {
+        getGuildPrefixNode(guild).setTextContent(newPrefix);
+    }
+
+    private static Node getGuildPrefixNode(Guild guild) {
+        Node ServerNode = getServerNode(guild);
+        Element NodeElement = (Element) ServerNode;
+        return NodeElement;
+    }
+    
+    public static void createCommandNodeIfNotExists(CommandParser.CommandContainer cmd) {
+        Element serverElement = (Element) getServerNode(cmd.event.getGuild());
+        Element commandsElement;
+        {
+            NodeList commandsNodeList = serverElement.getElementsByTagName("commands");
+            if (commandsNodeList.getLength() == 0) {
+                initGuildCommands(cmd.event.getGuild());
+            }
+            commandsNodeList = serverElement.getElementsByTagName("commands");
+            commandsElement = getCommandsElement(cmd.event.getGuild());
+            
+            NodeList commandNodeList = commandsElement.getElementsByTagName("command");
+            if (commandNodeList.getLength() == 0) {
+                initCommandsElement(commandsElement);
+            }
+        }
+        if (commandElementExists(commandsElement, cmd.invoke)) {
+            System.out.println("Command element exists");
+                addMissingSubElementsToCommand(commandsElement, cmd.invoke);
+                return;
+        }
+        System.out.println("Command element not exists");
+        initCommandElement(commandsElement, cmd.invoke);
+    }
+
+    // TODO fix the exceptions here, too
+    public static void putNodes() throws Exception {
+        try {
+    	BotMain.DomFactory = DocumentBuilderFactory.newInstance();
+    	BotMain.DomInput = BotMain.DomFactory.newDocumentBuilder();
+    
+    	File InputFile = new File("servers.xml");
+    
+    	BotMain.PInputFile = BotMain.DomInput.parse(InputFile);
+    	BotMain.PInputFile.getDocumentElement().normalize();
+    	SimpleLog.getLog("Reasons.").info(BotMain.PInputFile.getDocumentElement().getNodeName());
+    
+    	// <config> element
+    	Element rootElem = BotMain.PInputFile.getDocumentElement();
+    	// <server> element list
+    	NodeList ServerNodes = rootElem.getElementsByTagName("server");
+    	for (int i = 0; i < ServerNodes.getLength(); i++) {
+    		Node ServerNode = ServerNodes.item(i);
+    		Element ServerNodeElement = (Element) ServerNode;
+    
+    		servers.put(ServerNodeElement.getAttribute("id"), ServerNode);
+    	}
+    	
+    	Element globalElem = (Element) rootElem.getElementsByTagName("global").item(0);
+    	
+    	BotMain.prefix = globalElem.getElementsByTagName("prefix").item(0).getTextContent();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public static Permissions getCommandPermissionXML(Guild guild, Command command) {
+    
+    
+        String commandName = null;
+    
+        for (String e : BotMain.commands.keySet()) {
+            if (BotMain.commands.get(e) == command) {
+                commandName = e;
+            }
+        }
+    
+        if (BotMain.commands.values().contains(command)) {
+            Element commandsElement = (Element) ((Element) getServerNode(guild))
+                    .getElementsByTagName("commands").item(0);
+            
+            List<Node> commandList = nodeListToList(commandsElement.getElementsByTagName("command"));
+            
+            for (Node n : commandList) {
+                Element elem = (Element) n;
+                if (elem.getAttribute("name").equals(commandName)) {
+                	System.out.println(elem.getTagName());
+                    return PermissionOps.intToEnum(Integer.parseInt(elem.getElementsByTagName("permLevel").item(0).getTextContent()));
+                }
+            }
+        }
+    
+        return null;
     }
 }
