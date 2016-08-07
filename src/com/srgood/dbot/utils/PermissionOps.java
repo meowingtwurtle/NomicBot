@@ -21,6 +21,47 @@ public class PermissionOps {
     	return rolesToPermissions(guild.getRolesForUser(user), guild);
     }
     
+<<<<<<< HEAD
+=======
+    public static Permissions roleToPermission(Role role, Guild guild) {
+    	Permissions permission = null;
+    	
+    	if (role == null) {
+    	    return permission;
+    	}
+    	
+    	//<config>
+    	//  <servers>
+    	//    <server>
+    	//      <roles>
+    	//        <role>
+    	
+    	// <server>
+
+    	
+    	List<Node> roleNodeList = XMLHandler.getRoleNodeListFromGuild(guild);
+    	
+    	String roleID = role.getId();
+    	
+    	for (Node n : roleNodeList) {
+    	    Element roleElem = (Element) n;
+    	    String roleXMLName = roleElem.getAttribute("name");
+    	    
+    	    if (!roleID.equals(roleElem.getTextContent())) {
+    	        continue;
+    	    }
+    	    
+    	    for (Permissions permLevel : Permissions.values()) {
+    	        if (permLevel.getLevel() >= (permission == null ? Permissions.STANDARD : permission).getLevel() && permLevel.getXMLName().equals(roleXMLName)) {
+    	            permission = permLevel;
+    	        }
+    	    }
+    	}
+    	
+    	return permission;
+    }
+
+>>>>>>> 6f1545b6bd89c070e93f166e2a52b5b1242ef23b
     public static Permissions getHighestPermission(Collection<Permissions> Roles, Guild guild) {
         
         Permissions maxFound = Permissions.STANDARD;
