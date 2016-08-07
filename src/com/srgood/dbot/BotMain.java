@@ -140,6 +140,7 @@ public class BotMain {
 			commands.put("roll", new CommandDiceRoll());
 			commands.put("toggle", new CommandToggle());
 			commands.put("eval", new CommandEval());
+			commands.put("calc", new CommandEval());
 			
 			
 		} catch (Exception e) {

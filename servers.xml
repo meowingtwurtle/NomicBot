@@ -1,49 +1,223 @@
 <config>
-	<global>
-		<prefix>#!</prefix>
-	</global>
-	<servers>
-		<server id="206507749822038018">
-			<prefix>#!</prefix>
-			<roles>
-				<role name="DEV">211731828489322496</role>
-				<role name="ADMIN">211731829600944129</role>
-				<role name="MUSIC_DJ">211731831022682112</role>
-			</roles>
-			<commands>
-				<command name="debug">
-					<isEnabled>true</isEnabled>
-					<permLevel>0</permLevel>
-				</command>
-				<command name="delete"></command>
-				<command name="flip"></command>
-				<command name="getprefix"></command>
-				<command name="help"></command>
-				<command name="invite"></command>
-				<command name="join"></command>
-				<command name="leave"></command>
-				<command name="list"></command>
-				<command name="now-playing"></command>
-				<command name="pause"></command>
-				<command name="ping">
-					<isEnabled>true</isEnabled>
-					<permLevel>0</permLevel>
-				</command>
-				<command name="play"></command>
-				<command name="pong">
-					<isEnabled>true</isEnabled>
-					<permLevel>0</permLevel>
-				</command>
-				<command name="repeat"></command>
-				<command name="roll"></command>
-				<command name="setprefix"></command>
-				<command name="shutdown"></command>
-				<command name="skip"></command>
-				<command name="stop"></command>
-				<command name="toggle"></command>
-				<command name="version"></command>
-				<command name="volume"></command>
-			</commands>
-		</server>
-	</servers>
+  <global>
+    <prefix>#!</prefix>
+  </global>
+  <servers>
+    <server id="206507749822038018">
+      <prefix>#!</prefix>
+      <roles>
+        <role name="DEV">211568259747545088</role>
+        <role name="ADMIN">211568260741726211</role>
+        <role name="MUSIC_DJ">211568261823725568</role>
+      </roles>
+      <commands>
+        <command name="play">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="now-playing">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="debug">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="ping">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="setprefix">
+          <permLevel>3</permLevel>
+        </command>
+        <command name="skip">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="pong">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="list">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="delete">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="version">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="getprefix">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="pause">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="volume">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="help">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="stop">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="leave">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="repeat">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="join">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="invite">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="shutdown">
+          <permLevel>3</permLevel>
+        </command>
+        <command name="eval">
+          <permLevel>0</permLevel>
+        </command>
+      </commands>
+    </server>
+    <server id="201020472702402560">
+      <prefix>#!</prefix>
+      <roles>
+        <role name="DEV">211568301640253440</role>
+        <role name="ADMIN">211568302189707265</role>
+        <role name="MUSIC_DJ">211568303036956672</role>
+      </roles>
+      <commands>
+        <command name="play">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="now-playing">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="debug">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="ping">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="setprefix">
+          <permLevel>3</permLevel>
+        </command>
+        <command name="skip">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="pong">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="list">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="delete">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="version">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="getprefix">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="pause">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="volume">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="help">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="stop">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="leave">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="repeat">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="join">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="invite">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="shutdown">
+          <permLevel>3</permLevel>
+        </command>
+        <command name="eval">
+          <permLevel>0</permLevel>
+        </command>
+      </commands>
+    </server>
+    <server id="178665810225528832">
+      <prefix>#!</prefix>
+      <roles>
+        <role name="DEV">211645476116758528</role>
+        <role name="ADMIN">211645482341105664</role>
+        <role name="MUSIC_DJ">211645482932371456</role>
+      </roles>
+      <commands>
+        <command name="play">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="now-playing">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="debug">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="ping">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="setprefix">
+          <permLevel>3</permLevel>
+        </command>
+        <command name="skip">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="pong">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="list">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="delete">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="version">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="getprefix">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="pause">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="volume">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="help">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="stop">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="leave">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="repeat">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="join">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="invite">
+          <permLevel>0</permLevel>
+        </command>
+        <command name="shutdown">
+          <permLevel>3</permLevel>
+        </command>
+      </commands>
+    </server>
+  </servers>
 </config>
