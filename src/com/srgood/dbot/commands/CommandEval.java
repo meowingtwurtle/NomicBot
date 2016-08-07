@@ -1,5 +1,6 @@
 package com.srgood.dbot.commands;
 
+import com.meowingtwurtle.math.api.IMathHandler;
 import com.meowingtwurtle.math.impl.MathHandlerImpl;
 import com.srgood.dbot.utils.Permissions;
 
@@ -20,7 +21,7 @@ public class CommandEval implements Command {
 
     @Override
     public void action(String[] args, GuildMessageReceivedEvent event) {
-        event.getChannel().sendMessage(MathHandlerImpl.INSTANCE.parse(join(args)).eval().toString());
+        event.getChannel().sendMessage(IMathHandler.getMathHandler().parse(join(args)).eval().toString());
     }
     
     public String join(Object[] arr) {
