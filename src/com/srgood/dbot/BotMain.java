@@ -35,6 +35,7 @@ import com.srgood.dbot.commands.Command;
 import com.srgood.dbot.commands.CommandDebug;
 import com.srgood.dbot.commands.CommandDelete;
 import com.srgood.dbot.commands.CommandDiceRoll;
+import com.srgood.dbot.commands.CommandEval;
 import com.srgood.dbot.commands.CommandGetPrefix;
 import com.srgood.dbot.commands.CommandHelp;
 import com.srgood.dbot.commands.CommandInvite;
@@ -56,7 +57,6 @@ import com.srgood.dbot.commands.audio.CommandAudioStop;
 import com.srgood.dbot.commands.audio.CommandAudioVolume;
 import com.srgood.dbot.ref.RefStrings;
 import com.srgood.dbot.utils.CommandParser;
-import com.srgood.dbot.utils.CommandParser.CommandContainer;
 import com.srgood.dbot.utils.PermissionOps;
 import com.srgood.dbot.utils.ShutdownThread;
 import com.srgood.dbot.utils.XMLUtils;
@@ -85,13 +85,6 @@ public class BotMain {
 	
 	
 	public static void main(String[] args) {
-	    
-	    try {
-            System.setOut(new PrintStream(new FileOutputStream(new File("log.txt"))));
-        } catch (FileNotFoundException e2) {
-            // TODO Auto-generated catch block
-            e2.printStackTrace();
-        }
 	    
 		//catch exceptions when building JDA
 		//invite temp: https://discordapp.com/oauth2/authorize?client_id=XXXX&scope=bot&permissions=0x33525237
@@ -146,6 +139,7 @@ public class BotMain {
 			commands.put("flip", new CoinFlip());
 			commands.put("roll", new CommandDiceRoll());
 			commands.put("toggle", new CommandToggle());
+			commands.put("eval", new CommandEval());
 			
 			
 		} catch (Exception e) {
