@@ -12,8 +12,6 @@ public enum MathHandler implements IMathHandler {
     INSTANCE;
 
     public IMathGroup parse(String exp) {
-//        System.out.println("parse called for: " + exp);
-
         exp = exp.trim().replaceAll("\\s+", "");
 
         if (!(exp.contains("+") || exp.contains("-") || exp.contains("*") || exp.contains("/") || exp.contains("(") || exp.contains(")"))) {
@@ -77,13 +75,7 @@ public enum MathHandler implements IMathHandler {
                 String subNoParens = subBase.substring(1, subBase.length() - 1);
                 BigDecimal parseResult = parse(subNoParens).eval();
                 String quoteToReplace = cleanReplacementString(Matcher.quoteReplacement(subBase));
-                System.out.println("old exp = " + exp);
-                System.out.println("subBase = " + subBase);
-                System.out.println("quoteReplacement(subBase) = " + quoteToReplace);
-                System.out.println("subNoParens = " + subNoParens);
-                System.out.println("replacing sub with: " + parseResult);
                 exp = exp.replaceFirst(quoteToReplace, parseResult.toString());
-                System.out.println("new exp: " + exp);
                 return parse(exp);
             }
         }
@@ -105,19 +97,15 @@ public enum MathHandler implements IMathHandler {
             int mode = 0;
 
             if (exp.contains("+")) {
-//                System.out.println("Splitting on +");
                 topLevelComponents = exp.split("\\+");
                 mode = 0;
             } else if (exp.contains("-")) {
-//                System.out.println("Splitting on -");
                 topLevelComponents = exp.split("-");
                 mode = 1;
             } else if (exp.contains("*")) {
-//                System.out.println("Splitting on *");
                 topLevelComponents = exp.split("\\*");
                 mode = 2;
             } else if (exp.contains("/")) {
-//                System.out.println("Splitting on /");
                 topLevelComponents = exp.split("/");
                 mode = 3;
             } else {
@@ -128,32 +116,23 @@ public enum MathHandler implements IMathHandler {
             IMathGroup[] retParams = new IMathGroup[topLevelComponents.length];
 
             for (int i = 0; i < topLevelComponents.length; i++) {
-//                System.out.println("Parsing sub-component");
                 retParams[i] = parse(topLevelComponents[i]);
             }
-
-//            System.out.println("retParams: " + Arrays.deepToString(retParams));
 
             IMathGroup ret;
 
             if (mode == 0) {
-//                System.out.println("Returning Addition");
                 ret = new MathGroupAddition(retParams);
             } else if (mode == 1) {
-//                System.out.println("Returning Subtraction");
                 ret = new MathGroupSubtraction(retParams);
             } else if (mode == 2) {
-//                System.out.println("Returning Multiplication");
                 ret = new MathGroupMultiplication(retParams);
             } else if (mode == 3) {
-//                System.out.println("Returning Division");
                 ret = new MathGroupDivision(retParams);
             } else {
-//                System.out.println("Returning Basic");
                 ret = new MathGroupBasic(retParams[0]);
             }
 
-//            System.out.println("Returning: " + ret);
             return ret;
         } catch (Exception e) {
             e.printStackTrace();
