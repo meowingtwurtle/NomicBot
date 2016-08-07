@@ -1,28 +1,28 @@
-package com.srgood.dbot.math.impl;
+package com.meowingtwurtle.math.impl;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collection;
 
-import com.srgood.dbot.math.api.IMathGroup;
+import com.meowingtwurtle.math.api.IMathGroup;
 
-public class MathGroupSubtraction  implements IMathGroup{
+public class MathGroupMultiplication  implements IMathGroup{
     
     IMathGroup[] components;
 
-    public MathGroupSubtraction(IMathGroup... exps) {
+    public MathGroupMultiplication(IMathGroup... exps) {
         components = exps;
     }
     
-    public MathGroupSubtraction(Collection<IMathGroup> exps) {
+    public MathGroupMultiplication(Collection<IMathGroup> exps) {
         this(exps.toArray(new IMathGroup[0]));
     }
     
     public BigDecimal eval() {
-        BigDecimal ret = components[0].eval();
+        BigDecimal ret = BigDecimal.ONE;
                 
-        for (int x = 1; x < components.length; x++) {
-            ret = ret.subtract(components[x].eval());
+        for (IMathGroup x : components) {
+            ret = ret.multiply(x.eval());
         }
         
         return ret;

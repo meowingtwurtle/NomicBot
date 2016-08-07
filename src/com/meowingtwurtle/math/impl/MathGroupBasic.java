@@ -1,8 +1,8 @@
-package com.srgood.dbot.math.impl;
+package com.meowingtwurtle.math.impl;
 
 import java.math.BigDecimal;
 
-import com.srgood.dbot.math.api.IMathGroup;
+import com.meowingtwurtle.math.api.IMathGroup;
 
 public class MathGroupBasic implements IMathGroup {
     

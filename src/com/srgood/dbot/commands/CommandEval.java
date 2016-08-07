@@ -1,6 +1,6 @@
 package com.srgood.dbot.commands;
 
-import com.srgood.dbot.math.impl.MathHandler;
+import com.meowingtwurtle.math.impl.MathHandler;
 import com.srgood.dbot.utils.Permissions;
 
 import net.dv8tion.jda.entities.Guild;

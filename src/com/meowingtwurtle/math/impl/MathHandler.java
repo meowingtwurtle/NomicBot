@@ -1,11 +1,11 @@
-package com.srgood.dbot.math.impl;
+package com.meowingtwurtle.math.impl;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 
-import com.srgood.dbot.math.api.IMathGroup;
-import com.srgood.dbot.math.api.IMathHandler;
+import com.meowingtwurtle.math.api.IMathGroup;
+import com.meowingtwurtle.math.api.IMathHandler;
 
 public enum MathHandler implements IMathHandler {
 

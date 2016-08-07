@@ -1,11 +1,11 @@
-package com.srgood.dbot.math.impl;
+package com.meowingtwurtle.math.impl;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.regex.MatchResult;
 
-import com.srgood.dbot.math.api.IMathGroup;
+import com.meowingtwurtle.math.api.IMathGroup;
 
 public class MathGroupAddition implements IMathGroup {
     
