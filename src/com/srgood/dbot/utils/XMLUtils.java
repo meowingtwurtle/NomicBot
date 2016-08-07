@@ -12,6 +12,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.srgood.dbot.BotMain;
+import com.srgood.dbot.commands.Command;
 
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.entities.Role;
@@ -65,9 +66,12 @@ public class XMLUtils {
         commandElement.setAttribute("name", command);
         
         Element permLevelElement = BotMain.PInputFile.createElement("permLevel");
+        Element isEnabledElement = BotMain.PInputFile.createElement("isEnabled");
         permLevelElement.setTextContent("" + BotMain.commands.get(command).defaultPermissionLevel().getLevel());
-
+        isEnabledElement.setTextContent("true");
+        
         commandElement.appendChild(permLevelElement);
+        commandElement.appendChild(isEnabledElement);
         commandsElement.appendChild(commandElement);
     }
     
@@ -150,5 +154,34 @@ public class XMLUtils {
         Element rolesElem = (Element) serverElem.getElementsByTagName("roles").item(0);
                 
         return nodeListToList(rolesElem.getElementsByTagName("role"));
+    }
+    
+    public static Boolean commandIsEnabled(Guild guild, Command command) {
+
+
+        String commandName = null;
+
+        for (String e : BotMain.commands.keySet()) {
+            if (BotMain.commands.get(e) == command) {
+                commandName = e;
+            }
+        }
+
+        if (BotMain.commands.values().contains(command)) {
+            Element commandsElement = (Element) ((Element) BotMain.servers.get(guild.getId()))
+                    .getElementsByTagName("commands").item(0);
+            
+            List<Node> commandList = XMLUtils.nodeListToList(commandsElement.getElementsByTagName("command"));
+            
+            for (Node n : commandList) {
+                Element elem = (Element) n;
+                if (elem.getAttribute("name").equals(commandName)) {
+                	System.out.println("" + Boolean.parseBoolean(elem.getLastChild().getTextContent().trim()));
+                	return Boolean.parseBoolean(elem.getElementsByTagName("isEnabled").item(0).getTextContent());
+                }
+            }
+        }
+
+    	return null;
     }
 }

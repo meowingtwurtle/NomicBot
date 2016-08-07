@@ -12,6 +12,7 @@ import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 import javax.security.auth.login.LoginException;
 import javax.xml.parsers.DocumentBuilder;
@@ -72,7 +73,7 @@ public class BotMain {
 	public static String Okey;
 	
 	public static final CommandParser parser = new CommandParser();
-	public static HashMap<String, Command> commands = new HashMap<String, Command>(); 
+	public static TreeMap<String, Command> commands = new TreeMap<String, Command>(); 
 	public static HashMap<String,Node> servers = new HashMap<String,Node>();
 	
 	//XML variables
@@ -266,21 +267,25 @@ public class BotMain {
             
             createCommandNodeIfNotExists(cmd);
             
-            if (PermissionOps
-                    .getHighestPermission(PermissionOps.getPermissions(cmd.event.getGuild(), cmd.event.getAuthor()),
-                            cmd.event.getGuild())
-                    .getLevel() >= commands.get(cmd.invoke).permissionLevel(cmd.event.getGuild()).getLevel()) {
-                boolean safe = commands.get(cmd.invoke).called(cmd.args, cmd.event);
-                if (safe) {
-                    commands.get(cmd.invoke).action(cmd.args, cmd.event);
-                    commands.get(cmd.invoke).executed(safe, cmd.event);
+            if (XMLUtils.commandIsEnabled(cmd.event.getGuild(), BotMain.commands.get(cmd.invoke))) {
+            	if (PermissionOps
+                        .getHighestPermission(PermissionOps.getPermissions(cmd.event.getGuild(), cmd.event.getAuthor()),
+                                cmd.event.getGuild())
+                        .getLevel() >= commands.get(cmd.invoke).permissionLevel(cmd.event.getGuild()).getLevel()) {
+                    boolean safe = commands.get(cmd.invoke).called(cmd.args, cmd.event);
+                    if (safe) {
+                        commands.get(cmd.invoke).action(cmd.args, cmd.event);
+                        commands.get(cmd.invoke).executed(safe, cmd.event);
+                    } else {
+                        commands.get(cmd.invoke).executed(safe, cmd.event);
+                    }
                 } else {
-                    commands.get(cmd.invoke).executed(safe, cmd.event);
+                	cmd.event.getChannel().sendMessage("You lack the required permission to preform this action");
                 }
             } else {
-            	cmd.event.getChannel().sendMessage("You lack the required permission to preform this action");
+            	cmd.event.getChannel().sendMessage("This command is disabled");
             }
-        }
+        } 
     }
     
     public static void createCommandNodeIfNotExists(CommandParser.CommandContainer cmd) {

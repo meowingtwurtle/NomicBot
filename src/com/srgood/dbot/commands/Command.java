@@ -44,7 +44,8 @@ public interface Command {
             for (Node n : commandList) {
                 Element elem = (Element) n;
                 if (elem.getAttribute("name").equals(commandName)) {
-                    return PermissionOps.intToEnum(Integer.parseInt(elem.getTextContent().trim()));
+                	System.out.println(elem.getTagName());
+                    return PermissionOps.intToEnum(Integer.parseInt(elem.getElementsByTagName("permLevel").item(0).getTextContent()));
                 }
             }
         }
