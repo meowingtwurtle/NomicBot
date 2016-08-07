@@ -305,7 +305,7 @@ public class XMLHandler {
     private static Node getGuildPrefixNode(Guild guild) {
         Node ServerNode = getServerNode(guild);
         Element NodeElement = (Element) ServerNode;
-        return NodeElement;
+        return NodeElement.getElementsByTagName("prefix").item(0);
     }
     
     public static void createCommandNodeIfNotExists(CommandParser.CommandContainer cmd) {
