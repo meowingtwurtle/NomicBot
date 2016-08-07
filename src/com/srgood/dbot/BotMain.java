@@ -28,9 +28,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.srgood.dbot.commands.CoinFlip;
 import com.srgood.dbot.commands.Command;
 import com.srgood.dbot.commands.CommandDebug;
 import com.srgood.dbot.commands.CommandDelete;
+import com.srgood.dbot.commands.CommandDiceRoll;
 import com.srgood.dbot.commands.CommandGetPrefix;
 import com.srgood.dbot.commands.CommandHelp;
 import com.srgood.dbot.commands.CommandInvite;
@@ -86,7 +88,7 @@ public class BotMain {
 		Runtime.getRuntime().addShutdownHook(new ShutdownThread());
 		
 		try  {
-			jda = new JDABuilder().addListener(new BotListener()).setBotToken(RefStrings.BOT_TOKEN_REASONS).buildBlocking();
+			jda = new JDABuilder().addListener(new BotListener()).setBotToken(RefStrings.BOT_TOKEN_REASONS_DEV_2).buildBlocking();
 			jda.setAutoReconnect(true);
 			jda.getAccountManager().setGame("type '@Reasons help'");
 		} catch(LoginException e) {
@@ -130,6 +132,8 @@ public class BotMain {
 			commands.put("delete", new CommandDelete());
 			commands.put("version", new CommandVersion());
 			commands.put("invite", new CommandInvite());
+			commands.put("flip", new CoinFlip());
+			commands.put("roll", new CommandDiceRoll());
 			
 			
 		} catch (Exception e) {
