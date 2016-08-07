@@ -21,8 +21,8 @@ public class MathGroupSubtraction  implements IMathGroup{
     public BigDecimal eval() {
         BigDecimal ret = BigDecimal.ZERO;
         
-        for (IMathGroup x : components) {
-            ret = ret.subtract(x.eval());
+        for (int x = 1; x < components.length; x++) {
+            ret = ret.subtract(components[x].eval());
         }
         
         return ret;
