@@ -9,6 +9,7 @@ import java.util.Map;
 
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.utils.Permissions;
+import com.srgood.dbot.utils.XMLHandler;
 
 import net.dv8tion.jda.entities.Channel;
 import net.dv8tion.jda.entities.Guild;
@@ -103,7 +104,7 @@ private final String help = "Deletes Messages Use: '" + BotMain.prefix + "delete
     @Override
     public Permissions permissionLevel(Guild guild) {
         // TODO Auto-generated method stub
-        return Command.getPermissionXML(guild, this);
+        return XMLHandler.getCommandPermissionXML(guild, this);
     }
 
     @Override

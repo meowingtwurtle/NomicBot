@@ -4,6 +4,7 @@ import org.w3c.dom.Element;
 
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.utils.Permissions;
+import com.srgood.dbot.utils.XMLHandler;
 
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
@@ -20,21 +21,13 @@ public class CommandSetPrefix implements Command{
 
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
-		// TODO Auto-generated method stub
 		try {
-			Element serverNode = (Element) BotMain.servers.get(event.getGuild().getId());
-			Element prefixNode = (Element) serverNode.getElementsByTagName("prefix").item(0);
-			System.out.println("prefixNode type: " + prefixNode.getTagName());
-			System.out.println("prefixNode.getTextContent(): " + prefixNode.getTextContent());
-			event.getChannel().sendMessage("Prefix set to: " + args[0].toString());
-			prefixNode.setTextContent(args[0]);
-			System.out.println("prefixNode type: " + prefixNode.getTagName());
-			System.out.println("prefixNode.getTextContent(): " + prefixNode.getTextContent());
+		    XMLHandler.setGuildPrefix(event.getGuild(), args[0]);
+			event.getChannel().sendMessage("Prefix set to: " + args[0]);
 		} catch (Exception e) {
 			event.getChannel().sendMessage(help().toString());
 			e.printStackTrace();
 		}
-
 	}
 
 	@Override
@@ -52,7 +45,7 @@ public class CommandSetPrefix implements Command{
 	@Override
 	public Permissions permissionLevel(Guild guild) {
 		// TODO Auto-generated method stub
-		return Command.getPermissionXML(guild, this);
+		return XMLHandler.getCommandPermissionXML(guild, this);
 	}
 
 	@Override

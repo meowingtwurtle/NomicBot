@@ -7,7 +7,7 @@ import org.w3c.dom.Node;
 
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.utils.Permissions;
-import com.srgood.dbot.utils.XMLUtils;
+import com.srgood.dbot.utils.XMLHandler;
 
 import net.dv8tion.jda.Permission;
 import net.dv8tion.jda.entities.Guild;
@@ -27,10 +27,10 @@ public class CommandToggle implements Command {
 		// TODO Auto-generated method stub
 		if (args.length > 0) {
 			if (BotMain.commands.containsKey(args[0].toLowerCase())) {
-				 Element commandsElement = (Element) ((Element) BotMain.servers.get(event.getGuild().getId()))
+				 Element commandsElement = (Element) ((Element) XMLHandler.getServerNode(event.getGuild().getId()))
 		                    .getElementsByTagName("commands").item(0);
 		            
-		            List<Node> commandList = XMLUtils.nodeListToList(commandsElement.getElementsByTagName("command"));
+		            List<Node> commandList = XMLHandler.nodeListToList(commandsElement.getElementsByTagName("command"));
 		            
 		            for (Node n : commandList) {
 		                Element elem = (Element) n;
@@ -65,7 +65,7 @@ public class CommandToggle implements Command {
 	@Override
 	public Permissions permissionLevel(Guild guild) {
 		// TODO Auto-generated method stub
-		return Command.getPermissionXML(guild, this);
+		return XMLHandler.getCommandPermissionXML(guild, this);
 	}
 
 	@Override

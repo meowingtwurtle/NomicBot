@@ -2,8 +2,8 @@ package com.srgood.dbot.commands.audio;
 
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.MusicPlayer;
-import com.srgood.dbot.commands.Command;
 import com.srgood.dbot.utils.Permissions;
+import com.srgood.dbot.utils.XMLHandler;
 
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
@@ -44,7 +44,7 @@ public class CommandAudioPause implements AudioCommand {
     @Override
     public Permissions permissionLevel(Guild guild) {
         // TODO Auto-generated method stub
-        return Command.getPermissionXML(guild, this);
+        return XMLHandler.getCommandPermissionXML(guild, this);
     }
 
     @Override

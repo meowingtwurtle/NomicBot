@@ -21,51 +21,13 @@ public class PermissionOps {
     	return rolesToPermissions(guild.getRolesForUser(user), guild);
     }
     
-    public static Permissions roleToPermission(Role role, Guild guild) {
-    	Permissions permission = null;
-    	
-    	if (role == null) {
-    	    return permission;
-    	}
-    	
-    	//<config>
-    	//  <servers>
-    	//    <server>
-    	//      <roles>
-    	//        <role>
-    	
-    	// <server>
-
-    	
-    	List<Node> roleNodeList = XMLUtils.getRoleNodeListFromGuild(guild);
-    	
-    	String roleID = role.getId();
-    	
-    	for (Node n : roleNodeList) {
-    	    Element roleElem = (Element) n;
-    	    String roleXMLName = roleElem.getAttribute("name");
-    	    
-    	    if (!roleID.equals(roleElem.getTextContent())) {
-    	        continue;
-    	    }
-    	    
-    	    for (Permissions permLevel : Permissions.values()) {
-    	        if (permLevel.getLevel() >= (permission == null ? Permissions.STANDARD : permission).getLevel() && permLevel.getXMLName().equals(roleXMLName)) {
-    	            permission = permLevel;
-    	        }
-    	    }
-    	}
-    	
-    	return permission;
-    }
-
     public static Permissions getHighestPermission(Collection<Permissions> Roles, Guild guild) {
         
         Permissions maxFound = Permissions.STANDARD;
 
         for (Permissions permLevel : Permissions.values()) {
             if ((permLevel.getLevel() > maxFound.getLevel())) {
-                if (containsAny(rolesToPermissions(XMLUtils.getGuildRolesFromInternalName(permLevel.getXMLName(), guild), guild), Roles)) {
+                if (containsAny(rolesToPermissions(XMLHandler.getGuildRolesFromInternalName(permLevel.getXMLName(), guild), guild), Roles)) {
                     maxFound = permLevel;
                     break;
                 }
@@ -77,7 +39,7 @@ public class PermissionOps {
     public static Collection<Permissions> rolesToPermissions(Collection<? extends Role> roles, Guild guild) {
         List<Permissions> ret = new ArrayList<Permissions>();
         for (Role role : roles) {
-        	ret.add(roleToPermission(role, guild));
+        	ret.add(XMLHandler.roleToPermission(role, guild));
         }
         return ret;
     }
@@ -105,18 +67,8 @@ public class PermissionOps {
         
         if (!roleLevel.isVisible()) return;
         
-        Element serverElement = (Element) BotMain.servers.get(guild.getId());
-        
-        Element rolesElement = (Element) serverElement.getElementsByTagName("roles");
-        
-        List<Node> roleElementList = ( XMLUtils.nodeListToList(rolesElement.getElementsByTagName("role")));
-        
-        
-        for (Node n : roleElementList) {
-            Element roleElem = (Element) n;
-            if (roleElem.getAttribute("name").equals(roleLevel.getXMLName())) {
-                return;
-            }
+        if (XMLHandler.guildHasRoleForPermission(guild, roleLevel)) {
+            return;
         }
         
         createRole(roleLevel, guild, true);
@@ -135,19 +87,11 @@ public class PermissionOps {
 
         Role role = roleMgr.getRole();
 
-        if (!addToXML) {
-            return role;
+        if (addToXML) {
+            XMLHandler.registerRoleXML(guild, role, roleLevel);
         }
 
-        Element elementRoles = (Element) ((Element) BotMain.servers.get(guild.getId())).getElementsByTagName("roles").item(0);
         
-        Element elementRole = BotMain.PInputFile.createElement("role");
-        Attr roleAttr = BotMain.PInputFile.createAttribute("name");
-        roleAttr.setValue(roleLevel.getXMLName());
-        elementRole.setAttributeNode(roleAttr);
-        elementRole.setTextContent(role.getId());
-
-        elementRoles.appendChild(elementRole);
 
         return role;
     }

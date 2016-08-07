@@ -5,6 +5,7 @@ import org.w3c.dom.Node;
 
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.utils.Permissions;
+import com.srgood.dbot.utils.XMLHandler;
 
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.MessageReceivedEvent;
@@ -20,15 +21,10 @@ public class CommandGetPrefix implements Command {
 		return true;
 	}
 
-	@Override
-	public void action(String[] args, GuildMessageReceivedEvent event) {
-		// TODO Auto-generated method stub
-		if (BotMain.servers.containsKey(event.getGuild().getId())) {
-			Node ServerNode = BotMain.servers.get(event.getGuild().getId());
-			Element NodeElement = (Element)ServerNode;
-			event.getChannel().sendMessage("Prefix: " + NodeElement.getElementsByTagName("prefix").item(0).getTextContent());
-		}
-	}
+    @Override
+    public void action(String[] args, GuildMessageReceivedEvent event) {
+        event.getChannel().sendMessage("Prefix: " + XMLHandler.getGuildPrefix(event.getGuild()));
+    }
 
 	@Override
 	public String help() {
@@ -45,7 +41,7 @@ public class CommandGetPrefix implements Command {
 	@Override
 	public Permissions permissionLevel(Guild guild) {
 		// TODO Auto-generated method stub
-		return Command.getPermissionXML(guild, this);
+		return XMLHandler.getCommandPermissionXML(guild, this);
 	}
 
 	@Override

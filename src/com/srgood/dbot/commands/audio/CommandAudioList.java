@@ -4,11 +4,11 @@ import java.util.List;
 
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.MusicPlayer;
-import com.srgood.dbot.commands.Command;
 import com.srgood.dbot.source.AudioInfo;
 import com.srgood.dbot.source.AudioSource;
 import com.srgood.dbot.source.AudioTimestamp;
 import com.srgood.dbot.utils.Permissions;
+import com.srgood.dbot.utils.XMLHandler;
 
 import net.dv8tion.jda.MessageBuilder;
 import net.dv8tion.jda.entities.Guild;
@@ -93,7 +93,7 @@ public class CommandAudioList implements AudioCommand {
     @Override
     public Permissions permissionLevel(Guild guild) {
         // TODO Auto-generated method stub
-        return Command.getPermissionXML(guild, this);
+        return XMLHandler.getCommandPermissionXML(guild, this);
     }
 
     @Override

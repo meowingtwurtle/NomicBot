@@ -10,7 +10,7 @@ import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
 public class CommandParser {
 	//creates a new method of type CommandContainer which is used for parsing
-	public CommandContainer parse(String rw, GuildMessageReceivedEvent event) {
+	public CommandContainer parse(String rw, GuildMessageReceivedEvent event, String prefix) {
 		ArrayList<String> split = new ArrayList<String>();
 		String raw = rw,beheaded;
 		try {
@@ -21,10 +21,10 @@ public class CommandParser {
 				System.out.println(event.getJDA().getSelfInfo().getAsMention());
 				System.out.println(beheaded);
 			} else {
-				beheaded = raw.replaceFirst(BotListener.localPrefix,"");
+				beheaded = raw.replaceFirst(prefix,"");
 			}
 		} catch (IndexOutOfBoundsException ex) {
-			beheaded = raw.replaceFirst(BotListener.localPrefix,"");
+			beheaded = raw.replaceFirst(prefix,"");
 		}
 		
 		
