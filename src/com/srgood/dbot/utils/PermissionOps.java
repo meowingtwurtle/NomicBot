@@ -105,7 +105,7 @@ public class PermissionOps {
         
         if (!roleLevel.isVisible()) return;
         
-        Element serverElement = (Element) BotMain.servers.get(guild.getId());
+        Element serverElement = (Element) XMLHandler.servers.get(guild.getId());
         
         Element rolesElement = (Element) serverElement.getElementsByTagName("roles");
         
@@ -139,7 +139,7 @@ public class PermissionOps {
             return role;
         }
 
-        Element elementRoles = (Element) ((Element) BotMain.servers.get(guild.getId())).getElementsByTagName("roles").item(0);
+        Element elementRoles = (Element) ((Element) XMLHandler.servers.get(guild.getId())).getElementsByTagName("roles").item(0);
         
         Element elementRole = BotMain.PInputFile.createElement("role");
         Attr roleAttr = BotMain.PInputFile.createAttribute("name");
