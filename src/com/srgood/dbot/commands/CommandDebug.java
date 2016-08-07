@@ -1,6 +1,8 @@
 package com.srgood.dbot.commands;
  
 import java.awt.Color;
+import java.time.Duration;
+import java.time.Instant;
 
 import com.srgood.dbot.BotListener;
 import com.srgood.dbot.BotMain;
@@ -35,6 +37,12 @@ public class CommandDebug implements Command {
     				event.getChannel().sendMessage("Done");
     				break;
     			
+    			case "verifyXML":
+    				event.getChannel().sendMessage("" + XMLHandler.verifyXML());
+    				break;
+    				
+    			case "getuptime":
+    				event.getChannel().sendMessage(Duration.between(BotMain.startInstant, Instant.now()).toString());
     				
     			default:
     				event.getChannel().sendMessage("Invalid argument");
