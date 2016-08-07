@@ -294,6 +294,7 @@ public class XMLHandler {
             System.out.println("initting Guild from message");
             BotListener.initGuild(guild);
         }
+        System.out.println(((Element)getGuildPrefixNode(guild)).getTagName());
         return getGuildPrefixNode(guild).getTextContent();
     }
     
@@ -391,5 +392,71 @@ public class XMLHandler {
         }
     
         return null;
+    }
+
+    public static Permissions roleToPermission(Role role, Guild guild) {
+    	Permissions permission = null;
+    	
+    	if (role == null) {
+    	    return permission;
+    	}
+    	
+    	//<config>
+    	//  <servers>
+    	//    <server>
+    	//      <roles>
+    	//        <role>
+    	
+    	// <server>
+    
+    	
+    	List<Node> roleNodeList = getRoleNodeListFromGuild(guild);
+    	
+    	String roleID = role.getId();
+    	
+    	for (Node n : roleNodeList) {
+    	    Element roleElem = (Element) n;
+    	    String roleXMLName = roleElem.getAttribute("name");
+    	    
+    	    if (!roleID.equals(roleElem.getTextContent())) {
+    	        continue;
+    	    }
+    	    
+    	    for (Permissions permLevel : Permissions.values()) {
+    	        if (permLevel.getLevel() >= (permission == null ? Permissions.STANDARD : permission).getLevel() && permLevel.getXMLName().equals(roleXMLName)) {
+    	            permission = permLevel;
+    	        }
+    	    }
+    	}
+    	
+    	return permission;
+    }
+    
+    public static boolean guildHasRoleForPermission(Guild guild, Permissions roleLevel) {
+        Element serverElement = (Element) XMLHandler.getServerNode(guild);
+
+        Element rolesElement = (Element) serverElement.getElementsByTagName("roles");
+
+        List<Node> roleElementList = nodeListToList(rolesElement.getElementsByTagName("role"));
+
+        for (Node n : roleElementList) {
+            Element roleElem = (Element) n;
+            if (roleElem.getAttribute("name").equals(roleLevel.getXMLName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public static void registerRoleXML(Guild guild, Role role, Permissions roleLevel) {
+       Element elementRoles = (Element) (((Element) getServerNode(guild)).getElementsByTagName("roles").item(0));
+        
+        Element elementRole = BotMain.PInputFile.createElement("role");
+        Attr roleAttr = BotMain.PInputFile.createAttribute("name");
+        roleAttr.setValue(roleLevel.getXMLName());
+        elementRole.setAttributeNode(roleAttr);
+        elementRole.setTextContent(role.getId());
+
+        elementRoles.appendChild(elementRole);
     }
 }

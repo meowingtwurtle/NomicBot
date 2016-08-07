@@ -27,7 +27,7 @@ public class CommandToggle implements Command {
 		// TODO Auto-generated method stub
 		if (args.length > 0) {
 			if (BotMain.commands.containsKey(args[0].toLowerCase())) {
-				 Element commandsElement = (Element) ((Element) XMLHandler.getServerNode(event.getGuild().getId()))
+				 Element commandsElement = (Element) ((Element) XMLHandler.getServerNode(event.getGuild()))
 		                    .getElementsByTagName("commands").item(0);
 		            
 		            List<Node> commandList = XMLHandler.nodeListToList(commandsElement.getElementsByTagName("command"));
