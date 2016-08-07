@@ -1,6 +1,7 @@
 package com.srgood.dbot.math.impl;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.regex.MatchResult;
 
@@ -26,6 +27,10 @@ public class MathGroupAddition implements IMathGroup {
         }
         
         return ret;
+    }
+    
+    public String toString() {
+        return this.getClass().getSimpleName() + Arrays.deepToString(components);
     }
 
 }

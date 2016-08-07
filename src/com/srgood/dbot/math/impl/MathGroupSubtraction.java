@@ -1,6 +1,7 @@
 package com.srgood.dbot.math.impl;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Collection;
 
 import com.srgood.dbot.math.api.IMathGroup;
@@ -25,6 +26,10 @@ public class MathGroupSubtraction  implements IMathGroup{
         }
         
         return ret;
+    }
+    
+    public String toString() {
+        return this.getClass().getSimpleName() + Arrays.deepToString(components);
     }
 
 }

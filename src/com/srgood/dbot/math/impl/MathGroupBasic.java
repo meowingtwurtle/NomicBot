@@ -20,5 +20,9 @@ public class MathGroupBasic implements IMathGroup {
     public BigDecimal eval() {
         return value;
     }
+    
+    public String toString() {
+        return this.getClass().getSimpleName() +  "(" + value + ")";
+    }
 
 }
