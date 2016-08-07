@@ -172,6 +172,10 @@
           <permLevel>0</permLevel>
           <isEnabled>true</isEnabled>
         </command>
+        <command name="toggle">
+          <permLevel>3</permLevel>
+          <isEnabled>true</isEnabled>
+        </command>
       </commands>
     </server>
   </servers>

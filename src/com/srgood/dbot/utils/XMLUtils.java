@@ -177,7 +177,12 @@ public class XMLUtils {
                 Element elem = (Element) n;
                 if (elem.getAttribute("name").equals(commandName)) {
                 	System.out.println("" + Boolean.parseBoolean(elem.getLastChild().getTextContent().trim()));
-                	return Boolean.parseBoolean(elem.getElementsByTagName("isEnabled").item(0).getTextContent());
+                	try {
+                		return Boolean.parseBoolean(elem.getElementsByTagName("isEnabled").item(0).getTextContent());
+                	} catch (NullPointerException e) {
+                		
+                	}
+                	
                 }
             }
         }

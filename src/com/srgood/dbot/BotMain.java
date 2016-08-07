@@ -41,6 +41,7 @@ import com.srgood.dbot.commands.CommandPing;
 import com.srgood.dbot.commands.CommandPong;
 import com.srgood.dbot.commands.CommandSetPrefix;
 import com.srgood.dbot.commands.CommandShutdown;
+import com.srgood.dbot.commands.CommandToggle;
 import com.srgood.dbot.commands.CommandVersion;
 import com.srgood.dbot.commands.audio.CommandAudioJoin;
 import com.srgood.dbot.commands.audio.CommandAudioLeave;
@@ -135,6 +136,7 @@ public class BotMain {
 			commands.put("invite", new CommandInvite());
 			commands.put("flip", new CoinFlip());
 			commands.put("roll", new CommandDiceRoll());
+			commands.put("toggle", new CommandToggle());
 			
 			
 		} catch (Exception e) {
