@@ -16,10 +16,6 @@ public class CommandParser {
 		try {
 			if (event.getJDA().getSelfInfo().getAsMention().equals(event.getMessage().getMentionedUsers().get(0).getAsMention())) {
 				beheaded = event.getMessage().getRawContent().replaceFirst(event.getJDA().getSelfInfo().getAsMention() + " ","");
-				
-				System.out.println(event.getMessage().getRawContent());
-				System.out.println(event.getJDA().getSelfInfo().getAsMention());
-				System.out.println(beheaded);
 			} else {
 				beheaded = raw.replaceFirst(prefix,"");
 			}

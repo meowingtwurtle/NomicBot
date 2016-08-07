@@ -44,14 +44,14 @@ public class BotListener extends ListenerAdapter {
         if (event.getMessage().getContent().startsWith(localPrefix)
                 && event.getMessage().getAuthor().getId() != event.getJDA().getSelfInfo().getId()) {
             BotMain.handleCommand(BotMain.parser.parse(event.getMessage().getContent().toLowerCase(), event, localPrefix));
-            SimpleLog.getLog("Reasons").info("Got Valid Input");
+            SimpleLog.getLog("Reasons").info("Got prefixed input: " + event.getMessage().getContent());
         } else {
             try {
 
                 if (event.getJDA().getSelfInfo().getAsMention()
                         .equals(event.getMessage().getMentionedUsers().get(0).getAsMention())) {
 
-                    SimpleLog.getLog("Reasons").info("Got Valid Input (mention)");
+                    SimpleLog.getLog("Reasons").info("Got prefixed input (mention): " + event.getMessage().getContent());
                     BotMain.handleCommand(BotMain.parser.parse(event.getMessage().getContent().toLowerCase(), event, localPrefix));
                 }
             } catch (Exception e) {

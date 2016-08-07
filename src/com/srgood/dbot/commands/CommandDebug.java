@@ -42,8 +42,16 @@ public class CommandDebug implements Command {
     				break;
     				
     			case "getuptime":
-    				event.getChannel().sendMessage(Duration.between(BotMain.startInstant, Instant.now()).toString());
-    				
+    				long seconds = Duration.between(BotMain.startInstant, Instant.now()).getSeconds();
+    				long absSeconds = Math.abs(seconds);
+    				String positive = String.format(
+    				        "%d:%02d:%02d",
+    				        absSeconds / 3600,
+    				        (absSeconds % 3600) / 60,
+    				        absSeconds % 60);
+    				String x = seconds < 0 ? "-" + positive : positive;
+    				event.getChannel().sendMessage(x);
+    				break;
     			default:
     				event.getChannel().sendMessage("Invalid argument");
     				break;
