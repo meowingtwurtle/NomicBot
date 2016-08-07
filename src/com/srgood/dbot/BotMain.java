@@ -9,6 +9,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.PrintStream;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -84,6 +85,14 @@ public class BotMain {
 	
 	
 	public static void main(String[] args) {
+	    
+	    try {
+            System.setOut(new PrintStream(new FileOutputStream(new File("log.txt"))));
+        } catch (FileNotFoundException e2) {
+            // TODO Auto-generated catch block
+            e2.printStackTrace();
+        }
+	    
 		//catch exceptions when building JDA
 		//invite temp: https://discordapp.com/oauth2/authorize?client_id=XXXX&scope=bot&permissions=0x33525237
 		
@@ -269,7 +278,9 @@ public class BotMain {
             
             createCommandNodeIfNotExists(cmd);
             
-            if (XMLUtils.commandIsEnabled(cmd.event.getGuild(), BotMain.commands.get(cmd.invoke))) {
+            if (XMLUtils.commandIsEnabled(
+                    cmd.event.getGuild(),
+                    BotMain.commands.get(cmd.invoke))) {
             	if (PermissionOps
                         .getHighestPermission(PermissionOps.getPermissions(cmd.event.getGuild(), cmd.event.getAuthor()),
                                 cmd.event.getGuild())
@@ -306,13 +317,12 @@ public class BotMain {
                 XMLUtils.initCommandsElement(commandsElement);
             }
         }
-        for (Node n : XMLUtils.nodeListToList(commandsElement.getElementsByTagName("command"))) {
-            Element elem = (Element) n;
-            if (elem.getAttribute("name").equals(cmd.invoke)) {
+        if (XMLUtils.commandElementExists(commandsElement, cmd.invoke)) {
+            System.out.println("Command element exists");
+                XMLUtils.addMissingSubElementsToCommand(commandsElement, cmd.invoke);
                 return;
-            }
         }
-        
+        System.out.println("Command element not exists");
         XMLUtils.initCommandElement(commandsElement, cmd.invoke);
     }
 

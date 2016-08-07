@@ -1,9 +1,14 @@
 package com.srgood.dbot.utils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+
+import javax.management.modelmbean.RequiredModelMBean;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -65,14 +70,9 @@ public class XMLUtils {
         
         commandElement.setAttribute("name", command);
         
-        Element permLevelElement = BotMain.PInputFile.createElement("permLevel");
-        Element isEnabledElement = BotMain.PInputFile.createElement("isEnabled");
-        permLevelElement.setTextContent("" + BotMain.commands.get(command).defaultPermissionLevel().getLevel());
-        isEnabledElement.setTextContent("true");
-        
-        commandElement.appendChild(permLevelElement);
-        commandElement.appendChild(isEnabledElement);
         commandsElement.appendChild(commandElement);
+        
+        addMissingSubElementsToCommand(commandsElement, command);
     }
     
     
@@ -140,6 +140,10 @@ public class XMLUtils {
                         System.out.println("Not 1 servers/server/commands/command/permLevel element");
                         return false;
                     }
+                    if (commandElement.getElementsByTagName("isEnabled").getLength() != 1) {
+                        System.out.println("Not 1 servers/server/commands/command/isEnabled element");
+                        return false;
+                    }
                 }
             }
         }
@@ -156,7 +160,7 @@ public class XMLUtils {
         return nodeListToList(rolesElem.getElementsByTagName("role"));
     }
     
-    public static Boolean commandIsEnabled(Guild guild, Command command) {
+    public static boolean commandIsEnabled(Guild guild, Command command) {
 
 
         String commandName = null;
@@ -176,17 +180,55 @@ public class XMLUtils {
             for (Node n : commandList) {
                 Element elem = (Element) n;
                 if (elem.getAttribute("name").equals(commandName)) {
-                	System.out.println("" + Boolean.parseBoolean(elem.getLastChild().getTextContent().trim()));
+//                	System.out.println("" + Boolean.parseBoolean(elem.getLastChild().getTextContent().trim()));
                 	try {
-                		return Boolean.parseBoolean(elem.getElementsByTagName("isEnabled").item(0).getTextContent());
+                	    Boolean ret = Boolean.parseBoolean(elem.getElementsByTagName("isEnabled").item(0).getTextContent());
+                		return ret == null ? true : ret;
                 	} catch (NullPointerException e) {
-                		
+                	    e.printStackTrace();
                 	}
                 	
                 }
             }
         }
+        return false;
+    }
 
-    	return null;
+    public static boolean commandElementExists(Element commandsElement, String cmdName) {
+        for (Node n : nodeListToList(commandsElement.getElementsByTagName("command"))) {
+            Element elem = (Element) n;
+            if (elem.getAttribute("name").equals(cmdName)) return true;
+        }
+        return false;
+    }
+    
+    static Map<String, Function<String, Object>> requiredCommandSubElements = new HashMap<String, Function<String, Object>>() {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = -710068261487017415L;
+
+        {
+            put("permLevel", name -> BotMain.commands.get(name).defaultPermissionLevel().getLevel());
+            put("isEnabled", name -> true);
+        }
+    };
+
+    public static void addMissingSubElementsToCommand(Element commandsElement, String commandName) {
+        Element targetCommand = null;
+        for (Node n : nodeListToList(commandsElement.getElementsByTagName("command"))) {
+            if (((Element) n).getAttribute("name").equals(commandName)) {
+                targetCommand = (Element) n;
+                break;
+            }
+        }
+        
+        for (String s : requiredCommandSubElements.keySet()) {
+            if (targetCommand.getElementsByTagName(s).getLength() < 1) {
+                Element subElement = BotMain.PInputFile.createElement(s);
+                subElement.setTextContent("" + requiredCommandSubElements.get(s).apply(commandName));
+                targetCommand.appendChild(subElement);
+            }
+        }
     }
 }

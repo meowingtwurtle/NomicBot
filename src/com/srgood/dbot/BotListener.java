@@ -128,12 +128,16 @@ public class BotListener extends ListenerAdapter {
             Attr idAttr = BotMain.PInputFile.createAttribute("id");
             idAttr.setValue(guild.getId());
             server.setAttributeNode(idAttr);
-   
-            Element prefixElement = BotMain.PInputFile.createElement("prefix");
-   
-            prefixElement.appendChild(BotMain.PInputFile.createTextNode(BotMain.prefix));
-   
-            server.appendChild(prefixElement);
+            
+        Element globalElement = (Element) BotMain.PInputFile.getDocumentElement().getElementsByTagName("global")
+                .item(0);
+        
+        for (Node n : XMLUtils.nodeListToList(globalElement.getChildNodes())) {
+            if (n instanceof Element) {
+                Element elem = (Element) n;
+                server.appendChild(elem.cloneNode(true));
+            }
+        }
 
             elementServers.appendChild(server);            
             BotMain.servers.put(guild.getId(), server);
