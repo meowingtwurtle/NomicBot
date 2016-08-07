@@ -1,7 +1,7 @@
 package com.srgood.dbot.commands;
 
+import com.meowingtwurtle.math.api.IMathGroup;
 import com.meowingtwurtle.math.api.IMathHandler;
-import com.meowingtwurtle.math.impl.MathHandlerImpl;
 import com.srgood.dbot.utils.Permissions;
 
 import net.dv8tion.jda.entities.Guild;
@@ -21,7 +21,13 @@ public class CommandEval implements Command {
 
     @Override
     public void action(String[] args, GuildMessageReceivedEvent event) {
-        event.getChannel().sendMessage(IMathHandler.getMathHandler().parse(join(args)).eval().toString());
+        try {
+            IMathGroup group = IMathHandler.getMathHandler().parse(join(args));
+            event.getChannel().sendMessage("`MATH:` " + group.eval().toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+            event.getChannel().sendMessage("`MATH:` An error occurred during parsing.");
+        }
     }
     
     public String join(Object[] arr) {
