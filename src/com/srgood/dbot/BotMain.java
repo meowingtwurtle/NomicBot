@@ -9,6 +9,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.PrintStream;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -31,6 +32,7 @@ import org.w3c.dom.NodeList;
 import com.srgood.dbot.commands.Command;
 import com.srgood.dbot.commands.CommandDebug;
 import com.srgood.dbot.commands.CommandDelete;
+import com.srgood.dbot.commands.CommandEval;
 import com.srgood.dbot.commands.CommandGetPrefix;
 import com.srgood.dbot.commands.CommandHelp;
 import com.srgood.dbot.commands.CommandInvite;
@@ -51,7 +53,6 @@ import com.srgood.dbot.commands.audio.CommandAudioStop;
 import com.srgood.dbot.commands.audio.CommandAudioVolume;
 import com.srgood.dbot.ref.RefStrings;
 import com.srgood.dbot.utils.CommandParser;
-import com.srgood.dbot.utils.CommandParser.CommandContainer;
 import com.srgood.dbot.utils.PermissionOps;
 import com.srgood.dbot.utils.ShutdownThread;
 import com.srgood.dbot.utils.XMLUtils;
@@ -80,6 +81,7 @@ public class BotMain {
 	
 	
 	public static void main(String[] args) {
+	    
 		//catch exceptions when building JDA
 		//invite temp: https://discordapp.com/oauth2/authorize?client_id=XXXX&scope=bot&permissions=0x33525237
 		
@@ -130,6 +132,7 @@ public class BotMain {
 			commands.put("delete", new CommandDelete());
 			commands.put("version", new CommandVersion());
 			commands.put("invite", new CommandInvite());
+			commands.put("eval", new CommandEval());
 			
 			
 		} catch (Exception e) {
