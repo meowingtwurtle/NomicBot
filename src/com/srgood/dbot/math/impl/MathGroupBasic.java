@@ -11,6 +11,10 @@ public class MathGroupBasic implements IMathGroup {
     public MathGroupBasic(BigDecimal value) {
         this.value = value;
     }
+    
+    public MathGroupBasic(IMathGroup value) {
+        this.value = value.eval();
+    }
 
     @Override
     public BigDecimal eval() {
