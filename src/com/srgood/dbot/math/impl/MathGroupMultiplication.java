@@ -19,8 +19,8 @@ public class MathGroupMultiplication  implements IMathGroup{
     }
     
     public BigDecimal eval() {
-        BigDecimal ret = BigDecimal.ZERO;
-        
+        BigDecimal ret = BigDecimal.ONE;
+                
         for (IMathGroup x : components) {
             ret = ret.multiply(x.eval());
         }

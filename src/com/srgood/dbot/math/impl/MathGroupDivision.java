@@ -20,7 +20,7 @@ public class MathGroupDivision implements IMathGroup {
 
     public BigDecimal eval() {
         BigDecimal ret = components[0].eval();
-        
+                
         for (int x = 1; x < components.length; x++) {
             ret = ret.divide(components[x].eval());
         }
