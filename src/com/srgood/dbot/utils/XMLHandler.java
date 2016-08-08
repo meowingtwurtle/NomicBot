@@ -128,26 +128,27 @@ public class XMLHandler {
     public static boolean verifyXML() {
 
         Document doc = BotMain.PInputFile;
-
+        SimpleLog.getLog("Reasons").warn("**XML IS BEING VERIFIED**");
+        
         if (!doc.getDocumentElement().getTagName().equals("config")) {
-            System.out.println("Invalid document element");
+        	SimpleLog.getLog("Reasons").info("Invalid document element");
             return false;
         }
 
         NodeList globalNodeList = doc.getDocumentElement().getElementsByTagName("global");
         if (globalNodeList.getLength() != 1) {
-            System.out.println("Not 1 global element");
+        	SimpleLog.getLog("Reasons").info("Not 1 global element");
             return false;
         }
         Element globalElement = (Element) globalNodeList.item(0);
         if (globalElement.getElementsByTagName("prefix").getLength() != 1) {
-            System.out.println("Not 1 global/prefix element");
+        	SimpleLog.getLog("Reasons").info("Not 1 global/prefix element");
             return false;
         }
         
 
         if (doc.getDocumentElement().getElementsByTagName("servers").getLength() != 1) {
-            System.out.println("Not 1 servers element");
+        	SimpleLog.getLog("Reasons").info("Not 1 servers element");
             return false;
         }
 
@@ -156,40 +157,40 @@ public class XMLHandler {
             Element serverElement = (Element) n;
             
             if (serverElement.getElementsByTagName("prefix").getLength() != 1) {
-                System.out.println("Not 1 servers/server/prefix element");
+            	SimpleLog.getLog("Reasons").info("Not 1 servers/server/prefix element");
                 return false;
             }
             
             NodeList rolesNodeList = serverElement.getElementsByTagName("roles");
             if (rolesNodeList.getLength() != 1) {
-                System.out.println("Not 1 servers/server/roles element");
+            	SimpleLog.getLog("Reasons").info("Not 1 servers/server/roles element");
                 return false;
             }
             if (((Element) rolesNodeList.item(0)).getElementsByTagName("role").getLength() < 1) {
-                System.out.println("Less than 1 servers/server/roles/role element");
+            	SimpleLog.getLog("Reasons").info("Less than 1 servers/server/roles/role element");
                 return false;
             }
             
             NodeList commandsNodeList = serverElement.getElementsByTagName("commands");
             
             if (commandsNodeList.getLength() != 1) {
-                System.out.println("Not 1 servers/server/commands element");
+            	SimpleLog.getLog("Reasons").info("Not 1 servers/server/commands element");
                 return false;
             }
             NodeList commandNodeList = ( (Element) commandsNodeList.item(0)).getElementsByTagName("command");
             if (commandNodeList.getLength() < 1) {
-                System.out.println("Less than 1 servers/server/commands/command element");
+            	SimpleLog.getLog("Reasons").info("Less than 1 servers/server/commands/command element");
                 return false;
             }
             {
                 for (Node temp : nodeListToList(commandNodeList)) {
                     Element commandElement = (Element ) temp;
                     if (commandElement.getElementsByTagName("permLevel").getLength() != 1) {
-                        System.out.println("Not 1 servers/server/commands/command/permLevel element");
+                    	SimpleLog.getLog("Reasons").info("Not 1 servers/server/commands/command/permLevel element");
                         return false;
                     }
                     if (commandElement.getElementsByTagName("isEnabled").getLength() != 1) {
-                        System.out.println("Not 1 servers/server/commands/command/isEnabled element");
+                    	SimpleLog.getLog("Reasons").info("Not 1 servers/server/commands/command/isEnabled element");
                         return false;
                     }
                 }
@@ -291,10 +292,9 @@ public class XMLHandler {
 
     public static String getGuildPrefix(Guild guild) {
         if (!servers.containsKey(guild.getId())) {
-            System.out.println("initting Guild from message");
+            SimpleLog.getLog("Reasons").info("initializing Guild from message");
             BotListener.initGuild(guild);
         }
-        System.out.println(((Element)getGuildPrefixNode(guild)).getTagName());
         return getGuildPrefixNode(guild).getTextContent();
     }
     
@@ -325,11 +325,9 @@ public class XMLHandler {
             }
         }
         if (commandElementExists(commandsElement, cmd.invoke)) {
-            System.out.println("Command element exists");
                 addMissingSubElementsToCommand(commandsElement, cmd.invoke);
                 return;
         }
-        System.out.println("Command element not exists");
         initCommandElement(commandsElement, cmd.invoke);
     }
 
@@ -343,7 +341,6 @@ public class XMLHandler {
     
     	BotMain.PInputFile = BotMain.DomInput.parse(InputFile);
     	BotMain.PInputFile.getDocumentElement().normalize();
-    	SimpleLog.getLog("Reasons.").info(BotMain.PInputFile.getDocumentElement().getNodeName());
     
     	// <config> element
     	Element rootElem = BotMain.PInputFile.getDocumentElement();
@@ -385,7 +382,6 @@ public class XMLHandler {
             for (Node n : commandList) {
                 Element elem = (Element) n;
                 if (elem.getAttribute("name").equals(commandName)) {
-                	System.out.println(elem.getTagName());
                     return PermissionOps.intToEnum(Integer.parseInt(elem.getElementsByTagName("permLevel").item(0).getTextContent()));
                 }
             }

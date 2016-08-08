@@ -2,6 +2,7 @@
 package com.srgood.dbot; 
 
 import java.io.BufferedReader;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -11,8 +12,8 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.PrintStream;
 import java.nio.file.Files;
+import java.time.Instant;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -27,7 +28,6 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 
 import com.srgood.dbot.commands.CoinFlip;
 import com.srgood.dbot.commands.Command;
@@ -64,11 +64,13 @@ import net.dv8tion.jda.JDA;
 import net.dv8tion.jda.JDABuilder;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.utils.SimpleLog;
+
 public class BotMain {
 	
 	public static JDA jda;
 	
 	//Global
+	public static Instant startInstant = Instant.now();
     // prefix and shutdown override key
 	public static String prefix;
 	public static String Okey;
@@ -110,7 +112,7 @@ public class BotMain {
 		
 		//TODO make the null checks modular and in the LoadParams method, not here
 		
-		//SimpleLog.getLog("Reasons").info("Override Key: " + Okey);
+		SimpleLog.getLog("Reasons").info("Session override Key: " + Okey);
 		
 		//catch null pointer exceptions when creating commands
 		try {
