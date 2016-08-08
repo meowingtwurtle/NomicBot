@@ -3,12 +3,12 @@
     <prefix>#!</prefix>
   </global>
   <servers>
-    <server id="201020472702402560">
+    <server id="206507749822038018">
       <prefix>#!</prefix>
       <roles>
-        <role name="DEV">211966761757573120</role>
-        <role name="ADMIN">211966762290380811</role>
-        <role name="MUSIC_DJ">211966762990829568</role>
+        <role name="DEV">211994785152499713</role>
+        <role name="ADMIN">211994786318647296</role>
+        <role name="MUSIC_DJ">211994787451109376</role>
       </roles>
       <commands>
         <command name="calc">
