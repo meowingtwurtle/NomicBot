@@ -1,15 +1,9 @@
 package com.srgood.dbot.commands;
 
-import java.util.List;
-
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.utils.Permissions;
 import com.srgood.dbot.utils.XMLHandler;
 
-import net.dv8tion.jda.Permission;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
@@ -25,26 +19,9 @@ public class CommandToggle implements Command {
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		// TODO Auto-generated method stub
+	    Command mCommand = BotMain.getCommandByName(args[0]);
 		if (args.length > 0) {
-			if (BotMain.commands.containsKey(args[0].toLowerCase())) {
-				 Element commandsElement = (Element) ((Element) XMLHandler.getServerNode(event.getGuild()))
-		                    .getElementsByTagName("commands").item(0);
-		            
-		            List<Node> commandList = XMLHandler.nodeListToList(commandsElement.getElementsByTagName("command"));
-		            
-		            for (Node n : commandList) {
-		                Element elem = (Element) n;
-		                if (elem.getAttribute("name").equals(args[0].toLowerCase())) {
-		                	System.out.println("" + Boolean.parseBoolean(elem.getLastChild().getTextContent().trim()));
-		                	if (Boolean.parseBoolean(elem.getElementsByTagName("isEnabled").item(0).getTextContent())) {
-		                		elem.getElementsByTagName("isEnabled").item(0).setTextContent("false");
-		                	} else {
-		                		elem.getElementsByTagName("isEnabled").item(0).setTextContent("true");
-		                	}
-		                	event.getChannel().sendMessage("Toggled " + args[0]);
-		                }
-		            }
-			}
+		    XMLHandler.setCommandIsEnabled(event.getGuild(), mCommand, !XMLHandler.commandIsEnabled(event.getGuild(), mCommand));
 		} else {
 			event.getChannel().sendMessage("Please specify a command to toggle");
 		}

@@ -26,8 +26,8 @@ import net.dv8tion.jda.entities.Role;
 import net.dv8tion.jda.utils.SimpleLog;
 
 public class XMLHandler {
-    public static Map<String,Node> servers = new HashMap<String,Node>();
-    public static Node getServerNode(Guild guild) {
+    public static Map<String,Element> servers = new HashMap<>();
+    private static Element getServerNode(Guild guild) {
         return servers.get(guild.getId());
     }
     
@@ -39,7 +39,8 @@ public class XMLHandler {
         Set<Role> ret = new HashSet<>();
         
         for (Node i : roleNodes) {
-            if (internalName.equals(((Attr) i.getAttributes().getNamedItem("name")).getValue())) {
+            Element elem = (Element) i;
+            if (internalName.equals(elem.getAttribute(internalName))) {
                 ret.add(guild.getRoleById(i.getTextContent()));
             }
         }
@@ -47,13 +48,11 @@ public class XMLHandler {
         return ret;
     }
     
-    public static Element getRolesElement(Guild guild) {
-        Element serverElem = (Element) getServerNode(guild);
-        Element rolesElem = (Element) serverElem.getElementsByTagName("roles").item(0);
-        return rolesElem;
+    private static Element getRolesElement(Guild guild) {
+        return getFirstSubElement(getServerNode(guild), "roles");
     }
     
-    public static List<Node> nodeListToList(NodeList nl) {
+    private static List<Node> nodeListToList(NodeList nl) {
         List<Node> ret = new ArrayList<>();
         
         for (int i = 0; i < nl.getLength(); i++) {
@@ -69,15 +68,11 @@ public class XMLHandler {
         initCommandsElement(commandsElement);
     }
     
-    public static Element getCommandsElement(Guild guild) {
-        return (Element) ((Element) getServerNode(guild)).getElementsByTagName("commands").item(0);
+    private static Element getCommandsElement(Guild guild) {
+        return getFirstSubElement(getServerNode(guild), "commands");
     }
-//    
-//    public static Element getCommandsElement(Guild guild) {
-//        
-//    }
-    
-    public static void initCommandsElement(Element commandsElement) {
+
+    private static void initCommandsElement(Element commandsElement) {
         try {            
             for (String command : BotMain.commands.keySet()) {
                 initCommandElement(commandsElement, command);
@@ -87,7 +82,7 @@ public class XMLHandler {
         }
     }
     
-    public static void initCommandElement(Element commandsElement, String command) {
+    private static void initCommandElement(Element commandsElement, String command) {
         Element commandElement = BotMain.PInputFile.createElement("command");
         
         commandElement.setAttribute("name", command);
@@ -100,15 +95,13 @@ public class XMLHandler {
     public static void initGuildXML(Guild guild) {
         Element server = BotMain.PInputFile.createElement("server");
 
-        Element elementServers = (Element) BotMain.PInputFile.getDocumentElement().getElementsByTagName("servers")
-                .item(0);
+        Element elementServers = getFirstSubElement(BotMain.PInputFile.getDocumentElement(), "servers");
 
         Attr idAttr = BotMain.PInputFile.createAttribute("id");
         idAttr.setValue(guild.getId());
         server.setAttributeNode(idAttr);
 
-        Element globalElement = (Element) BotMain.PInputFile.getDocumentElement().getElementsByTagName("global")
-                .item(0);
+        Element globalElement = getFirstSubElement(BotMain.PInputFile.getDocumentElement(), "global");
 
         for (Node n : XMLHandler.nodeListToList(globalElement.getChildNodes())) {
             if (n instanceof Element) {
@@ -201,24 +194,16 @@ public class XMLHandler {
 
     }
     
-    public static List<Node> getRoleNodeListFromGuild(Guild guild) {
+    private static List<Node> getRoleNodeListFromGuild(Guild guild) {
         Element serverElem = (Element) getServerNode(guild);
         
-        Element rolesElem = (Element) serverElem.getElementsByTagName("roles").item(0);
+        Element rolesElem = getFirstSubElement(serverElem, "roles");
                 
         return nodeListToList(rolesElem.getElementsByTagName("role"));
     }
     
-    public static boolean commandIsEnabled(Guild guild, Command command) {
-
-
-        String commandName = null;
-
-        for (String e : BotMain.commands.keySet()) {
-            if (BotMain.commands.get(e) == command) {
-                commandName = e;
-            }
-        }
+    private static Element getCommandEnabledElement(Guild guild, Command command) {
+        String commandName = BotMain.getNameFromCommand(command);
 
         if (BotMain.commands.values().contains(command)) {
             Element commandsElement = getCommandsElement(guild) ;
@@ -228,21 +213,28 @@ public class XMLHandler {
             for (Node n : commandList) {
                 Element elem = (Element) n;
                 if (elem.getAttribute("name").equals(commandName)) {
-//                	System.out.println("" + Boolean.parseBoolean(elem.getLastChild().getTextContent().trim()));
-                	try {
-                	    Boolean ret = Boolean.parseBoolean(elem.getElementsByTagName("isEnabled").item(0).getTextContent());
-                		return ret == null ? true : ret;
-                	} catch (NullPointerException e) {
-                	    e.printStackTrace();
-                	}
-                	
+//                  System.out.println("" + Boolean.parseBoolean(elem.getLastChild().getTextContent().trim()));
+                    try {
+                        return getFirstSubElement(elem, "isEnabled");
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
+                    
                 }
             }
         }
-        return false;
+        return null;
+    }
+    
+    public static boolean commandIsEnabled(Guild guild, Command command) {
+        return Boolean.parseBoolean(getCommandEnabledElement(guild, command).getTextContent());
+    }
+    
+    public static void setCommandIsEnabled(Guild guild, Command command, boolean enabled) {
+        getCommandEnabledElement(guild, command).setTextContent("" + enabled);
     }
 
-    public static boolean commandElementExists(Element commandsElement, String cmdName) {
+    private static boolean commandElementExists(Element commandsElement, String cmdName) {
         for (Node n : nodeListToList(commandsElement.getElementsByTagName("command"))) {
             Element elem = (Element) n;
             if (elem.getAttribute("name").equals(cmdName)) return true;
@@ -250,7 +242,7 @@ public class XMLHandler {
         return false;
     }
     
-    static Map<String, Function<String, Object>> requiredCommandSubElements = new HashMap<String, Function<String, Object>>() {
+    private static Map<String, Function<String, Object>> requiredCommandSubElements = new HashMap<String, Function<String, Object>>() {
         /**
          * 
          */
@@ -262,7 +254,7 @@ public class XMLHandler {
         }
     };
 
-    public static void addMissingSubElementsToCommand(Element commandsElement, String commandName) {
+    private static void addMissingSubElementsToCommand(Element commandsElement, String commandName) {
         Element targetCommand = null;
         for (Node n : nodeListToList(commandsElement.getElementsByTagName("command"))) {
             if (((Element) n).getAttribute("name").equals(commandName)) {
@@ -280,11 +272,14 @@ public class XMLHandler {
         }
     }
 
+    private static Element getFirstSubElement(Element parent, String subTagName) {
+        List<Node> nList = nodeListToList(parent.getElementsByTagName(subTagName));
+        return (Element) nList.get(0);
+    }
     
     public static void deleteGuild(Guild guild) {
         for (Node n : nodeListToList(
-                ((Element) ((Element) getServerNode(guild)).getElementsByTagName("roles").item(0))
-                        .getElementsByTagName("role"))) {
+                getFirstSubElement((Element) getServerNode(guild), "roles").getElementsByTagName("role"))) {
             guild.getRoleById(n.getTextContent()).getManager().delete();
         }
         getServerNode(guild).getParentNode().removeChild(getServerNode(guild));
@@ -303,12 +298,10 @@ public class XMLHandler {
     }
 
     private static Node getGuildPrefixNode(Guild guild) {
-        Node ServerNode = getServerNode(guild);
-        Element NodeElement = (Element) ServerNode;
-        return NodeElement.getElementsByTagName("prefix").item(0);
+        return getFirstSubElement(getServerNode(guild), "prefix");
     }
     
-    public static void createCommandNodeIfNotExists(CommandParser.CommandContainer cmd) {
+    public static void initCommandIfNotExists(CommandParser.CommandContainer cmd) {
         Element serverElement = (Element) getServerNode(cmd.event.getGuild());
         Element commandsElement;
         {
@@ -332,7 +325,7 @@ public class XMLHandler {
     }
 
     // TODO fix the exceptions here, too
-    public static void putNodes() throws Exception {
+    public static void initStorage() throws Exception {
         try {
     	BotMain.DomFactory = DocumentBuilderFactory.newInstance();
     	BotMain.DomInput = BotMain.DomFactory.newDocumentBuilder();
@@ -347,15 +340,13 @@ public class XMLHandler {
     	// <server> element list
     	NodeList ServerNodes = rootElem.getElementsByTagName("server");
     	for (int i = 0; i < ServerNodes.getLength(); i++) {
-    		Node ServerNode = ServerNodes.item(i);
+    		Element ServerNode = (Element) ServerNodes.item(i);
     		Element ServerNodeElement = (Element) ServerNode;
     
     		servers.put(ServerNodeElement.getAttribute("id"), ServerNode);
     	}
     	
-    	Element globalElem = (Element) rootElem.getElementsByTagName("global").item(0);
-    	
-    	BotMain.prefix = globalElem.getElementsByTagName("prefix").item(0).getTextContent();
+    	BotMain.prefix = getFirstSubElement(getFirstSubElement(rootElem, "global"), "prefix").getTextContent();
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
@@ -365,24 +356,17 @@ public class XMLHandler {
     public static Permissions getCommandPermissionXML(Guild guild, Command command) {
     
     
-        String commandName = null;
-    
-        for (String e : BotMain.commands.keySet()) {
-            if (BotMain.commands.get(e) == command) {
-                commandName = e;
-            }
-        }
+        String commandName = BotMain.getNameFromCommand(command);
     
         if (BotMain.commands.values().contains(command)) {
-            Element commandsElement = (Element) ((Element) getServerNode(guild))
-                    .getElementsByTagName("commands").item(0);
+            Element commandsElement = getFirstSubElement(getServerNode(guild), "commands");
             
             List<Node> commandList = nodeListToList(commandsElement.getElementsByTagName("command"));
             
             for (Node n : commandList) {
                 Element elem = (Element) n;
                 if (elem.getAttribute("name").equals(commandName)) {
-                    return PermissionOps.intToEnum(Integer.parseInt(elem.getElementsByTagName("permLevel").item(0).getTextContent()));
+                    return PermissionOps.intToEnum(Integer.parseInt(getFirstSubElement(elem, "permLevel").getTextContent()));
                 }
             }
         }
@@ -444,9 +428,9 @@ public class XMLHandler {
         return false;
     }
     
-    public static void registerRoleXML(Guild guild, Role role, Permissions roleLevel) {
-       Element elementRoles = (Element) (((Element) getServerNode(guild)).getElementsByTagName("roles").item(0));
-        
+    public static void registerRole(Guild guild, Role role, Permissions roleLevel) {
+        Element elementRoles = getFirstSubElement(getServerNode(guild), "roles");
+                
         Element elementRole = BotMain.PInputFile.createElement("role");
         Attr roleAttr = BotMain.PInputFile.createAttribute("name");
         roleAttr.setValue(roleLevel.getXMLName());

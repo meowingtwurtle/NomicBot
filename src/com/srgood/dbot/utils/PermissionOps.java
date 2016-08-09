@@ -89,7 +89,7 @@ public class PermissionOps {
         Role role = roleMgr.getRole();
 
         if (addToXML) {
-            XMLHandler.registerRoleXML(guild, role, roleLevel);
+            XMLHandler.registerRole(guild, role, roleLevel);
         }
         
 

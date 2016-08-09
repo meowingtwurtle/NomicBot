@@ -104,7 +104,7 @@ public class BotMain {
 		
 		//load global paramaters
 		try {
-			XMLHandler.putNodes();
+			XMLHandler.initStorage();
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -234,7 +234,7 @@ public class BotMain {
         // checks if the typed command is in the lis i
         if (commands.containsKey(cmd.invoke)) {
             
-            XMLHandler.createCommandNodeIfNotExists(cmd);
+            XMLHandler.initCommandIfNotExists(cmd);
             
             if (XMLHandler.commandIsEnabled(
                     cmd.event.getGuild(),
@@ -284,5 +284,18 @@ public class BotMain {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static Command getCommandByName(String name) {
+        return commands.get(name);
+    }
+    
+    public static String getNameFromCommand(Command cmd) {
+        for (String s : commands.keySet()) {
+            if (commands.get(s) == cmd) {
+                return s;
+            }
+        }
+        return null;
     }
 }
