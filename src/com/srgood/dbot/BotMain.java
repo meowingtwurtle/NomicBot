@@ -2,7 +2,6 @@
 package com.srgood.dbot; 
 
 import java.io.BufferedReader;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -10,7 +9,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.io.PrintStream;
 import java.nio.file.Files;
 import java.time.Instant;
 import java.util.Arrays;
@@ -27,34 +25,10 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.reflections.Reflections;
 import org.w3c.dom.Document;
 
-import com.srgood.dbot.commands.CoinFlip;
 import com.srgood.dbot.commands.Command;
-import com.srgood.dbot.commands.CommandDebug;
-import com.srgood.dbot.commands.CommandDelete;
-import com.srgood.dbot.commands.CommandDiceRoll;
-import com.srgood.dbot.commands.CommandEval;
-import com.srgood.dbot.commands.CommandGetPrefix;
-import com.srgood.dbot.commands.CommandHelp;
-import com.srgood.dbot.commands.CommandInvite;
-import com.srgood.dbot.commands.CommandPing;
-import com.srgood.dbot.commands.CommandPong;
-import com.srgood.dbot.commands.CommandSetPrefix;
-import com.srgood.dbot.commands.CommandShutdown;
-import com.srgood.dbot.commands.CommandToggle;
-import com.srgood.dbot.commands.CommandVersion;
-import com.srgood.dbot.commands.audio.CommandAudioJoin;
-import com.srgood.dbot.commands.audio.CommandAudioLeave;
-import com.srgood.dbot.commands.audio.CommandAudioList;
-import com.srgood.dbot.commands.audio.CommandAudioNowPlaying;
-import com.srgood.dbot.commands.audio.CommandAudioPause;
-import com.srgood.dbot.commands.audio.CommandAudioPlay;
-import com.srgood.dbot.commands.audio.CommandAudioRepeat;
-import com.srgood.dbot.commands.audio.CommandAudioSkip;
-import com.srgood.dbot.commands.audio.CommandAudioStop;
-import com.srgood.dbot.commands.audio.CommandAudioVolume;
 import com.srgood.dbot.ref.RefStrings;
 import com.srgood.dbot.utils.CommandParser;
 import com.srgood.dbot.utils.PermissionOps;
@@ -117,33 +91,16 @@ public class BotMain {
 		
 		//catch null pointer exceptions when creating commands
 		try {
-			commands.put("ping", new CommandPing());
-			commands.put("pong", new CommandPong());
-			commands.put("shutdown", new CommandShutdown());
-			commands.put("setprefix", new CommandSetPrefix());
-			commands.put("getprefix", new CommandGetPrefix());
-			commands.put("debug",  new CommandDebug());
-			commands.put("volume", new CommandAudioVolume());
-			commands.put("list", new CommandAudioList());
-			commands.put("now-playing", new CommandAudioNowPlaying());
-			commands.put("join", new CommandAudioJoin());
-			commands.put("leave", new CommandAudioLeave());
-			commands.put("play", new CommandAudioPlay());
-			commands.put("skip", new  CommandAudioSkip());
-			commands.put("stop", new CommandAudioStop());
-			commands.put("pause", new CommandAudioPause());
-			commands.put("help", new CommandHelp());
-			commands.put("repeat", new CommandAudioRepeat());
-			commands.put("delete", new CommandDelete());
-			commands.put("version", new CommandVersion());
-			commands.put("invite", new CommandInvite());
-			commands.put("flip", new CoinFlip());
-			commands.put("roll", new CommandDiceRoll());
-			commands.put("toggle", new CommandToggle());
-			commands.put("eval", new CommandEval());
-			commands.put("calc", new CommandEval());
-			
-			
+		    String[] packages = {"com.srgood.dbot", "com.srgood.dbot.audio"};
+
+            for (String pack : packages) {
+                Reflections mReflect = new Reflections(pack);
+                for (Class<? extends Command> cmdClass : mReflect.getSubTypesOf(Command.class)) {
+                    if (!cmdClass.isInterface()) {
+                        commands.put(cmdClass.getSimpleName().replaceAll("Command", "").toLowerCase(), cmdClass.newInstance());
+                    }
+                }
+            }
 		} catch (Exception e) {
 			SimpleLog.getLog("Reasons").warn("One or more of the commands failed to map");
 			e.printStackTrace();
