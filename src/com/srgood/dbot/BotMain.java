@@ -27,6 +27,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.w3c.dom.Document;
 
 import com.srgood.dbot.commands.CoinFlip;
