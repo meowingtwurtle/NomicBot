@@ -8,7 +8,12 @@ import com.srgood.dbot.utils.XMLHandler;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+
 public class CommandEval implements Command {
+
+    private final static NumberFormat RESULT_FORMATTER = new DecimalFormat("#0.0###");
 
     public CommandEval() {
         
@@ -24,7 +29,7 @@ public class CommandEval implements Command {
     public void action(String[] args, GuildMessageReceivedEvent event) {
         try {
             IMathGroup group = IMathHandler.getMathHandler().parse(join(args));
-            event.getChannel().sendMessage("`MATH:` " + group.eval().toString());
+            event.getChannel().sendMessage("`MATH:` " + RESULT_FORMATTER.format(group.eval()));
         } catch (Exception e) {
             e.printStackTrace();
             event.getChannel().sendMessage("`MATH:` An error occurred during parsing.");

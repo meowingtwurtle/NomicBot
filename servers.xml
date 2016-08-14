@@ -217,6 +217,10 @@
           <isEnabled>true</isEnabled>
           <permLevel>0</permLevel>
         </command>
+        <command name="calc">
+          <isEnabled>true</isEnabled>
+          <permLevel>0</permLevel>
+        </command>
       </commands>
     </server>
   </servers>
