@@ -95,7 +95,7 @@ local.properties
 ## Plugin-specific files:
 
 # IntelliJ
-/out/
+out/
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
@@ -110,8 +110,10 @@ crashlytics-build.properties
 fabric.properties
 
 ## Custom
+# Project-relevant
 config.properties
 /messages/
-/.settings/
 /target/
+# IDEA custom
 /.idea/codeStyleSettings.xml
+.idea/inspectionProfiles/
