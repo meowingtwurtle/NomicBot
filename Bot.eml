@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<component jdk="JavaSE-1.8">
+<component inheritJdk="true">
 	<exclude-output/>
 	<contentEntry url="file://$MODULE_DIR$"/>
 	<lib name="JDA-withDependencies-2.2.0_334.jar" scope="COMPILE">
-		<srcroot url="file://$MODULE_DIR$/srcJDA"/>
-		<relative-module-src project-related="file://$PROJECT_DIR$/srcJDA"/>
+		<srcroot url="file://$MODULE_DIR$/srcJDA/main/java"/>
+		<relative-module-src project-related="file://$PROJECT_DIR$/srcJDA/main/java"/>
 		<relative-module-cls project-related="jar://$PROJECT_DIR$/JDA-withDependencies-2.2.0_334.jar!/"/>
 	</lib>
 </component>

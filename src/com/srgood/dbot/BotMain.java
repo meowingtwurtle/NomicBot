@@ -1,21 +1,18 @@
 
 package com.srgood.dbot; 
 
-import java.io.BufferedReader;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.PrintStream;
-import java.nio.file.Files;
-import java.time.Instant;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.TreeMap;
+import com.srgood.dbot.commands.*;
+import com.srgood.dbot.commands.audio.*;
+import com.srgood.dbot.ref.RefStrings;
+import com.srgood.dbot.utils.CommandParser;
+import com.srgood.dbot.utils.PermissionOps;
+import com.srgood.dbot.utils.ShutdownThread;
+import com.srgood.dbot.utils.XMLHandler;
+import net.dv8tion.jda.JDA;
+import net.dv8tion.jda.JDABuilder;
+import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.utils.SimpleLog;
+import org.w3c.dom.Document;
 
 import javax.security.auth.login.LoginException;
 import javax.xml.parsers.DocumentBuilder;
@@ -26,44 +23,12 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
-import org.w3c.dom.Document;
-
-import com.srgood.dbot.commands.CoinFlip;
-import com.srgood.dbot.commands.Command;
-import com.srgood.dbot.commands.CommandDebug;
-import com.srgood.dbot.commands.CommandDelete;
-import com.srgood.dbot.commands.CommandDiceRoll;
-import com.srgood.dbot.commands.CommandEval;
-import com.srgood.dbot.commands.CommandGetPrefix;
-import com.srgood.dbot.commands.CommandHelp;
-import com.srgood.dbot.commands.CommandInvite;
-import com.srgood.dbot.commands.CommandPing;
-import com.srgood.dbot.commands.CommandPong;
-import com.srgood.dbot.commands.CommandSetPrefix;
-import com.srgood.dbot.commands.CommandShutdown;
-import com.srgood.dbot.commands.CommandToggle;
-import com.srgood.dbot.commands.CommandVersion;
-import com.srgood.dbot.commands.audio.CommandAudioJoin;
-import com.srgood.dbot.commands.audio.CommandAudioLeave;
-import com.srgood.dbot.commands.audio.CommandAudioList;
-import com.srgood.dbot.commands.audio.CommandAudioNowPlaying;
-import com.srgood.dbot.commands.audio.CommandAudioPause;
-import com.srgood.dbot.commands.audio.CommandAudioPlay;
-import com.srgood.dbot.commands.audio.CommandAudioRepeat;
-import com.srgood.dbot.commands.audio.CommandAudioSkip;
-import com.srgood.dbot.commands.audio.CommandAudioStop;
-import com.srgood.dbot.commands.audio.CommandAudioVolume;
-import com.srgood.dbot.ref.RefStrings;
-import com.srgood.dbot.utils.CommandParser;
-import com.srgood.dbot.utils.PermissionOps;
-import com.srgood.dbot.utils.ShutdownThread;
-import com.srgood.dbot.utils.XMLHandler;
-
-import net.dv8tion.jda.JDA;
-import net.dv8tion.jda.JDABuilder;
-import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.utils.SimpleLog;
+import java.io.*;
+import java.nio.file.Files;
+import java.time.Instant;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class BotMain {
 	
@@ -82,10 +47,9 @@ public class BotMain {
 	public static DocumentBuilderFactory DomFactory;
 	public static DocumentBuilder DomInput;
 	public static Document PInputFile;
-	
-	
+
 	public static void main(String[] args) {
-	    
+
 		//catch exceptions when building JDA
 		//invite temp: https://discordapp.com/oauth2/authorize?client_id=XXXX&scope=bot&permissions=0x33525237
 		

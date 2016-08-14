@@ -1,14 +1,9 @@
 package com.srgood.dbot.commands;
 
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.utils.Permissions;
 import com.srgood.dbot.utils.XMLHandler;
-
 import net.dv8tion.jda.entities.Guild;
-import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
 public class CommandGetPrefix implements Command {
