@@ -1,5 +1,4 @@
-
-package com.srgood.dbot; 
+package com.srgood.dbot;
 
 import com.srgood.dbot.commands.*;
 import com.srgood.dbot.commands.audio.*;
@@ -31,182 +30,179 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class BotMain {
-	
-	public static JDA jda;
-	
-	//Global
-	public static final Instant startInstant = Instant.now();
+
+    public static JDA jda;
+
+    //Global
+    public static final Instant startInstant = Instant.now();
     // prefix and shutdown override key
-	public static String prefix;
-	public static String overrideKey = com.srgood.dbot.utils.SecureOverrideKeyGenerator.nextOverrideKey();
-	
-	public static final CommandParser parser = new CommandParser();
-	public static final Map<String, Command> commands = new TreeMap<>();
+    public static String prefix;
+    public static String overrideKey = com.srgood.dbot.utils.SecureOverrideKeyGenerator.nextOverrideKey();
 
-	//XML variables
-	public static DocumentBuilderFactory DomFactory;
-	public static DocumentBuilder DomInput;
-	public static Document PInputFile;
+    public static final CommandParser parser = new CommandParser();
+    public static final Map<String, Command> commands = new TreeMap<>();
 
-	public static void main(String[] args) {
+    //XML variables
+    public static DocumentBuilderFactory DomFactory;
+    public static DocumentBuilder DomInput;
+    public static Document PInputFile;
 
-		//catch exceptions when building JDA
-		//invite temp: https://discordapp.com/oauth2/authorize?client_id=XXXX&scope=bot&permissions=0x33525237
-		
-		Runtime.getRuntime().addShutdownHook(new ShutdownThread());
-		
-		try  {
-			jda = new JDABuilder().addListener(new BotListener()).setBotToken(RefStrings.BOT_TOKEN_REASONS).buildBlocking();
-			jda.setAutoReconnect(true);
-			jda.getAccountManager().setGame("type '@Reasons help'");
-		} catch(LoginException e) {
-			SimpleLog.getLog("Reasons").fatal("**COULD NOT LOG IN**");
-		} catch (InterruptedException e) {
-			SimpleLog.getLog("JDA").fatal("**AN UNKNOWN ERROR OCCURRED DURING LOGIN**");
-			e.printStackTrace();
-		}
-		
-		//load global parameters
-		try {
-			XMLHandler.initStorage();
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		//TODO make the null checks modular and in the LoadParams method, not here
-		
-		SimpleLog.getLog("Reasons").info("Session override Key: " + overrideKey);
-		
-		//catch null pointer exceptions when creating commands
-		try {
-			commands.put("ping", new CommandPing());
-			commands.put("pong", new CommandPong());
-			commands.put("shutdown", new CommandShutdown());
-			commands.put("setprefix", new CommandSetPrefix());
-			commands.put("getprefix", new CommandGetPrefix());
-			commands.put("debug",  new CommandDebug());
-			commands.put("volume", new CommandAudioVolume());
-			commands.put("list", new CommandAudioList());
-			commands.put("now-playing", new CommandAudioNowPlaying());
-			commands.put("join", new CommandAudioJoin());
-			commands.put("leave", new CommandAudioLeave());
-			commands.put("play", new CommandAudioPlay());
-			commands.put("skip", new  CommandAudioSkip());
-			commands.put("stop", new CommandAudioStop());
-			commands.put("pause", new CommandAudioPause());
-			commands.put("help", new CommandHelp());
-			commands.put("repeat", new CommandAudioRepeat());
-			commands.put("delete", new CommandDelete());
-			commands.put("version", new CommandVersion());
-			commands.put("invite", new CommandInvite());
-			commands.put("flip", new CoinFlip());
-			commands.put("roll", new CommandDiceRoll());
-			commands.put("toggle", new CommandToggle());
-			commands.put("eval", new CommandEval());
-			commands.put("calc", new CommandEval());
-			
-			
-		} catch (Exception e) {
-			SimpleLog.getLog("Reasons").warn("One or more of the commands failed to map");
-			e.printStackTrace();
-		}
-		
-		
-	
-	}
-	
-	
-	//TODO fix the exceptions here
-	public static void writeXML() throws TransformerException{
-		TransformerFactory transformerFactory = TransformerFactory.newInstance();
-		Transformer transformer = transformerFactory.newTransformer();
-		// Beautify XML
-		// Set do indents
-		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-		// Set indent amount
-		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-		transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-		transformer.setOutputProperty(OutputKeys.METHOD, "html");
-		DOMSource source = new DOMSource(PInputFile);
-		StreamResult result = new StreamResult(new File("servers.xml"));
-		transformer.transform(source, result);
-		
-		cleanFile();
-	}
-	
-	
-	private final static int[] illegalChars = {34, 60, 62, 124, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 58, 42, 63, 92,46, 47};
-	static {
-	    Arrays.sort(illegalChars);
-	}
-	public static String cleanFileName(String badFileName) {
-	    StringBuilder cleanName = new StringBuilder();
-	    for (int i = 0; i < badFileName.length(); i++) {
-	        int c = (int)badFileName.charAt(i);
-	        if (Arrays.binarySearch(illegalChars, c) < 0) {
-	            cleanName.append((char)c);
-	        }
-	    }
-	    return cleanName.toString();
-	}
-	
-	public static void storeMessage (GuildMessageReceivedEvent event){
-		
-		String truePath = "messages/guilds/" + cleanFileName(event.getGuild().getName()) +"/" + cleanFileName(event.getChannel().getName()) + "/all/";
-		try {
-			
-			FileOutputStream allFileStream = new FileOutputStream(truePath + event.getMessage().getId() + ".ser");
-			ObjectOutputStream allObjectStream = new ObjectOutputStream(allFileStream);
-			allObjectStream.writeObject(event.getMessage().getContent());
-			
-			allObjectStream.close();
-			Boolean mentioned = false;
-			if (!event.getMessage().getMentionedUsers().isEmpty()) {
-				if ( event.getJDA().getSelfInfo().getAsMention().equals(event.getMessage().getMentionedUsers().get(0).getAsMention())) {
-					mentioned = true;
-				}
-			}
-			if (event.getAuthor().isBot() | event.getMessage().getContent().startsWith(XMLHandler.getGuildPrefix(event.getGuild())) | mentioned) {
-				FileOutputStream botFileStream = new FileOutputStream(truePath.replace("/all/", "/bot/") + event.getMessage().getId() + ".ser");
-				ObjectOutputStream botObjectStream = new ObjectOutputStream(botFileStream);
-				botObjectStream.writeObject(event.getMessage().getContent());
-				
-				botObjectStream.close();
-			}
-		} catch(FileNotFoundException e) {
-			
-			File allFile = new File(truePath);
-			File botFile = new File(truePath.replace("/all/", "/bot/"));
-			
-			allFile.setWritable(true);
-			botFile.setWritable(true);
-			allFile.mkdirs();
-			botFile.mkdirs();
-			
-			storeMessage(event);
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
-		//TODO Rank based delete
-	}
+    public static void main(String[] args) {
+
+        //catch exceptions when building JDA
+        //invite temp: https://discordapp.com/oauth2/authorize?client_id=XXXX&scope=bot&permissions=0x33525237
+
+        Runtime.getRuntime().addShutdownHook(new ShutdownThread());
+
+        try {
+            jda = new JDABuilder().addListener(new BotListener()).setBotToken(RefStrings.BOT_TOKEN_REASONS).buildBlocking();
+            jda.setAutoReconnect(true);
+            jda.getAccountManager().setGame("type '@Reasons help'");
+        } catch (LoginException e) {
+            SimpleLog.getLog("Reasons").fatal("**COULD NOT LOG IN**");
+        } catch (InterruptedException e) {
+            SimpleLog.getLog("JDA").fatal("**AN UNKNOWN ERROR OCCURRED DURING LOGIN**");
+            e.printStackTrace();
+        }
+
+        //load global parameters
+        try {
+            XMLHandler.initStorage();
+        } catch (Exception e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+
+        //TODO make the null checks modular and in the LoadParams method, not here
+
+        SimpleLog.getLog("Reasons").info("Session override Key: " + overrideKey);
+
+        //catch null pointer exceptions when creating commands
+        try {
+            commands.put("ping", new CommandPing());
+            commands.put("pong", new CommandPong());
+            commands.put("shutdown", new CommandShutdown());
+            commands.put("setprefix", new CommandSetPrefix());
+            commands.put("getprefix", new CommandGetPrefix());
+            commands.put("debug", new CommandDebug());
+            commands.put("volume", new CommandAudioVolume());
+            commands.put("list", new CommandAudioList());
+            commands.put("now-playing", new CommandAudioNowPlaying());
+            commands.put("join", new CommandAudioJoin());
+            commands.put("leave", new CommandAudioLeave());
+            commands.put("play", new CommandAudioPlay());
+            commands.put("skip", new CommandAudioSkip());
+            commands.put("stop", new CommandAudioStop());
+            commands.put("pause", new CommandAudioPause());
+            commands.put("help", new CommandHelp());
+            commands.put("repeat", new CommandAudioRepeat());
+            commands.put("delete", new CommandDelete());
+            commands.put("version", new CommandVersion());
+            commands.put("invite", new CommandInvite());
+            commands.put("flip", new CoinFlip());
+            commands.put("roll", new CommandDiceRoll());
+            commands.put("toggle", new CommandToggle());
+            commands.put("eval", new CommandEval());
+            commands.put("calc", new CommandEval());
+
+
+        } catch (Exception e) {
+            SimpleLog.getLog("Reasons").warn("One or more of the commands failed to map");
+            e.printStackTrace();
+        }
+
+
+    }
+
+
+    //TODO fix the exceptions here
+    public static void writeXML() throws TransformerException {
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        // Beautify XML
+        // Set do indents
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        // Set indent amount
+        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+        transformer.setOutputProperty(OutputKeys.METHOD, "html");
+        DOMSource source = new DOMSource(PInputFile);
+        StreamResult result = new StreamResult(new File("servers.xml"));
+        transformer.transform(source, result);
+
+        cleanFile();
+    }
+
+
+    private final static int[] illegalChars = { 34, 60, 62, 124, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 58, 42, 63, 92, 46, 47 };
+
+    static {
+        Arrays.sort(illegalChars);
+    }
+
+    public static String cleanFileName(String badFileName) {
+        StringBuilder cleanName = new StringBuilder();
+        for (int i = 0; i < badFileName.length(); i++) {
+            int c = (int) badFileName.charAt(i);
+            if (Arrays.binarySearch(illegalChars, c) < 0) {
+                cleanName.append((char) c);
+            }
+        }
+        return cleanName.toString();
+    }
+
+    public static void storeMessage(GuildMessageReceivedEvent event) {
+
+        String truePath = "messages/guilds/" + cleanFileName(event.getGuild().getName()) + "/" + cleanFileName(event.getChannel().getName()) + "/all/";
+        try {
+
+            FileOutputStream allFileStream = new FileOutputStream(truePath + event.getMessage().getId() + ".ser");
+            ObjectOutputStream allObjectStream = new ObjectOutputStream(allFileStream);
+            allObjectStream.writeObject(event.getMessage().getContent());
+
+            allObjectStream.close();
+            Boolean mentioned = false;
+            if (!event.getMessage().getMentionedUsers().isEmpty()) {
+                if (event.getJDA().getSelfInfo().getAsMention().equals(event.getMessage().getMentionedUsers().get(0).getAsMention())) {
+                    mentioned = true;
+                }
+            }
+            if (event.getAuthor().isBot() | event.getMessage().getContent().startsWith(XMLHandler.getGuildPrefix(event.getGuild())) | mentioned) {
+                FileOutputStream botFileStream = new FileOutputStream(truePath.replace("/all/", "/bot/") + event.getMessage().getId() + ".ser");
+                ObjectOutputStream botObjectStream = new ObjectOutputStream(botFileStream);
+                botObjectStream.writeObject(event.getMessage().getContent());
+
+                botObjectStream.close();
+            }
+        } catch (FileNotFoundException e) {
+
+            File allFile = new File(truePath);
+            File botFile = new File(truePath.replace("/all/", "/bot/"));
+
+            allFile.setWritable(true);
+            botFile.setWritable(true);
+            allFile.mkdirs();
+            botFile.mkdirs();
+
+            storeMessage(event);
+
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+
+        //TODO Rank based delete
+    }
+
     public static void handleCommand(CommandParser.CommandContainer cmd) {
         // checks if the typed command is in the lis i
         if (commands.containsKey(cmd.invoke)) {
-            
+
             XMLHandler.initCommandIfNotExists(cmd);
-            
-            if (XMLHandler.commandIsEnabled(
-                    cmd.event.getGuild(),
-                    BotMain.commands.get(cmd.invoke))) {
-            	if (PermissionOps
-                        .getHighestPermission(PermissionOps.getPermissions(cmd.event.getGuild(), cmd.event.getAuthor()),
-                                cmd.event.getGuild())
-                        .getLevel() >= commands.get(cmd.invoke).permissionLevel(cmd.event.getGuild()).getLevel()) {
+
+            if (XMLHandler.commandIsEnabled(cmd.event.getGuild(), BotMain.commands.get(cmd.invoke))) {
+                if (PermissionOps.getHighestPermission(PermissionOps.getPermissions(cmd.event.getGuild(), cmd.event.getAuthor()), cmd.event.getGuild()).getLevel() >= commands.get(cmd.invoke).permissionLevel(cmd.event.getGuild()).getLevel()) {
                     boolean safe = commands.get(cmd.invoke).called(cmd.args, cmd.event);
                     if (safe) {
                         commands.get(cmd.invoke).action(cmd.args, cmd.event);
@@ -215,22 +211,21 @@ public class BotMain {
                         commands.get(cmd.invoke).executed(false, cmd.event);
                     }
                 } else {
-                	cmd.event.getChannel().sendMessage("You lack the required permission to preform this action");
+                    cmd.event.getChannel().sendMessage("You lack the required permission to preform this action");
                 }
             } else {
-            	cmd.event.getChannel().sendMessage("This command is disabled");
+                cmd.event.getChannel().sendMessage("This command is disabled");
             }
-        } 
+        }
     }
-    
+
     private static void cleanFile() {
-        
-        try (FileReader fr = new FileReader("servers.xml"); FileWriter fw = new FileWriter("temp.xml") ) {
-            BufferedReader br = new BufferedReader(fr); 
+
+        try (FileReader fr = new FileReader("servers.xml"); FileWriter fw = new FileWriter("temp.xml")) {
+            BufferedReader br = new BufferedReader(fr);
             String line;
 
-            while((line = br.readLine()) != null)
-            { 
+            while ((line = br.readLine()) != null) {
                 if (!line.trim().equals("")) // don't write out blank lines
                 {
                     line = line.replace("\n", "").replace("\f", "").replace("\r", "");
@@ -253,7 +248,7 @@ public class BotMain {
     public static Command getCommandByName(String name) {
         return commands.get(name);
     }
-    
+
     public static String getNameFromCommand(Command cmd) {
         for (String s : commands.keySet()) {
             if (commands.get(s) == cmd) {

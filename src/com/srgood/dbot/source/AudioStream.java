@@ -3,12 +3,10 @@ package com.srgood.dbot.source;
 import java.io.BufferedInputStream;
 import java.util.regex.Pattern;
 
-public abstract class AudioStream extends BufferedInputStream
-{
+public abstract class AudioStream extends BufferedInputStream {
     static final Pattern TIME_PATTERN = Pattern.compile("(?<=time=).*?(?= bitrate)");
 
-    AudioStream()
-    {
+    AudioStream() {
         super(null);
     }
 

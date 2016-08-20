@@ -1,79 +1,63 @@
 package com.srgood.dbot.source;
 
-public class AudioTimestamp
-{
+public class AudioTimestamp {
     private final int hours;
     private final int minutes;
     private final int seconds;
     private final int milliseconds;
 
-    private AudioTimestamp(int hours, int minutes, int seconds, int milliseconds)
-    {
+    private AudioTimestamp(int hours, int minutes, int seconds, int milliseconds) {
         this.hours = hours;
         this.minutes = minutes;
         this.seconds = seconds;
         this.milliseconds = milliseconds;
     }
 
-    public String getTimestamp()
-    {
+    public String getTimestamp() {
         String timestamp = "";
         timestamp += hours != 0 ? String.format("%02d:", hours) : "";
         timestamp += String.format("%02d:%02d", minutes, seconds);
         return timestamp;
     }
 
-    private String getFullTimestamp()
-    {
+    private String getFullTimestamp() {
         return String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds, milliseconds);
     }
 
-    public int getHours()
-    {
+    public int getHours() {
         return hours;
     }
 
-    public int getMinutes()
-    {
+    public int getMinutes() {
         return minutes;
     }
 
-    public int getSeconds()
-    {
+    public int getSeconds() {
         return seconds;
     }
 
-    public int getMilliseconds()
-    {
+    public int getMilliseconds() {
         return milliseconds;
     }
 
-    public int getTotalSeconds()
-    {
+    public int getTotalSeconds() {
         return (hours * 3600) + (minutes * 60) + seconds;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "AudioTimeStamp(" + getFullTimestamp() + ")";
     }
 
     @Override
-    public boolean equals(Object o)
-    {
-        if (!(o instanceof AudioTimestamp))
-            return false;
+    public boolean equals(Object o) {
+        if (!(o instanceof AudioTimestamp)) return false;
 
         AudioTimestamp oTime = (AudioTimestamp) o;
-        return oTime.hours == hours
-                && oTime.minutes == minutes
-                && oTime.seconds == seconds
-                && oTime.milliseconds == milliseconds;
+        return oTime.hours == hours && oTime.minutes == minutes && oTime.seconds == seconds && oTime.milliseconds == milliseconds;
     }
 
-    public static AudioTimestamp fromFFmpegTimestamp(String ffmpegTimestamp)
-    {
+    public static AudioTimestamp fromFFmpegTimestamp(String ffmpegTimestamp) {
         String[] timeParts = ffmpegTimestamp.split(":");
         int hours = Integer.parseInt(timeParts[0]);
         int minutes = Integer.parseInt(timeParts[1]);
@@ -85,8 +69,7 @@ public class AudioTimestamp
         return new AudioTimestamp(hours, minutes, seconds, milliseconds);
     }
 
-    public static AudioTimestamp fromSeconds(int seconds)
-    {
+    public static AudioTimestamp fromSeconds(int seconds) {
         int hours = seconds / 3600;
         seconds = seconds % 3600;
 

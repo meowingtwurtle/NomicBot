@@ -11,85 +11,84 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CommandDelete implements Command {
-	
-private final String help = "Deletes Messages Use: '" + BotMain.prefix + "delete [all|bot] [channel name]' Default is all in current channel";
 
-	@Override
-	public boolean called(String[] args, GuildMessageReceivedEvent event) {
-		// TODO Auto-generated method stub
-		return true;
-	}
+    private final String help = "Deletes Messages Use: '" + BotMain.prefix + "delete [all|bot] [channel name]' Default is all in current channel";
 
-	@Override
-	public void action(String[] args, GuildMessageReceivedEvent event) {
-		
-		
-		String channel,delType;
-		List<String> messages = new ArrayList<>();
-		
-		
-		if (args.length >= 1) {
-			delType = args[0].toLowerCase();
-			if (args.length >= 2) {
-				channel = BotMain.cleanFileName(args[1]);
-			} else {
-				channel = BotMain.cleanFileName(event.getChannel().getName());
-			}
-		} else {
-			delType = "all";
-			channel = BotMain.cleanFileName(event.getChannel().getName());
-		}
-		
-		
-		
-		if (delType.equals("all")) {
-			File dir = new File("messages/guilds/" + BotMain.cleanFileName(event.getGuild().getName()) + "/" + channel + "/all/");
-			File[] directoryListing = dir.listFiles();
-			if (directoryListing != null) {
-				for (File child : directoryListing) {
-					try {
-						messages.add(child.getName().replace(".ser", ""));
-						child.delete();
-					} catch (Exception ignored) {
-						  
-					}
+    @Override
+    public boolean called(String[] args, GuildMessageReceivedEvent event) {
+        // TODO Auto-generated method stub
+        return true;
+    }
 
-			    }
-			} else {
-				dir.mkdirs();
-			}
-		} else if(delType.equals("bot")){
-			File dir = new File("messages/guilds/" + BotMain.cleanFileName(event.getGuild().getName()) + "/" + channel + "/bot/");
-			File[] directoryListing = dir.listFiles();
-			if (directoryListing != null) {
-				for (File child : directoryListing) {
-					try {
-						messages.add(child.getName().replace(".ser", ""));
-						child.delete();
-					} catch (Exception ignored) {
-						  
-					}
+    @Override
+    public void action(String[] args, GuildMessageReceivedEvent event) {
 
-			    }
-			} else {
-				dir.mkdirs();
-			}
-		}
-		  
-		event.getChannel().deleteMessagesByIds(messages);
-		event.getChannel().sendMessage("Successfully Deleted **" + messages.size() + "** messages");
-		  
-	}
 
-	@Override
-	public String help() {
-		// TODO Auto-generated method stub
-		return help;
-	}
+        String channel, delType;
+        List<String> messages = new ArrayList<>();
 
-	@Override
-	public void executed(boolean success, GuildMessageReceivedEvent event) {
-		// TODO Auto-generated method stub
+
+        if (args.length >= 1) {
+            delType = args[0].toLowerCase();
+            if (args.length >= 2) {
+                channel = BotMain.cleanFileName(args[1]);
+            } else {
+                channel = BotMain.cleanFileName(event.getChannel().getName());
+            }
+        } else {
+            delType = "all";
+            channel = BotMain.cleanFileName(event.getChannel().getName());
+        }
+
+
+        if (delType.equals("all")) {
+            File dir = new File("messages/guilds/" + BotMain.cleanFileName(event.getGuild().getName()) + "/" + channel + "/all/");
+            File[] directoryListing = dir.listFiles();
+            if (directoryListing != null) {
+                for (File child : directoryListing) {
+                    try {
+                        messages.add(child.getName().replace(".ser", ""));
+                        child.delete();
+                    } catch (Exception ignored) {
+
+                    }
+
+                }
+            } else {
+                dir.mkdirs();
+            }
+        } else if (delType.equals("bot")) {
+            File dir = new File("messages/guilds/" + BotMain.cleanFileName(event.getGuild().getName()) + "/" + channel + "/bot/");
+            File[] directoryListing = dir.listFiles();
+            if (directoryListing != null) {
+                for (File child : directoryListing) {
+                    try {
+                        messages.add(child.getName().replace(".ser", ""));
+                        child.delete();
+                    } catch (Exception ignored) {
+
+                    }
+
+                }
+            } else {
+                dir.mkdirs();
+            }
+        }
+
+        event.getChannel().deleteMessagesByIds(messages);
+        event.getChannel().sendMessage("Successfully Deleted **" + messages.size() + "** messages");
+
+    }
+
+    @Override
+    public String help() {
+        // TODO Auto-generated method stub
+        return help;
+    }
+
+    @Override
+    public void executed(boolean success, GuildMessageReceivedEvent event) {
+        // TODO Auto-generated method stub
     }
 
     @Override
@@ -103,5 +102,5 @@ private final String help = "Deletes Messages Use: '" + BotMain.prefix + "delete
         // TODO Auto-generated method stub
         return Permissions.STANDARD;
     }
-	
+
 }

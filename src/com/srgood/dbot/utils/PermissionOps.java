@@ -11,12 +11,12 @@ import java.util.List;
 public class PermissionOps {
 
     public static Collection<Permissions> getPermissions(Guild guild, User user) {
-    	return rolesToPermissions(guild.getRolesForUser(user), guild);
+        return rolesToPermissions(guild.getRolesForUser(user), guild);
     }
-    
+
 
     public static Permissions getHighestPermission(Collection<Permissions> Roles, Guild guild) {
-        
+
         Permissions maxFound = Permissions.STANDARD;
 
         for (Permissions permLevel : Permissions.values()) {
@@ -29,12 +29,12 @@ public class PermissionOps {
         }
         return maxFound;
     }
-    
+
     private static Collection<Permissions> rolesToPermissions(Collection<? extends Role> roles, Guild guild) {
         List<Permissions> ret = roles.stream().map(role -> com.srgood.dbot.utils.XMLHandler.roleToPermission(role, guild)).collect(java.util.stream.Collectors.toList());
         return ret;
     }
-    
+
     private static boolean containsAny(Collection<?> container, Collection<?> checkFor) {
         for (Object o : checkFor) {
             if (container.contains(o)) {
@@ -43,7 +43,7 @@ public class PermissionOps {
         }
         return false;
     }
-    
+
     public static Permissions intToEnum(int level) {
         for (Permissions p : Permissions.values()) {
             if (p.level == level) {
@@ -54,8 +54,7 @@ public class PermissionOps {
     }
 
     public static Role createRole(Permissions roleLevel, Guild guild, boolean addToXML) {
-        if (!roleLevel.isVisible())
-            return null;
+        if (!roleLevel.isVisible()) return null;
 
         RoleManager roleMgr = guild.createRole();
         roleMgr.setName(roleLevel.getReadableName());
@@ -68,7 +67,7 @@ public class PermissionOps {
         if (addToXML) {
             XMLHandler.registerRole(guild, role, roleLevel);
         }
-        
+
 
         return role;
     }

@@ -4,7 +4,6 @@ import com.meowingtwurtle.math.api.IMathGroup;
 import com.meowingtwurtle.math.api.IMathHandler;
 import com.srgood.dbot.utils.Permissions;
 import com.srgood.dbot.utils.XMLHandler;
-
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
@@ -16,7 +15,7 @@ public class CommandEval implements Command {
     private final static NumberFormat RESULT_FORMATTER = new DecimalFormat("#0.0###");
 
     public CommandEval() {
-        
+
     }
 
     @Override
@@ -35,7 +34,7 @@ public class CommandEval implements Command {
             event.getChannel().sendMessage("`MATH:` An error occurred during parsing.");
         }
     }
-    
+
     private String join(Object[] arr) {
         String ret = "";
         for (Object o : arr) {

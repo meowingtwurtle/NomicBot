@@ -30,167 +30,133 @@ public class MusicPlayer implements AudioSendHandler {
 
     private final byte[] buffer = new byte[AudioConnection.OPUS_FRAME_SIZE * PCM_FRAME_SIZE];
 
-    protected enum State
-    {
+    protected enum State {
         PLAYING, PAUSED, STOPPED
     }
 
-    public void addEventListener(PlayerEventListener listener)
-    {
+    public void addEventListener(PlayerEventListener listener) {
         eventManager.register(listener);
     }
 
-    public void removeEventListener(PlayerEventListener listener)
-    {
+    public void removeEventListener(PlayerEventListener listener) {
         eventManager.unregister(listener);
     }
 
-    public void setRepeat(boolean repeat)
-    {
+    public void setRepeat(boolean repeat) {
         this.repeat = repeat;
     }
 
-    public boolean isRepeat()
-    {
+    public boolean isRepeat() {
         return repeat;
     }
 
-    public float getVolume()
-    {
+    public float getVolume() {
         return this.volume;
     }
 
-    public void setVolume(float volume)
-    {
+    public void setVolume(float volume) {
         this.volume = volume;
     }
 
-    public void setShuffle(boolean shuffle)
-    {
+    public void setShuffle(boolean shuffle) {
         this.shuffle = shuffle;
     }
 
-    public boolean isShuffle()
-    {
+    public boolean isShuffle() {
         return shuffle;
     }
 
-    public void reload(boolean autoPlay)
-    {
+    public void reload(boolean autoPlay) {
         reload0(autoPlay, true);
     }
 
-    public void skipToNext()
-    {
+    public void skipToNext() {
         AudioSource skipped = currentAudioSource;
         playNext(false);
 
         eventManager.handle(new SkipEvent(this, skipped));
-        if (state == State.STOPPED)
-            eventManager.handle(new FinishEvent(this));
+        if (state == State.STOPPED) eventManager.handle(new FinishEvent(this));
     }
 
-    public LinkedList<AudioSource> getAudioQueue()
-    {
+    public LinkedList<AudioSource> getAudioQueue() {
         return audioQueue;
     }
 
-    public AudioSource getCurrentAudioSource()
-    {
+    public AudioSource getCurrentAudioSource() {
         return currentAudioSource;
     }
 
-    public AudioSource getPreviousAudioSource()
-    {
+    public AudioSource getPreviousAudioSource() {
         return previousAudioSource;
     }
 
-    public AudioTimestamp getCurrentTimestamp()
-    {
-        if (currentAudioStream != null)
-            return currentAudioStream.getCurrentTimestamp();
-        else
-            return null;
+    public AudioTimestamp getCurrentTimestamp() {
+        if (currentAudioStream != null) return currentAudioStream.getCurrentTimestamp();
+        else return null;
     }
 
-    public void play()
-    {
+    public void play() {
         play0(true);
     }
 
-    public void pause()
-    {
-        if (state == State.PAUSED)
-            return;
+    public void pause() {
+        if (state == State.PAUSED) return;
 
-        if (state == State.STOPPED)
-            throw new IllegalStateException("Cannot pause a stopped player!");
+        if (state == State.STOPPED) throw new IllegalStateException("Cannot pause a stopped player!");
 
         state = State.PAUSED;
         eventManager.handle(new PauseEvent(this));
     }
 
-    public void stop()
-    {
+    public void stop() {
         stop0(true);
     }
 
-    public boolean isPlaying()
-    {
+    public boolean isPlaying() {
         return state == State.PLAYING;
     }
 
-    public boolean isPaused()
-    {
+    public boolean isPaused() {
         return state == State.PAUSED;
     }
 
-    public boolean isStopped()
-    {
+    public boolean isStopped() {
         return state == State.STOPPED;
     }
 
     // ============ JDA AudioSendHandler overrides =============
 
     @Override
-    public boolean canProvide()
-    {
+    public boolean canProvide() {
         return state.equals(State.PLAYING);
     }
 
     @Override
-    public byte[] provide20MsAudio()
-    {
+    public byte[] provide20MsAudio() {
 //        if (currentAudioStream == null || audioFormat == null)
 //            throw new IllegalStateException("The Audio source was never set for this player!\n" +
 //                    "Please provide an AudioInputStream using setAudioSource.");
-        try
-        {
+        try {
             int amountRead = currentAudioStream.read(buffer, 0, buffer.length);
-            if (amountRead > -1)
-            {
+            if (amountRead > -1) {
                 if (amountRead < buffer.length) {
                     Arrays.fill(buffer, amountRead, buffer.length - 1, (byte) 0);
                 }
                 if (volume != 1) {
                     short sample;
-                    for (int i = 0; i < buffer.length; i+=2) {
-                        sample = (short)((buffer[ i+ 1] & 0xff) | (buffer[i] << 8));
+                    for (int i = 0; i < buffer.length; i += 2) {
+                        sample = (short) ((buffer[i + 1] & 0xff) | (buffer[i] << 8));
                         sample = (short) (sample * volume);
-                        buffer[i + 1] = (byte)(sample & 0xff);
-                        buffer[i] = (byte)((sample >> 8) & 0xff);
+                        buffer[i + 1] = (byte) (sample & 0xff);
+                        buffer[i] = (byte) ((sample >> 8) & 0xff);
                     }
                 }
                 return buffer;
-            }
-            else
-            {
+            } else {
                 sourceFinished();
                 return null;
             }
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             SimpleLog.getLog("JDA-Player").warn("A source closed unexpectedly? Oh well I guess...");
             sourceFinished();
         }
@@ -199,13 +165,10 @@ public class MusicPlayer implements AudioSendHandler {
 
     // ========= Internal Functions ==========
 
-    private void play0(boolean fireEvent)
-    {
-        if (state == State.PLAYING)
-            return;
+    private void play0(boolean fireEvent) {
+        if (state == State.PLAYING) return;
 
-        if (currentAudioSource != null)
-        {
+        if (currentAudioSource != null) {
             state = State.PLAYING;
             return;
         }
@@ -216,94 +179,67 @@ public class MusicPlayer implements AudioSendHandler {
         loadFromSource(audioQueue.removeFirst());
         state = State.PLAYING;
 
-        if (fireEvent)
-            eventManager.handle(new PlayEvent(this));
+        if (fireEvent) eventManager.handle(new PlayEvent(this));
     }
 
-    private void stop0(boolean fireEvent)
-    {
-        if (state == State.STOPPED)
-            return;
+    private void stop0(boolean fireEvent) {
+        if (state == State.STOPPED) return;
 
         state = State.STOPPED;
-        try
-        {
+        try {
             currentAudioStream.close();
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
-        }
-        finally
-        {
+        } finally {
             previousAudioSource = currentAudioSource;
             currentAudioSource = null;
             currentAudioStream = null;
         }
 
-        if (fireEvent)
-            eventManager.handle(new StopEvent(this));
+        if (fireEvent) eventManager.handle(new StopEvent(this));
     }
 
-    private void reload0(boolean autoPlay, boolean fireEvent)
-    {
+    private void reload0(boolean autoPlay, boolean fireEvent) {
         if (previousAudioSource == null && currentAudioSource == null)
             throw new IllegalStateException("Cannot restart or reload a player that has never been started!");
 
         stop0(false);
         loadFromSource(previousAudioSource);
 
-        if (autoPlay)
-            play0(false);
-        if (fireEvent)
-            eventManager.handle(new ReloadEvent(this));
+        if (autoPlay) play0(false);
+        if (fireEvent) eventManager.handle(new ReloadEvent(this));
     }
 
-    private void playNext(boolean fireEvent)
-    {
+    private void playNext(boolean fireEvent) {
         stop0(false);
-        if (audioQueue.isEmpty())
-        {
-            if (fireEvent)
-                eventManager.handle(new FinishEvent(this));
+        if (audioQueue.isEmpty()) {
+            if (fireEvent) eventManager.handle(new FinishEvent(this));
             return;
         }
 
         AudioSource source;
-        if (shuffle)
-        {
+        if (shuffle) {
             Random rand = new Random();
             source = audioQueue.remove(rand.nextInt(audioQueue.size()));
-        }
-        else
-            source = audioQueue.removeFirst();
+        } else source = audioQueue.removeFirst();
         loadFromSource(source);
 
         play0(false);
-        if (fireEvent)
-            eventManager.handle(new NextEvent(this));
+        if (fireEvent) eventManager.handle(new NextEvent(this));
     }
 
-    private void sourceFinished()
-    {
-        if (AUTO_CONTINUE)
-        {
-            if(repeat)
-            {
+    private void sourceFinished() {
+        if (AUTO_CONTINUE) {
+            if (repeat) {
                 reload0(true, false);
                 eventManager.handle(new RepeatEvent(this));
-            }
-            else
-            {
+            } else {
                 playNext(true);
             }
-        }
-        else
-            stop0(true);
+        } else stop0(true);
     }
 
-    private void loadFromSource(AudioSource source)
-    {
+    private void loadFromSource(AudioSource source) {
         AudioStream stream = source.asStream();
         currentAudioSource = source;
         currentAudioStream = stream;

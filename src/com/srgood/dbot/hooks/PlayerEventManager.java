@@ -1,41 +1,33 @@
 package com.srgood.dbot.hooks;
 
 
+import com.srgood.dbot.hooks.events.PlayerEvent;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import com.srgood.dbot.hooks.events.PlayerEvent;
-
-public class PlayerEventManager
-{
+public class PlayerEventManager {
     private final List<PlayerEventListener> listeners = new LinkedList<>();
 
-    public PlayerEventManager() {}
+    public PlayerEventManager() {
+    }
 
-    public void register(PlayerEventListener listener)
-    {
+    public void register(PlayerEventListener listener) {
         if (listeners.contains(listener))
             throw new IllegalArgumentException("Attempted to register a listener that is already registered");
         listeners.add(listener);
     }
 
-    public void unregister(PlayerEventListener listener)
-    {
+    public void unregister(PlayerEventListener listener) {
         listeners.remove(listener);
     }
 
-    public void handle(PlayerEvent event)
-    {
+    public void handle(PlayerEvent event) {
         List<PlayerEventListener> listenerCopy = new LinkedList<>(listeners);
-        for (PlayerEventListener listener : listenerCopy)
-        {
-            try
-            {
+        for (PlayerEventListener listener : listenerCopy) {
+            try {
                 listener.onEvent(event);
-            }
-            catch (Throwable throwable)
-            {
+            } catch (Throwable throwable) {
                 throwable.printStackTrace();
             }
         }
