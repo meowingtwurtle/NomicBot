@@ -1,17 +1,16 @@
 package com.srgood.dbot.commands;
 
-import java.util.Random;
-
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.utils.Permissions;
 import com.srgood.dbot.utils.XMLHandler;
-
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
+import java.util.Random;
+
 public class CommandDiceRoll implements Command {
 	
-	String help = "Rolls a dice (or die) and prints the results, and prints the result use:'" + BotMain.prefix + "roll <# die>'";
+	private final String help = "Rolls a dice (or die) and prints the results, and prints the result use:'" + BotMain.prefix + "roll <# die>'";
 	
 	@Override
 	public boolean called(String[] args, GuildMessageReceivedEvent event) {
@@ -28,16 +27,16 @@ public class CommandDiceRoll implements Command {
 		
 		if (args.length > 0) {
 			if (Integer.parseInt(args[0]) > 10) {
-				event.getChannel().sendMessage("Woah there, Im not going to roll " + args[0] + " dice, how about 10 instead?" );
+				event.getChannel().sendMessage("Whoa there, Im not going to roll " + args[0] + " dice, how about 10 instead?" );
 				numRolls = 10;
 			} else numRolls = Integer.parseInt(args[0]);
 			
 			for (int roll = 0; roll < numRolls; roll++) {
-				int temp = r.nextInt(6) + 1;
+				int randNum = r.nextInt(6) + 1;
 				if (roll < numRolls - 1) {
-					stringBuilder.append(temp + ", ");
+					stringBuilder.append(randNum).append(", ");
 				} else {
-					stringBuilder.append(temp + ".");
+					stringBuilder.append(randNum).append(".");
 				}
 				
 			}

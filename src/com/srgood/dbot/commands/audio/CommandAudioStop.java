@@ -6,7 +6,6 @@ import com.srgood.dbot.utils.Permissions;
 import com.srgood.dbot.utils.XMLHandler;
 
 import net.dv8tion.jda.entities.Guild;
-import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.managers.AudioManager;
 
@@ -39,8 +38,7 @@ public class CommandAudioStop implements AudioCommand {
 	@Override
 	public void executed(boolean success, GuildMessageReceivedEvent event) {
 		// TODO Auto-generated method stub
-		return;
-	}
+    }
 	
     @Override
     public Permissions permissionLevel(Guild guild) {

@@ -5,7 +5,7 @@ import com.srgood.dbot.source.AudioSource;
 
 public class SkipEvent extends PlayerEvent
 {
-    protected final AudioSource skippedSource;
+    private final AudioSource skippedSource;
 
     public SkipEvent(MusicPlayer player, AudioSource skippedSource)
     {

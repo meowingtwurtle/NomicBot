@@ -11,7 +11,7 @@ import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
 public class CoinFlip implements Command {
 	
-	String help = "Flips a coin, and prints the result use:'" + BotMain.prefix + "flip'";
+	private final String help = "Flips a coin, and prints the result use:'" + BotMain.prefix + "flip'";
 			
 	@Override
 	public boolean called(String[] args, GuildMessageReceivedEvent event) {

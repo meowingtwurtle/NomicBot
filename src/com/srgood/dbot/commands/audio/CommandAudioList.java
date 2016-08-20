@@ -1,7 +1,5 @@
 package com.srgood.dbot.commands.audio;
 
-import java.util.List;
-
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.MusicPlayer;
 import com.srgood.dbot.source.AudioInfo;
@@ -9,12 +7,12 @@ import com.srgood.dbot.source.AudioSource;
 import com.srgood.dbot.source.AudioTimestamp;
 import com.srgood.dbot.utils.Permissions;
 import com.srgood.dbot.utils.XMLHandler;
-
 import net.dv8tion.jda.MessageBuilder;
 import net.dv8tion.jda.entities.Guild;
-import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.managers.AudioManager;
+
+import java.util.List;
 
 public class CommandAudioList implements AudioCommand {
 
@@ -74,7 +72,7 @@ public class CommandAudioList implements AudioCommand {
 
         builder.appendString("\nTotal Queue Time Length: " + AudioTimestamp.fromSeconds(totalSeconds).getTimestamp());
         if (error)
-            builder.appendString("`An error occured calculating total time. Might not be completely valid.");
+            builder.appendString("`An error occurred calculating total time. Might not be completely valid.");
         event.getChannel().sendMessage(builder.build());
 	}
 
@@ -86,8 +84,6 @@ public class CommandAudioList implements AudioCommand {
 
 	@Override
 	public void executed(boolean success, GuildMessageReceivedEvent event) {
-		// TODO Auto-generated method stub
-		return;
 	}
 	
     @Override

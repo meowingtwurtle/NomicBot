@@ -4,17 +4,17 @@ import org.json.JSONObject;
 
 public class AudioInfo
 {
-    protected JSONObject jsonInfo;
-    protected String title;
-    protected String origin;
-    protected String id;
-    protected String encoding;
-    protected String description;
-    protected String extractor;
-    protected String thumbnail;
-    protected String error;
-    protected boolean isLive;
-    protected AudioTimestamp duration;
+    JSONObject jsonInfo;
+    String title;
+    String origin;
+    String id;
+    String encoding;
+    String description;
+    String extractor;
+    String thumbnail;
+    String error;
+    boolean isLive;
+    AudioTimestamp duration;
 
     public JSONObject getJsonInfo()
     {

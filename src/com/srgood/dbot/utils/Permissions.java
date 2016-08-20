@@ -5,11 +5,11 @@ import java.awt.Color;
 public enum Permissions {
 	DEVELOPER(99, "DEV", "Bot Developer",true,Color.red), ADMINISTRATOR(3, "ADMIN", "Reasons Admin",true,Color.green),MUSIC_DJ(2, "MUSIC_DJ", "DJ",true,Color.cyan), STANDARD(0, "STANDARD", "Standard",false,Color.BLACK);
 
-    int level;
-    String xmlName;
-    String readableName;
-    Color color;
-    Boolean visible;
+    final int level;
+    final String xmlName;
+    final String readableName;
+    final Color color;
+    final Boolean visible;
     
 
     

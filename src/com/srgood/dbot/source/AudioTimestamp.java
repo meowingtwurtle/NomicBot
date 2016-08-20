@@ -2,12 +2,12 @@ package com.srgood.dbot.source;
 
 public class AudioTimestamp
 {
-    protected int hours;
-    protected int minutes;
-    protected int seconds;
-    protected int milliseconds;
+    private final int hours;
+    private final int minutes;
+    private final int seconds;
+    private final int milliseconds;
 
-    public AudioTimestamp(int hours, int minutes, int seconds, int milliseconds)
+    private AudioTimestamp(int hours, int minutes, int seconds, int milliseconds)
     {
         this.hours = hours;
         this.minutes = minutes;
@@ -23,7 +23,7 @@ public class AudioTimestamp
         return timestamp;
     }
 
-    public String getFullTimestamp()
+    private String getFullTimestamp()
     {
         return String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds, milliseconds);
     }

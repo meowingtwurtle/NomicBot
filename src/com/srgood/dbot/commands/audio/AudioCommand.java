@@ -5,8 +5,8 @@ import com.srgood.dbot.commands.Command;
 
 import net.dv8tion.jda.managers.AudioManager;
 
-public interface AudioCommand extends Command {
-	public static final float DEFAULT_VOLUME = 0.35f;
+interface AudioCommand extends Command {
+	float DEFAULT_VOLUME = 0.35f;
 	
 	static MusicPlayer initAndGetPlayer(AudioManager manager) {
         MusicPlayer player;

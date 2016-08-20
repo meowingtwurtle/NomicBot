@@ -35,13 +35,13 @@ public class BotMain {
 	public static JDA jda;
 	
 	//Global
-	public static Instant startInstant = Instant.now();
+	public static final Instant startInstant = Instant.now();
     // prefix and shutdown override key
 	public static String prefix;
-	public static String Okey;
+	public static String overrideKey = com.srgood.dbot.utils.SecureOverrideKeyGenerator.nextOverrideKey();
 	
 	public static final CommandParser parser = new CommandParser();
-	public static Map<String, Command> commands = new TreeMap<String, Command>(); 
+	public static final Map<String, Command> commands = new TreeMap<>();
 
 	//XML variables
 	public static DocumentBuilderFactory DomFactory;
@@ -62,11 +62,11 @@ public class BotMain {
 		} catch(LoginException e) {
 			SimpleLog.getLog("Reasons").fatal("**COULD NOT LOG IN**");
 		} catch (InterruptedException e) {
-			SimpleLog.getLog("JDA").fatal("**AN UNKNOWWN ERROR OCCURED DURING LOGIN**");
+			SimpleLog.getLog("JDA").fatal("**AN UNKNOWN ERROR OCCURRED DURING LOGIN**");
 			e.printStackTrace();
 		}
 		
-		//load global paramaters
+		//load global parameters
 		try {
 			XMLHandler.initStorage();
 		} catch (Exception e1) {
@@ -76,7 +76,7 @@ public class BotMain {
 		
 		//TODO make the null checks modular and in the LoadParams method, not here
 		
-		SimpleLog.getLog("Reasons").info("Session override Key: " + Okey);
+		SimpleLog.getLog("Reasons").info("Session override Key: " + overrideKey);
 		
 		//catch null pointer exceptions when creating commands
 		try {
@@ -126,7 +126,7 @@ public class BotMain {
 		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 		// Set indent amount
 		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-		transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+		transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
 		transformer.setOutputProperty(OutputKeys.METHOD, "html");
 		DOMSource source = new DOMSource(PInputFile);
 		StreamResult result = new StreamResult(new File("servers.xml"));
@@ -136,7 +136,7 @@ public class BotMain {
 	}
 	
 	
-	final static int[] illegalChars = {34, 60, 62, 124, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 58, 42, 63, 92,46, 47};
+	private final static int[] illegalChars = {34, 60, 62, 124, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 58, 42, 63, 92,46, 47};
 	static {
 	    Arrays.sort(illegalChars);
 	}
@@ -156,11 +156,11 @@ public class BotMain {
 		String truePath = "messages/guilds/" + cleanFileName(event.getGuild().getName()) +"/" + cleanFileName(event.getChannel().getName()) + "/all/";
 		try {
 			
-			FileOutputStream fout = new FileOutputStream(truePath + event.getMessage().getId() + ".ser");
-			ObjectOutputStream oos = new ObjectOutputStream(fout);   
-			oos.writeObject(event.getMessage().getContent());
+			FileOutputStream allFileStream = new FileOutputStream(truePath + event.getMessage().getId() + ".ser");
+			ObjectOutputStream allObjectStream = new ObjectOutputStream(allFileStream);
+			allObjectStream.writeObject(event.getMessage().getContent());
 			
-			oos.close();
+			allObjectStream.close();
 			Boolean mentioned = false;
 			if (!event.getMessage().getMentionedUsers().isEmpty()) {
 				if ( event.getJDA().getSelfInfo().getAsMention().equals(event.getMessage().getMentionedUsers().get(0).getAsMention())) {
@@ -168,21 +168,21 @@ public class BotMain {
 				}
 			}
 			if (event.getAuthor().isBot() | event.getMessage().getContent().startsWith(XMLHandler.getGuildPrefix(event.getGuild())) | mentioned) {
-				FileOutputStream fout2 = new FileOutputStream(truePath.replace("/all/", "/bot/") + event.getMessage().getId() + ".ser");
-				ObjectOutputStream oos2 = new ObjectOutputStream(fout2);   
-				oos2.writeObject(event.getMessage().getContent());
+				FileOutputStream botFileStream = new FileOutputStream(truePath.replace("/all/", "/bot/") + event.getMessage().getId() + ".ser");
+				ObjectOutputStream botObjectStream = new ObjectOutputStream(botFileStream);
+				botObjectStream.writeObject(event.getMessage().getContent());
 				
-				oos2.close();
+				botObjectStream.close();
 			}
 		} catch(FileNotFoundException e) {
 			
-			File file = new File(truePath);
-			File file2 = new File(truePath.replace("/all/", "/bot/"));
+			File allFile = new File(truePath);
+			File botFile = new File(truePath.replace("/all/", "/bot/"));
 			
-			file.setWritable(true);
-			file2.setWritable(true);
-			file.mkdirs();
-			file2.mkdirs();
+			allFile.setWritable(true);
+			botFile.setWritable(true);
+			allFile.mkdirs();
+			botFile.mkdirs();
 			
 			storeMessage(event);
 			
@@ -210,9 +210,9 @@ public class BotMain {
                     boolean safe = commands.get(cmd.invoke).called(cmd.args, cmd.event);
                     if (safe) {
                         commands.get(cmd.invoke).action(cmd.args, cmd.event);
-                        commands.get(cmd.invoke).executed(safe, cmd.event);
+                        commands.get(cmd.invoke).executed(true, cmd.event);
                     } else {
-                        commands.get(cmd.invoke).executed(safe, cmd.event);
+                        commands.get(cmd.invoke).executed(false, cmd.event);
                     }
                 } else {
                 	cmd.event.getChannel().sendMessage("You lack the required permission to preform this action");
@@ -223,9 +223,9 @@ public class BotMain {
         } 
     }
     
-    public static void cleanFile() {
+    private static void cleanFile() {
         
-        try (FileReader fr = new FileReader("servers.xml"); FileWriter fw = new FileWriter("temp.xml"); ) {
+        try (FileReader fr = new FileReader("servers.xml"); FileWriter fw = new FileWriter("temp.xml") ) {
             BufferedReader br = new BufferedReader(fr); 
             String line;
 

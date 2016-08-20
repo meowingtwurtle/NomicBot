@@ -1,39 +1,38 @@
 package com.srgood.dbot;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Random;
-
 import com.srgood.dbot.hooks.PlayerEventListener;
 import com.srgood.dbot.hooks.PlayerEventManager;
 import com.srgood.dbot.hooks.events.*;
 import com.srgood.dbot.source.AudioSource;
 import com.srgood.dbot.source.AudioStream;
 import com.srgood.dbot.source.AudioTimestamp;
-
 import net.dv8tion.jda.audio.AudioConnection;
 import net.dv8tion.jda.audio.AudioSendHandler;
 import net.dv8tion.jda.utils.SimpleLog;
 
-public class MusicPlayer implements AudioSendHandler {
-    public static final int PCM_FRAME_SIZE = 4;
-    protected PlayerEventManager eventManager = new PlayerEventManager();
-    protected LinkedList<AudioSource> audioQueue = new LinkedList<>();
-    protected AudioSource previousAudioSource = null;
-    protected AudioSource currentAudioSource = null;
-    protected AudioStream currentAudioStream = null;
-    protected State state = State.STOPPED;
-    protected boolean autoContinue = true;
-    protected boolean shuffle = false;
-    protected boolean repeat = false;
-    protected float volume = 1.0F;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Random;
 
-    private byte[] buffer = new byte[AudioConnection.OPUS_FRAME_SIZE * PCM_FRAME_SIZE];
+public class MusicPlayer implements AudioSendHandler {
+    private static final int PCM_FRAME_SIZE = 4;
+    private final PlayerEventManager eventManager = new PlayerEventManager();
+    private final LinkedList<AudioSource> audioQueue = new LinkedList<>();
+    private AudioSource previousAudioSource = null;
+    private AudioSource currentAudioSource = null;
+    private AudioStream currentAudioStream = null;
+    private State state = State.STOPPED;
+    private final boolean AUTO_CONTINUE = true;
+    private boolean shuffle = false;
+    private boolean repeat = false;
+    private float volume = 1.0F;
+
+    private final byte[] buffer = new byte[AudioConnection.OPUS_FRAME_SIZE * PCM_FRAME_SIZE];
 
     protected enum State
     {
-        PLAYING, PAUSED, STOPPED;
+        PLAYING, PAUSED, STOPPED
     }
 
     public void addEventListener(PlayerEventListener listener)
@@ -192,7 +191,7 @@ public class MusicPlayer implements AudioSendHandler {
         }
         catch (IOException e)
         {
-            SimpleLog.getLog("JDA-Player").warn("A source closed unexpectantly? Oh well I guess...");
+            SimpleLog.getLog("JDA-Player").warn("A source closed unexpectedly? Oh well I guess...");
             sourceFinished();
         }
         return null;
@@ -200,7 +199,7 @@ public class MusicPlayer implements AudioSendHandler {
 
     // ========= Internal Functions ==========
 
-    protected void play0(boolean fireEvent)
+    private void play0(boolean fireEvent)
     {
         if (state == State.PLAYING)
             return;
@@ -221,7 +220,7 @@ public class MusicPlayer implements AudioSendHandler {
             eventManager.handle(new PlayEvent(this));
     }
 
-    protected void stop0(boolean fireEvent)
+    private void stop0(boolean fireEvent)
     {
         if (state == State.STOPPED)
             return;
@@ -246,7 +245,7 @@ public class MusicPlayer implements AudioSendHandler {
             eventManager.handle(new StopEvent(this));
     }
 
-    protected void reload0(boolean autoPlay, boolean fireEvent)
+    private void reload0(boolean autoPlay, boolean fireEvent)
     {
         if (previousAudioSource == null && currentAudioSource == null)
             throw new IllegalStateException("Cannot restart or reload a player that has never been started!");
@@ -260,7 +259,7 @@ public class MusicPlayer implements AudioSendHandler {
             eventManager.handle(new ReloadEvent(this));
     }
 
-    protected void playNext(boolean fireEvent)
+    private void playNext(boolean fireEvent)
     {
         stop0(false);
         if (audioQueue.isEmpty())
@@ -285,9 +284,9 @@ public class MusicPlayer implements AudioSendHandler {
             eventManager.handle(new NextEvent(this));
     }
 
-    protected void sourceFinished()
+    private void sourceFinished()
     {
-        if (autoContinue)
+        if (AUTO_CONTINUE)
         {
             if(repeat)
             {
@@ -303,7 +302,7 @@ public class MusicPlayer implements AudioSendHandler {
             stop0(true);
     }
 
-    protected void loadFromSource(AudioSource source)
+    private void loadFromSource(AudioSource source)
     {
         AudioStream stream = source.asStream();
         currentAudioSource = source;

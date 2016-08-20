@@ -30,8 +30,7 @@ public class CommandGetPrefix implements Command {
 	@Override
 	public void executed(boolean success, GuildMessageReceivedEvent event) {
 		// TODO Auto-generated method stub
-		return;
-	}
+    }
 
 	@Override
 	public Permissions permissionLevel(Guild guild) {

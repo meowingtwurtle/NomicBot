@@ -1,9 +1,5 @@
 package com.srgood.dbot.commands.audio;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.MusicPlayer;
 import com.srgood.dbot.Playlist;
@@ -11,11 +7,13 @@ import com.srgood.dbot.source.AudioInfo;
 import com.srgood.dbot.source.AudioSource;
 import com.srgood.dbot.utils.Permissions;
 import com.srgood.dbot.utils.XMLHandler;
-
 import net.dv8tion.jda.entities.Guild;
-import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.managers.AudioManager;
+
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 public class CommandAudioPlay implements AudioCommand {
 	
@@ -42,7 +40,6 @@ public class CommandAudioPlay implements AudioCommand {
              if (player.isPlaying())
              {
                  event.getChannel().sendMessage("Player is already playing!");
-                 return;
              }
              else if (player.isPaused())
              {
@@ -66,7 +63,7 @@ public class CommandAudioPlay implements AudioCommand {
              String msg = "";
              String url = message.substring("play ".length());
              Playlist playlist = Playlist.getPlaylist(url);
-             List<AudioSource> sources = new LinkedList<AudioSource>(playlist.getSources());
+             List<AudioSource> sources = new LinkedList<>(playlist.getSources());
 //             AudioSource source = new RemoteSource(url);
 //             AudioSource source = new LocalSource(new File(url));
 //             AudioInfo info = source.getInfo();   //Preload the audio info.

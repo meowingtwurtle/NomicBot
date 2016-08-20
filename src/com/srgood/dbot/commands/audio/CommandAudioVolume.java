@@ -6,7 +6,6 @@ import com.srgood.dbot.utils.Permissions;
 import com.srgood.dbot.utils.XMLHandler;
 
 import net.dv8tion.jda.entities.Guild;
-import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.managers.AudioManager;
 
@@ -17,7 +16,6 @@ public class CommandAudioVolume implements AudioCommand {
 	@Override
 	public boolean called(String[] args, GuildMessageReceivedEvent event) {
 		return true;
-		// TODO Auto-generated method stubn 
 	}
 
 	@Override
@@ -44,8 +42,7 @@ public class CommandAudioVolume implements AudioCommand {
 	@Override
 	public void executed(boolean success, GuildMessageReceivedEvent event) {
 		// TODO Auto-generated method stub
-		return;
-	}
+    }
 	
     @Override
     public Permissions permissionLevel(Guild guild) {

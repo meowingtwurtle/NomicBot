@@ -1,6 +1,5 @@
 package com.srgood.dbot.source;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 import sun.misc.IOUtils;
 
@@ -10,16 +9,16 @@ import java.util.*;
 
 public class RemoteSource implements AudioSource
 {
-    public static final List<String> YOUTUBE_DL_LAUNCH_ARGS =
+    private static final List<String> YOUTUBE_DL_LAUNCH_ARGS =
             Collections.unmodifiableList(Arrays.asList(
                     "python",               //Launch python executor
                     "./youtube-dl",         //youtube-dl program file
                     "-q",                   //quiet. No standard out.
                     "-f", "bestaudio/best", //Format to download. Attempts best audio-only, followed by best video/audio combo
                     "--no-playlist",        //If the provided link is part of a Playlist, only grabs the video, not playlist too.
-                    "-o", "-"               //Output, output to STDout
+                    "-o", "-"               //Output, output to stdout
             ));
-    public static final List<String> FFMPEG_LAUNCH_ARGS =
+    private static final List<String> FFMPEG_LAUNCH_ARGS =
             Collections.unmodifiableList(Arrays.asList(
                     "ffmpeg",       //Program launch
                     "-i", "-",      //Input file, specifies to read from STDin (pipe)
@@ -27,7 +26,7 @@ public class RemoteSource implements AudioSource
                     "-ac", "2",     //Channels. Specify 2 for stereo audio.
                     "-ar", "48000", //Rate. Opus requires an audio rate of 48000hz
                     "-map", "a",    //Makes sure to only output audio, even if the specified format supports other streams
-                    "-"             //Used to specify STDout as the output location (pipe)
+                    "-"             //Used to specify stdout as the output location (pipe)
             ));
 
     private final String url;
@@ -40,7 +39,7 @@ public class RemoteSource implements AudioSource
         this(url, null, null);
     }
 
-    public RemoteSource(String url, List<String> ytdlLaunchArgs, List<String> ffmpegLaunchArgs)
+    private RemoteSource(String url, List<String> ytdlLaunchArgs, List<String> ffmpegLaunchArgs)
     {
         if (url == null || url.isEmpty())
             throw new NullPointerException("String url provided to RemoteSource was null or empty.");
@@ -149,12 +148,7 @@ public class RemoteSource implements AudioSource
                 }
             }
         }
-        catch (IOException e)
-        {
-            audioInfo.error = e.getMessage();
-            e.printStackTrace();
-        }
-        catch (JSONException e)
+        catch (java.io.IOException | org.json.JSONException e)
         {
             audioInfo.error = e.getMessage();
             e.printStackTrace();
@@ -221,7 +215,7 @@ public class RemoteSource implements AudioSource
         try
         {
             byte[] buffer = new byte[1024];
-            int amountRead = -1;
+            int amountRead;
             while (!currentThread.isInterrupted() && ((amountRead = input.read(buffer)) > -1))
             {
                 fos.write(buffer, 0, amountRead);

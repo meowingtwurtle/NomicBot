@@ -4,9 +4,9 @@ import com.srgood.dbot.MusicPlayer;
 
 public abstract class PlayerEvent
 {
-    protected final MusicPlayer player;
+    private final MusicPlayer player;
 
-    public PlayerEvent(MusicPlayer player)
+    PlayerEvent(MusicPlayer player)
     {
         this.player = player;
     }

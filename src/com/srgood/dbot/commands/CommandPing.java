@@ -1,20 +1,10 @@
 package com.srgood.dbot.commands;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.utils.Permissions;
 import com.srgood.dbot.utils.XMLHandler;
 
 import net.dv8tion.jda.entities.Guild;
-import net.dv8tion.jda.entities.Role;
-import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
 public class CommandPing implements Command {
@@ -44,8 +34,7 @@ public class CommandPing implements Command {
 	@Override
 	public void executed(boolean success, GuildMessageReceivedEvent event) {
 		// TODO Auto-generated method stub
-		return;
-	}
+    }
 
 	@Override
 	public Permissions permissionLevel(Guild guild) {

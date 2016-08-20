@@ -1,6 +1,5 @@
 package com.srgood.dbot.source;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 import sun.misc.IOUtils;
 
@@ -15,14 +14,14 @@ import java.util.List;
 
 public class LocalSource implements AudioSource
 {
-    public static final List<String> FFMPEG_LAUNCH_ARGS =
+    private static final List<String> FFMPEG_LAUNCH_ARGS =
         Collections.unmodifiableList(Arrays.asList(
                 "ffmpeg",       //Program launch
                 "-f", "s16be",  //Format.  PCM, signed, 16bit, Big Endian
                 "-ac", "2",     //Channels. Specify 2 for stereo audio.
                 "-ar", "48000", //Rate. Opus requires an audio rate of 48000hz
                 "-map", "a",    //Makes sure to only output audio, even if the specified format supports other streams
-                "-"             //Used to specify STDout as the output location (pipe)
+                "-"             //Used to specify stdout as the output location (pipe)
         ));
     public static final List<String> FFPROBE_INFO_ARGS =
             Collections.unmodifiableList(Arrays.asList(
@@ -114,12 +113,7 @@ public class LocalSource implements AudioSource
                     : null;
 
         }
-        catch (IOException e)
-        {
-            audioInfo.error = e.getMessage();
-            e.printStackTrace();
-        }
-        catch (JSONException e)
+        catch (java.io.IOException | org.json.JSONException e)
         {
             audioInfo.error = e.getMessage();
             e.printStackTrace();

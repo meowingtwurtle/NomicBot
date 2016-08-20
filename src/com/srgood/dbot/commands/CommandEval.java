@@ -36,7 +36,7 @@ public class CommandEval implements Command {
         }
     }
     
-    public String join(Object[] arr) {
+    private String join(Object[] arr) {
         String ret = "";
         for (Object o : arr) {
             ret += o.toString();
@@ -51,7 +51,6 @@ public class CommandEval implements Command {
 
     @Override
     public void executed(boolean success, GuildMessageReceivedEvent event) {
-        return;
     }
 
     @Override

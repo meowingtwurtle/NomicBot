@@ -1,28 +1,22 @@
 package com.srgood.dbot.commands;
  
-import java.awt.Color;
-import java.time.Duration;
-import java.time.Instant;
-
 import com.srgood.dbot.BotListener;
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.utils.Permissions;
 import com.srgood.dbot.utils.XMLHandler;
-
 import net.dv8tion.jda.entities.Guild;
-import net.dv8tion.jda.entities.Role;
-import net.dv8tion.jda.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.exceptions.PermissionException;
-import net.dv8tion.jda.managers.RoleManager;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
+
+import java.time.Duration;
+import java.time.Instant;
  
 public class CommandDebug implements Command {
     private final String help = "Used internally for debugging. Use: '" + BotMain.prefix + "debug [debug arg]'";
-    private boolean exe = true;
+    private static final boolean ALLOW_DEBUG = true;
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {
         // TODO Auto-generated method stub
-        return exe;
+        return ALLOW_DEBUG;
     }
  
     @Override
@@ -37,7 +31,7 @@ public class CommandDebug implements Command {
     				event.getChannel().sendMessage("Done");
     				break;
     			
-    			case "verifyXML":
+    			case "verifyxml":
     				event.getChannel().sendMessage("" + XMLHandler.verifyXML());
     				break;
     				
@@ -61,8 +55,8 @@ public class CommandDebug implements Command {
                     "Author Nick: " + event.getAuthorNick() + "\n" +
                     "id: " + event.getAuthor().getId() + "\n" +
                     event.getAuthor().getAsMention() + "\n" +
-                    "Picture url: " + event.getAuthor().getAvatarUrl().toString() + "\n" +
-                    "BotMain.jda.getSelfInfo().getAsMention().length()" + BotMain.jda.getSelfInfo().getAsMention().toString().length() + "\n" +
+                    "Picture url: " + event.getAuthor().getAvatarUrl() + "\n" +
+                    "BotMain.jda.getSelfInfo().getAsMention().length()" + com.srgood.dbot.BotMain.jda.getSelfInfo().getAsMention().length() + "\n" +
                     "BotMain.jda.getSelfInfo().getAsMention()" + BotMain.jda.getSelfInfo().getAsMention() + "\n" + "XMLHandler.verifyXML() = " + XMLHandler.verifyXML());
     	}
        
@@ -77,7 +71,6 @@ public class CommandDebug implements Command {
     @Override
     public void executed(boolean success, GuildMessageReceivedEvent event) {
         // TODO Auto-generated method stub
-        return;
     }
 
     @Override

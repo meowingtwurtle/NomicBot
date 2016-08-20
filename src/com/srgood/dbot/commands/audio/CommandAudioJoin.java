@@ -4,10 +4,8 @@ import com.srgood.dbot.BotMain;
 import com.srgood.dbot.MusicPlayer;
 import com.srgood.dbot.utils.Permissions;
 import com.srgood.dbot.utils.XMLHandler;
-
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.entities.VoiceChannel;
-import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.managers.AudioManager;
 import net.dv8tion.jda.utils.SimpleLog;
@@ -15,7 +13,7 @@ import net.dv8tion.jda.utils.SimpleLog;
 public class CommandAudioJoin implements AudioCommand {
 
 	
-	private final String help = "Adds Reasons to a voice channel Use: '" + BotMain.prefix + "join [channel name]' Default is the channle you are currently in";
+	private final String help = "Adds Reasons to a voice channel Use: '" + BotMain.prefix + "join [channel name]' Default is the channel you are currently in";
 			
 	@Override
 	public boolean called(String[] args, GuildMessageReceivedEvent event) {
@@ -74,8 +72,6 @@ public class CommandAudioJoin implements AudioCommand {
 
 	@Override
 	public void executed(boolean success, GuildMessageReceivedEvent event) {
-		// TODO Auto-generated method stub
-		return;
 	}
 	
     @Override

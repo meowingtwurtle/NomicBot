@@ -1,14 +1,9 @@
 package com.srgood.dbot;
  
-import java.util.HashMap;
-import java.util.Map;
-
 import com.srgood.dbot.ref.RefStrings;
 import com.srgood.dbot.utils.PermissionOps;
 import com.srgood.dbot.utils.Permissions;
 import com.srgood.dbot.utils.XMLHandler;
-
-import net.dv8tion.jda.audio.player.Player;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.ReadyEvent;
 import net.dv8tion.jda.events.guild.GuildJoinEvent;
@@ -20,7 +15,7 @@ import net.dv8tion.jda.utils.SimpleLog;
 /**
  * <h1>Bot Listener</h1>
  *
- * Bot Listener deals with MessageRecieved events, excluding its own.
+ * Bot Listener deals with MessageReceived events, excluding its own.
  *
  * @author srgood
  * @version 0.8
@@ -28,8 +23,6 @@ import net.dv8tion.jda.utils.SimpleLog;
  */
  
 public class BotListener extends ListenerAdapter {
-    public static Map<String,Player> players = new HashMap<>();
-   
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 
@@ -42,7 +35,7 @@ public class BotListener extends ListenerAdapter {
         BotMain.storeMessage(event);
 
         if (event.getMessage().getContent().startsWith(localPrefix)
-                && event.getMessage().getAuthor().getId() != event.getJDA().getSelfInfo().getId()) {
+                && !java.util.Objects.equals(event.getMessage().getAuthor().getId(), event.getJDA().getSelfInfo().getId())) {
             BotMain.handleCommand(BotMain.parser.parse(event.getMessage().getContent().toLowerCase(), event, localPrefix));
             SimpleLog.getLog("Reasons").info("Got prefixed input: " + event.getMessage().getContent());
         } else {
@@ -54,7 +47,7 @@ public class BotListener extends ListenerAdapter {
                     SimpleLog.getLog("Reasons").info("Got prefixed input (mention): " + event.getMessage().getContent());
                     BotMain.handleCommand(BotMain.parser.parse(event.getMessage().getContent().toLowerCase(), event, localPrefix));
                 }
-            } catch (Exception e) {
+            } catch (Exception ignored) {
 
             }
         }

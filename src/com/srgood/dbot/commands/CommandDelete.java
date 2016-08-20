@@ -1,22 +1,14 @@
 package com.srgood.dbot.commands;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.utils.Permissions;
 import com.srgood.dbot.utils.XMLHandler;
-
-import net.dv8tion.jda.entities.Channel;
 import net.dv8tion.jda.entities.Guild;
-import net.dv8tion.jda.entities.MessageChannel;
-import net.dv8tion.jda.entities.TextChannel;
-import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CommandDelete implements Command {
 	
@@ -32,8 +24,8 @@ private final String help = "Deletes Messages Use: '" + BotMain.prefix + "delete
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		
 		
-		String channel = null,delType = null;
-		List<String> messages = new ArrayList<String>();
+		String channel,delType;
+		List<String> messages = new ArrayList<>();
 		
 		
 		if (args.length >= 1) {
@@ -58,7 +50,7 @@ private final String help = "Deletes Messages Use: '" + BotMain.prefix + "delete
 					try {
 						messages.add(child.getName().replace(".ser", ""));
 						child.delete();
-					} catch (Exception e) {
+					} catch (Exception ignored) {
 						  
 					}
 
@@ -74,7 +66,7 @@ private final String help = "Deletes Messages Use: '" + BotMain.prefix + "delete
 					try {
 						messages.add(child.getName().replace(".ser", ""));
 						child.delete();
-					} catch (Exception e) {
+					} catch (Exception ignored) {
 						  
 					}
 
@@ -98,8 +90,7 @@ private final String help = "Deletes Messages Use: '" + BotMain.prefix + "delete
 	@Override
 	public void executed(boolean success, GuildMessageReceivedEvent event) {
 		// TODO Auto-generated method stub
-		return;
-	}
+    }
 
     @Override
     public Permissions permissionLevel(Guild guild) {

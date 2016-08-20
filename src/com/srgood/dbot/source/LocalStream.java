@@ -31,14 +31,16 @@ public class LocalStream extends AudioStream
                 {
                     try
                     {
-                        InputStream fromFFmpeg = null;
+                        InputStream fromFFmpeg;
 
                         fromFFmpeg = ffmpegProcessF.getErrorStream();
-                        if (fromFFmpeg == null)
+                        if (fromFFmpeg == null) {
                             System.out.println("fromFFmpeg is null");
+                            return;
+                        }
 
                         byte[] buffer = new byte[1024];
-                        int amountRead = -1;
+                        int amountRead;
                         while (!isInterrupted() && ((amountRead = fromFFmpeg.read(buffer)) > -1))
                         {
                             String info = new String(Arrays.copyOf(buffer, amountRead));

@@ -1,14 +1,12 @@
 package com.srgood.dbot.commands;
 
-import java.util.Set;
-
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.utils.Permissions;
 import com.srgood.dbot.utils.XMLHandler;
-
 import net.dv8tion.jda.entities.Guild;
-import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
+
+import java.util.Set;
 
 public class CommandHelp implements Command {
 	private final String help = "Lists all commands. Use: '" + BotMain.prefix + "help'";
@@ -30,7 +28,7 @@ public class CommandHelp implements Command {
 		
 		for (String i : v) {
 			String output = i.substring(0, 1).toUpperCase() + i.substring(1);
-			z.append("**" + output + ":** " + "  `" +BotMain.commands.get(i).help() + "`" + "\n\n");
+			z.append("**").append(output).append(":** ").append("  `").append(com.srgood.dbot.BotMain.commands.get(i).help()).append("`").append("\n\n");
 		}
 		
 		
@@ -49,8 +47,7 @@ public class CommandHelp implements Command {
 	@Override
 	public void executed(boolean success, GuildMessageReceivedEvent event) {
 		// TODO Auto-generated method stub
-		return;
-	}
+    }
 	
     @Override
     public Permissions permissionLevel(Guild guild) {

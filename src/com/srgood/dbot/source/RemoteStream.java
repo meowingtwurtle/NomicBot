@@ -25,7 +25,7 @@ public class RemoteStream extends AudioStream
 	private List<String> ffmpegLaunchArgs;
     private AudioTimestamp timestamp = AudioTimestamp.fromSeconds(0);
 
-    protected RemoteStream(List<String> ytdlLaunchArgs, List<String> ffmpegLaunchArgs)
+    RemoteStream(List<String> ytdlLaunchArgs, List<String> ffmpegLaunchArgs)
     {
         try
         {
@@ -55,7 +55,7 @@ public class RemoteStream extends AudioStream
                         toFFmpeg = ffmpegProcessF.getOutputStream();
 
                         byte[] buffer = new byte[1024];
-                        int amountRead = -1;
+                        int amountRead;
                         while (!isInterrupted() && ((amountRead = fromYTDL.read(buffer)) > -1))
                         {
                             toFFmpeg.write(buffer, 0, amountRead);
@@ -75,13 +75,13 @@ public class RemoteStream extends AudioStream
                             if (fromYTDL != null)
                                 fromYTDL.close();
                         }
-                        catch (IOException e) {}
+                        catch (IOException ignored) {}
                         try
                         {
                             if (toFFmpeg != null)
                                 toFFmpeg.close();
                         }
-                        catch (IOException e) {}
+                        catch (IOException ignored) {}
                     }
                 }
             };
@@ -94,14 +94,14 @@ public class RemoteStream extends AudioStream
 
                     try
                     {
-                        InputStream fromYTDL = null;
+                        InputStream fromYTDL;
 
                         fromYTDL = ytdlProcessF.getErrorStream();
                         if (fromYTDL == null)
                             System.out.println("fromYTDL is null");
 
                         byte[] buffer = new byte[1024];
-                        int amountRead = -1;
+                        int amountRead;
                         while (!isInterrupted() && ((amountRead = fromYTDL.read(buffer)) > -1))
                         {
                             System.out.println("ERR YTDL: " + new String(Arrays.copyOf(buffer, amountRead)));
@@ -121,14 +121,14 @@ public class RemoteStream extends AudioStream
                 {
                     try
                     {
-                        InputStream fromFFmpeg = null;
+                        InputStream fromFFmpeg;
 
                         fromFFmpeg = ffmpegProcessF.getErrorStream();
                         if (fromFFmpeg == null)
                             System.out.println("fromYTDL is null");
 
                         byte[] buffer = new byte[1024];
-                        int amountRead = -1;
+                        int amountRead;
                         while (!isInterrupted() && ((amountRead = fromFFmpeg.read(buffer)) > -1))
                         {
                             String info = new String(Arrays.copyOf(buffer, amountRead));

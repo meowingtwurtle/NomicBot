@@ -1,14 +1,12 @@
 package com.srgood.dbot.commands;
 
-import javax.xml.transform.TransformerException;
-
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.utils.Permissions;
 import com.srgood.dbot.utils.XMLHandler;
-
 import net.dv8tion.jda.entities.Guild;
-import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
+
+import javax.xml.transform.TransformerException;
 
 public class CommandShutdown implements Command {
 	private final String help = "Used to shutdown Reasons. Use: '" + BotMain.prefix + "shutdown' -OR- '" + BotMain.prefix + "shutdown override [override key]'";
@@ -35,7 +33,7 @@ public class CommandShutdown implements Command {
 				BotMain.jda.shutdown();
 			} else {
 				if (args[0].toLowerCase().equals("override")) {
-					if (BotMain.Okey.equals(args[1])) {
+					if (BotMain.overrideKey.equals(args[1])) {
 						event.getChannel().sendMessage("Valid key. Shutting down! " + event.getAuthor().getAsMention());
 						try {
 							BotMain.writeXML();
@@ -47,8 +45,6 @@ public class CommandShutdown implements Command {
 					} else {
 						event.getChannel().sendMessage("Bad key " + event.getAuthor().getAsMention());
 					}
-				} else {
-					
 				}
 			}
 		} catch (ArrayIndexOutOfBoundsException e) {
@@ -57,7 +53,7 @@ public class CommandShutdown implements Command {
 					event.getChannel().sendMessage("Invalid Arguments, you should quit the debate team " + event.getAuthor().getAsMention());
 				}
 			} catch (ArrayIndexOutOfBoundsException ex) {
-				event.getChannel().sendMessage("You arent me. you cant do that " + event.getAuthor().getAsMention());
+				event.getChannel().sendMessage("You aren't me. you cant do that " + event.getAuthor().getAsMention());
 			}
 			
 		}
@@ -73,8 +69,7 @@ public class CommandShutdown implements Command {
 	@Override
 	public void executed(boolean success, GuildMessageReceivedEvent event) {
 		// TODO Auto-generated method stub
-		return;
-	}
+    }
 
     @Override
     public Permissions defaultPermissionLevel() {

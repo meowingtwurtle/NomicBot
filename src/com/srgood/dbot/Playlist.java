@@ -12,7 +12,7 @@ import java.util.*;
 
 public class Playlist
 {
-    public static final List<String> YOUTUBE_DL_PLAYLIST_ARGS =
+    private static final List<String> YOUTUBE_DL_PLAYLIST_ARGS =
             Collections.unmodifiableList(Arrays.asList(
                     "python",               //Launch python executor
                     "./youtube-dl",         //youtube-dl program file
@@ -20,15 +20,15 @@ public class Playlist
                     "-j",                   //Print JSON
                     "--flat-playlist"       //Get ONLY the urls of the playlist if this is a playlist.
             ));
-    protected List<AudioSource> sources;
+    private List<AudioSource> sources;
     protected Queue<AudioSource> currentOrder;
     protected AudioSource endOfList;
-    protected String name;
+    private final String name;
     protected boolean repeatSingle = false;
     protected boolean repeatList = false;
     protected boolean shuffle = false;
 
-    public Playlist(String name)
+    private Playlist(String name)
     {
         this.name = name;
         this.sources = new ArrayList<>();
