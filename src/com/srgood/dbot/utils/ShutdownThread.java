@@ -17,5 +17,6 @@ public class ShutdownThread extends Thread {
 
         BotMain.jda.shutdown();
 
+        System.out.println("Successfully shutdown from termination");
     }
 }
