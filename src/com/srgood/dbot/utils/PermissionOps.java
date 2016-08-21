@@ -6,7 +6,6 @@ import net.dv8tion.jda.entities.User;
 import net.dv8tion.jda.managers.RoleManager;
 
 import java.util.Collection;
-import java.util.List;
 
 public class PermissionOps {
 

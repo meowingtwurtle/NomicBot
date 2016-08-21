@@ -361,7 +361,7 @@ public class XMLHandler {
         Permissions permission = null;
 
         if (role == null) {
-            return permission;
+            return null;
         }
 
         //<config>

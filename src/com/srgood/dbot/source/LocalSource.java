@@ -102,7 +102,7 @@ public class LocalSource implements AudioSource {
     }
 
     @Override
-    public File asFile(String path, boolean deleteOnExists) throws FileAlreadyExistsException, FileNotFoundException {
+    public File asFile(String path, boolean deleteIfExists) throws FileAlreadyExistsException, FileNotFoundException {
         return null;
     }
 }

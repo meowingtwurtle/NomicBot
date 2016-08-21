@@ -1,7 +1,6 @@
 package com.srgood.dbot.commands.audio;
 
 import com.srgood.dbot.BotMain;
-import com.srgood.dbot.MusicPlayer;
 import com.srgood.dbot.utils.Permissions;
 import com.srgood.dbot.utils.XMLHandler;
 import net.dv8tion.jda.entities.Guild;
@@ -22,7 +21,6 @@ public class CommandAudioLeave implements AudioCommand {
     public void action(String[] args, GuildMessageReceivedEvent event) {
 
         AudioManager manager = event.getGuild().getAudioManager();
-        MusicPlayer player = AudioCommand.initAndGetPlayer(manager);
 
         manager.closeAudioConnection();
     }

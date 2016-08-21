@@ -36,51 +36,51 @@ public class BotMain {
     //Global
     public static final Instant startInstant = Instant.now();
     // prefix and shutdown override key
-	public static String prefix;
-	public static String overrideKey = com.srgood.dbot.utils.SecureOverrideKeyGenerator.nextOverrideKey();
-	
-	static final CommandParser parser = new CommandParser();
-	public static Map<String, Command> commands = new TreeMap<>();
+    public static String prefix;
+    public static String overrideKey = com.srgood.dbot.utils.SecureOverrideKeyGenerator.nextOverrideKey();
 
-	//XML variables
-	public static DocumentBuilderFactory DomFactory;
-	public static DocumentBuilder DomInput;
-	public static Document PInputFile;
-	
-	
-	public static void main(String[] args) {
-	    
-		//catch exceptions when building JDA
-		//invite temp: https://discordapp.com/oauth2/authorize?client_id=XXXX&scope=bot&permissions=0x33525237
-		
-		Runtime.getRuntime().addShutdownHook(new ShutdownThread());
-		
-		try  {
-			jda = new JDABuilder().addListener(new BotListener()).setBotToken(RefStrings.BOT_TOKEN_REASONS).buildBlocking();
-			jda.setAutoReconnect(true);
-			jda.getAccountManager().setGame("type '@Reasons help'");
-		} catch(LoginException e) {
-			SimpleLog.getLog("Reasons").fatal("**COULD NOT LOG IN**");
-		} catch (InterruptedException e) {
-			SimpleLog.getLog("JDA").fatal("**AN UNKNOWWN ERROR OCCURED DURING LOGIN**");
-			e.printStackTrace();
-		}
-		
-		//load global paramaters
-		try {
-			XMLHandler.initStorage();
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		//TODO make the null checks modular and in the LoadParams method, not here
-		
-		SimpleLog.getLog("Reasons").info("Session override Key: " + overrideKey);
-		
-		//catch null pointer exceptions when creating commands
-		try {
-		    String[] packages = {"com.srgood.dbot", "com.srgood.dbot.audio"};
+    static final CommandParser parser = new CommandParser();
+    public static Map<String, Command> commands = new TreeMap<>();
+
+    //XML variables
+    public static DocumentBuilderFactory DomFactory;
+    public static DocumentBuilder DomInput;
+    public static Document PInputFile;
+
+
+    public static void main(String[] args) {
+
+        //catch exceptions when building JDA
+        //invite temp: https://discordapp.com/oauth2/authorize?client_id=XXXX&scope=bot&permissions=0x33525237
+
+        Runtime.getRuntime().addShutdownHook(new ShutdownThread());
+
+        try {
+            jda = new JDABuilder().addListener(new BotListener()).setBotToken(RefStrings.BOT_TOKEN_REASONS).buildBlocking();
+            jda.setAutoReconnect(true);
+            jda.getAccountManager().setGame("type '@Reasons help'");
+        } catch (LoginException e) {
+            SimpleLog.getLog("Reasons").fatal("**COULD NOT LOG IN**");
+        } catch (InterruptedException e) {
+            SimpleLog.getLog("JDA").fatal("**AN UNKNOWWN ERROR OCCURED DURING LOGIN**");
+            e.printStackTrace();
+        }
+
+        //load global parameters
+        try {
+            XMLHandler.initStorage();
+        } catch (Exception e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+
+        //TODO make the null checks modular and in the LoadParams method, not here
+
+        SimpleLog.getLog("Reasons").info("Session override Key: " + overrideKey);
+
+        //catch null pointer exceptions when creating commands
+        try {
+            String[] packages = { "com.srgood.dbot", "com.srgood.dbot.audio" };
 
             for (String pack : packages) {
                 Reflections mReflect = new Reflections(pack);
@@ -90,14 +90,13 @@ public class BotMain {
                     }
                 }
             }
-		} catch (Exception e) {
-			SimpleLog.getLog("Reasons").warn("One or more of the commands failed to map");
-			e.printStackTrace();
-		}
-		
-		
-	
-	}
+        } catch (Exception e) {
+            SimpleLog.getLog("Reasons").warn("One or more of the commands failed to map");
+            e.printStackTrace();
+        }
+
+
+    }
 
     //TODO fix the exceptions here
     public static void writeXML() throws TransformerException {

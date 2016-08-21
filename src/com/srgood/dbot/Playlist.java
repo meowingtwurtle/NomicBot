@@ -23,7 +23,6 @@ public class Playlist {
     protected boolean shuffle = false;
 
     private Playlist(String name) {
-        String name1 = name;
         this.sources = new ArrayList<>();
     }
 
