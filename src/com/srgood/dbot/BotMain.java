@@ -1,19 +1,18 @@
 
 package com.srgood.dbot; 
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.nio.file.Files;
-import java.time.Instant;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.TreeMap;
+import com.srgood.dbot.commands.Command;
+import com.srgood.dbot.ref.RefStrings;
+import com.srgood.dbot.utils.CommandParser;
+import com.srgood.dbot.utils.PermissionOps;
+import com.srgood.dbot.utils.ShutdownThread;
+import com.srgood.dbot.utils.XMLHandler;
+import net.dv8tion.jda.JDA;
+import net.dv8tion.jda.JDABuilder;
+import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.utils.SimpleLog;
+import org.reflections.Reflections;
+import org.w3c.dom.Document;
 
 import javax.security.auth.login.LoginException;
 import javax.xml.parsers.DocumentBuilder;
@@ -24,21 +23,12 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
-import org.reflections.Reflections;
-import org.w3c.dom.Document;
-
-import com.srgood.dbot.commands.Command;
-import com.srgood.dbot.ref.RefStrings;
-import com.srgood.dbot.utils.CommandParser;
-import com.srgood.dbot.utils.PermissionOps;
-import com.srgood.dbot.utils.ShutdownThread;
-import com.srgood.dbot.utils.XMLHandler;
-
-import net.dv8tion.jda.JDA;
-import net.dv8tion.jda.JDABuilder;
-import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.utils.SimpleLog;
+import java.io.*;
+import java.nio.file.Files;
+import java.time.Instant;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class BotMain {
 	
@@ -97,7 +87,7 @@ public class BotMain {
                 Reflections mReflect = new Reflections(pack);
                 for (Class<? extends Command> cmdClass : mReflect.getSubTypesOf(Command.class)) {
                     if (!cmdClass.isInterface()) {
-                        commands.put(cmdClass.getSimpleName().replaceAll("Command", "").toLowerCase(), cmdClass.newInstance());
+                        commands.put(cmdClass.getSimpleName().toLowerCase().replace("command", "").replace("audio", ""), cmdClass.newInstance());
                     }
                 }
             }
