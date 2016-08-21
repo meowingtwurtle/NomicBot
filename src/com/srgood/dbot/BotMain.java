@@ -55,11 +55,12 @@ public class BotMain {
         Runtime.getRuntime().addShutdownHook(new ShutdownThread());
 
         try {
+            //create a JDA with one Event listener
             jda = new JDABuilder().addListener(new BotListener()).setBotToken(RefStrings.BOT_TOKEN_REASONS).buildBlocking();
             jda.setAutoReconnect(true);
             jda.getAccountManager().setGame("type '@Reasons help'");
         } catch (LoginException e) {
-            SimpleLog.getLog("Reasons").fatal("**COULD NOT LOG IN**");
+            SimpleLog.getLog("Reasons").fatal("**COULD NOT LOG IN (Invalid password?)**");
         } catch (InterruptedException e) {
             SimpleLog.getLog("JDA").fatal("**AN UNKNOWN ERROR OCCURRED DURING LOGIN**");
             e.printStackTrace();
@@ -152,7 +153,9 @@ public class BotMain {
     }
 
     public static void storeMessage(GuildMessageReceivedEvent event) {
-
+        //creates a path based on a guild's readable name, which has illegal characters removed
+        //example guild: name = "ExampleGuild" channel = "ExampleChannel"
+        //our path for this example would be: "messages/guilds/ExampleGuild/ExampleChannel/all/
         String truePath = "messages/guilds/" + cleanFileName(event.getGuild().getName()) + "/" + cleanFileName(event.getChannel().getName()) + "/all/";
         try {
 
@@ -162,11 +165,14 @@ public class BotMain {
 
             allObjectStream.close();
             Boolean mentioned = false;
+            //checks if jds is mentioned
+            //TODO move this to a more suitable place
             if (!event.getMessage().getMentionedUsers().isEmpty()) {
                 if (event.getJDA().getSelfInfo().getAsMention().equals(event.getMessage().getMentionedUsers().get(0).getAsMention())) {
                     mentioned = true;
                 }
             }
+            //checks if the message is written by a bot, or mentions this bot, and, if it is, puts it in the /bot/ directory also
             if (event.getAuthor().isBot() | event.getMessage().getContent().startsWith(XMLHandler.getGuildPrefix(event.getGuild())) | mentioned) {
                 FileOutputStream botFileStream = new FileOutputStream(truePath.replace("/all/", "/bot/") + event.getMessage().getId() + ".ser");
                 ObjectOutputStream botObjectStream = new ObjectOutputStream(botFileStream);
@@ -175,7 +181,8 @@ public class BotMain {
                 botObjectStream.close();
             }
         } catch (FileNotFoundException e) {
-
+            //creates the file chain, if it dosent exist
+            //TODO can't we change this to a lambada thingy? you know wherever you do that ->
             File allFile = new File(truePath);
             File botFile = new File(truePath.replace("/all/", "/bot/"));
 
@@ -187,7 +194,6 @@ public class BotMain {
             storeMessage(event);
 
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -196,18 +202,21 @@ public class BotMain {
     }
 
     public static void handleCommand(CommandParser.CommandContainer cmd) {
-        // checks if the typed command is in the lis i
+        // checks if the referenced command is in the command list
         if (commands.containsKey(cmd.invoke)) {
-
             XMLHandler.initCommandIfNotExists(cmd);
-
+            //if the command is enabled for the message's guild...
             if (XMLHandler.commandIsEnabled(cmd.event.getGuild(), BotMain.commands.get(cmd.invoke))) {
+                //if the message author has the required permission level...
                 if (PermissionOps.getHighestPermission(PermissionOps.getPermissions(cmd.event.getGuild(), cmd.event.getAuthor()), cmd.event.getGuild()).getLevel() >= commands.get(cmd.invoke).permissionLevel(cmd.event.getGuild()).getLevel()) {
                     boolean safe = commands.get(cmd.invoke).called(cmd.args, cmd.event);
+                    //if the commands get method returns true (see command.class)...
                     if (safe) {
+                        //then run the command and its post execution code (see command)
                         commands.get(cmd.invoke).action(cmd.args, cmd.event);
                         commands.get(cmd.invoke).executed(true, cmd.event);
                     } else {
+                        //else only run the execution code
                         commands.get(cmd.invoke).executed(false, cmd.event);
                     }
                 } else {
