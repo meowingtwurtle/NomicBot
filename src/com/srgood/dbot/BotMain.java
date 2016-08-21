@@ -29,7 +29,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class BotMain {
+public class BotMain extends Thread{
 
     public static JDA jda;
 
@@ -47,7 +47,7 @@ public class BotMain {
     public static DocumentBuilder DomInput;
     public static Document PInputFile;
 
-    public static void main(String[] args) {
+    public void start() {
 
         //catch exceptions when building JDA
         //invite temp: https://discordapp.com/oauth2/authorize?client_id=XXXX&scope=bot&permissions=0x33525237
