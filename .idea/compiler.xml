@@ -22,11 +22,11 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
-        <module name="ReasonsBot" />
+        <module name="Bot" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="ReasonsBot" target="1.8" />
+      <module name="Bot" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

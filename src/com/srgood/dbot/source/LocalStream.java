@@ -6,16 +6,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 
-public class LocalStream extends AudioStream
-{
+public class LocalStream extends AudioStream {
     private Process ffmpegProcess;
     private Thread ffmpegErrGobler;
     private AudioTimestamp timestamp;
 
-    public LocalStream(List<String> ffmpegLaunchArgs)
-    {
-        try
-        {
+    public LocalStream(List<String> ffmpegLaunchArgs) {
+        try {
             ProcessBuilder pBuilder = new ProcessBuilder();
 
             pBuilder.command(ffmpegLaunchArgs);
@@ -24,36 +21,30 @@ public class LocalStream extends AudioStream
 
             final Process ffmpegProcessF = ffmpegProcess;
 
-            ffmpegErrGobler = new Thread("LocalStream ffmpegErrGobler")
-            {
+            ffmpegErrGobler = new Thread("LocalStream ffmpegErrGobler") {
                 @Override
-                public void run()
-                {
-                    try
-                    {
-                        InputStream fromFFmpeg = null;
+                public void run() {
+                    try {
+                        InputStream fromFFmpeg;
 
                         fromFFmpeg = ffmpegProcessF.getErrorStream();
-                        if (fromFFmpeg == null)
+                        if (fromFFmpeg == null) {
                             System.out.println("fromFFmpeg is null");
+                            return;
+                        }
 
                         byte[] buffer = new byte[1024];
-                        int amountRead = -1;
-                        while (!isInterrupted() && ((amountRead = fromFFmpeg.read(buffer)) > -1))
-                        {
+                        int amountRead;
+                        while (!isInterrupted() && ((amountRead = fromFFmpeg.read(buffer)) > -1)) {
                             String info = new String(Arrays.copyOf(buffer, amountRead));
-                            if (info.contains("time="))
-                            {
+                            if (info.contains("time=")) {
                                 Matcher m = TIME_PATTERN.matcher(info);
-                                if (m.find())
-                                {
+                                if (m.find()) {
                                     timestamp = AudioTimestamp.fromFFmpegTimestamp(m.group());
                                 }
                             }
                         }
-                    }
-                    catch (IOException e)
-                    {
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
@@ -61,42 +52,32 @@ public class LocalStream extends AudioStream
 
             ffmpegErrGobler.start();
             this.in = ffmpegProcess.getInputStream();
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
-            try
-            {
+            try {
                 close();
-            }
-            catch (IOException e1)
-            {
+            } catch (IOException e1) {
                 e1.printStackTrace();
             }
         }
     }
 
     @Override
-    public AudioTimestamp getCurrentTimestamp()
-    {
+    public AudioTimestamp getCurrentTimestamp() {
         return timestamp;
     }
 
     @Override
-    public void close() throws IOException
-    {
-        if (in != null)
-        {
+    public void close() throws IOException {
+        if (in != null) {
             in.close();
             in = null;
         }
-        if (ffmpegErrGobler != null)
-        {
+        if (ffmpegErrGobler != null) {
             ffmpegErrGobler.interrupt();
             ffmpegErrGobler = null;
         }
-        if (ffmpegProcess != null)
-        {
+        if (ffmpegProcess != null) {
             ffmpegProcess.destroy();
             ffmpegProcess = null;
         }

@@ -1,4 +1,4 @@
- package com.srgood.dbot.source;
+package com.srgood.dbot.source;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,8 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 
-public class RemoteStream extends AudioStream
-{
+public class RemoteStream extends AudioStream {
     //Represent the processes that control the Python Youtube-dl and the FFmpeg program.
     private Process ytdlProcess;
     private Process ffmpegProcess;
@@ -19,16 +18,14 @@ public class RemoteStream extends AudioStream
     private Thread ffmpegErrGobler;
 
     @SuppressWarnings("unused")
-	private List<String> ytdlLaunchArgs;
-    
+    private List<String> ytdlLaunchArgs;
+
     @SuppressWarnings("unused")
-	private List<String> ffmpegLaunchArgs;
+    private List<String> ffmpegLaunchArgs;
     private AudioTimestamp timestamp = AudioTimestamp.fromSeconds(0);
 
-    protected RemoteStream(List<String> ytdlLaunchArgs, List<String> ffmpegLaunchArgs)
-    {
-        try
-        {
+    RemoteStream(List<String> ytdlLaunchArgs, List<String> ffmpegLaunchArgs) {
+        try {
             ProcessBuilder pBuilder = new ProcessBuilder();
 
             pBuilder.command(ytdlLaunchArgs);
@@ -42,108 +39,79 @@ public class RemoteStream extends AudioStream
             final Process ytdlProcessF = ytdlProcess;
             final Process ffmpegProcessF = ffmpegProcess;
 
-            ytdlToFFmpegThread = new Thread("RemoteSource ytdlToFFmpeg Bridge")
-            {
+            ytdlToFFmpegThread = new Thread("RemoteSource ytdlToFFmpeg Bridge") {
                 @Override
-                public void run()
-                {
+                public void run() {
                     InputStream fromYTDL = null;
                     OutputStream toFFmpeg = null;
-                    try
-                    {
+                    try {
                         fromYTDL = ytdlProcessF.getInputStream();
                         toFFmpeg = ffmpegProcessF.getOutputStream();
 
                         byte[] buffer = new byte[1024];
-                        int amountRead = -1;
-                        while (!isInterrupted() && ((amountRead = fromYTDL.read(buffer)) > -1))
-                        {
+                        int amountRead;
+                        while (!isInterrupted() && ((amountRead = fromYTDL.read(buffer)) > -1)) {
                             toFFmpeg.write(buffer, 0, amountRead);
                         }
                         toFFmpeg.flush();
-                    }
-                    catch (IOException e)
-                    {
+                    } catch (IOException e) {
                         //If the pipe being closed caused this problem, it was because it tried to write when it closed.
-                        if (!e.getMessage().contains("The pipe has been ended"))
-                            e.printStackTrace();
-                    }
-                    finally
-                    {
-                        try
-                        {
-                            if (fromYTDL != null)
-                                fromYTDL.close();
+                        if (!e.getMessage().contains("The pipe has been ended")) e.printStackTrace();
+                    } finally {
+                        try {
+                            if (fromYTDL != null) fromYTDL.close();
+                        } catch (IOException ignored) {
                         }
-                        catch (IOException e) {}
-                        try
-                        {
-                            if (toFFmpeg != null)
-                                toFFmpeg.close();
+                        try {
+                            if (toFFmpeg != null) toFFmpeg.close();
+                        } catch (IOException ignored) {
                         }
-                        catch (IOException e) {}
                     }
                 }
             };
 
-            ytdlErrGobler = new Thread("RemoteStream ytdlErrGobler")
-            {
+            ytdlErrGobler = new Thread("RemoteStream ytdlErrGobler") {
                 @Override
-                public void run()
-                {
+                public void run() {
 
-                    try
-                    {
-                        InputStream fromYTDL = null;
+                    try {
+                        InputStream fromYTDL;
 
                         fromYTDL = ytdlProcessF.getErrorStream();
-                        if (fromYTDL == null)
-                            System.out.println("fromYTDL is null");
+                        if (fromYTDL == null) System.out.println("fromYTDL is null");
 
                         byte[] buffer = new byte[1024];
-                        int amountRead = -1;
-                        while (!isInterrupted() && ((amountRead = fromYTDL.read(buffer)) > -1))
-                        {
+                        int amountRead;
+                        while (!isInterrupted() && ((amountRead = fromYTDL.read(buffer)) > -1)) {
                             System.out.println("ERR YTDL: " + new String(Arrays.copyOf(buffer, amountRead)));
                         }
-                    }
-                    catch (IOException e)
-                    {
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
             };
 
-            ffmpegErrGobler = new Thread("RemoteStream ffmpegErrGobler")
-            {
+            ffmpegErrGobler = new Thread("RemoteStream ffmpegErrGobler") {
                 @Override
-                public void run()
-                {
-                    try
-                    {
-                        InputStream fromFFmpeg = null;
+                public void run() {
+                    try {
+                        InputStream fromFFmpeg;
 
                         fromFFmpeg = ffmpegProcessF.getErrorStream();
-                        if (fromFFmpeg == null)
-                            System.out.println("fromYTDL is null");
+                        if (fromFFmpeg == null) System.out.println("fromYTDL is null");
 
                         byte[] buffer = new byte[1024];
-                        int amountRead = -1;
-                        while (!isInterrupted() && ((amountRead = fromFFmpeg.read(buffer)) > -1))
-                        {
+                        int amountRead;
+                        while (!isInterrupted() && ((amountRead = fromFFmpeg.read(buffer)) > -1)) {
                             String info = new String(Arrays.copyOf(buffer, amountRead));
-                            if (info.contains("time="))
-                            {
+                            if (info.contains("time=")) {
                                 Matcher m = TIME_PATTERN.matcher(info);
-                                if (m.find())
-                                {
+                                if (m.find()) {
                                     timestamp = AudioTimestamp.fromFFmpegTimestamp(m.group());
                                 }
                             }
                         }
-                    }
-                    catch (IOException e)
-                    {
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
@@ -153,57 +121,44 @@ public class RemoteStream extends AudioStream
             ytdlErrGobler.start();
             ffmpegErrGobler.start();
             this.in = ffmpegProcess.getInputStream();
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
-            try
-            {
+            try {
                 close();
-            }
-            catch (IOException e1)
-            {
+            } catch (IOException e1) {
                 e1.printStackTrace();
             }
         }
     }
 
     @Override
-    public AudioTimestamp getCurrentTimestamp()
-    {
+    public AudioTimestamp getCurrentTimestamp() {
         return timestamp;
     }
 
     @Override
-    public void close() throws IOException
-    {
-        if (in != null)
-        {
+    public void close() throws IOException {
+        if (in != null) {
             in.close();
             in = null;
         }
-        if (ytdlToFFmpegThread != null)
-        {
+        if (ytdlToFFmpegThread != null) {
             ytdlToFFmpegThread.interrupt();
             ytdlToFFmpegThread = null;
         }
-        if (ytdlErrGobler != null)
-        {
+        if (ytdlErrGobler != null) {
             ytdlErrGobler.interrupt();
             ytdlErrGobler = null;
         }
-        if (ffmpegErrGobler != null)
-        {
+        if (ffmpegErrGobler != null) {
             ffmpegErrGobler.interrupt();
             ffmpegErrGobler = null;
         }
-        if (ffmpegProcess != null)
-        {
+        if (ffmpegProcess != null) {
             ffmpegProcess.destroy();
             ffmpegProcess = null;
         }
-        if (ytdlProcess != null)
-        {
+        if (ytdlProcess != null) {
             ytdlProcess.destroy();
             ytdlProcess = null;
         }

@@ -1,80 +1,76 @@
 package com.srgood.dbot.commands;
 
-import javax.xml.transform.TransformerException;
-
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.utils.Permissions;
 import com.srgood.dbot.utils.XMLHandler;
-
 import net.dv8tion.jda.entities.Guild;
-import net.dv8tion.jda.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
+import javax.xml.transform.TransformerException;
+
 public class CommandShutdown implements Command {
-	private final String help = "Used to shutdown Reasons. Use: '" + BotMain.prefix + "shutdown' -OR- '" + BotMain.prefix + "shutdown override [override key]'";
-	@Override
-	public boolean called(String[] args, GuildMessageReceivedEvent event) {
-		// TODO Auto-generated method stub
-		return true;
-	}
+    private final String help = "Used to shutdown Reasons. Use: '" + BotMain.prefix + "shutdown' -OR- '" + BotMain.prefix + "shutdown override [override key]'";
 
-	@Override
-	public void action(String[] args, GuildMessageReceivedEvent event) {
-		long uid = Long.parseLong(event.getAuthor().getId());
-		
-		
-		try {
-			if (164117897025683456L == uid || 138048665112543233L == uid) {
-				event.getChannel().sendMessage("Shutting down! " + event.getAuthor().getAsMention());
-				try {
-					BotMain.writeXML();
-				} catch (TransformerException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				BotMain.jda.shutdown();
-			} else {
-				if (args[0].toLowerCase().equals("override")) {
-					if (BotMain.Okey.equals(args[1])) {
-						event.getChannel().sendMessage("Valid key. Shutting down! " + event.getAuthor().getAsMention());
-						try {
-							BotMain.writeXML();
-						} catch (TransformerException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						BotMain.jda.shutdown();
-					} else {
-						event.getChannel().sendMessage("Bad key " + event.getAuthor().getAsMention());
-					}
-				} else {
-					
-				}
-			}
-		} catch (ArrayIndexOutOfBoundsException e) {
-			try {
-				if (args[0].toLowerCase().equals("override")) {
-					event.getChannel().sendMessage("Invalid Arguments, you should quit the debate team " + event.getAuthor().getAsMention());
-				}
-			} catch (ArrayIndexOutOfBoundsException ex) {
-				event.getChannel().sendMessage("You arent me. you cant do that " + event.getAuthor().getAsMention());
-			}
-			
-		}
-		
-	}
+    @Override
+    public boolean called(String[] args, GuildMessageReceivedEvent event) {
+        // TODO Auto-generated method stub
+        return true;
+    }
 
-	@Override
-	public String help() {
-		// TODO Auto-generated method stub
-		return help;
-	}
+    @Override
+    public void action(String[] args, GuildMessageReceivedEvent event) {
+        long uid = Long.parseLong(event.getAuthor().getId());
 
-	@Override
-	public void executed(boolean success, GuildMessageReceivedEvent event) {
-		// TODO Auto-generated method stub
-		return;
-	}
+
+        try {
+            if (164117897025683456L == uid || 138048665112543233L == uid) {
+                event.getChannel().sendMessage("Shutting down! " + event.getAuthor().getAsMention());
+                try {
+                    BotMain.writeXML();
+                } catch (TransformerException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                BotMain.jda.shutdown();
+            } else {
+                if (args[0].toLowerCase().equals("override")) {
+                    if (BotMain.overrideKey.equals(args[1])) {
+                        event.getChannel().sendMessage("Valid key. Shutting down! " + event.getAuthor().getAsMention());
+                        try {
+                            BotMain.writeXML();
+                        } catch (TransformerException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                        BotMain.jda.shutdown();
+                    } else {
+                        event.getChannel().sendMessage("Bad key " + event.getAuthor().getAsMention());
+                    }
+                }
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            try {
+                if (args[0].toLowerCase().equals("override")) {
+                    event.getChannel().sendMessage("Invalid Arguments, you should quit the debate team " + event.getAuthor().getAsMention());
+                }
+            } catch (ArrayIndexOutOfBoundsException ex) {
+                event.getChannel().sendMessage("You aren't me. you cant do that " + event.getAuthor().getAsMention());
+            }
+
+        }
+
+    }
+
+    @Override
+    public String help() {
+        // TODO Auto-generated method stub
+        return help;
+    }
+
+    @Override
+    public void executed(boolean success, GuildMessageReceivedEvent event) {
+        // TODO Auto-generated method stub
+    }
 
     @Override
     public Permissions defaultPermissionLevel() {
@@ -82,10 +78,10 @@ public class CommandShutdown implements Command {
         return Permissions.ADMINISTRATOR;
     }
 
-	@Override
-	public Permissions permissionLevel(Guild guild) {
-		// TODO Auto-generated method stub
-		return XMLHandler.getCommandPermissionXML(guild, this);
-	}
-	
+    @Override
+    public Permissions permissionLevel(Guild guild) {
+        // TODO Auto-generated method stub
+        return XMLHandler.getCommandPermissionXML(guild, this);
+    }
+
 }

@@ -2,62 +2,52 @@ package com.srgood.dbot.source;
 
 import org.json.JSONObject;
 
-public class AudioInfo
-{
-    protected JSONObject jsonInfo;
-    protected String title;
-    protected String origin;
-    protected String id;
-    protected String encoding;
-    protected String description;
-    protected String extractor;
-    protected String thumbnail;
-    protected String error;
-    protected boolean isLive;
-    protected AudioTimestamp duration;
+public class AudioInfo {
+    JSONObject jsonInfo;
+    String title;
+    String origin;
+    String id;
+    String encoding;
+    String description;
+    String extractor;
+    String thumbnail;
+    String error;
+    boolean isLive;
+    AudioTimestamp duration;
 
-    public JSONObject getJsonInfo()
-    {
+    public JSONObject getJsonInfo() {
         return jsonInfo;
     }
 
-    public String getTitle()
-    {
+    public String getTitle() {
         return title;
     }
 
-    public String getOrigin()
-    {
+    public String getOrigin() {
         return origin;
     }
 
-    public String getId()
-    {
+    public String getId() {
         return id;
     }
 
-    public String getEncoding()
-    {
+    public String getEncoding() {
         return encoding;
     }
 
-    public String getDescription()
-    {
+    public String getDescription() {
         return description;
     }
 
-    public String getExtractor()
-    {
+    public String getExtractor() {
         return extractor;
     }
 
-    public String getThumbnail()
-    {
+    public String getThumbnail() {
         return thumbnail;
     }
 
-    public String getError()
-    {
+    public String getError() {
         return error;
     }
 
@@ -65,8 +55,7 @@ public class AudioInfo
         return isLive;
     }
 
-    public AudioTimestamp getDuration()
-    {
+    public AudioTimestamp getDuration() {
         return duration;
     }
 }

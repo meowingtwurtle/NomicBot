@@ -1,6 +1,5 @@
 package com.srgood.dbot.source;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 import sun.misc.IOUtils;
 
@@ -8,40 +7,33 @@ import java.io.*;
 import java.nio.file.FileAlreadyExistsException;
 import java.util.*;
 
-public class RemoteSource implements AudioSource
-{
-    public static final List<String> YOUTUBE_DL_LAUNCH_ARGS =
-            Collections.unmodifiableList(Arrays.asList(
-                    "python",               //Launch python executor
-                    "./youtube-dl",         //youtube-dl program file
-                    "-q",                   //quiet. No standard out.
-                    "-f", "bestaudio/best", //Format to download. Attempts best audio-only, followed by best video/audio combo
-                    "--no-playlist",        //If the provided link is part of a Playlist, only grabs the video, not playlist too.
-                    "-o", "-"               //Output, output to STDout
-            ));
-    public static final List<String> FFMPEG_LAUNCH_ARGS =
-            Collections.unmodifiableList(Arrays.asList(
-                    "ffmpeg",       //Program launch
-                    "-i", "-",      //Input file, specifies to read from STDin (pipe)
-                    "-f", "s16be",  //Format.  PCM, signed, 16bit, Big Endian
-                    "-ac", "2",     //Channels. Specify 2 for stereo audio.
-                    "-ar", "48000", //Rate. Opus requires an audio rate of 48000hz
-                    "-map", "a",    //Makes sure to only output audio, even if the specified format supports other streams
-                    "-"             //Used to specify STDout as the output location (pipe)
-            ));
+public class RemoteSource implements AudioSource {
+    private static final List<String> YOUTUBE_DL_LAUNCH_ARGS = Collections.unmodifiableList(Arrays.asList("python",               //Launch python executor
+            "./youtube-dl",         //youtube-dl program file
+            "-q",                   //quiet. No standard out.
+            "-f", "bestaudio/best", //Format to download. Attempts best audio-only, followed by best video/audio combo
+            "--no-playlist",        //If the provided link is part of a Playlist, only grabs the video, not playlist too.
+            "-o", "-"               //Output, output to stdout
+    ));
+    private static final List<String> FFMPEG_LAUNCH_ARGS = Collections.unmodifiableList(Arrays.asList("ffmpeg",       //Program launch
+            "-i", "-",      //Input file, specifies to read from STDin (pipe)
+            "-f", "s16be",  //Format.  PCM, signed, 16bit, Big Endian
+            "-ac", "2",     //Channels. Specify 2 for stereo audio.
+            "-ar", "48000", //Rate. Opus requires an audio rate of 48000hz
+            "-map", "a",    //Makes sure to only output audio, even if the specified format supports other streams
+            "-"             //Used to specify stdout as the output location (pipe)
+    ));
 
     private final String url;
     private final List<String> ytdlLaunchArgsF;
     private final List<String> ffmpegLaunchArgsF;
     private AudioInfo audioInfo;
 
-    public RemoteSource(String url)
-    {
+    public RemoteSource(String url) {
         this(url, null, null);
     }
 
-    public RemoteSource(String url, List<String> ytdlLaunchArgs, List<String> ffmpegLaunchArgs)
-    {
+    private RemoteSource(String url, List<String> ytdlLaunchArgs, List<String> ffmpegLaunchArgs) {
         if (url == null || url.isEmpty())
             throw new NullPointerException("String url provided to RemoteSource was null or empty.");
         this.url = url;
@@ -49,26 +41,19 @@ public class RemoteSource implements AudioSource
         this.ffmpegLaunchArgsF = ffmpegLaunchArgs;
     }
 
-    public String getSource()
-    {
+    public String getSource() {
         return url;
     }
 
     @Override
-    public synchronized AudioInfo getInfo()
-    {
-        if (audioInfo != null)
-            return audioInfo;
+    public synchronized AudioInfo getInfo() {
+        if (audioInfo != null) return audioInfo;
 
         List<String> infoArgs = new LinkedList<>();
-        if (ytdlLaunchArgsF != null)
-        {
+        if (ytdlLaunchArgsF != null) {
             infoArgs.addAll(ytdlLaunchArgsF);
-            if (!infoArgs.contains("-q"))
-                infoArgs.add("-q");
-        }
-        else
-            infoArgs.addAll(YOUTUBE_DL_LAUNCH_ARGS);
+            if (!infoArgs.contains("-q")) infoArgs.add("-q");
+        } else infoArgs.addAll(YOUTUBE_DL_LAUNCH_ARGS);
 
         infoArgs.add("--ignore-errors");    //Ignore errors, obviously
         infoArgs.add("-j");                 //Dumps the json about the file into STDout
@@ -77,58 +62,31 @@ public class RemoteSource implements AudioSource
         infoArgs.add(url);                  //specifies the URL to download.
 
         audioInfo = new AudioInfo();
-        try
-        {
+        try {
             Process infoProcess = new ProcessBuilder().command(infoArgs).start();
             byte[] infoData = IOUtils.readFully(infoProcess.getErrorStream(), -1, false);   //YT-DL outputs to STDerr
             if (infoData == null || infoData.length == 0)
                 throw new NullPointerException("The Youtube-DL process resulted in a null or zero-length INFO!");
 
             String infoString = new String(infoData);
-            if (infoString.startsWith("ERROR"))
-            {
+            if (infoString.startsWith("ERROR")) {
                 audioInfo.error = infoString;
-            }
-            else
-            {
+            } else {
                 JSONObject info = new JSONObject(infoString);
 
                 audioInfo.jsonInfo = info;
-                audioInfo.title = !info.optString("title", "").isEmpty()
-                        ? info.getString("title")
-                        : !info.optString("fulltitle", "").isEmpty()
-                        ? info.getString("fulltitle")
-                        : null;
-                audioInfo.origin = !info.optString("webpage_url", "").isEmpty()
-                        ? info.getString("webpage_url")
-                        : url;
-                audioInfo.id = !info.optString("id", "").isEmpty()
-                        ? info.getString("id")
-                        : null;
-                audioInfo.encoding = !info.optString("acodec", "").isEmpty()
-                        ? info.getString("acodec")
-                        : !info.optString("ext", "").isEmpty()
-                        ? info.getString("ext")
-                        : null;
-                audioInfo.description = !info.optString("description", "").isEmpty()
-                        ? info.getString("description")
-                        : null;
-                audioInfo.extractor = !info.optString("extractor", "").isEmpty()
-                        ? info.getString("extractor")
-                        : !info.optString("extractor_key").isEmpty()
-                        ? info.getString("extractor_key")
-                        : null;
-                audioInfo.thumbnail = !info.optString("thumbnail", "").isEmpty()
-                        ? info.getString("thumbnail")
-                        : null;
+                audioInfo.title = !info.optString("title", "").isEmpty() ? info.getString("title") : !info.optString("fulltitle", "").isEmpty() ? info.getString("fulltitle") : null;
+                audioInfo.origin = !info.optString("webpage_url", "").isEmpty() ? info.getString("webpage_url") : url;
+                audioInfo.id = !info.optString("id", "").isEmpty() ? info.getString("id") : null;
+                audioInfo.encoding = !info.optString("acodec", "").isEmpty() ? info.getString("acodec") : !info.optString("ext", "").isEmpty() ? info.getString("ext") : null;
+                audioInfo.description = !info.optString("description", "").isEmpty() ? info.getString("description") : null;
+                audioInfo.extractor = !info.optString("extractor", "").isEmpty() ? info.getString("extractor") : !info.optString("extractor_key").isEmpty() ? info.getString("extractor_key") : null;
+                audioInfo.thumbnail = !info.optString("thumbnail", "").isEmpty() ? info.getString("thumbnail") : null;
                 audioInfo.isLive = info.has("is_live") && !info.isNull("is_live") && info.getBoolean("is_live");
-                audioInfo.duration = info.optInt("duration", -1) != -1
-                        ? AudioTimestamp.fromSeconds(info.getInt("duration"))
-                        : null;
+                audioInfo.duration = info.optInt("duration", -1) != -1 ? AudioTimestamp.fromSeconds(info.getInt("duration")) : null;
 
                 //Use FFprobe to find the duration because YT-DL didn't give it to us.
-                if (audioInfo.duration == null)
-                {
+                if (audioInfo.duration == null) {
                     List<String> ffprobeInfoArgs = new LinkedList<>();
                     ffprobeInfoArgs.addAll(LocalSource.FFPROBE_INFO_ARGS);
                     ffprobeInfoArgs.add("-i");
@@ -136,26 +94,17 @@ public class RemoteSource implements AudioSource
 
                     infoProcess = new ProcessBuilder().command(ffprobeInfoArgs).start();
                     infoData = IOUtils.readFully(infoProcess.getInputStream(), -1, false);
-                    if (infoData != null && infoData.length > 0)
-                    {
+                    if (infoData != null && infoData.length > 0) {
                         info = new JSONObject(new String(infoData)).getJSONObject("format");
 
-                        if (info.optDouble("duration", -1.0) != -1.0)
-                        {
+                        if (info.optDouble("duration", -1.0) != -1.0) {
                             int duration = Math.round((float) info.getDouble("duration"));
                             audioInfo.duration = AudioTimestamp.fromSeconds(duration);
                         }
                     }
                 }
             }
-        }
-        catch (IOException e)
-        {
-            audioInfo.error = e.getMessage();
-            e.printStackTrace();
-        }
-        catch (JSONException e)
-        {
+        } catch (java.io.IOException | org.json.JSONException e) {
             audioInfo.error = e.getMessage();
             e.printStackTrace();
         }
@@ -163,23 +112,17 @@ public class RemoteSource implements AudioSource
     }
 
     @Override
-    public AudioStream asStream()
-    {
+    public AudioStream asStream() {
         List<String> ytdlLaunchArgs = new ArrayList<>();
         List<String> ffmpegLaunchArgs = new ArrayList<>();
-        if (ytdlLaunchArgsF == null)
-            ytdlLaunchArgs.addAll(YOUTUBE_DL_LAUNCH_ARGS);
-        else
-        {
+        if (ytdlLaunchArgsF == null) ytdlLaunchArgs.addAll(YOUTUBE_DL_LAUNCH_ARGS);
+        else {
             ytdlLaunchArgs.addAll(ytdlLaunchArgsF);
-            if (!ytdlLaunchArgs.contains("-q"))
-                ytdlLaunchArgs.add("-q");
+            if (!ytdlLaunchArgs.contains("-q")) ytdlLaunchArgs.add("-q");
         }
 
-        if (ffmpegLaunchArgsF == null)
-            ffmpegLaunchArgs.addAll(FFMPEG_LAUNCH_ARGS);
-        else
-            ffmpegLaunchArgs.addAll(ffmpegLaunchArgsF);
+        if (ffmpegLaunchArgsF == null) ffmpegLaunchArgs.addAll(FFMPEG_LAUNCH_ARGS);
+        else ffmpegLaunchArgs.addAll(ffmpegLaunchArgsF);
 
         ytdlLaunchArgs.add("--");   //Url separator. Deals with YT ids that start with --
         ytdlLaunchArgs.add(url);    //specifies the URL to download.
@@ -188,25 +131,16 @@ public class RemoteSource implements AudioSource
     }
 
     @Override
-    public File asFile(String path, boolean deleteIfExists) throws FileAlreadyExistsException, FileNotFoundException
-    {
-        if (path == null || path.isEmpty())
-            throw new NullPointerException("Provided path was null or empty!");
+    public File asFile(String path, boolean deleteIfExists) throws FileAlreadyExistsException, FileNotFoundException {
+        if (path == null || path.isEmpty()) throw new NullPointerException("Provided path was null or empty!");
 
         File file = new File(path);
-        if (file.isDirectory())
-            throw new IllegalArgumentException("The provided path is a directory, not a file!");
-        if (file.exists())
-        {
-            if (!deleteIfExists)
-            {
-                throw new FileAlreadyExistsException("The provided path already has an existing file " +
-                        " and the `deleteIfExists` boolean was set to false.");
-            }
-            else
-            {
-                if (!file.delete())
-                    throw new UnsupportedOperationException("Cannot delete the file. Is it in use?");
+        if (file.isDirectory()) throw new IllegalArgumentException("The provided path is a directory, not a file!");
+        if (file.exists()) {
+            if (!deleteIfExists) {
+                throw new FileAlreadyExistsException("The provided path already has an existing file " + " and the `deleteIfExists` boolean was set to false.");
+            } else {
+                if (!file.delete()) throw new UnsupportedOperationException("Cannot delete the file. Is it in use?");
             }
         }
 
@@ -218,37 +152,25 @@ public class RemoteSource implements AudioSource
         //Has detection to detect if the current thread has been interrupted to respect calls to
         // Thread#interrupt() when an instance of RemoteSource is in an async thread.
         //TODO: consider replacing with a Future.
-        try
-        {
+        try {
             byte[] buffer = new byte[1024];
-            int amountRead = -1;
-            while (!currentThread.isInterrupted() && ((amountRead = input.read(buffer)) > -1))
-            {
+            int amountRead;
+            while (!currentThread.isInterrupted() && ((amountRead = input.read(buffer)) > -1)) {
                 fos.write(buffer, 0, amountRead);
             }
             fos.flush();
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
-        }
-        finally
-        {
-            try
-            {
+        } finally {
+            try {
                 input.close();
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            try
-            {
+            try {
                 fos.close();
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
