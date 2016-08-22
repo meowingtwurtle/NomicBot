@@ -16,7 +16,7 @@ public class RemoteSource implements AudioSource {
             "-o", "-"               //Output, output to stdout
     ));
     private static final List<String> FFMPEG_LAUNCH_ARGS = Collections.unmodifiableList(Arrays.asList("ffmpeg",       //Program launch
-            "-i", "-",      //Input file, specifies to read from STDin (pipe)
+            "-i", "-",      //Input file, specifies to read from stdin (pipe)
             "-f", "s16be",  //Format.  PCM, signed, 16bit, Big Endian
             "-ac", "2",     //Channels. Specify 2 for stereo audio.
             "-ar", "48000", //Rate. Opus requires an audio rate of 48000hz
@@ -56,7 +56,7 @@ public class RemoteSource implements AudioSource {
         } else infoArgs.addAll(YOUTUBE_DL_LAUNCH_ARGS);
 
         infoArgs.add("--ignore-errors");    //Ignore errors, obviously
-        infoArgs.add("-j");                 //Dumps the json about the file into STDout
+        infoArgs.add("-j");                 //Dumps the json about the file into stdout
         infoArgs.add("--skip-download");    //Doesn't actually download the file.
         infoArgs.add("--");                 //Url separator. Deals with YT ids that start with --
         infoArgs.add(url);                  //specifies the URL to download.
@@ -64,7 +64,7 @@ public class RemoteSource implements AudioSource {
         audioInfo = new AudioInfo();
         try {
             Process infoProcess = new ProcessBuilder().command(infoArgs).start();
-            byte[] infoData = IOUtils.readFully(infoProcess.getErrorStream(), -1, false);   //YT-DL outputs to STDerr
+            byte[] infoData = IOUtils.readFully(infoProcess.getErrorStream(), -1, false);   //YT-DL outputs to stderr
             if (infoData == null || infoData.length == 0)
                 throw new NullPointerException("The Youtube-DL process resulted in a null or zero-length INFO!");
 

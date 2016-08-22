@@ -18,13 +18,11 @@ public class Playlist {
     private List<AudioSource> sources;
     protected Queue<AudioSource> currentOrder;
     protected AudioSource endOfList;
-    private final String name;
     protected boolean repeatSingle = false;
     protected boolean repeatList = false;
     protected boolean shuffle = false;
 
     private Playlist(String name) {
-        this.name = name;
         this.sources = new ArrayList<>();
     }
 

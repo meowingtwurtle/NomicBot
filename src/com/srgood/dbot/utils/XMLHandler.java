@@ -325,9 +325,8 @@ public class XMLHandler {
             NodeList ServerNodes = rootElem.getElementsByTagName("server");
             for (int i = 0; i < ServerNodes.getLength(); i++) {
                 Element ServerNode = (Element) ServerNodes.item(i);
-                Element ServerNodeElement = ServerNode;
 
-                servers.put(ServerNodeElement.getAttribute("id"), ServerNode);
+                servers.put(ServerNode.getAttribute("id"), ServerNode);
             }
 
             BotMain.prefix = getFirstSubElement(getFirstSubElement(rootElem, "global"), "prefix").getTextContent();
@@ -362,7 +361,7 @@ public class XMLHandler {
         Permissions permission = null;
 
         if (role == null) {
-            return permission;
+            return null;
         }
 
         //<config>

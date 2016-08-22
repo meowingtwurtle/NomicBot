@@ -23,7 +23,6 @@ public class MusicPlayer implements AudioSendHandler {
     private AudioSource currentAudioSource = null;
     private AudioStream currentAudioStream = null;
     private State state = State.STOPPED;
-    private final boolean AUTO_CONTINUE = true;
     private boolean shuffle = false;
     private boolean repeat = false;
     private float volume = 1.0F;
@@ -227,6 +226,8 @@ public class MusicPlayer implements AudioSendHandler {
         play0(false);
         if (fireEvent) eventManager.handle(new NextEvent(this));
     }
+
+    private static final boolean AUTO_CONTINUE = true;
 
     private void sourceFinished() {
         if (AUTO_CONTINUE) {

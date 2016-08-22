@@ -1,7 +1,6 @@
 package com.srgood.dbot.commands.audio;
 
 import com.srgood.dbot.BotMain;
-import com.srgood.dbot.MusicPlayer;
 import com.srgood.dbot.utils.Permissions;
 import com.srgood.dbot.utils.XMLHandler;
 import net.dv8tion.jda.entities.Guild;
@@ -24,7 +23,6 @@ public class CommandAudioJoin implements AudioCommand {
     @Override
     public void action(String[] args, GuildMessageReceivedEvent event) {
         AudioManager manager = event.getGuild().getAudioManager();
-        @SuppressWarnings("unused") MusicPlayer player = AudioCommand.initAndGetPlayer(manager);
 
         VoiceChannel channel = null;
 

@@ -1,7 +1,6 @@
 package com.srgood.dbot;
 
-import com.srgood.dbot.commands.*;
-import com.srgood.dbot.commands.audio.*;
+import com.srgood.dbot.commands.Command;
 import com.srgood.dbot.ref.RefStrings;
 import com.srgood.dbot.utils.CommandParser;
 import com.srgood.dbot.utils.PermissionOps;
@@ -11,6 +10,7 @@ import net.dv8tion.jda.JDA;
 import net.dv8tion.jda.JDABuilder;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.utils.SimpleLog;
+import org.reflections.Reflections;
 import org.w3c.dom.Document;
 
 import javax.security.auth.login.LoginException;
@@ -39,8 +39,8 @@ public class BotMain extends Thread{
     public static String prefix;
     public static String overrideKey = com.srgood.dbot.utils.SecureOverrideKeyGenerator.nextOverrideKey();
 
-    public static final CommandParser parser = new CommandParser();
-    public static final Map<String, Command> commands = new TreeMap<>();
+    static final CommandParser parser = new CommandParser();
+    public static Map<String, Command> commands = new TreeMap<>();
 
     //XML variables
     public static DocumentBuilderFactory DomFactory;
@@ -55,14 +55,13 @@ public class BotMain extends Thread{
         Runtime.getRuntime().addShutdownHook(new ShutdownThread());
 
         try {
-            //create a JDA with one Event listener
             jda = new JDABuilder().addListener(new BotListener()).setBotToken(RefStrings.BOT_TOKEN_REASONS).buildBlocking();
             jda.setAutoReconnect(true);
             jda.getAccountManager().setGame("type '@Reasons help'");
         } catch (LoginException e) {
-            SimpleLog.getLog("Reasons").fatal("**COULD NOT LOG IN (Invalid password?)**");
+            SimpleLog.getLog("Reasons").fatal("**COULD NOT LOG IN**");
         } catch (InterruptedException e) {
-            SimpleLog.getLog("JDA").fatal("**AN UNKNOWN ERROR OCCURRED DURING LOGIN**");
+            SimpleLog.getLog("JDA").fatal("**AN UNKNOWWN ERROR OCCURED DURING LOGIN**");
             e.printStackTrace();
         }
 
@@ -80,33 +79,16 @@ public class BotMain extends Thread{
 
         //catch null pointer exceptions when creating commands
         try {
-            commands.put("ping", new CommandPing());
-            commands.put("pong", new CommandPong());
-            commands.put("shutdown", new CommandShutdown());
-            commands.put("setprefix", new CommandSetPrefix());
-            commands.put("getprefix", new CommandGetPrefix());
-            commands.put("debug", new CommandDebug());
-            commands.put("volume", new CommandAudioVolume());
-            commands.put("list", new CommandAudioList());
-            commands.put("now-playing", new CommandAudioNowPlaying());
-            commands.put("join", new CommandAudioJoin());
-            commands.put("leave", new CommandAudioLeave());
-            commands.put("play", new CommandAudioPlay());
-            commands.put("skip", new CommandAudioSkip());
-            commands.put("stop", new CommandAudioStop());
-            commands.put("pause", new CommandAudioPause());
-            commands.put("help", new CommandHelp());
-            commands.put("repeat", new CommandAudioRepeat());
-            commands.put("delete", new CommandDelete());
-            commands.put("version", new CommandVersion());
-            commands.put("invite", new CommandInvite());
-            commands.put("flip", new CoinFlip());
-            commands.put("roll", new CommandDiceRoll());
-            commands.put("toggle", new CommandToggle());
-            commands.put("eval", new CommandEval());
-            commands.put("calc", new CommandEval());
+            String[] packages = { "com.srgood.dbot", "com.srgood.dbot.audio" };
 
-
+            for (String pack : packages) {
+                Reflections mReflect = new Reflections(pack);
+                for (Class<? extends Command> cmdClass : mReflect.getSubTypesOf(Command.class)) {
+                    if (!cmdClass.isInterface()) {
+                        commands.put(cmdClass.getSimpleName().toLowerCase().replace("command", "").replace("audio", ""), cmdClass.newInstance());
+                    }
+                }
+            }
         } catch (Exception e) {
             SimpleLog.getLog("Reasons").warn("One or more of the commands failed to map");
             e.printStackTrace();
@@ -114,7 +96,6 @@ public class BotMain extends Thread{
 
 
     }
-
 
     //TODO fix the exceptions here
     public static void writeXML() throws TransformerException {
