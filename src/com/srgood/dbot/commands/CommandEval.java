@@ -27,7 +27,13 @@ public class CommandEval implements Command {
     @Override
     public void action(String[] args, GuildMessageReceivedEvent event) {
         try {
-            IMathGroup group = IMathHandler.getMathHandler().parse(join(args));
+            String exp = join(args);
+
+            if (!exp.matches("[()\\d\\w\\s.+\\-*/^]+")) {
+                throw new com.meowingtwurtle.math.api.MathExpressionParseException("Expression contains invalid characters");
+            }
+
+            IMathGroup group = IMathHandler.getMathHandler().parse(exp);
             event.getChannel().sendMessage("`MATH:` " + RESULT_FORMATTER.format(group.eval()));
         } catch (Exception e) {
             e.printStackTrace();
