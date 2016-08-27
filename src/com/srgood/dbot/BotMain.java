@@ -165,7 +165,7 @@ public class BotMain extends Application {
             //load image here
             Image image = null;
             try {
-                image = ImageIO.read(new File("/test.jpg"));
+                image = ImageIO.read(getClass().getResource("/test.jpg"));
             } catch (IOException e) {
                 e.printStackTrace();
             }
