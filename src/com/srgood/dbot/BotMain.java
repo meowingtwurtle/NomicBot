@@ -4,8 +4,13 @@ import com.srgood.dbot.commands.Command;
 import com.srgood.dbot.ref.RefStrings;
 import com.srgood.dbot.utils.CommandParser;
 import com.srgood.dbot.utils.PermissionOps;
-import com.srgood.dbot.utils.ShutdownThread;
 import com.srgood.dbot.utils.XMLHandler;
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import net.dv8tion.jda.JDA;
 import net.dv8tion.jda.JDABuilder;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
@@ -13,6 +18,7 @@ import net.dv8tion.jda.utils.SimpleLog;
 import org.reflections.Reflections;
 import org.w3c.dom.Document;
 
+import javax.imageio.ImageIO;
 import javax.security.auth.login.LoginException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -22,6 +28,8 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import java.awt.*;
+import java.awt.event.ActionListener;
 import java.io.*;
 import java.nio.file.Files;
 import java.time.Instant;
@@ -29,7 +37,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class BotMain {
+public class BotMain extends Application {
 
     public static JDA jda;
 
@@ -38,8 +46,10 @@ public class BotMain {
     // prefix and shutdown override key
     public static String prefix;
     public static String overrideKey = com.srgood.dbot.utils.SecureOverrideKeyGenerator.nextOverrideKey();
+    public static PrintStream outPS;
+    public static ByteArrayOutputStream out;
 
-    static final CommandParser parser = new CommandParser();
+    public static final CommandParser parser = new CommandParser();
     public static Map<String, Command> commands = new TreeMap<>();
 
     //XML variables
@@ -47,15 +57,37 @@ public class BotMain {
     public static DocumentBuilder DomInput;
     public static Document PInputFile;
 
+    private static com.srgood.dbot.app.Controller controller = null;
 
-    public static void main(String[] args) {
+    private boolean firstTime;
+    private TrayIcon trayIcon;
+
+    @Override public void init() {
+        out = new ByteArrayOutputStream();
+        outPS = new PrintStream(out) {
+            @Override
+            public void println(Object o) {
+                super.println(o);
+                if (controller != null)
+                    controller.updateConsole();
+            }
+
+            @Override
+            public void println(String s) {
+                super.println(s);
+                if (controller != null)
+                    controller.updateConsole();
+            }
+        };
+
+        System.setOut(outPS);
 
         //catch exceptions when building JDA
         //invite temp: https://discordapp.com/oauth2/authorize?client_id=XXXX&scope=bot&permissions=0x33525237
 
-        Runtime.getRuntime().addShutdownHook(new ShutdownThread());
 
         try {
+            //create a JDA with one Event listener
             jda = new JDABuilder().addListener(new BotListener()).setBotToken(RefStrings.BOT_TOKEN_REASONS).buildBlocking();
             jda.setAutoReconnect(true);
             jda.getAccountManager().setGame("type '@Reasons help'");
@@ -95,8 +127,99 @@ public class BotMain {
             e.printStackTrace();
         }
 
-
     }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/app.fxml"));
+
+        Parent root = loader.load();
+
+        controller = loader.getController();
+
+        controller.updateConsole();
+
+        primaryStage.setTitle("Reasons Console");
+        primaryStage.setScene(new Scene(root));
+
+        addToTray(primaryStage);
+        firstTime = true;
+        Platform.setImplicitExit(false);
+
+        primaryStage.show();
+    }
+
+    public void stop () {
+        jda.shutdown();
+    }
+
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+
+    public void addToTray(Stage stage) {
+        if (SystemTray.isSupported()) {
+            SystemTray systemTray = SystemTray.getSystemTray();
+            //load image here
+            Image image = null;
+            try {
+                image = ImageIO.read(getClass().getResource("/test.jpg"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            stage.setOnCloseRequest(event -> hide(stage));
+
+            final ActionListener closeListener = e -> {
+                System.exit(0);
+            };
+
+            final ActionListener showListener = e -> Platform.runLater(() -> stage.show());
+
+            PopupMenu popup = new PopupMenu();
+
+            MenuItem showItem = new MenuItem("Show");
+            showItem.addActionListener(showListener);
+            popup.add(showItem);
+
+            MenuItem closeItem = new MenuItem("Close");
+            closeItem.addActionListener(closeListener);
+            popup.add(closeItem);
+
+            trayIcon = new TrayIcon(image,"somthing",popup);
+
+            trayIcon.addActionListener(showListener);
+
+            try {
+                systemTray.add(trayIcon);
+                trayIcon.setImageAutoSize(true); // <- Sets the image size properly
+            } catch (AWTException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    public void showPrgmIsMinimizedMsg() {
+        if (firstTime) {
+            trayIcon.displayMessage("line1","line2",TrayIcon.MessageType.INFO);
+            firstTime = false;
+        }
+    }
+
+    private void hide(final Stage stage) {
+        Platform.runLater(() -> {
+            if (SystemTray.isSupported()) {
+                stage.hide();
+                showPrgmIsMinimizedMsg();
+            } else {
+                System.exit(0);
+            }
+        });
+    }
+
 
     //TODO fix the exceptions here
     public static void writeXML() throws TransformerException {
@@ -188,7 +311,7 @@ public class BotMain {
         if (commands.containsKey(cmd.invoke)) {
             XMLHandler.initCommandIfNotExists(cmd);
             //if the command is enabled for the message's guild...
-            if (XMLHandler.commandIsEnabled(cmd.event.getGuild(), BotMain.commands.get(cmd.invoke))) {
+            if (XMLHandler.commandIsEnabled(cmd.event.getGuild(), commands.get(cmd.invoke))) {
                 //if the message author has the required permission level...
                 if (PermissionOps.getHighestPermission(PermissionOps.getPermissions(cmd.event.getGuild(), cmd.event.getAuthor()), cmd.event.getGuild()).getLevel() >= commands.get(cmd.invoke).permissionLevel(cmd.event.getGuild()).getLevel()) {
                     boolean safe = commands.get(cmd.invoke).called(cmd.args, cmd.event);

@@ -831,7 +831,7 @@ public class SampleRateConversionProvider extends
         }
 
         /**
-         * Main read method. It blocks until all samples are converted or the
+         * BotMain read method. It blocks until all samples are converted or the
          * source stream is at its end or closed.<br>
          * The sourceStream's sample rate is converted following the current
          * setting of <code>conversionAlgorithm</code>. At most

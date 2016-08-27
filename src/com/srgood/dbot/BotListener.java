@@ -19,6 +19,12 @@ import net.dv8tion.jda.utils.SimpleLog;
  */
 
 public class BotListener extends ListenerAdapter {
+
+    @Override
+    public void onReady(ReadyEvent event) {
+
+    }
+
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 
@@ -48,11 +54,6 @@ public class BotListener extends ListenerAdapter {
 
     }
 
-    //does stuff once JDA is loaded
-    @Override
-    public void onReady(ReadyEvent event) {
-
-    }
 
     @Override
     public void onGuildJoin(GuildJoinEvent event) {
