@@ -1,8 +1,5 @@
-package com.srgood.app;
+package com.srgood.dbot;
 
-import com.srgood.dbot.BotListener;
-import com.srgood.dbot.commands.*;
-import com.srgood.dbot.commands.audio.*;
 import com.srgood.dbot.commands.Command;
 import com.srgood.dbot.ref.RefStrings;
 import com.srgood.dbot.utils.CommandParser;
@@ -56,9 +53,25 @@ public class BotMain extends Application {
     public static DocumentBuilder DomInput;
     public static Document PInputFile;
 
+    private static com.srgood.dbot.app.Controller controller = null;
+
     @Override public void init() {
         out = new ByteArrayOutputStream();
-        outPS = new PrintStream(out);
+        outPS = new PrintStream(out) {
+            @Override
+            public void println(Object o) {
+                super.println(o);
+                if (controller != null)
+                    controller.updateConsole();
+            }
+
+            @Override
+            public void println(String s) {
+                super.println(s);
+                if (controller != null)
+                    controller.updateConsole();
+            }
+        };
 
         System.setOut(outPS);
 
@@ -110,8 +123,14 @@ public class BotMain extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("App.fxml"));
+    public void start(Stage primaryStage) throws Exception {
+        FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/app.fxml"));
+
+        Parent root = loader.load();
+
+        controller = loader.getController();
+
+        controller.updateConsole();
 
         primaryStage.setTitle("Reasons Console");
         primaryStage.setScene(new Scene(root));

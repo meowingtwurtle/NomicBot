@@ -1,7 +1,5 @@
 package com.srgood.dbot;
 
-import com.srgood.app.BotMain;
-import com.srgood.app.Controller;
 import com.srgood.dbot.ref.RefStrings;
 import com.srgood.dbot.utils.PermissionOps;
 import com.srgood.dbot.utils.Permissions;

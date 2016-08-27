@@ -1,6 +1,6 @@
 package com.srgood.dbot.utils;
 
-import com.srgood.app.BotMain;
+import com.srgood.dbot.BotMain;
 import com.srgood.dbot.BotListener;
 import com.srgood.dbot.commands.Command;
 import net.dv8tion.jda.entities.Guild;

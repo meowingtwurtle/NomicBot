@@ -1,6 +1,6 @@
 package com.srgood.dbot.commands;
 
-import com.srgood.app.BotMain;
+import com.srgood.dbot.BotMain;
 import com.srgood.dbot.BotListener;
 import com.srgood.dbot.utils.Permissions;
 import com.srgood.dbot.utils.XMLHandler;

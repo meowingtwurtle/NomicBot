@@ -1,22 +1,16 @@
-package com.srgood.app;
+package com.srgood.dbot.app;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TitledPane;
-import net.dv8tion.jda.JDA;
 
-import java.lang.invoke.LambdaConversionException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
+
     @FXML
     private ResourceBundle resources;
 
@@ -41,13 +35,17 @@ public class Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         assert x1 != null : "fx:id=\"x1\" was not injected: check your FXML file 'sample.fxml'.";
 
-
-        PowerButton.setOnAction(event -> BotMain.jda.shutdown());
-        UpdateButton.setOnAction(event -> console.setText(BotMain.out.toString()));
-
+        PowerButton.setOnAction(event -> com.srgood.dbot.BotMain.jda.shutdown());
+        UpdateButton.setOnAction(event -> updateConsole());
 
 
 
+
+    }
+
+    @javafx.fxml.FXML
+    public void updateConsole() {
+        console.setText(com.srgood.dbot.BotMain.out.toString());
     }
 
 

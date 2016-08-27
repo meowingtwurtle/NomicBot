@@ -1,4 +1,4 @@
-package com.srgood.dbot.utils;
+package com.srgood.dbot.app;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
