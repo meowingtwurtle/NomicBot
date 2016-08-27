@@ -1,14 +1,10 @@
 package com.srgood.dbot;
 
 import com.srgood.dbot.ref.RefStrings;
-import com.srgood.dbot.utils.PermissionOps;
-import com.srgood.dbot.utils.Permissions;
 import com.srgood.dbot.utils.XMLHandler;
-import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.ReadyEvent;
 import net.dv8tion.jda.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.exceptions.PermissionException;
 import net.dv8tion.jda.hooks.ListenerAdapter;
 import net.dv8tion.jda.utils.SimpleLog;
 
@@ -63,18 +59,4 @@ public class BotListener extends ListenerAdapter {
 //          initGuild(event.getGuild());
     }
 
-    public static void initGuild(Guild guild) {
-
-        XMLHandler.initGuildXML(guild);
-
-        try {
-            for (Permissions permission : Permissions.values()) {
-                PermissionOps.createRole(permission, guild, true);
-            }
-        } catch (PermissionException e3) {
-            SimpleLog.getLog("Reasons").warn("Could not create custom role! Possible permissions problem?");
-        }
-
-        XMLHandler.initGuildCommands(guild);
-    }
 }

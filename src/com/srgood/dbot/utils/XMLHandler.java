@@ -1,6 +1,5 @@
 package com.srgood.dbot.utils;
 
-import com.srgood.dbot.BotListener;
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.commands.Command;
 import net.dv8tion.jda.entities.Guild;
@@ -90,9 +89,9 @@ public class XMLHandler {
         idAttr.setValue(guild.getId());
         server.setAttributeNode(idAttr);
 
-        Element globalElement = getFirstSubElement(BotMain.PInputFile.getDocumentElement(), "global");
+        Element defaultElement = getFirstSubElement(BotMain.PInputFile.getDocumentElement(), "default");
 
-        XMLHandler.nodeListToList(globalElement.getChildNodes()).stream().filter(n -> n instanceof org.w3c.dom.Element).forEach(n -> {
+        XMLHandler.nodeListToList(defaultElement.getChildNodes()).stream().filter(n -> n instanceof org.w3c.dom.Element).forEach(n -> {
             org.w3c.dom.Element elem = (org.w3c.dom.Element) n;
             server.appendChild(elem.cloneNode(true));
         });
@@ -115,14 +114,14 @@ public class XMLHandler {
             return false;
         }
 
-        NodeList globalNodeList = doc.getDocumentElement().getElementsByTagName("global");
-        if (globalNodeList.getLength() != 1) {
-            SimpleLog.getLog("Reasons").info("Not 1 global element");
+        NodeList defaultNodeList = doc.getDocumentElement().getElementsByTagName("default");
+        if (defaultNodeList.getLength() != 1) {
+            SimpleLog.getLog("Reasons").info("Not 1 default element");
             return false;
         }
-        Element globalElement = (Element) globalNodeList.item(0);
-        if (globalElement.getElementsByTagName("prefix").getLength() != 1) {
-            SimpleLog.getLog("Reasons").info("Not 1 global/prefix element");
+        Element defaultElement = (Element) defaultNodeList.item(0);
+        if (defaultElement.getElementsByTagName("prefix").getLength() != 1) {
+            SimpleLog.getLog("Reasons").info("Not 1 default/prefix element");
             return false;
         }
 
@@ -273,7 +272,7 @@ public class XMLHandler {
     public static String getGuildPrefix(Guild guild) {
         if (!servers.containsKey(guild.getId())) {
             SimpleLog.getLog("Reasons").info("initializing Guild from message");
-            BotListener.initGuild(guild);
+            com.srgood.dbot.utils.GuildUtil.initGuild(guild);
         }
         return getGuildPrefixNode(guild).getTextContent();
     }
@@ -329,7 +328,7 @@ public class XMLHandler {
                 servers.put(ServerNode.getAttribute("id"), ServerNode);
             }
 
-            BotMain.prefix = getFirstSubElement(getFirstSubElement(rootElem, "global"), "prefix").getTextContent();
+            BotMain.prefix = getFirstSubElement(getFirstSubElement(rootElem, "default"), "prefix").getTextContent();
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
