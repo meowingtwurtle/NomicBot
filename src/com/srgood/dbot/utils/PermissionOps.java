@@ -6,7 +6,6 @@ import net.dv8tion.jda.entities.User;
 import net.dv8tion.jda.managers.RoleManager;
 
 import java.util.Collection;
-import java.util.List;
 
 public class PermissionOps {
 
@@ -31,8 +30,7 @@ public class PermissionOps {
     }
 
     private static Collection<Permissions> rolesToPermissions(Collection<? extends Role> roles, Guild guild) {
-        List<Permissions> ret = roles.stream().map(role -> com.srgood.dbot.utils.XMLHandler.roleToPermission(role, guild)).collect(java.util.stream.Collectors.toList());
-        return ret;
+        return roles.stream().map(role -> XMLHandler.roleToPermission(role, guild)).collect(java.util.stream.Collectors.toList());
     }
 
     private static boolean containsAny(Collection<?> container, Collection<?> checkFor) {

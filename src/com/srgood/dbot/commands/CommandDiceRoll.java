@@ -21,7 +21,7 @@ public class CommandDiceRoll implements Command {
     @Override
     public void action(String[] args, GuildMessageReceivedEvent event) {
         // TODO Auto-generated method stub
-        int numRolls = 0;
+        int numRolls;
         StringBuilder stringBuilder = new StringBuilder();
         Random r = new Random();
 
