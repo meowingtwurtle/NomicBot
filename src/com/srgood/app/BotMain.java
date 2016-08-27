@@ -1,12 +1,17 @@
-package com.srgood.dbot;
+package com.srgood.app;
 
+import com.srgood.dbot.BotListener;
 import com.srgood.dbot.commands.*;
 import com.srgood.dbot.commands.audio.*;
 import com.srgood.dbot.ref.RefStrings;
 import com.srgood.dbot.utils.CommandParser;
 import com.srgood.dbot.utils.PermissionOps;
-import com.srgood.dbot.utils.ShutdownThread;
 import com.srgood.dbot.utils.XMLHandler;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import net.dv8tion.jda.JDA;
 import net.dv8tion.jda.JDABuilder;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
@@ -29,7 +34,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class BotMain extends Thread{
+public class BotMain extends Application {
 
     public static JDA jda;
 
@@ -38,6 +43,8 @@ public class BotMain extends Thread{
     // prefix and shutdown override key
     public static String prefix;
     public static String overrideKey = com.srgood.dbot.utils.SecureOverrideKeyGenerator.nextOverrideKey();
+    public static PrintStream outPS;
+    public static ByteArrayOutputStream out;
 
     public static final CommandParser parser = new CommandParser();
     public static final Map<String, Command> commands = new TreeMap<>();
@@ -47,12 +54,15 @@ public class BotMain extends Thread{
     public static DocumentBuilder DomInput;
     public static Document PInputFile;
 
-    public void start() {
+    @Override public void init() {
+        out = new ByteArrayOutputStream();
+        outPS = new PrintStream(out);
+
+        System.setOut(outPS);
 
         //catch exceptions when building JDA
         //invite temp: https://discordapp.com/oauth2/authorize?client_id=XXXX&scope=bot&permissions=0x33525237
 
-        Runtime.getRuntime().addShutdownHook(new ShutdownThread());
 
         try {
             //create a JDA with one Event listener
@@ -90,7 +100,7 @@ public class BotMain extends Thread{
             commands.put("list", new CommandAudioList());
             commands.put("now-playing", new CommandAudioNowPlaying());
             commands.put("join", new CommandAudioJoin());
-            commands.put("leave", new CommandAudioLeave());
+            //commands.put("leave", new CommandAudioLeave());
             commands.put("play", new CommandAudioPlay());
             commands.put("skip", new CommandAudioSkip());
             commands.put("stop", new CommandAudioStop());
@@ -112,8 +122,29 @@ public class BotMain extends Thread{
             e.printStackTrace();
         }
 
-
     }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception{
+        Parent root = FXMLLoader.load(getClass().getResource("App.fxml"));
+
+        primaryStage.setTitle("Reasons Console");
+        primaryStage.setScene(new Scene(root));
+        primaryStage.show();
+    }
+
+    public void stop () {
+        jda.shutdown();
+    }
+
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+
+
+
 
 
     //TODO fix the exceptions here
@@ -206,7 +237,7 @@ public class BotMain extends Thread{
         if (commands.containsKey(cmd.invoke)) {
             XMLHandler.initCommandIfNotExists(cmd);
             //if the command is enabled for the message's guild...
-            if (XMLHandler.commandIsEnabled(cmd.event.getGuild(), BotMain.commands.get(cmd.invoke))) {
+            if (XMLHandler.commandIsEnabled(cmd.event.getGuild(), commands.get(cmd.invoke))) {
                 //if the message author has the required permission level...
                 if (PermissionOps.getHighestPermission(PermissionOps.getPermissions(cmd.event.getGuild(), cmd.event.getAuthor()), cmd.event.getGuild()).getLevel() >= commands.get(cmd.invoke).permissionLevel(cmd.event.getGuild()).getLevel()) {
                     boolean safe = commands.get(cmd.invoke).called(cmd.args, cmd.event);

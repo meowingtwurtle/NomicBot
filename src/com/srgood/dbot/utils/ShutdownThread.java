@@ -1,6 +1,6 @@
 package com.srgood.dbot.utils;
 
-import com.srgood.dbot.BotMain;
+import com.srgood.app.BotMain;
 
 import javax.xml.transform.TransformerException;
 

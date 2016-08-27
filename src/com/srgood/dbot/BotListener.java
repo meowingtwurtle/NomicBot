@@ -1,5 +1,7 @@
 package com.srgood.dbot;
 
+import com.srgood.app.BotMain;
+import com.srgood.app.Controller;
 import com.srgood.dbot.ref.RefStrings;
 import com.srgood.dbot.utils.PermissionOps;
 import com.srgood.dbot.utils.Permissions;
@@ -23,6 +25,12 @@ import net.dv8tion.jda.utils.SimpleLog;
  */
 
 public class BotListener extends ListenerAdapter {
+
+    @Override
+    public void onReady(ReadyEvent event) {
+
+    }
+
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 
@@ -52,11 +60,6 @@ public class BotListener extends ListenerAdapter {
 
     }
 
-    //does stuff once JDA is loaded
-    @Override
-    public void onReady(ReadyEvent event) {
-
-    }
 
     @Override
     public void onGuildJoin(GuildJoinEvent event) {

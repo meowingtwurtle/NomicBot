@@ -1,6 +1,6 @@
 package com.srgood.dbot.commands;
 
-import com.srgood.dbot.BotMain;
+import com.srgood.app.BotMain;
 import com.srgood.dbot.utils.Permissions;
 import com.srgood.dbot.utils.XMLHandler;
 import net.dv8tion.jda.entities.Guild;
@@ -28,7 +28,7 @@ public class CommandHelp implements Command {
 
         for (String i : v) {
             String output = i.substring(0, 1).toUpperCase() + i.substring(1);
-            z.append("**").append(output).append(":** ").append("  `").append(com.srgood.dbot.BotMain.commands.get(i).help()).append("`").append("\n\n");
+            z.append("**").append(output).append(":** ").append("  `").append(BotMain.commands.get(i).help()).append("`").append("\n\n");
         }
 
 

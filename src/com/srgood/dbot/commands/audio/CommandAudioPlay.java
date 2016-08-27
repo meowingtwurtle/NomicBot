@@ -1,6 +1,6 @@
 package com.srgood.dbot.commands.audio;
 
-import com.srgood.dbot.BotMain;
+import com.srgood.app.BotMain;
 import com.srgood.dbot.MusicPlayer;
 import com.srgood.dbot.Playlist;
 import com.srgood.dbot.source.AudioInfo;
