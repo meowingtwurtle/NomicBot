@@ -55,10 +55,10 @@ public interface PermissionOverride
     int getDeniedRaw();
 
     /**
-     * An unmodifiable list of all {@link net.dv8tion.jda.Permission Permissions} that are specifically allowed by this override.
+     * An unmodifiable list of all {@link net.dv8tion.jda.Permission PermissionLevels} that are specifically allowed by this override.
      *
      * @return
-     *      Possibly-empty unmodifiable list of allowed {@link net.dv8tion.jda.Permission Permissions}.
+     *      Possibly-empty unmodifiable list of allowed {@link net.dv8tion.jda.Permission PermissionLevels}.
      */
     List<Permission> getAllowed();
 
@@ -66,15 +66,15 @@ public interface PermissionOverride
      * An unmodifiable list of all {@link net.dv8tion.jda.Permission Permission} that are unaffected by this override.
      *
      * @return
-     *      Possibly-empty unmodifiable list of unaffected {@link net.dv8tion.jda.Permission Permissions}.
+     *      Possibly-empty unmodifiable list of unaffected {@link net.dv8tion.jda.Permission PermissionLevels}.
      */
     List<Permission> getInherit();
 
     /**
-     * An unmodifiable list of all {@link net.dv8tion.jda.Permission Permissions} that are denied by this override.
+     * An unmodifiable list of all {@link net.dv8tion.jda.Permission PermissionLevels} that are denied by this override.
      *
      * @return
-     *      Possibly-empty unmodifiable list of denied {@link net.dv8tion.jda.Permission Permissions}.
+     *      Possibly-empty unmodifiable list of denied {@link net.dv8tion.jda.Permission PermissionLevels}.
      */
     List<Permission> getDenied();
 

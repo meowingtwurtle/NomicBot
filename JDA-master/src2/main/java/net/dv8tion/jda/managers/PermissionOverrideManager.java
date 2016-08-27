@@ -63,13 +63,13 @@ public class PermissionOverrideManager
     }
 
     /**
-     * Sets this Override to grant given Permissions
+     * Sets this Override to grant given PermissionLevels
      *
      * This change will only be applied, if {@link #update()} is called.
      * So multiple changes can be made at once.
      *
      * @param perms
-     *      The Permissions that should be granted
+     *      The PermissionLevels that should be granted
      * @return
      *      this
      */
@@ -88,13 +88,13 @@ public class PermissionOverrideManager
     }
 
     /**
-     * Sets this Override to deny given Permissions
+     * Sets this Override to deny given PermissionLevels
      *
      * This change will only be applied, if {@link #update()} is called.
      * So multiple changes can be made at once.
      *
      * @param perms
-     *      The Permissions that should be denied
+     *      The PermissionLevels that should be denied
      * @return
      *      this
      */
@@ -113,14 +113,14 @@ public class PermissionOverrideManager
     }
 
     /**
-     * Resets the allow/deny status for one or more {@link net.dv8tion.jda.Permission Permissions}.
-     * This means, that this neither explicitly allows nor denies given Permissions.
+     * Resets the allow/deny status for one or more {@link net.dv8tion.jda.Permission PermissionLevels}.
+     * This means, that this neither explicitly allows nor denies given PermissionLevels.
      *
      * This change will only be applied, if {@link #update()} is called.
      * So multiple changes can be made at once.
      *
      * @param perms
-     *      The Permissions that should be reset
+     *      The PermissionLevels that should be reset
      * @return
      *      this
      */

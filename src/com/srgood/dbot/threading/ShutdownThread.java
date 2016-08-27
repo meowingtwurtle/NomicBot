@@ -1,4 +1,4 @@
-package com.srgood.dbot.utils;
+package com.srgood.dbot.threading;
 
 import com.srgood.dbot.BotMain;
 

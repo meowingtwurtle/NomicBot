@@ -1,8 +1,6 @@
 package com.srgood.dbot.commands;
 
 import com.srgood.dbot.BotMain;
-import com.srgood.dbot.utils.Permissions;
-import com.srgood.dbot.utils.XMLHandler;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
@@ -36,16 +34,16 @@ public class CommandPing implements Command {
     }
 
     @Override
-    public Permissions permissionLevel(Guild guild) {
+    public com.srgood.dbot.PermissionLevels permissionLevel(Guild guild) {
 
-        return XMLHandler.getCommandPermissionXML(guild, this);
+        return com.srgood.dbot.utils.XMLUtils.getCommandPermissionXML(guild, this);
 
 
     }
 
     @Override
-    public Permissions defaultPermissionLevel() {
-        return Permissions.STANDARD;
+    public com.srgood.dbot.PermissionLevels defaultPermissionLevel() {
+        return com.srgood.dbot.PermissionLevels.STANDARD;
     }
 
 }

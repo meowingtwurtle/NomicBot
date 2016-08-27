@@ -1,7 +1,6 @@
 package com.srgood.dbot.utils;
 
 import com.srgood.dbot.BotMain;
-import com.srgood.dbot.BotListener;
 import com.srgood.dbot.commands.Command;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.entities.Role;
@@ -13,7 +12,7 @@ import java.io.File;
 import java.util.*;
 import java.util.function.Function;
 
-public class XMLHandler {
+public class XMLUtils {
     private static final Map<String, Element> servers = new HashMap<>();
 
     private static Element getServerNode(Guild guild) {
@@ -92,7 +91,7 @@ public class XMLHandler {
 
         Element defaultElement = getFirstSubElement(BotMain.PInputFile.getDocumentElement(), "default");
 
-        XMLHandler.nodeListToList(defaultElement.getChildNodes()).stream().filter(n -> n instanceof org.w3c.dom.Element).forEach(n -> {
+        XMLUtils.nodeListToList(defaultElement.getChildNodes()).stream().filter(n -> n instanceof org.w3c.dom.Element).forEach(n -> {
             org.w3c.dom.Element elem = (org.w3c.dom.Element) n;
             server.appendChild(elem.cloneNode(true));
         });
@@ -194,7 +193,7 @@ public class XMLHandler {
         if (BotMain.commands.values().contains(command)) {
             Element commandsElement = getCommandsElement(guild);
 
-            List<Node> commandList = XMLHandler.nodeListToList(commandsElement.getElementsByTagName("command"));
+            List<Node> commandList = XMLUtils.nodeListToList(commandsElement.getElementsByTagName("command"));
 
             for (Node n : commandList) {
                 Element elem = (Element) n;
@@ -273,7 +272,7 @@ public class XMLHandler {
     public static String getGuildPrefix(Guild guild) {
         if (!servers.containsKey(guild.getId())) {
             SimpleLog.getLog("Reasons").info("initializing Guild from message");
-            com.srgood.dbot.utils.GuildUtil.initGuild(guild);
+            com.srgood.dbot.utils.GuildUtils.initGuild(guild);
         }
         return getGuildPrefixNode(guild).getTextContent();
     }
@@ -286,7 +285,7 @@ public class XMLHandler {
         return getFirstSubElement(getServerNode(guild), "prefix");
     }
 
-    public static void initCommandIfNotExists(CommandParser.CommandContainer cmd) {
+    public static void initCommandIfNotExists(com.srgood.dbot.commands.CommandParser.CommandContainer cmd) {
         Element serverElement = getServerNode(cmd.event.getGuild());
         Element commandsElement;
         {
@@ -336,7 +335,7 @@ public class XMLHandler {
         }
     }
 
-    public static Permissions getCommandPermissionXML(Guild guild, Command command) {
+    public static com.srgood.dbot.PermissionLevels getCommandPermissionXML(Guild guild, Command command) {
 
 
         String commandName = BotMain.getNameFromCommand(command);
@@ -349,7 +348,7 @@ public class XMLHandler {
             for (Node n : commandList) {
                 Element elem = (Element) n;
                 if (elem.getAttribute("name").equals(commandName)) {
-                    return PermissionOps.intToEnum(Integer.parseInt(getFirstSubElement(elem, "permLevel").getTextContent()));
+                    return PermissionUtils.intToEnum(Integer.parseInt(getFirstSubElement(elem, "permLevel").getTextContent()));
                 }
             }
         }
@@ -357,8 +356,8 @@ public class XMLHandler {
         return null;
     }
 
-    public static Permissions roleToPermission(Role role, Guild guild) {
-        Permissions permission = null;
+    public static com.srgood.dbot.PermissionLevels roleToPermission(Role role, Guild guild) {
+        com.srgood.dbot.PermissionLevels permission = null;
 
         if (role == null) {
             return null;
@@ -385,8 +384,8 @@ public class XMLHandler {
                 continue;
             }
 
-            for (Permissions permLevel : Permissions.values()) {
-                if (permLevel.getLevel() >= (permission == null ? Permissions.STANDARD : permission).getLevel() && permLevel.getXMLName().equals(roleXMLName)) {
+            for (com.srgood.dbot.PermissionLevels permLevel : com.srgood.dbot.PermissionLevels.values()) {
+                if (permLevel.getLevel() >= (permission == null ? com.srgood.dbot.PermissionLevels.STANDARD : permission).getLevel() && permLevel.getXMLName().equals(roleXMLName)) {
                     permission = permLevel;
                 }
             }
@@ -395,8 +394,8 @@ public class XMLHandler {
         return permission;
     }
 
-    public static boolean guildHasRoleForPermission(Guild guild, Permissions roleLevel) {
-        Element serverElement = com.srgood.dbot.utils.XMLHandler.getServerNode(guild);
+    public static boolean guildHasRoleForPermission(Guild guild, com.srgood.dbot.PermissionLevels roleLevel) {
+        Element serverElement = com.srgood.dbot.utils.XMLUtils.getServerNode(guild);
 
         Element rolesElement = (Element) serverElement.getElementsByTagName("roles");
 
@@ -411,7 +410,7 @@ public class XMLHandler {
         return false;
     }
 
-    public static void registerRole(Guild guild, Role role, Permissions roleLevel) {
+    public static void registerRole(Guild guild, Role role, com.srgood.dbot.PermissionLevels roleLevel) {
         Element elementRoles = getFirstSubElement(getServerNode(guild), "roles");
 
         Element elementRole = BotMain.PInputFile.createElement("role");

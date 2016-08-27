@@ -1,7 +1,7 @@
 package com.srgood.dbot.hooks;
 
 
-import com.srgood.dbot.hooks.events.PlayerEvent;
+import com.srgood.dbot.audio.events.PlayerEvent;
 
 import java.util.LinkedList;
 import java.util.List;

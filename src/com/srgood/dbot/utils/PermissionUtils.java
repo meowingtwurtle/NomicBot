@@ -8,28 +8,28 @@ import net.dv8tion.jda.managers.RoleManager;
 
 import java.util.Collection;
 
-public class PermissionOps {
+public class PermissionUtils {
 
-    public static Collection<Permissions> getPermissions(Guild guild, User user) {
+    public static Collection<com.srgood.dbot.PermissionLevels> getPermissions(Guild guild, User user) {
         return rolesToPermissions(guild, guild.getRolesForUser(user));
     }
 
-    public static Permissions userPermissionLevel(Guild guild, User user) {
+    public static com.srgood.dbot.PermissionLevels userPermissionLevel(Guild guild, User user) {
         if (Reference.Other.BOT_DEVELOPERS.contains(user.getId())) {
-            return Permissions.DEVELOPER;
+            return com.srgood.dbot.PermissionLevels.DEVELOPER;
         } else {
             return getHighestPermission(guild, getPermissions(guild, user));
         }
     }
 
 
-    public static Permissions getHighestPermission(Guild guild, Collection<com.srgood.dbot.utils.Permissions> Roles) {
+    public static com.srgood.dbot.PermissionLevels getHighestPermission(Guild guild, Collection<com.srgood.dbot.PermissionLevels> Roles) {
 
-        Permissions maxFound = Permissions.STANDARD;
+        com.srgood.dbot.PermissionLevels maxFound = com.srgood.dbot.PermissionLevels.STANDARD;
 
-        for (Permissions permLevel : Permissions.values()) {
+        for (com.srgood.dbot.PermissionLevels permLevel : com.srgood.dbot.PermissionLevels.values()) {
             if ((permLevel.getLevel() > maxFound.getLevel())) {
-                if (containsAny(rolesToPermissions(guild, XMLHandler.getGuildRolesFromInternalName(permLevel.getXMLName(), guild)), Roles)) {
+                if (containsAny(rolesToPermissions(guild, XMLUtils.getGuildRolesFromInternalName(permLevel.getXMLName(), guild)), Roles)) {
                     maxFound = permLevel;
                     break;
                 }
@@ -38,8 +38,8 @@ public class PermissionOps {
         return maxFound;
     }
 
-    private static Collection<Permissions> rolesToPermissions(Guild guild, Collection<? extends net.dv8tion.jda.entities.Role> roles) {
-        return roles.stream().map(role -> XMLHandler.roleToPermission(role, guild)).collect(java.util.stream.Collectors.toList());
+    private static Collection<com.srgood.dbot.PermissionLevels> rolesToPermissions(Guild guild, Collection<? extends net.dv8tion.jda.entities.Role> roles) {
+        return roles.stream().map(role -> XMLUtils.roleToPermission(role, guild)).collect(java.util.stream.Collectors.toList());
     }
 
     private static boolean containsAny(Collection<?> container, Collection<?> checkFor) {
@@ -51,8 +51,8 @@ public class PermissionOps {
         return false;
     }
 
-    public static Permissions intToEnum(int level) {
-        for (Permissions p : Permissions.values()) {
+    public static com.srgood.dbot.PermissionLevels intToEnum(int level) {
+        for (com.srgood.dbot.PermissionLevels p : com.srgood.dbot.PermissionLevels.values()) {
             if (p.level == level) {
                 return p;
             }
@@ -60,7 +60,7 @@ public class PermissionOps {
         return null;
     }
 
-    public static Role createRole(Permissions roleLevel, Guild guild, boolean addToXML) {
+    public static Role createRole(com.srgood.dbot.PermissionLevels roleLevel, Guild guild, boolean addToXML) {
         if (!roleLevel.isVisible()) return null;
 
         RoleManager roleMgr = guild.createRole();
@@ -72,7 +72,7 @@ public class PermissionOps {
         Role role = roleMgr.getRole();
 
         if (addToXML) {
-            XMLHandler.registerRole(guild, role, roleLevel);
+            XMLUtils.registerRole(guild, role, roleLevel);
         }
 
 

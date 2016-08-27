@@ -1,10 +1,6 @@
 package com.srgood.dbot.commands;
 
 import com.srgood.dbot.BotMain;
-
-import com.srgood.dbot.utils.GuildUtil;
-import com.srgood.dbot.utils.Permissions;
-import com.srgood.dbot.utils.XMLHandler;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
@@ -28,13 +24,13 @@ public class CommandDebug implements Command {
         if (args.length > 0) {
             switch (args[0].toLowerCase()) {
                 case "flushandinitguild":
-                    XMLHandler.deleteGuild(event.getGuild());
-                    GuildUtil.initGuild(event.getGuild());
+                    com.srgood.dbot.utils.XMLUtils.deleteGuild(event.getGuild());
+                    com.srgood.dbot.utils.GuildUtils.initGuild(event.getGuild());
                     event.getChannel().sendMessage("Done");
                     break;
 
                 case "verifyxml":
-                    event.getChannel().sendMessage("" + XMLHandler.verifyXML());
+                    event.getChannel().sendMessage("" + com.srgood.dbot.utils.XMLUtils.verifyXML());
                     break;
 
                 case "getuptime":
@@ -49,7 +45,7 @@ public class CommandDebug implements Command {
                     break;
             }
         } else {
-            event.getChannel().sendMessage("Author Name: " + event.getAuthor().getUsername() + "\n" + "Author Nick: " + event.getAuthorNick() + "\n" + "id: " + event.getAuthor().getId() + "\n" + event.getAuthor().getAsMention() + "\n" + "Picture url: " + event.getAuthor().getAvatarUrl() + "\n" + "BotMain.jda.getSelfInfo().getAsMention().length()" + BotMain.jda.getSelfInfo().getAsMention().length() + "\n" + "BotMain.jda.getSelfInfo().getAsMention()" + BotMain.jda.getSelfInfo().getAsMention() + "\n" + "XMLHandler.verifyXML() = " + XMLHandler.verifyXML());
+            event.getChannel().sendMessage("Author Name: " + event.getAuthor().getUsername() + "\n" + "Author Nick: " + event.getAuthorNick() + "\n" + "id: " + event.getAuthor().getId() + "\n" + event.getAuthor().getAsMention() + "\n" + "Picture url: " + event.getAuthor().getAvatarUrl() + "\n" + "BotMain.jda.getSelfInfo().getAsMention().length()" + BotMain.jda.getSelfInfo().getAsMention().length() + "\n" + "BotMain.jda.getSelfInfo().getAsMention()" + BotMain.jda.getSelfInfo().getAsMention() + "\n" + "XMLUtils.verifyXML() = " + com.srgood.dbot.utils.XMLUtils.verifyXML());
         }
 
     }
@@ -66,15 +62,15 @@ public class CommandDebug implements Command {
     }
 
     @Override
-    public Permissions permissionLevel(Guild guild) {
+    public com.srgood.dbot.PermissionLevels permissionLevel(Guild guild) {
         // TODO Auto-generated method stub
-        return XMLHandler.getCommandPermissionXML(guild, this);
+        return com.srgood.dbot.utils.XMLUtils.getCommandPermissionXML(guild, this);
     }
 
     @Override
-    public Permissions defaultPermissionLevel() {
+    public com.srgood.dbot.PermissionLevels defaultPermissionLevel() {
         // TODO Auto-generated method stub
-        return Permissions.STANDARD;
+        return com.srgood.dbot.PermissionLevels.STANDARD;
     }
 
 }

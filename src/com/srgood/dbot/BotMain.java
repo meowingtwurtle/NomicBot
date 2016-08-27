@@ -1,9 +1,7 @@
 package com.srgood.dbot;
 
 import com.srgood.dbot.commands.Command;
-import com.srgood.dbot.utils.CommandParser;
-import com.srgood.dbot.utils.PermissionOps;
-import com.srgood.dbot.utils.XMLHandler;
+import com.srgood.dbot.commands.CommandParser;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -28,7 +26,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.awt.*;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.time.Instant;
@@ -87,7 +85,7 @@ public class BotMain extends Application {
 
         try {
             //create a JDA with one Event listener
-            jda = new JDABuilder().addListener(new BotListener()).setBotToken(com.srgood.dbot.Reference.Strings.BOT_TOKEN_REASONS).buildBlocking();
+            jda = new JDABuilder().addListener(new com.srgood.dbot.audio.BotListener()).setBotToken(com.srgood.dbot.Reference.Strings.BOT_TOKEN_REASONS).buildBlocking();
             jda.setAutoReconnect(true);
             jda.getAccountManager().setGame("type '@Reasons help'");
         } catch (LoginException e) {
@@ -99,7 +97,7 @@ public class BotMain extends Application {
 
         //load global parameters
         try {
-            XMLHandler.initStorage();
+            com.srgood.dbot.utils.XMLUtils.initStorage();
         } catch (Exception e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
@@ -277,7 +275,7 @@ public class BotMain extends Application {
                 }
             }
             //checks if the message is written by a bot, or mentions this bot, and, if it is, puts it in the /bot/ directory also
-            if (event.getAuthor().isBot() | event.getMessage().getContent().startsWith(XMLHandler.getGuildPrefix(event.getGuild())) | mentioned) {
+            if (event.getAuthor().isBot() | event.getMessage().getContent().startsWith(com.srgood.dbot.utils.XMLUtils.getGuildPrefix(event.getGuild())) | mentioned) {
                 FileOutputStream botFileStream = new FileOutputStream(truePath.replace("/all/", "/bot/") + event.getMessage().getId() + ".ser");
                 ObjectOutputStream botObjectStream = new ObjectOutputStream(botFileStream);
                 botObjectStream.writeObject(event.getMessage().getContent());
@@ -308,11 +306,11 @@ public class BotMain extends Application {
     public static void handleCommand(CommandParser.CommandContainer cmd) {
         // checks if the referenced command is in the command list
         if (commands.containsKey(cmd.invoke)) {
-            XMLHandler.initCommandIfNotExists(cmd);
+            com.srgood.dbot.utils.XMLUtils.initCommandIfNotExists(cmd);
             //if the command is enabled for the message's guild...
-            if (XMLHandler.commandIsEnabled(cmd.event.getGuild(), commands.get(cmd.invoke))) {
+            if (com.srgood.dbot.utils.XMLUtils.commandIsEnabled(cmd.event.getGuild(), commands.get(cmd.invoke))) {
                 //if the message author has the required permission level...
-                if (PermissionOps.userPermissionLevel(cmd.event.getGuild(), cmd.event.getAuthor())
+                if (com.srgood.dbot.utils.PermissionUtils.userPermissionLevel(cmd.event.getGuild(), cmd.event.getAuthor())
                         .getLevel() >= commands.get(cmd.invoke).permissionLevel(cmd.event.getGuild()).getLevel()) {
                     boolean safe = commands.get(cmd.invoke).called(cmd.args, cmd.event);
                     //if the commands get method returns true (see command.class)...

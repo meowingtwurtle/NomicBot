@@ -1,4 +1,4 @@
-package com.srgood.dbot;
+package com.srgood.dbot.audio;
 
 import com.srgood.dbot.source.AudioSource;
 import com.srgood.dbot.source.RemoteSource;

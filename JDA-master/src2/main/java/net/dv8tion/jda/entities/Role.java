@@ -106,7 +106,7 @@ public interface Role extends Comparable<Role>
     int getPermissionsRaw();
 
     /**
-     * A list of the literal {@link net.dv8tion.jda.Permission Permissions} that this {@link net.dv8tion.jda.entities.Role Role} has.<br>
+     * A list of the literal {@link net.dv8tion.jda.Permission PermissionLevels} that this {@link net.dv8tion.jda.entities.Role Role} has.<br>
      * <b>NOTE:</b> these do not necessarily represent the permissions this role will have in a {@link net.dv8tion.jda.entities.Channel Channel}.
      *
      * @return

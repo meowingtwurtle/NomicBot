@@ -1,6 +1,6 @@
 package com.srgood.dbot.commands.audio;
 
-import com.srgood.dbot.MusicPlayer;
+import com.srgood.dbot.audio.MusicPlayer;
 import com.srgood.dbot.commands.Command;
 import net.dv8tion.jda.managers.AudioManager;
 

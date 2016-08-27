@@ -1,8 +1,6 @@
 package com.srgood.dbot.commands;
 
 import com.srgood.dbot.BotMain;
-import com.srgood.dbot.utils.Permissions;
-import com.srgood.dbot.utils.XMLHandler;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
@@ -20,7 +18,7 @@ public class CommandToggle implements Command {
         // TODO Auto-generated method stub
         Command mCommand = BotMain.getCommandByName(args[0]);
         if (args.length > 0) {
-            XMLHandler.setCommandIsEnabled(event.getGuild(), mCommand, !XMLHandler.commandIsEnabled(event.getGuild(), mCommand));
+            com.srgood.dbot.utils.XMLUtils.setCommandIsEnabled(event.getGuild(), mCommand, !com.srgood.dbot.utils.XMLUtils.commandIsEnabled(event.getGuild(), mCommand));
         } else {
             event.getChannel().sendMessage("Please specify a command to toggle");
         }
@@ -39,15 +37,15 @@ public class CommandToggle implements Command {
     }
 
     @Override
-    public Permissions permissionLevel(Guild guild) {
+    public com.srgood.dbot.PermissionLevels permissionLevel(Guild guild) {
         // TODO Auto-generated method stub
-        return XMLHandler.getCommandPermissionXML(guild, this);
+        return com.srgood.dbot.utils.XMLUtils.getCommandPermissionXML(guild, this);
     }
 
     @Override
-    public Permissions defaultPermissionLevel() {
+    public com.srgood.dbot.PermissionLevels defaultPermissionLevel() {
         // TODO Auto-generated method stub
-        return Permissions.ADMINISTRATOR;
+        return com.srgood.dbot.PermissionLevels.ADMINISTRATOR;
     }
 
 }

@@ -1,8 +1,6 @@
 package com.srgood.dbot.commands.audio;
 
 import com.srgood.dbot.BotMain;
-import com.srgood.dbot.utils.Permissions;
-import com.srgood.dbot.utils.XMLHandler;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.entities.VoiceChannel;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
@@ -70,15 +68,15 @@ public class CommandAudioJoin implements AudioCommand {
     }
 
     @Override
-    public Permissions permissionLevel(Guild guild) {
+    public com.srgood.dbot.PermissionLevels permissionLevel(Guild guild) {
         // TODO Auto-generated method stub
-        return XMLHandler.getCommandPermissionXML(guild, this);
+        return com.srgood.dbot.utils.XMLUtils.getCommandPermissionXML(guild, this);
     }
 
     @Override
-    public Permissions defaultPermissionLevel() {
+    public com.srgood.dbot.PermissionLevels defaultPermissionLevel() {
         // TODO Auto-generated method stub
-        return Permissions.STANDARD;
+        return com.srgood.dbot.PermissionLevels.STANDARD;
     }
 
 }

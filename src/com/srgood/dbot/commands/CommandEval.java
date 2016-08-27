@@ -2,8 +2,6 @@ package com.srgood.dbot.commands;
 
 import com.meowingtwurtle.math.api.IMathGroup;
 import com.meowingtwurtle.math.api.IMathHandler;
-import com.srgood.dbot.utils.Permissions;
-import com.srgood.dbot.utils.XMLHandler;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
@@ -59,14 +57,14 @@ public class CommandEval implements Command {
     }
 
     @Override
-    public Permissions permissionLevel(Guild guild) {
+    public com.srgood.dbot.PermissionLevels permissionLevel(Guild guild) {
         // TODO Auto-generated method stub
-        return XMLHandler.getCommandPermissionXML(guild, this);
+        return com.srgood.dbot.utils.XMLUtils.getCommandPermissionXML(guild, this);
     }
 
     @Override
-    public Permissions defaultPermissionLevel() {
-        return Permissions.STANDARD;
+    public com.srgood.dbot.PermissionLevels defaultPermissionLevel() {
+        return com.srgood.dbot.PermissionLevels.STANDARD;
     }
 
 }

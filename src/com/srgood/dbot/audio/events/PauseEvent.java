@@ -1,6 +1,6 @@
-package com.srgood.dbot.hooks.events;
+package com.srgood.dbot.audio.events;
 
-import com.srgood.dbot.MusicPlayer;
+import com.srgood.dbot.audio.MusicPlayer;
 
 public class PauseEvent extends PlayerEvent {
     public PauseEvent(MusicPlayer player) {

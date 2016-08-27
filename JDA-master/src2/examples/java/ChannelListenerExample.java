@@ -15,8 +15,6 @@
  */
 
 import net.dv8tion.jda.JDABuilder;
-import net.dv8tion.jda.events.channel.text.*;
-import net.dv8tion.jda.events.channel.voice.*;
 import net.dv8tion.jda.hooks.ListenerAdapter;
 
 import javax.security.auth.login.LoginException;
@@ -83,7 +81,7 @@ public class ChannelListenerExample extends ListenerAdapter
     @Override
     public void onTextChannelUpdatePermissions(TextChannelUpdatePermissionsEvent event)
     {
-        System.out.println("TextChannel Permissions changed. There are a lot of details in this event and I'm too lazy to show them all. Just read the Javadoc ;_;");
+        System.out.println("TextChannel PermissionLevels changed. There are a lot of details in this event and I'm too lazy to show them all. Just read the Javadoc ;_;");
     }
 
     // ------------------------------
@@ -119,6 +117,6 @@ public class ChannelListenerExample extends ListenerAdapter
     @Override
     public void onVoiceChannelUpdatePermissions(VoiceChannelUpdatePermissionsEvent event)
     {
-        System.out.println("VoiceChannel Permissions changed. There are a lot of details in this event and I'm too lazy to show them all. Just read the Javadoc ;_;");
+        System.out.println("VoiceChannel PermissionLevels changed. There are a lot of details in this event and I'm too lazy to show them all. Just read the Javadoc ;_;");
     }
 }

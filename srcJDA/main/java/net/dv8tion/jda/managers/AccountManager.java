@@ -128,7 +128,7 @@ public class AccountManager
     /**
      * Changes this user's nickname in given guild.
      * The nickname is visible to all users of the guild.
-     * This requires the correct Permissions to perform
+     * This requires the correct PermissionLevels to perform
      * (either {@link net.dv8tion.jda.Permission#NICKNAME_MANAGE NICKNAME_MANAGE} or
      * {@link net.dv8tion.jda.Permission#NICKNAME_CHANGE NICKNAME_CHANGE}).
      *

@@ -17,7 +17,6 @@ package net.dv8tion.jda.managers;
 
 import net.dv8tion.jda.Permission;
 import net.dv8tion.jda.Region;
-import net.dv8tion.jda.entities.*;
 import net.dv8tion.jda.entities.impl.JDAImpl;
 import net.dv8tion.jda.entities.impl.UserImpl;
 import net.dv8tion.jda.exceptions.GuildUnavailableException;
@@ -28,8 +27,6 @@ import net.dv8tion.jda.utils.PermissionUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.util.*;
 
 /**
  * Manager used to modify aspects of a {@link net.dv8tion.jda.entities.Guild Guild}.
@@ -492,7 +489,7 @@ public class GuildManager
     /**
      * Changes a user's nickname in this guild.
      * The nickname is visible to all users of this guild.
-     * This requires the correct Permissions to perform
+     * This requires the correct PermissionLevels to perform
      * ({@link net.dv8tion.jda.Permission#NICKNAME_MANAGE NICKNAME_MANAGE} for others+self and
      * {@link net.dv8tion.jda.Permission#NICKNAME_CHANGE NICKNAME_CHANGE} for only self).
      *

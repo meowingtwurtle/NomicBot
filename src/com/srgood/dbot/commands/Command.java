@@ -1,7 +1,6 @@
 package com.srgood.dbot.commands;
 
 
-import com.srgood.dbot.utils.Permissions;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
@@ -19,8 +18,8 @@ public interface Command {
     void executed(boolean success, GuildMessageReceivedEvent event);
 
     //required permission
-    Permissions permissionLevel(Guild guild);
+    com.srgood.dbot.PermissionLevels permissionLevel(Guild guild);
 
     //used for XML
-    Permissions defaultPermissionLevel();
+    com.srgood.dbot.PermissionLevels defaultPermissionLevel();
 }

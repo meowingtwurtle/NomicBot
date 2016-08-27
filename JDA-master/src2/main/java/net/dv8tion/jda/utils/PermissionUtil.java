@@ -16,7 +16,6 @@
 package net.dv8tion.jda.utils;
 
 import net.dv8tion.jda.Permission;
-import net.dv8tion.jda.entities.*;
 import net.dv8tion.jda.entities.impl.GuildImpl;
 import net.dv8tion.jda.entities.impl.PermissionOverrideImpl;
 import net.dv8tion.jda.entities.impl.TextChannelImpl;
@@ -176,7 +175,7 @@ public class PermissionUtil
      * Gets the <code>int</code> representation of the effective permissions allowed for this {@link net.dv8tion.jda.entities.User User}
      * in this {@link net.dv8tion.jda.entities.Channel Channel}. This can be used in conjunction with
      * {@link net.dv8tion.jda.Permission#getPermissions(int) Permission.getPermissions(int)} to easily get a list of all
-     * {@link net.dv8tion.jda.Permission Permissions} that this user can use in this {@link net.dv8tion.jda.entities.Channel Channel}.<br>
+     * {@link net.dv8tion.jda.Permission PermissionLevels} that this user can use in this {@link net.dv8tion.jda.entities.Channel Channel}.<br>
      * This functions very similarly to how {@link net.dv8tion.jda.entities.Role#getPermissionsRaw() Role.getPermissionsRaw()}.
      *
      * @param user
@@ -204,7 +203,7 @@ public class PermissionUtil
      * Gets the <code>int</code> representation of the effective permissions allowed for this {@link net.dv8tion.jda.entities.User User}
      * in this {@link net.dv8tion.jda.entities.Guild Guild}. This can be used in conjunction with
      * {@link net.dv8tion.jda.Permission#getPermissions(int) Permission.getPermissions(int)} to easily get a list of all
-     * {@link net.dv8tion.jda.Permission Permissions} that this user has in this {@link net.dv8tion.jda.entities.Guild Guild}.
+     * {@link net.dv8tion.jda.Permission PermissionLevels} that this user has in this {@link net.dv8tion.jda.entities.Guild Guild}.
      *
      * This only returns the Guild-level permissions!
      *

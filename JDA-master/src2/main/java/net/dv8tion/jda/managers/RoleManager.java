@@ -25,7 +25,6 @@ import net.dv8tion.jda.utils.PermissionUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -267,12 +266,12 @@ public class RoleManager
     }
 
     /**
-     * Gives this Role one or more {@link net.dv8tion.jda.Permission Permissions}.
+     * Gives this Role one or more {@link net.dv8tion.jda.Permission PermissionLevels}.
      * This change will only be applied, if {@link #update()} is called.
      * So multiple changes can be made at once.
      *
      * @param perms
-     *      the Permissions to give this Role
+     *      the PermissionLevels to give this Role
      * @return
      *      this
      */
@@ -294,12 +293,12 @@ public class RoleManager
     }
 
     /**
-     * Removes one or more {@link net.dv8tion.jda.Permission Permissions} from this Role.
+     * Removes one or more {@link net.dv8tion.jda.Permission PermissionLevels} from this Role.
      * This change will only be applied, if {@link #update()} is called.
      * So multiple changes can be made at once.
      *
      * @param perms
-     *      the Permissions to remove from this Role
+     *      the PermissionLevels to remove from this Role
      * @return
      *      this
      */

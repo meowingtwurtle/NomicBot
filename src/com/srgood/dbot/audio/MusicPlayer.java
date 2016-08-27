@@ -1,8 +1,7 @@
-package com.srgood.dbot;
+package com.srgood.dbot.audio;
 
 import com.srgood.dbot.hooks.PlayerEventListener;
 import com.srgood.dbot.hooks.PlayerEventManager;
-import com.srgood.dbot.hooks.events.*;
 import com.srgood.dbot.source.AudioSource;
 import com.srgood.dbot.source.AudioStream;
 import com.srgood.dbot.source.AudioTimestamp;
@@ -73,8 +72,8 @@ public class MusicPlayer implements AudioSendHandler {
         AudioSource skipped = currentAudioSource;
         playNext(false);
 
-        eventManager.handle(new SkipEvent(this, skipped));
-        if (state == State.STOPPED) eventManager.handle(new FinishEvent(this));
+        eventManager.handle(new com.srgood.dbot.audio.events.SkipEvent(this, skipped));
+        if (state == State.STOPPED) eventManager.handle(new com.srgood.dbot.audio.events.FinishEvent(this));
     }
 
     public LinkedList<AudioSource> getAudioQueue() {
@@ -104,7 +103,7 @@ public class MusicPlayer implements AudioSendHandler {
         if (state == State.STOPPED) throw new IllegalStateException("Cannot pause a stopped player!");
 
         state = State.PAUSED;
-        eventManager.handle(new PauseEvent(this));
+        eventManager.handle(new com.srgood.dbot.audio.events.PauseEvent(this));
     }
 
     public void stop() {
@@ -178,7 +177,7 @@ public class MusicPlayer implements AudioSendHandler {
         loadFromSource(audioQueue.removeFirst());
         state = State.PLAYING;
 
-        if (fireEvent) eventManager.handle(new PlayEvent(this));
+        if (fireEvent) eventManager.handle(new com.srgood.dbot.audio.events.PlayEvent(this));
     }
 
     private void stop0(boolean fireEvent) {
@@ -195,7 +194,7 @@ public class MusicPlayer implements AudioSendHandler {
             currentAudioStream = null;
         }
 
-        if (fireEvent) eventManager.handle(new StopEvent(this));
+        if (fireEvent) eventManager.handle(new com.srgood.dbot.audio.events.StopEvent(this));
     }
 
     private void reload0(boolean autoPlay, boolean fireEvent) {
@@ -206,13 +205,13 @@ public class MusicPlayer implements AudioSendHandler {
         loadFromSource(previousAudioSource);
 
         if (autoPlay) play0(false);
-        if (fireEvent) eventManager.handle(new ReloadEvent(this));
+        if (fireEvent) eventManager.handle(new com.srgood.dbot.audio.events.ReloadEvent(this));
     }
 
     private void playNext(boolean fireEvent) {
         stop0(false);
         if (audioQueue.isEmpty()) {
-            if (fireEvent) eventManager.handle(new FinishEvent(this));
+            if (fireEvent) eventManager.handle(new com.srgood.dbot.audio.events.FinishEvent(this));
             return;
         }
 
@@ -224,7 +223,7 @@ public class MusicPlayer implements AudioSendHandler {
         loadFromSource(source);
 
         play0(false);
-        if (fireEvent) eventManager.handle(new NextEvent(this));
+        if (fireEvent) eventManager.handle(new com.srgood.dbot.audio.events.NextEvent(this));
     }
 
     private static final boolean AUTO_CONTINUE = true;
@@ -233,7 +232,7 @@ public class MusicPlayer implements AudioSendHandler {
         if (AUTO_CONTINUE) {
             if (repeat) {
                 reload0(true, false);
-                eventManager.handle(new RepeatEvent(this));
+                eventManager.handle(new com.srgood.dbot.audio.events.RepeatEvent(this));
             } else {
                 playNext(true);
             }

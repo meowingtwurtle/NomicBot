@@ -117,7 +117,7 @@ public enum Permission
     }
 
     /**
-     * A list of all {@link net.dv8tion.jda.Permission Permissions} that are specified by this raw int representation of
+     * A list of all {@link net.dv8tion.jda.Permission PermissionLevels} that are specified by this raw int representation of
      * permissions. The is best used with the getRaw methods in {@link net.dv8tion.jda.entities.Role Role},
      * {@link net.dv8tion.jda.entities.PermissionOverride PermissionOverride} or {@link net.dv8tion.jda.utils.PermissionUtil}.
      * <p>
@@ -129,7 +129,7 @@ public enum Permission
      * @param permissions
      *          The raw <code>int</code> representation of permissions.
      * @return
-     *      Possibly-empty list of {@link net.dv8tion.jda.Permission Permissions}.
+     *      Possibly-empty list of {@link net.dv8tion.jda.Permission PermissionLevels}.
      */
     public static List<Permission> getPermissions(int permissions)
     {

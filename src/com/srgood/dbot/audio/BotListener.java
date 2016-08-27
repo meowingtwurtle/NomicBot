@@ -1,6 +1,5 @@
-package com.srgood.dbot;
+package com.srgood.dbot.audio;
 
-import com.srgood.dbot.utils.XMLHandler;
 import net.dv8tion.jda.events.ReadyEvent;
 import net.dv8tion.jda.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
@@ -27,16 +26,16 @@ public class BotListener extends ListenerAdapter {
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 
-        String localPrefix = XMLHandler.getGuildPrefix(event.getGuild());
+        String localPrefix = com.srgood.dbot.utils.XMLUtils.getGuildPrefix(event.getGuild());
 
         if (event.getMessage().getContent().equals(com.srgood.dbot.Reference.Strings.TABLE_FLIP)) {
             event.getChannel().sendMessage(com.srgood.dbot.Reference.Strings.TABLE_UNFLIP_JOKE);
         }
 
-        BotMain.storeMessage(event);
+        com.srgood.dbot.BotMain.storeMessage(event);
 
         if (event.getMessage().getContent().startsWith(localPrefix) && !java.util.Objects.equals(event.getMessage().getAuthor().getId(), event.getJDA().getSelfInfo().getId())) {
-            BotMain.handleCommand(BotMain.parser.parse(event.getMessage().getContent().toLowerCase(), event, localPrefix));
+            com.srgood.dbot.BotMain.handleCommand(com.srgood.dbot.BotMain.parser.parse(event.getMessage().getContent().toLowerCase(), event, localPrefix));
             SimpleLog.getLog("Reasons").info("Got prefixed input: " + event.getMessage().getContent());
         } else {
             try {
@@ -44,7 +43,7 @@ public class BotListener extends ListenerAdapter {
                 if (event.getJDA().getSelfInfo().getAsMention().equals(event.getMessage().getMentionedUsers().get(0).getAsMention())) {
 
                     SimpleLog.getLog("Reasons").info("Got prefixed input (mention): " + event.getMessage().getContent());
-                    BotMain.handleCommand(BotMain.parser.parse(event.getMessage().getContent().toLowerCase(), event, localPrefix));
+                    com.srgood.dbot.BotMain.handleCommand(com.srgood.dbot.BotMain.parser.parse(event.getMessage().getContent().toLowerCase(), event, localPrefix));
                 }
             } catch (Exception ignored) {
 

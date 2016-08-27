@@ -58,7 +58,7 @@ public class ApplicationUtil
      * @param appId
      *      The id of the application that owns the bot
      * @param perms
-     *      Possibly empty list of Permissions that should be requested via invite
+     *      Possibly empty list of PermissionLevels that should be requested via invite
      * @return
      *      The link used to invite the bot
      */
@@ -79,7 +79,7 @@ public class ApplicationUtil
      * @param jda
      *      The JDA instance of a bot-account
      * @param perms
-     *      Possibly empty list of Permissions that should be requested via invite
+     *      Possibly empty list of PermissionLevels that should be requested via invite
      * @return
      *      The link used to invite the bot or null on failure
      */
@@ -489,7 +489,7 @@ public class ApplicationUtil
              * This is a shortcut to {@link ApplicationUtil#getAuthInvite(String, Permission...)}.
              *
              * @param perms
-             *      Possibly empty list of Permissions that should be requested via invite
+             *      Possibly empty list of PermissionLevels that should be requested via invite
              * @return
              *      The oauth link to invite this Bot
              */

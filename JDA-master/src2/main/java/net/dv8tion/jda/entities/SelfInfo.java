@@ -38,7 +38,7 @@ public interface SelfInfo extends User
      * {@link net.dv8tion.jda.utils.ApplicationUtil#getAuthInvite(net.dv8tion.jda.JDA, net.dv8tion.jda.Permission...) ApplicationUtil.getAuthInvite(JDA, Permission...)}
      *
      * @param perms
-     *      Possibly empty list of Permissions that should be requested via invite
+     *      Possibly empty list of PermissionLevels that should be requested via invite
      * @return
      *      The link used to invite the bot
      */
