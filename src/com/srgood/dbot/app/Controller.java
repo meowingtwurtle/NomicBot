@@ -43,7 +43,7 @@ public class Controller implements Initializable {
 
     }
 
-    @javafx.fxml.FXML
+    @FXML
     public void updateConsole() {
         console.setText(com.srgood.dbot.BotMain.out.toString());
     }

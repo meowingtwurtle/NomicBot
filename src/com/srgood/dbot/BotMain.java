@@ -6,6 +6,7 @@ import com.srgood.dbot.utils.CommandParser;
 import com.srgood.dbot.utils.PermissionOps;
 import com.srgood.dbot.utils.XMLHandler;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -17,6 +18,7 @@ import net.dv8tion.jda.utils.SimpleLog;
 import org.reflections.Reflections;
 import org.w3c.dom.Document;
 
+import javax.imageio.ImageIO;
 import javax.security.auth.login.LoginException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -26,6 +28,8 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import java.awt.*;
+import java.awt.event.ActionListener;
 import java.io.*;
 import java.nio.file.Files;
 import java.time.Instant;
@@ -54,6 +58,9 @@ public class BotMain extends Application {
     public static Document PInputFile;
 
     private static com.srgood.dbot.app.Controller controller = null;
+
+    private boolean firstTime;
+    private TrayIcon trayIcon;
 
     @Override public void init() {
         out = new ByteArrayOutputStream();
@@ -134,6 +141,11 @@ public class BotMain extends Application {
 
         primaryStage.setTitle("Reasons Console");
         primaryStage.setScene(new Scene(root));
+
+        addToTray(primaryStage);
+        firstTime = true;
+        Platform.setImplicitExit(false);
+
         primaryStage.show();
     }
 
@@ -147,7 +159,65 @@ public class BotMain extends Application {
     }
 
 
+    public void addToTray(Stage stage) {
+        if (SystemTray.isSupported()) {
+            SystemTray systemTray = SystemTray.getSystemTray();
+            //load image here
+            Image image = null;
+            try {
+                image = ImageIO.read(new File("/test.jpg"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
+            stage.setOnCloseRequest(event -> hide(stage));
+
+            final ActionListener closeListener = e -> {
+                System.exit(0);
+            };
+
+            final ActionListener showListener = e -> Platform.runLater(() -> stage.show());
+
+            PopupMenu popup = new PopupMenu();
+
+            MenuItem showItem = new MenuItem("Show");
+            showItem.addActionListener(showListener);
+            popup.add(showItem);
+
+            MenuItem closeItem = new MenuItem("Close");
+            closeItem.addActionListener(closeListener);
+            popup.add(closeItem);
+
+            trayIcon = new TrayIcon(image,"somthing",popup);
+
+            trayIcon.addActionListener(showListener);
+
+            try {
+                systemTray.add(trayIcon);
+            } catch (AWTException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    public void showPrgmIsMinimizedMsg() {
+        if (firstTime) {
+            trayIcon.displayMessage("line1","line2",TrayIcon.MessageType.INFO);
+            firstTime = false;
+        }
+    }
+
+    private void hide(final Stage stage) {
+        Platform.runLater(() -> {
+            if (SystemTray.isSupported()) {
+                stage.hide();
+                showPrgmIsMinimizedMsg();
+            } else {
+                System.exit(0);
+            }
+        });
+    }
 
 
     //TODO fix the exceptions here
