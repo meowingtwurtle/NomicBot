@@ -48,7 +48,7 @@ public class BotMain extends Application {
     public static PrintStream outPS;
     public static ByteArrayOutputStream out;
 
-    static final CommandParser parser = new CommandParser();
+    public static final CommandParser parser = new CommandParser();
     public static Map<String, Command> commands = new TreeMap<>();
 
     //XML variables
@@ -92,6 +92,7 @@ public class BotMain extends Application {
 
         //catch null pointer exceptions when creating commands
         try {
+            String[] packages = { "com.srgood.dbot", "com.srgood.dbot.audio" };
 
             for (String pack : packages) {
                 Reflections mReflect = new Reflections(pack);
