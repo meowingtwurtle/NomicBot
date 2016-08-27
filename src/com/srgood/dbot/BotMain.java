@@ -1,7 +1,6 @@
 package com.srgood.dbot;
 
 import com.srgood.dbot.commands.Command;
-import com.srgood.dbot.ref.RefStrings;
 import com.srgood.dbot.utils.CommandParser;
 import com.srgood.dbot.utils.PermissionOps;
 import com.srgood.dbot.utils.XMLHandler;
@@ -88,7 +87,7 @@ public class BotMain extends Application {
 
         try {
             //create a JDA with one Event listener
-            jda = new JDABuilder().addListener(new BotListener()).setBotToken(RefStrings.BOT_TOKEN_REASONS).buildBlocking();
+            jda = new JDABuilder().addListener(new BotListener()).setBotToken(com.srgood.dbot.Reference.Strings.BOT_TOKEN_REASONS).buildBlocking();
             jda.setAutoReconnect(true);
             jda.getAccountManager().setGame("type '@Reasons help'");
         } catch (LoginException e) {
@@ -313,7 +312,8 @@ public class BotMain extends Application {
             //if the command is enabled for the message's guild...
             if (XMLHandler.commandIsEnabled(cmd.event.getGuild(), commands.get(cmd.invoke))) {
                 //if the message author has the required permission level...
-                if (PermissionOps.getHighestPermission(PermissionOps.getPermissions(cmd.event.getGuild(), cmd.event.getAuthor()), cmd.event.getGuild()).getLevel() >= commands.get(cmd.invoke).permissionLevel(cmd.event.getGuild()).getLevel()) {
+                if (PermissionOps.userPermissionLevel(cmd.event.getGuild(), cmd.event.getAuthor())
+                        .getLevel() >= commands.get(cmd.invoke).permissionLevel(cmd.event.getGuild()).getLevel()) {
                     boolean safe = commands.get(cmd.invoke).called(cmd.args, cmd.event);
                     //if the commands get method returns true (see command.class)...
                     if (safe) {

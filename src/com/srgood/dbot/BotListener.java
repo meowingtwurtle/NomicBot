@@ -1,6 +1,5 @@
 package com.srgood.dbot;
 
-import com.srgood.dbot.ref.RefStrings;
 import com.srgood.dbot.utils.XMLHandler;
 import net.dv8tion.jda.events.ReadyEvent;
 import net.dv8tion.jda.events.guild.GuildJoinEvent;
@@ -30,8 +29,8 @@ public class BotListener extends ListenerAdapter {
 
         String localPrefix = XMLHandler.getGuildPrefix(event.getGuild());
 
-        if (event.getMessage().getContent().equals(RefStrings.TABLE_FLIP)) {
-            event.getChannel().sendMessage(RefStrings.TABLE_UNFLIP_JOKE);
+        if (event.getMessage().getContent().equals(com.srgood.dbot.Reference.Strings.TABLE_FLIP)) {
+            event.getChannel().sendMessage(com.srgood.dbot.Reference.Strings.TABLE_UNFLIP_JOKE);
         }
 
         BotMain.storeMessage(event);

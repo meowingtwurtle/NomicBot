@@ -1,6 +1,5 @@
 package com.srgood.dbot.commands;
 
-import com.srgood.dbot.ref.RefStrings;
 import com.srgood.dbot.utils.Permissions;
 import com.srgood.dbot.utils.XMLHandler;
 import net.dv8tion.jda.entities.Guild;
@@ -24,7 +23,7 @@ public class CommandVersion implements Command {
                 //TODO add an XML field for past and current Release notes. I.E. <notes ver= 0.1.2>Added Version command</Notes>
             }
         } else {
-            event.getChannel().sendMessage("The current version is: " + RefStrings.VERSION);
+            event.getChannel().sendMessage("The current version is: " + com.srgood.dbot.Reference.Strings.VERSION);
         }
     }
 

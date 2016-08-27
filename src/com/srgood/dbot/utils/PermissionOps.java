@@ -1,5 +1,6 @@
 package com.srgood.dbot.utils;
 
+import com.srgood.dbot.Reference;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.entities.Role;
 import net.dv8tion.jda.entities.User;
@@ -10,17 +11,25 @@ import java.util.Collection;
 public class PermissionOps {
 
     public static Collection<Permissions> getPermissions(Guild guild, User user) {
-        return rolesToPermissions(guild.getRolesForUser(user), guild);
+        return rolesToPermissions(guild, guild.getRolesForUser(user));
+    }
+
+    public static Permissions userPermissionLevel(Guild guild, User user) {
+        if (Reference.Other.BOT_DEVELOPERS.contains(user.getId())) {
+            return Permissions.DEVELOPER;
+        } else {
+            return getHighestPermission(guild, getPermissions(guild, user));
+        }
     }
 
 
-    public static Permissions getHighestPermission(Collection<Permissions> Roles, Guild guild) {
+    public static Permissions getHighestPermission(Guild guild, Collection<com.srgood.dbot.utils.Permissions> Roles) {
 
         Permissions maxFound = Permissions.STANDARD;
 
         for (Permissions permLevel : Permissions.values()) {
             if ((permLevel.getLevel() > maxFound.getLevel())) {
-                if (containsAny(rolesToPermissions(XMLHandler.getGuildRolesFromInternalName(permLevel.getXMLName(), guild), guild), Roles)) {
+                if (containsAny(rolesToPermissions(guild, XMLHandler.getGuildRolesFromInternalName(permLevel.getXMLName(), guild)), Roles)) {
                     maxFound = permLevel;
                     break;
                 }
@@ -29,7 +38,7 @@ public class PermissionOps {
         return maxFound;
     }
 
-    private static Collection<Permissions> rolesToPermissions(Collection<? extends Role> roles, Guild guild) {
+    private static Collection<Permissions> rolesToPermissions(Guild guild, Collection<? extends net.dv8tion.jda.entities.Role> roles) {
         return roles.stream().map(role -> XMLHandler.roleToPermission(role, guild)).collect(java.util.stream.Collectors.toList());
     }
 
