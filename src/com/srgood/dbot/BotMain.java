@@ -194,6 +194,7 @@ public class BotMain extends Application {
 
             try {
                 systemTray.add(trayIcon);
+                trayIcon.setImageAutoSize(true); // <- Sets the image size properly
             } catch (AWTException e) {
                 e.printStackTrace();
             }
