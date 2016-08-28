@@ -303,34 +303,6 @@ public class BotMain extends Application {
         //TODO Rank based delete
     }
 
-    public static void handleCommand(CommandParser.CommandContainer cmd) {
-        // checks if the referenced command is in the command list
-        if (commands.containsKey(cmd.invoke)) {
-            com.srgood.dbot.utils.XMLUtils.initCommandIfNotExists(cmd);
-            //if the command is enabled for the message's guild...
-            if (com.srgood.dbot.utils.XMLUtils.commandIsEnabled(cmd.event.getGuild(), commands.get(cmd.invoke))) {
-                //if the message author has the required permission level...
-                if (com.srgood.dbot.utils.PermissionUtils.userPermissionLevel(cmd.event.getGuild(), cmd.event.getAuthor())
-                        .getLevel() >= commands.get(cmd.invoke).permissionLevel(cmd.event.getGuild()).getLevel()) {
-                    boolean safe = commands.get(cmd.invoke).called(cmd.args, cmd.event);
-                    //if the commands get method returns true (see command.class)...
-                    if (safe) {
-                        //then run the command and its post execution code (see command)
-                        commands.get(cmd.invoke).action(cmd.args, cmd.event);
-                        commands.get(cmd.invoke).executed(true, cmd.event);
-                    } else {
-                        //else only run the execution code
-                        commands.get(cmd.invoke).executed(false, cmd.event);
-                    }
-                } else {
-                    cmd.event.getChannel().sendMessage("You lack the required permission to preform this action");
-                }
-            } else {
-                cmd.event.getChannel().sendMessage("This command is disabled");
-            }
-        }
-    }
-
     private static void cleanFile() {
 
         try (FileReader fr = new FileReader("servers.xml"); FileWriter fw = new FileWriter("temp.xml")) {

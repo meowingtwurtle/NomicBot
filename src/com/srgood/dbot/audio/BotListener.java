@@ -35,7 +35,7 @@ public class BotListener extends ListenerAdapter {
         com.srgood.dbot.BotMain.storeMessage(event);
 
         if (event.getMessage().getContent().startsWith(localPrefix) && !java.util.Objects.equals(event.getMessage().getAuthor().getId(), event.getJDA().getSelfInfo().getId())) {
-            com.srgood.dbot.BotMain.handleCommand(com.srgood.dbot.BotMain.parser.parse(event.getMessage().getContent().toLowerCase(), event, localPrefix));
+            com.srgood.dbot.utils.CommandUtils.handleCommand(com.srgood.dbot.BotMain.parser.parse(event.getMessage().getContent().toLowerCase(), event, localPrefix));
             SimpleLog.getLog("Reasons").info("Got prefixed input: " + event.getMessage().getContent());
         } else {
             try {
@@ -43,7 +43,7 @@ public class BotListener extends ListenerAdapter {
                 if (event.getJDA().getSelfInfo().getAsMention().equals(event.getMessage().getMentionedUsers().get(0).getAsMention())) {
 
                     SimpleLog.getLog("Reasons").info("Got prefixed input (mention): " + event.getMessage().getContent());
-                    com.srgood.dbot.BotMain.handleCommand(com.srgood.dbot.BotMain.parser.parse(event.getMessage().getContent().toLowerCase(), event, localPrefix));
+                    com.srgood.dbot.utils.CommandUtils.handleCommand(com.srgood.dbot.BotMain.parser.parse(event.getMessage().getContent().toLowerCase(), event, localPrefix));
                 }
             } catch (Exception ignored) {
 
