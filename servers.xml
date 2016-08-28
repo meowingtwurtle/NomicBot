@@ -1,7 +1,7 @@
 <config>
-  <global>
+  <default>
     <prefix>#!</prefix>
-  </global>
+  </default>
   <servers>
     <server id="201020472702402560">
       <prefix>#!</prefix>
