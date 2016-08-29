@@ -23,10 +23,12 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
         <module name="Bot" />
+        <module name="ReasonsBot" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="Bot" target="1.8" />
+      <module name="ReasonsBot" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="EclipseCompilerSettings">

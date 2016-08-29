@@ -37,7 +37,10 @@ public class ChannelThread extends Thread {
                 }
                 commandDeque.removeFirst();
             }
-            if (!commandWasAdded) { return; }
+            if (!commandWasAdded) {
+                endOfLife();
+                return;
+            }
         }
     }
 
