@@ -117,3 +117,6 @@ config.properties
 # IDEA custom
 /.idea/codeStyleSettings.xml
 .idea/inspectionProfiles/
+/Bot.iml
+/Bot.eml
+/ReasonsBot.iml
