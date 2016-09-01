@@ -41,6 +41,7 @@ public class ChannelThread extends Thread {
                 endOfLife();
                 return;
             }
+            commandWasAdded = false;
         }
     }
 

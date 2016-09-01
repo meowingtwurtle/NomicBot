@@ -85,7 +85,7 @@ public class BotMain extends Application {
 
         try {
             //create a JDA with one Event listener
-            jda = new JDABuilder().addListener(new com.srgood.dbot.audio.BotListener()).setBotToken(com.srgood.dbot.Reference.Strings.BOT_TOKEN_REASONS_DEV_2).buildBlocking();
+            jda = new JDABuilder().addListener(new com.srgood.dbot.audio.BotListener()).setBotToken(com.srgood.dbot.Reference.Strings.BOT_TOKEN_REASONS).buildBlocking();
             jda.setAutoReconnect(true);
             jda.getAccountManager().setGame("type '@Reasons help'");
         } catch (LoginException e) {
