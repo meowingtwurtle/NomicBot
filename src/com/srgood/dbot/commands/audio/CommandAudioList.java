@@ -12,6 +12,8 @@ import net.dv8tion.jda.managers.AudioManager;
 
 import java.util.List;
 
+import static sun.audio.AudioPlayer.player;
+
 public class CommandAudioList implements AudioCommand {
 
     private final String help = "Lists the current Audio queue Use: '" + BotMain.prefix + "list'";
@@ -27,7 +29,9 @@ public class CommandAudioList implements AudioCommand {
         AudioManager manager = event.getGuild().getAudioManager();
         MusicPlayer player = AudioCommand.initAndGetPlayer(manager);
 
+
         List<AudioSource> queue = player.getAudioQueue();
+        queue.add(player.getCurrentAudioSource());
         if (queue.isEmpty()) {
             event.getChannel().sendMessage("The queue is currently empty!");
             return;

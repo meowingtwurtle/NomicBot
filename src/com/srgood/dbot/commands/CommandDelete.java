@@ -1,7 +1,9 @@
 package com.srgood.dbot.commands;
 
 import com.srgood.dbot.BotMain;
+import com.srgood.dbot.utils.XMLUtils;
 import net.dv8tion.jda.entities.Guild;
+import net.dv8tion.jda.entities.Message;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
 import java.io.File;
@@ -23,7 +25,8 @@ public class CommandDelete implements Command {
 
 
         String channel, delType;
-        List<String> messages = new ArrayList<>();
+        List<Message> messages = new ArrayList<>();
+        List<Message> buffer = new ArrayList<>();
 
 
         if (args.length >= 1) {
@@ -35,45 +38,19 @@ public class CommandDelete implements Command {
             }
         } else {
             delType = "all";
-            channel = BotMain.cleanFileName(event.getChannel().getName());
         }
 
+        messages = event.getChannel().getHistory().retrieveAll();
 
-        if (delType.equals("all")) {
-            File dir = new File("messages/guilds/" + BotMain.cleanFileName(event.getGuild().getName()) + "/" + channel + "/all/");
-            File[] directoryListing = dir.listFiles();
-            if (directoryListing != null) {
-                for (File child : directoryListing) {
-                    try {
-                        messages.add(child.getName().replace(".ser", ""));
-                        child.delete();
-                    } catch (Exception ignored) {
-
-                    }
-
+        if (delType.equals("bot")) {
+            for (Message message : messages) {
+                if (!message.getContent().startsWith(XMLUtils.getGuildPrefix(event.getGuild())) & !event.getJDA().getSelfInfo().getAsMention().equals(event.getMessage().getMentionedUsers().get(0).getAsMention()) & !event.getAuthor().getId().equals(event.getJDA().getSelfInfo().getId())) {
+                    messages.remove(message);
                 }
-            } else {
-                dir.mkdirs();
-            }
-        } else if (delType.equals("bot")) {
-            File dir = new File("messages/guilds/" + BotMain.cleanFileName(event.getGuild().getName()) + "/" + channel + "/bot/");
-            File[] directoryListing = dir.listFiles();
-            if (directoryListing != null) {
-                for (File child : directoryListing) {
-                    try {
-                        messages.add(child.getName().replace(".ser", ""));
-                        child.delete();
-                    } catch (Exception ignored) {
-
-                    }
-
-                }
-            } else {
-                dir.mkdirs();
             }
         }
 
-        event.getChannel().deleteMessagesByIds(messages);
+        event.getChannel().deleteMessages(messages);
         event.getChannel().sendMessage("Successfully Deleted **" + messages.size() + "** messages");
 
     }

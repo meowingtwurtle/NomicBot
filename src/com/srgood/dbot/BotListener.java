@@ -1,4 +1,4 @@
-package com.srgood.dbot.audio;
+package com.srgood.dbot;
 
 import net.dv8tion.jda.events.ReadyEvent;
 import net.dv8tion.jda.events.guild.GuildJoinEvent;

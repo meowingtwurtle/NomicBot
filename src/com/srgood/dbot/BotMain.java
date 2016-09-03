@@ -85,7 +85,7 @@ public class BotMain extends Application {
 
         try {
             //create a JDA with one Event listener
-            jda = new JDABuilder().addListener(new com.srgood.dbot.audio.BotListener()).setBotToken(com.srgood.dbot.Reference.Strings.BOT_TOKEN_REASONS).buildBlocking();
+            jda = new JDABuilder().addListener(new BotListener()).setBotToken(com.srgood.dbot.Reference.Strings.BOT_TOKEN_REASONS).buildBlocking();
             jda.setAutoReconnect(true);
             jda.getAccountManager().setGame("type '@Reasons help'");
         } catch (LoginException e) {
@@ -162,7 +162,7 @@ public class BotMain extends Application {
             //load image here
             Image image = null;
             try {
-                image = ImageIO.read(getClass().getResource("/test.jpg"));
+                image = ImageIO.read(getClass().getResource("/Nicholas.gif"));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -185,7 +185,7 @@ public class BotMain extends Application {
             closeItem.addActionListener(closeListener);
             popup.add(closeItem);
 
-            trayIcon = new TrayIcon(image,"somthing",popup);
+            trayIcon = new TrayIcon(image,"Reasons",popup);
 
             trayIcon.addActionListener(showListener);
 
@@ -201,8 +201,9 @@ public class BotMain extends Application {
 
     public void showPrgmIsMinimizedMsg() {
         if (firstTime) {
-            trayIcon.displayMessage("line1","line2",TrayIcon.MessageType.INFO);
+            trayIcon.displayMessage("Alert","Reasons has been minimised to tray",TrayIcon.MessageType.INFO);
             firstTime = false;
+
         }
     }
 
