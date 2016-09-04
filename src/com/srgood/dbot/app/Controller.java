@@ -26,21 +26,12 @@ public class Controller implements Initializable {
     @FXML
     private TextArea console;
 
-    @FXML
-    private Button UpdateButton;
-
-
 
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
         assert x1 != null : "fx:id=\"x1\" was not injected: check your FXML file 'sample.fxml'.";
 
         PowerButton.setOnAction(event -> com.srgood.dbot.BotMain.jda.shutdown());
-        UpdateButton.setOnAction(event -> updateConsole());
-
-
-
-
     }
 
     @FXML
