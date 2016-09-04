@@ -28,7 +28,6 @@ import javax.xml.transform.stream.StreamResult;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-import java.nio.file.Files;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.Map;
@@ -219,8 +218,7 @@ public class BotMain extends Application {
     }
 
 
-    //TODO fix the exceptions here
-    public static void writeXML() throws TransformerException {
+    public static String generateDirtyXML() throws TransformerException {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
         // Beautify XML
@@ -229,12 +227,28 @@ public class BotMain extends Application {
         // Set indent amount
         transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
         transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-        transformer.setOutputProperty(OutputKeys.METHOD, "html");
+        transformer.setOutputProperty(OutputKeys.METHOD, "xml");
         DOMSource source = new DOMSource(PInputFile);
-        StreamResult result = new StreamResult(new File("servers.xml"));
+        StringWriter stringWriter = new StringWriter();
+        StreamResult result = new StreamResult(stringWriter);
         transformer.transform(source, result);
+        return stringWriter.toString();
+    }
 
-        cleanFile();
+    public static String generateCleanXML() throws TransformerException  {
+        return cleanXMLString(generateDirtyXML());
+    }
+
+    //TODO fix the exceptions here
+    public static void writeXML() throws TransformerException {
+        String cleanXML = generateCleanXML();
+
+        try (FileWriter fileWriter = new FileWriter(new File("servers.xml")); BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
+            bufferedWriter.write(cleanXML);
+            bufferedWriter.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -304,30 +318,42 @@ public class BotMain extends Application {
         //TODO Rank based delete
     }
 
-    private static void cleanFile() {
+    private static String cleanXMLString(String dirtyXML) {
 
-        try (FileReader fr = new FileReader("servers.xml"); FileWriter fw = new FileWriter("temp.xml")) {
-            BufferedReader br = new BufferedReader(fr);
-            String line;
+//        try (FileReader fr = new FileReader("servers.xml"); FileWriter fw = new FileWriter("temp.xml")) {
+//            BufferedReader br = new BufferedReader(fr);
+//            String line;
+//
+//            while ((line = br.readLine()) != null) {
+//                if (!line.trim().equals("")) // don't write out blank lines
+//                {
+//                    line = line.replace("\n", "").replace("\f", "").replace("\r", "");
+//                    fw.write(line + "\n", 0, line.length() + 1);
+//                }
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return;
+//        }
+//        try {
+//            Files.deleteIfExists(new File("servers.xml").toPath());
+//            Files.move(new File("temp.xml").toPath(), new File("servers.xml").toPath());
+//            Files.deleteIfExists(new File("temp.xml").toPath());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
-            while ((line = br.readLine()) != null) {
-                if (!line.trim().equals("")) // don't write out blank lines
-                {
-                    line = line.replace("\n", "").replace("\f", "").replace("\r", "");
-                    fw.write(line + "\n", 0, line.length() + 1);
-                }
+        String[] lines = dirtyXML.split("\n");
+        StringBuilder buffer = new StringBuilder();
+
+        for (String line : lines) {
+            if (!line.trim().equals("") /* don't write out blank lines */ ) {
+                line = line.replace("\f", "").replace("\r", "").replaceAll("\\s+$", "");
+                buffer.append(line).append("\n");
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
         }
-        try {
-            Files.deleteIfExists(new File("servers.xml").toPath());
-            Files.move(new File("temp.xml").toPath(), new File("servers.xml").toPath());
-            Files.deleteIfExists(new File("temp.xml").toPath());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        return buffer.toString();
     }
 
     public static Command getCommandByName(String name) {
