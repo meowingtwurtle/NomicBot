@@ -2,13 +2,15 @@ package com.srgood.dbot.commands;
 
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.utils.XMLUtils;
+import net.dv8tion.jda.Permission;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.entities.Message;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.srgood.dbot.BotMain.jda;
 
 public class CommandDelete implements Command {
 
@@ -23,6 +25,11 @@ public class CommandDelete implements Command {
     @Override
     public void action(String[] args, GuildMessageReceivedEvent event) {
 
+        if (!event.getChannel()
+                .checkPermission(jda.getSelfInfo(), Permission.MESSAGE_MANAGE)) {
+            event.getChannel().sendMessage("Error, unable to delete messages! Please check permissions.");
+            return;
+        }
 
         String channel, delType;
         List<Message> messages = new ArrayList<>();
