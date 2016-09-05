@@ -31,6 +31,7 @@ import java.io.*;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
 public class BotMain extends Application {
@@ -42,8 +43,8 @@ public class BotMain extends Application {
     // prefix and shutdown override key
     public static String prefix;
     public static String overrideKey = com.srgood.dbot.utils.SecureOverrideKeyGenerator.nextOverrideKey();
-    public static PrintStream outPS;
-    public static ByteArrayOutputStream out;
+    public static PrintStream outPS,errOutPS;
+    public static ByteArrayOutputStream out,errOut;
 
     public static final CommandParser parser = new CommandParser();
     public static Map<String, Command> commands = new TreeMap<>();
@@ -60,6 +61,8 @@ public class BotMain extends Application {
 
     @Override public void init() {
         out = new ByteArrayOutputStream();
+        errOut = new ByteArrayOutputStream();
+
         outPS = new PrintStream(out) {
             @Override
             public void println(Object o) {
@@ -76,7 +79,27 @@ public class BotMain extends Application {
             }
         };
 
+        errOutPS = new PrintStream(errOut) {
+            @Override
+            public void println(Object o) {
+                super.println(o);
+                if (controller != null)
+                    controller.updateErrConsole();
+            }
+
+            @Override
+            public void println(String s) {
+                super.println(s);
+                if (controller != null)
+                    controller.updateErrConsole();
+            }
+
+        };
+
+
+
         System.setOut(outPS);
+        System.setErr(errOutPS);
 
         //catch exceptions when building JDA
         //invite temp: https://discordapp.com/oauth2/authorize?client_id=XXXX&scope=bot&permissions=0x33525237
@@ -84,13 +107,13 @@ public class BotMain extends Application {
 
         try {
             //create a JDA with one Event listener
-            jda = new JDABuilder().addListener(new BotListener()).setBotToken(com.srgood.dbot.Reference.Strings.BOT_TOKEN_REASONS).buildBlocking();
+            jda = new JDABuilder().addListener(new BotListener()).setBotToken(Reference.Strings.BOT_TOKEN_REASONS_DEV_2).buildBlocking();
             jda.setAutoReconnect(true);
             jda.getAccountManager().setGame("type '@Reasons help'");
         } catch (LoginException e) {
             SimpleLog.getLog("Reasons").fatal("**COULD NOT LOG IN**");
         } catch (InterruptedException e) {
-            SimpleLog.getLog("JDA").fatal("**AN UNKNOWWN ERROR OCCURED DURING LOGIN**");
+            SimpleLog.getLog("JDA").fatal("**AN UNKNOWN ERROR OCCURRED DURING LOGIN**");
             e.printStackTrace();
         }
 

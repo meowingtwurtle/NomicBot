@@ -32,6 +32,9 @@ public class Controller implements Initializable {
     private TextArea console;
 
     @FXML
+    private TextArea errConsole;
+
+    @FXML
     private Button loadXMLButton;
 
     @FXML
@@ -46,9 +49,7 @@ public class Controller implements Initializable {
 
         PowerButton.setOnAction(event -> com.srgood.dbot.BotMain.jda.shutdown());
 
-        loadXMLButton.setOnAction(event -> {
-            loadXMLToEditArea();
-        });
+        loadXMLButton.setOnAction(event -> loadXMLToEditArea());
 
         saveXMLButton.setOnAction(event -> {
             try {
@@ -73,6 +74,13 @@ public class Controller implements Initializable {
     public void updateConsole() {
         console.setText(com.srgood.dbot.BotMain.out.toString());
     }
+
+    @FXML
+    public void updateErrConsole() {
+        errConsole.setText(BotMain.errOut.toString());
+    }
+
+
 
 
 

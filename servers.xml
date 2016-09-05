@@ -16,6 +16,34 @@
           <isEnabled>true</isEnabled>
           <permLevel>0</permLevel>
         </command>
+      <command name="ping">
+          <isEnabled>true</isEnabled>
+          <permLevel>0</permLevel>
+        </command>
+        <command name="join">
+          <isEnabled>true</isEnabled>
+          <permLevel>0</permLevel>
+        </command>
+        <command name="shutdown">
+          <isEnabled>true</isEnabled>
+          <permLevel>3</permLevel>
+        </command>
+      <command name="leave">
+          <isEnabled>true</isEnabled>
+          <permLevel>0</permLevel>
+        </command>
+      <command name="diceroll">
+          <isEnabled>true</isEnabled>
+          <permLevel>0</permLevel>
+        </command>
+      <command name="play">
+          <isEnabled>true</isEnabled>
+          <permLevel>0</permLevel>
+        </command>
+        <command name="stop">
+          <isEnabled>true</isEnabled>
+          <permLevel>0</permLevel>
+        </command>
       </commands>
     </server>
     <server id="206507749822038018">

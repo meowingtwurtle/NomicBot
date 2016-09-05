@@ -39,7 +39,8 @@ public class ChannelThread extends Thread {
                 } catch (Exception e) {
                     CommandItem commandItem = commandDeque.getFirst();
                     CommandParser.CommandContainer commandContainer = commandItem.getCommandContainer();
-                    commandContainer.event.getChannel().sendMessage("An exception occurred, please notify us. If possible, store the date and time.");
+                    commandContainer.event.getChannel().sendMessage("***A FATAL exception occurred ( " + e.getMessage()+ ") , please notify us. If possible, store the date and time.***");
+                    e.printStackTrace();
 
                 }
                 commandDeque.removeFirst();
