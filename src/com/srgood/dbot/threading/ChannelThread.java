@@ -25,15 +25,22 @@ public class ChannelThread extends Thread {
         while (true) {
             //if the commands get method returns true (see command.class)...
             for (int i = 0; i < commandDeque.size(); i++) {
-                CommandItem commandItem = commandDeque.getFirst();
-                CommandParser.CommandContainer commandContainer = commandItem.getCommandContainer();
-                if (commandItem.shouldExecute()) {
-                    //then run the command and its post execution code (see command)
-                    BotMain.commands.get(commandContainer.invoke).action(commandContainer.args, commandContainer.event);
-                    BotMain.commands.get(commandContainer.invoke).executed(true, commandContainer.event);
-                } else {
-                    //else only run the execution code
-                    BotMain.commands.get(commandContainer.invoke).executed(false, commandContainer.event);
+                try {
+                    CommandItem commandItem = commandDeque.getFirst();
+                    CommandParser.CommandContainer commandContainer = commandItem.getCommandContainer();
+                    if (commandItem.shouldExecute()) {
+                        //then run the command and its post execution code (see command)
+                        BotMain.commands.get(commandContainer.invoke).action(commandContainer.args, commandContainer.event);
+                        BotMain.commands.get(commandContainer.invoke).executed(true, commandContainer.event);
+                    } else {
+                        //else only run the execution code
+                        BotMain.commands.get(commandContainer.invoke).executed(false, commandContainer.event);
+                    }
+                } catch (Exception e) {
+                    CommandItem commandItem = commandDeque.getFirst();
+                    CommandParser.CommandContainer commandContainer = commandItem.getCommandContainer();
+                    commandContainer.event.getChannel().sendMessage("An exception occurred, please notify us. If possible, store the date and time.");
+
                 }
                 commandDeque.removeFirst();
             }
