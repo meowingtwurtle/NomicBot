@@ -95,9 +95,9 @@
                     <content>
                         <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TextArea prefWidth="768.0" AnchorPane.bottomAnchor="16" AnchorPane.leftAnchor="16" AnchorPane.rightAnchor="16" AnchorPane.topAnchor="80.0" />
-                        <Button AnchorPane.leftAnchor="16" AnchorPane.rightAnchor="16" layoutY="16.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="768.0" text="Load XML" />
-                        <Button AnchorPane.leftAnchor="16" AnchorPane.rightAnchor="16" layoutY="48.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="768.0" text="Save XML" />
+                        <TextArea prefWidth="768.0" AnchorPane.bottomAnchor="16" AnchorPane.leftAnchor="16" AnchorPane.rightAnchor="16" AnchorPane.topAnchor="80.0" fx:id="xmlEditArea" />
+                        <Button fx:id="loadXMLButton" layoutY="16.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="768.0" text="Load XML" AnchorPane.leftAnchor="16" AnchorPane.rightAnchor="16" />
+                        <Button fx:id="saveXMLButton" layoutY="48.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="768.0" text="Save XML" AnchorPane.leftAnchor="16" AnchorPane.rightAnchor="16" />
                      </children>
                         </AnchorPane>
                     </content>

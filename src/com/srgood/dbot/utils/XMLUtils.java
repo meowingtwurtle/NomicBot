@@ -9,11 +9,13 @@ import org.w3c.dom.*;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.*;
 import java.util.function.Function;
 
 public class XMLUtils {
-    private static final Map<String, Element> servers = new HashMap<>();
+    private static Map<String, Element> servers = new HashMap<>();
 
     private static Element getServerNode(Guild guild) {
         return servers.get(guild.getId());
@@ -309,13 +311,18 @@ public class XMLUtils {
 
     // TODO fix the exceptions here, too
     public static void initStorage() throws Exception {
+        File inputFile = new File("servers.xml");
+        initFromStream(new FileInputStream(inputFile));
+    }
+
+    public static void initFromStream(InputStream inputStream) throws Exception {
         try {
+            servers = new HashMap<>();
+
             BotMain.DomFactory = DocumentBuilderFactory.newInstance();
             BotMain.DomInput = BotMain.DomFactory.newDocumentBuilder();
 
-            File InputFile = new File("servers.xml");
-
-            BotMain.PInputFile = BotMain.DomInput.parse(InputFile);
+            BotMain.PInputFile = BotMain.DomInput.parse(inputStream);
             BotMain.PInputFile.getDocumentElement().normalize();
 
             // <config> element
@@ -331,7 +338,6 @@ public class XMLUtils {
             BotMain.prefix = getFirstSubElement(getFirstSubElement(rootElem, "default"), "prefix").getTextContent();
         } catch (Exception e) {
             e.printStackTrace();
-            throw e;
         }
     }
 

@@ -5,6 +5,7 @@ import com.srgood.dbot.audio.MusicPlayer;
 import com.srgood.dbot.audio.Playlist;
 import com.srgood.dbot.source.AudioInfo;
 import com.srgood.dbot.source.AudioSource;
+import net.dv8tion.jda.Permission;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.managers.AudioManager;
@@ -12,6 +13,8 @@ import net.dv8tion.jda.managers.AudioManager;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
+import static com.srgood.dbot.BotMain.jda;
 
 public class CommandAudioPlay implements AudioCommand {
 
@@ -31,7 +34,11 @@ public class CommandAudioPlay implements AudioCommand {
 
         String message = event.getMessage().getContent();
         message = message.substring(message.indexOf("play"));
-        event.getMessage().deleteMessage();
+
+        if (event.getChannel()
+                .checkPermission(jda.getSelfInfo(), Permission.MESSAGE_MANAGE)) {
+            event.getMessage().deleteMessage();
+        }
 
         if (message.equals("play")) {
             if (player.isPlaying()) {
