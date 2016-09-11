@@ -52,7 +52,13 @@ public class CommandAudioJoin implements AudioCommand {
             SimpleLog.getLog("Reasons").debug("Joined: " + chanName.toString());
             return;
         }
-        manager.openAudioConnection(channel);
+        try {
+            manager.openAudioConnection(channel);
+        } catch (IllegalStateException e){
+            event.getChannel().sendMessage("Reasons is already connected to an audio channel");
+
+        }
+
 
 
     }

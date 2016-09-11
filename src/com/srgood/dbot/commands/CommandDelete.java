@@ -5,7 +5,9 @@ import com.srgood.dbot.utils.XMLUtils;
 import net.dv8tion.jda.Permission;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.entities.Message;
+import net.dv8tion.jda.events.Event;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.exceptions.RateLimitedException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,10 +17,12 @@ import static com.srgood.dbot.BotMain.jda;
 public class CommandDelete implements Command {
 
     private final String help = "Deletes Messages Use: '" + BotMain.prefix + "delete [all|bot] [channel name]' Default is all in current channel";
+    int total;
 
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {
         // TODO Auto-generated method stub
+        total = event.getChannel().getHistory().retrieveAll().size();
         return true;
     }
 
@@ -32,9 +36,9 @@ public class CommandDelete implements Command {
         }
 
         String channel, delType;
-        List<Message> messages = new ArrayList<>();
+        List<Message> messages = event.getChannel().getHistory().retrieveAll();
         List<Message> buffer = new ArrayList<>();
-
+        Boolean needsRecursion = false;
 
         if (args.length >= 1) {
             delType = args[0].toLowerCase();
@@ -47,8 +51,14 @@ public class CommandDelete implements Command {
             delType = "all";
         }
 
-        messages = event.getChannel().getHistory().retrieveAll();
-
+        if (messages.size() > 100) {
+            for (; ;) {
+                messages.remove(messages.size()-1);
+                if (messages.size() == 100) break;
+            }
+            needsRecursion = true;
+        }
+/*
         if (delType.equals("bot")) {
             for (Message message : messages) {
                 if (!message.getContent().startsWith(XMLUtils.getGuildPrefix(event.getGuild())) & !event.getJDA().getSelfInfo().getAsMention().equals(event.getMessage().getMentionedUsers().get(0).getAsMention()) & !event.getAuthor().getId().equals(event.getJDA().getSelfInfo().getId())) {
@@ -56,9 +66,16 @@ public class CommandDelete implements Command {
                 }
             }
         }
+*/
 
         event.getChannel().deleteMessages(messages);
-        event.getChannel().sendMessage("Successfully Deleted **" + messages.size() + "** messages");
+
+        if (needsRecursion) {
+            this.action(args,event);
+        } else {
+            event.getChannel().sendMessage("Successfully Deleted **" + total + "** messages");
+        }
+
 
     }
 

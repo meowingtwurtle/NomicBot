@@ -49,7 +49,7 @@ public class CommandEval implements Command {
 
     @Override
     public String help() {
-        return "";
+        return "no way man";
     }
 
     @Override

@@ -40,6 +40,9 @@ public class CommandDebug implements Command {
                     String x = seconds < 0 ? "-" + positive : positive;
                     event.getChannel().sendMessage(x);
                     break;
+                case "throw":
+                    new Exception("Test Exception").printStackTrace();
+                    break;
                 default:
                     event.getChannel().sendMessage("Invalid argument");
                     break;

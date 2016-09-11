@@ -4,6 +4,7 @@ import com.srgood.dbot.BotMain;
 import com.srgood.dbot.commands.CommandParser;
 import com.srgood.dbot.utils.CommandUtils;
 import net.dv8tion.jda.entities.Channel;
+import net.dv8tion.jda.exceptions.RateLimitedException;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -35,6 +36,13 @@ public class ChannelThread extends Thread {
                     } else {
                         //else only run the execution code
                         BotMain.commands.get(commandContainer.invoke).executed(false, commandContainer.event);
+                    }
+                }  catch (RateLimitedException e) {
+                    try {
+                        Thread.sleep(1000L);
+
+                    } catch (InterruptedException e1) {
+                        e1.printStackTrace();
                     }
                 } catch (Exception e) {
                     CommandItem commandItem = commandDeque.getFirst();

@@ -44,6 +44,22 @@
           <isEnabled>true</isEnabled>
           <permLevel>0</permLevel>
         </command>
+      <command name="debug">
+          <isEnabled>true</isEnabled>
+          <permLevel>0</permLevel>
+        </command>
+        <command name="help">
+          <isEnabled>true</isEnabled>
+          <permLevel>0</permLevel>
+        </command>
+        <command name="pong">
+          <isEnabled>true</isEnabled>
+          <permLevel>0</permLevel>
+        </command>
+      <command name="coinflip">
+          <isEnabled>true</isEnabled>
+          <permLevel>0</permLevel>
+        </command>
       </commands>
     </server>
     <server id="206507749822038018">
@@ -54,5 +70,110 @@
         <role name="MUSIC_DJ">218897241006538764</role>
       </roles>
 </server>
+  <server id="221824580963008513">
+      <prefix>#!</prefix>
+      <roles>
+        <role name="ADMIN">224255533211713536</role>
+        <role name="MUSIC_DJ">224255534352564225</role>
+      </roles>
+      <commands>
+        <command name="coinflip">
+          <isEnabled>true</isEnabled>
+          <permLevel>0</permLevel>
+        </command>
+        <command name="debug">
+          <isEnabled>true</isEnabled>
+          <permLevel>0</permLevel>
+        </command>
+        <command name="delete">
+          <isEnabled>true</isEnabled>
+          <permLevel>0</permLevel>
+        </command>
+        <command name="diceroll">
+          <isEnabled>true</isEnabled>
+          <permLevel>0</permLevel>
+        </command>
+        <command name="eval">
+          <isEnabled>true</isEnabled>
+          <permLevel>0</permLevel>
+        </command>
+        <command name="getprefix">
+          <isEnabled>true</isEnabled>
+          <permLevel>0</permLevel>
+        </command>
+        <command name="help">
+          <isEnabled>true</isEnabled>
+          <permLevel>0</permLevel>
+        </command>
+        <command name="invite">
+          <isEnabled>true</isEnabled>
+          <permLevel>0</permLevel>
+        </command>
+        <command name="join">
+          <isEnabled>true</isEnabled>
+          <permLevel>0</permLevel>
+        </command>
+        <command name="leave">
+          <isEnabled>true</isEnabled>
+          <permLevel>0</permLevel>
+        </command>
+        <command name="list">
+          <isEnabled>true</isEnabled>
+          <permLevel>0</permLevel>
+        </command>
+        <command name="nowplaying">
+          <isEnabled>true</isEnabled>
+          <permLevel>0</permLevel>
+        </command>
+        <command name="pause">
+          <isEnabled>true</isEnabled>
+          <permLevel>0</permLevel>
+        </command>
+        <command name="ping">
+          <isEnabled>true</isEnabled>
+          <permLevel>0</permLevel>
+        </command>
+        <command name="play">
+          <isEnabled>true</isEnabled>
+          <permLevel>0</permLevel>
+        </command>
+        <command name="pong">
+          <isEnabled>true</isEnabled>
+          <permLevel>0</permLevel>
+        </command>
+        <command name="repeat">
+          <isEnabled>true</isEnabled>
+          <permLevel>0</permLevel>
+        </command>
+        <command name="setprefix">
+          <isEnabled>true</isEnabled>
+          <permLevel>3</permLevel>
+        </command>
+        <command name="shutdown">
+          <isEnabled>true</isEnabled>
+          <permLevel>3</permLevel>
+        </command>
+        <command name="skip">
+          <isEnabled>true</isEnabled>
+          <permLevel>0</permLevel>
+        </command>
+        <command name="stop">
+          <isEnabled>true</isEnabled>
+          <permLevel>0</permLevel>
+        </command>
+        <command name="toggle">
+          <isEnabled>true</isEnabled>
+          <permLevel>3</permLevel>
+        </command>
+        <command name="version">
+          <isEnabled>true</isEnabled>
+          <permLevel>0</permLevel>
+        </command>
+        <command name="volume">
+          <isEnabled>true</isEnabled>
+          <permLevel>0</permLevel>
+        </command>
+      </commands>
+    </server>
   </servers>
 </config>
