@@ -35,6 +35,8 @@ public class CommandUtils {
             else {
                 cmd.event.getChannel().sendMessage("This command is disabled");
             }
+        } else {
+            cmd.event.getChannel().sendMessage("Unknown command `" + cmd.invoke+"`");
         }
     }
 

@@ -1,5 +1,6 @@
 package com.srgood.dbot.utils;
 
+import com.srgood.dbot.PermissionLevels;
 import com.srgood.dbot.Reference;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.entities.Role;
@@ -60,6 +61,14 @@ public class PermissionUtils {
         return null;
     }
 
+    /**
+     * @deprecated
+     */
+    public static int enumToInt (PermissionLevels level) {
+        return level.getLevel();
+    }
+
+
     public static Role createRole(com.srgood.dbot.PermissionLevels roleLevel, Guild guild, boolean addToXML) {
         if (!roleLevel.isVisible()) return null;
 
@@ -79,4 +88,14 @@ public class PermissionUtils {
         return role;
     }
 
+    public static PermissionLevels stringToRole(String uRole) {
+        System.out.println("" + uRole);
+
+        for (PermissionLevels p : PermissionLevels.values()) {
+            if (p.getXMLName().toLowerCase().equals(uRole.toLowerCase())) {
+                return p;
+            }
+        }
+        return PermissionLevels.STANDARD;
+    }
 }
