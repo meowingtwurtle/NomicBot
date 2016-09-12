@@ -60,6 +60,14 @@
           <isEnabled>true</isEnabled>
           <permLevel>0</permLevel>
         </command>
+      <command name="setprefix">
+          <isEnabled>true</isEnabled>
+          <permLevel>3</permLevel>
+        </command>
+        <command name="list">
+          <isEnabled>false</isEnabled>
+          <permLevel>0</permLevel>
+        </command>
       </commands>
     </server>
     <server id="206507749822038018">
@@ -118,7 +126,7 @@
           <permLevel>0</permLevel>
         </command>
         <command name="list">
-          <isEnabled>true</isEnabled>
+          <isEnabled>false</isEnabled>
           <permLevel>0</permLevel>
         </command>
         <command name="nowplaying">

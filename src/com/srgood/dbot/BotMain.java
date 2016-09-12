@@ -31,7 +31,6 @@ import java.io.*;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.Objects;
 import java.util.TreeMap;
 
 public class BotMain extends Application {
@@ -107,7 +106,7 @@ public class BotMain extends Application {
 
         try {
             //create a JDA with one Event listener
-            jda = new JDABuilder().addListener(new BotListener()).setBotToken(Reference.Strings.BOT_TOKEN_REASONS).buildBlocking();
+            jda = new JDABuilder().addListener(new BotListener()).setBotToken(Reference.Strings.BOT_TOKEN_REASONS_DEV_2).buildBlocking();
             jda.setAutoReconnect(true);
             jda.getAccountManager().setGame("type '@Reasons help'");
         } catch (LoginException e) {
@@ -217,7 +216,6 @@ public class BotMain extends Application {
             } catch (AWTException e) {
                 e.printStackTrace();
             }
-
         }
     }
 
