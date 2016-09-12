@@ -1,6 +1,7 @@
 package com.srgood.dbot.utils;
 
 import com.srgood.dbot.BotMain;
+import com.srgood.dbot.PermissionLevels;
 import com.srgood.dbot.commands.Command;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.entities.Role;
@@ -360,6 +361,24 @@ public class XMLUtils {
         }
 
         return null;
+    }
+
+    public static void setCommandPermissionXML(Guild guild, Command command, PermissionLevels perm) {
+        String commandName = BotMain.getNameFromCommand(command);
+
+        if (BotMain.commands.values().contains(command)) {
+            Element commandsElement = getFirstSubElement(getServerNode(guild), "commands");
+
+            List<Node> commandList = nodeListToList(commandsElement.getElementsByTagName("command"));
+
+            for (Node n : commandList) {
+                Element elem = (Element) n;
+                if (elem.getAttribute("name").equals(commandName)) {
+                    getFirstSubElement(elem, "permLevel").setTextContent("" + perm.getLevel());
+                }
+            }
+        }
+
     }
 
     public static com.srgood.dbot.PermissionLevels roleToPermission(Role role, Guild guild) {
