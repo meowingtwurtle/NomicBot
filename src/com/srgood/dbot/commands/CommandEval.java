@@ -2,6 +2,7 @@ package com.srgood.dbot.commands;
 
 import com.meowingtwurtle.math.api.IMathGroup;
 import com.meowingtwurtle.math.api.IMathHandler;
+import com.meowingtwurtle.math.api.MathExpressionParseException;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
@@ -28,14 +29,23 @@ public class CommandEval implements Command {
             String exp = join(args);
 
             if (!exp.matches("[()\\d\\w\\s.+\\-*/^]+")) {
-                throw new com.meowingtwurtle.math.api.MathExpressionParseException("Expression contains invalid characters");
+                event.getChannel().sendMessage("`MATH:` Expression contains invalid characters");
+                return;
             }
 
             IMathGroup group = IMathHandler.getMathHandler().parse(exp);
             event.getChannel().sendMessage("`MATH:` " + RESULT_FORMATTER.format(group.eval()));
         } catch (Exception e) {
             e.printStackTrace();
-            event.getChannel().sendMessage("`MATH:` An error occurred during parsing.");
+            Throwable t = e;
+            while (t != null && t instanceof MathExpressionParseException) {
+                if (t.getCause() != null) {
+                    t = t.getCause();
+                } else {
+                    break;
+                }
+            }
+            event.getChannel().sendMessage("`MATH:` An error occurred during parsing: " + (t == null ? "null" : t.getClass().getCanonicalName() + ": " + t.getMessage()));
         }
     }
 
