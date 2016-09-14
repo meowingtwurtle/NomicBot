@@ -7,12 +7,15 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TitledPane;
+import net.dv8tion.jda.entities.Guild;
 
 import javax.xml.transform.TransformerException;
 import java.io.ByteArrayInputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ResourceBundle;
+
+import static com.srgood.dbot.BotMain.jda;
 
 public class Controller implements Initializable {
 
@@ -24,6 +27,8 @@ public class Controller implements Initializable {
 
     @FXML
     private TitledPane x1;
+
+    @FXML TitledPane aSTab;
 
     @FXML
     private Button PowerButton;
@@ -43,11 +48,13 @@ public class Controller implements Initializable {
     @FXML
     private TextArea xmlEditArea;
 
+    @FXML TextArea servers;
+
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
         assert x1 != null : "fx:id=\"x1\" was not injected: check your FXML file 'sample.fxml'.";
 
-        PowerButton.setOnAction(event -> com.srgood.dbot.BotMain.jda.shutdown());
+        PowerButton.setOnAction(event -> jda.shutdown());
 
         loadXMLButton.setOnAction(event -> loadXMLToEditArea());
 
@@ -60,6 +67,14 @@ public class Controller implements Initializable {
                 e.printStackTrace();
             }
         });
+        StringBuilder sb = new StringBuilder();
+
+        for (Guild guild : jda.getGuilds()) {
+            sb.append(guild.getName());
+            sb.append("\n");
+        }
+        servers.setText(sb.toString());
+        aSTab.setText("Active Servers (" + jda.getGuilds().size() + ")");
     }
 
     private void loadXMLToEditArea() {

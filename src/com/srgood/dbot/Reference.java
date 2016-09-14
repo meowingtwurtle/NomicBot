@@ -12,6 +12,7 @@ public class Reference {
         public static final String BOT_TOKEN_REASONS_DEV_1 = "MjA3MjIyNzY5MjA3NzM4MzY4.Cnf-vg.UNECSqJIHUX_9sXL-98W27XUlIU";
         public static final String BOT_TOKEN_REASONS_DEV_2 = "MjA3MjIzMTU4OTAwNjU0MDgw.Cnf_Gw.HKBXiCldwx57cN_1uHt6XhyNEwY";
 
+        public static final String[] EIGHT_BALL = {"It is certain","It is decidedly so","Without a doubt","Yes, definitely","You may rely on it","As I see it, yes","Most likely","Outlook good","Yes","Signs point to yes","Reply hazy try again","Ask again later","Better not tell you now","Cannot predict now","Concentrate and ask again","Dount count on it","My reply is no","My sources say no","Outlook not so good","Very doubtful"};
         //see http://stackoverflow.com/questions/396429/how-do-you-know-what-version-number-to-use
         public static final String VERSION = "0.74";
     }

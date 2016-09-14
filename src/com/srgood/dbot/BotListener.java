@@ -3,6 +3,7 @@ package com.srgood.dbot;
 import net.dv8tion.jda.events.ReadyEvent;
 import net.dv8tion.jda.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.events.message.guild.GuildMessageUpdateEvent;
 import net.dv8tion.jda.hooks.ListenerAdapter;
 import net.dv8tion.jda.utils.SimpleLog;
 
@@ -56,6 +57,12 @@ public class BotListener extends ListenerAdapter {
     @Override
     public void onGuildJoin(GuildJoinEvent event) {
 //          initGuild(event.getGuild());
+    }
+
+    @Override
+    public void onGuildMessageUpdate(GuildMessageUpdateEvent event) {
+        GuildMessageReceivedEvent e = new GuildMessageReceivedEvent(event.getJDA(),event.getResponseNumber(),event.getMessage(),event.getChannel());
+        this.onGuildMessageReceived(e);
     }
 
 }

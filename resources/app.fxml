@@ -11,6 +11,7 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.effect.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -55,16 +56,20 @@
           <content>
             <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
               <children>
-                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="linear-gradient(from 0.0% 100.0% to 0.0% 0.0%, 0xa1a1a1ff 0.0%, 0xc4c4c4ff 30.0%, 0xc4c4c4ff 50.0%, 0xc4c4c4ff 70.0%, 0xa1a1a1ff 100.0%)" height="478.0" layoutX="0.0" layoutY="-33.0" strokeType="INSIDE" width="796.0">
+                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="linear-gradient(from 0.0% 100.0% to 0.0% 0.0%, 0xa1a1a1ff 0.0%, 0xc4c4c4ff 30.0%, 0xc4c4c4ff 50.0%, 0xc4c4c4ff 70.0%, 0xa1a1a1ff 100.0%)" height="478.0" layoutX="-2.0" layoutY="-36.0" strokeType="INSIDE" width="802.0">
                   <stroke>
                     <Color blue="0.631" green="0.631" red="0.631" fx:id="x2" />
                   </stroke>
                 </Rectangle>
                 <Accordion layoutX="596.0" layoutY="0.0" prefHeight="442.0">
                   <panes>
-                    <TitledPane fx:id="x3" animated="true" text="Active Servers">
+                    <TitledPane id="x3" fx:id="aSTab" animated="true" text="Active Servers">
                       <content>
-                        <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                          <children>
+                            <TextArea fx:id="servers" layoutX="0.0" layoutY="0.0" prefHeight="394.0" prefWidth="200.0" style="overflow:scroll" wrapText="true" />
+                          </children>
+                        </AnchorPane>
                       </content>
                     </TitledPane>
                     <TitledPane fx:id="x1" animated="true" text="Most Popular Commands">
@@ -74,16 +79,22 @@
                     </TitledPane>
                   </panes>
                 </Accordion>
-                <Button fx:id="PowerButton" layoutX="32.0" layoutY="60.0" mnemonicParsing="false" prefHeight="71.0" prefWidth="158.0" text="TURN IT OFF">
+                <Button fx:id="PowerButton" layoutX="224.0" layoutY="93.0" mnemonicParsing="false" prefHeight="71.0" prefWidth="158.0" text="Shutdown">
                   <font>
-                    <Font size="30.0" />
+                    <Font size="20.0" fx:id="x4" />
                   </font>
                 </Button>
-                <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="219.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
+                <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="34.0" layoutY="128.0" pickOnBounds="true" preserveRatio="true">
+                  <effect>
+                    <Reflection fraction="0.13888888888888884" topOpacity="0.2142857142857143" />
+                  </effect>
                   <image>
                     <Image url="@Nicholas.gif" />
                   </image>
                 </ImageView>
+                <Button id="PowerButton" font="$x4" layoutX="421.0" layoutY="93.0" mnemonicParsing="false" prefHeight="71.0" prefWidth="158.0" text="Somthing" />
+                <Button id="PowerButton" font="$x4" layoutX="224.0" layoutY="243.0" mnemonicParsing="false" prefHeight="71.0" prefWidth="158.0" text="Nothing" />
+                <Button id="PowerButton" font="$x4" layoutX="421.0" layoutY="243.0" mnemonicParsing="false" prefHeight="71.0" prefWidth="158.0" text="Help" />
               </children>
             </AnchorPane>
           </content>
@@ -98,12 +109,12 @@
             </AnchorPane>
           </content>
         </Tab>
-        <Tab text="Errors">
+        <Tab style="" text="Errors">
           <content>
             <AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
               <children>
                 <Rectangle arcHeight="5.0" arcWidth="5.0" fill="linear-gradient(from 0.0% 100.0% to 0.0% 0.0%, 0xa1a1a1ff 0.0%, 0xc4c4c4ff 30.0%, 0xc4c4c4ff 50.0%, 0xc4c4c4ff 70.0%, 0xa1a1a1ff 100.0%)" height="478.0" layoutX="0.0" layoutY="-18.0" stroke="#a1a1a1" strokeType="INSIDE" width="800.0000999999975" />
-                <TextArea fx:id="errConsole" layoutX="14.0" layoutY="14.0" prefHeight="414.0" prefWidth="772.0" wrapText="true" />
+                <TextArea fx:id="errConsole" layoutX="14.0" layoutY="14.0" prefHeight="414.0" prefWidth="772.0" style="overflow:scroll" wrapText="true" />
               </children>
             </AnchorPane>
           </content>
