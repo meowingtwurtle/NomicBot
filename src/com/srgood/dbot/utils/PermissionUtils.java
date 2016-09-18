@@ -30,7 +30,7 @@ public class PermissionUtils {
 
         for (com.srgood.dbot.PermissionLevels permLevel : com.srgood.dbot.PermissionLevels.values()) {
             if ((permLevel.getLevel() > maxFound.getLevel())) {
-                if (containsAny(rolesToPermissions(guild, XMLUtils.getGuildRolesFromInternalName(permLevel.getXMLName(), guild)), Roles)) {
+                if (containsAny(rolesToPermissions(guild, ConfigUtils.getGuildRolesFromInternalName(permLevel.getXMLName(), guild)), Roles)) {
                     maxFound = permLevel;
                     break;
                 }
@@ -40,7 +40,7 @@ public class PermissionUtils {
     }
 
     private static Collection<com.srgood.dbot.PermissionLevels> rolesToPermissions(Guild guild, Collection<? extends net.dv8tion.jda.entities.Role> roles) {
-        return roles.stream().map(role -> XMLUtils.roleToPermission(role, guild)).collect(java.util.stream.Collectors.toList());
+        return roles.stream().map(role -> ConfigUtils.roleToPermission(role, guild)).collect(java.util.stream.Collectors.toList());
     }
 
     private static boolean containsAny(Collection<?> container, Collection<?> checkFor) {
@@ -81,7 +81,7 @@ public class PermissionUtils {
         Role role = roleMgr.getRole();
 
         if (addToXML) {
-            XMLUtils.registerRole(guild, role, roleLevel);
+            ConfigUtils.registerRole(guild, role, roleLevel);
         }
 
 

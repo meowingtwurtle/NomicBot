@@ -1,22 +1,26 @@
 package com.srgood.dbot.utils;
 
-import com.srgood.dbot.BotMain;
+import com.srgood.dbot.commands.Command;
 import com.srgood.dbot.commands.CommandParser;
 import com.srgood.dbot.threading.ChannelThread;
 
+import java.util.Map;
+import java.util.TreeMap;
+
 public class CommandUtils {
 
+    public static Map<String, Command> commands = new TreeMap<>();
     private static java.util.Map<String, ChannelThread> channelThreadMap = new java.util.HashMap<>();
 
     public static void handleCommand(CommandParser.CommandContainer cmd) {
         // checks if the referenced command is in the command list
-        if (BotMain.commands.containsKey(cmd.invoke)) {
-            XMLUtils.initCommandIfNotExists(cmd);
+        if (commands.containsKey(cmd.invoke)) {
+            ConfigUtils.initCommandIfNotExists(cmd);
             //if the command is enabled for the message's guild...
             //if the message author has the required permission level...
-            if (XMLUtils.commandIsEnabled(cmd.event.getGuild(), BotMain.commands.get(cmd.invoke)))
-                if (PermissionUtils.userPermissionLevel(cmd.event.getGuild(), cmd.event.getAuthor()).getLevel() >= BotMain.commands.get(cmd.invoke).permissionLevel(cmd.event.getGuild()).getLevel()) {
-                    boolean safe = BotMain.commands.get(cmd.invoke).called(cmd.args, cmd.event);
+            if (ConfigUtils.commandIsEnabled(cmd.event.getGuild(), commands.get(cmd.invoke)))
+                if (PermissionUtils.userPermissionLevel(cmd.event.getGuild(), cmd.event.getAuthor()).getLevel() >= commands.get(cmd.invoke).permissionLevel(cmd.event.getGuild()).getLevel()) {
+                    boolean safe = commands.get(cmd.invoke).called(cmd.args, cmd.event);
                     if (channelThreadMap.containsKey(cmd.event.getChannel().getId())) {
                         ChannelThread channelThread = channelThreadMap.get(cmd.event.getChannel().getId());
                         channelThread.addCommand(new ChannelThread.CommandItem(cmd, safe));
@@ -44,5 +48,17 @@ public class CommandUtils {
         if (channelThreadMap.containsKey(thread.getChannelID())) {
             channelThreadMap.remove(thread.getChannelID());
         }
+    }
+
+    public static String getNameFromCommand(Command cmd) {
+        return cmd.names()[0];
+    }
+
+    public static String getPrimaryCommandAlias(String name) {
+        return getNameFromCommand(getCommandByName(name));
+    }
+
+    public static Command getCommandByName(String name) {
+        return commands.get(name);
     }
 }

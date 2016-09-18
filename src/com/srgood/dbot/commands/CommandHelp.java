@@ -1,6 +1,8 @@
 package com.srgood.dbot.commands;
 
 import com.srgood.dbot.BotMain;
+import com.srgood.dbot.utils.CommandUtils;
+import com.srgood.dbot.utils.ConfigUtils;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
@@ -19,14 +21,14 @@ public class CommandHelp implements Command {
     public void action(String[] args, GuildMessageReceivedEvent event) {
         // TODO Auto-generated method stub
 
-        Set<String> v = BotMain.commands.keySet();
+        Set<String> v = CommandUtils.commands.keySet();
         StringBuilder z = new StringBuilder();
         z.append("All commands: \n");
 
 
         for (String i : v) {
             String output = i.substring(0, 1).toUpperCase() + i.substring(1);
-            z.append("**").append(output).append(":** ").append("  `").append(BotMain.commands.get(i).help()).append("`").append("\n\n");
+            z.append("**").append(output).append(":** ").append("  `").append(CommandUtils.commands.get(i).help()).append("`").append("\n\n");
         }
 
 
@@ -49,7 +51,7 @@ public class CommandHelp implements Command {
     @Override
     public com.srgood.dbot.PermissionLevels permissionLevel(Guild guild) {
         // TODO Auto-generated method stub
-        return com.srgood.dbot.utils.XMLUtils.getCommandPermissionXML(guild, this);
+        return ConfigUtils.getCommandPermissionXML(guild, this);
     }
 
     @Override

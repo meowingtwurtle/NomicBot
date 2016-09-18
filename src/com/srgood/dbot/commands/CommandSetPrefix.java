@@ -1,6 +1,7 @@
 package com.srgood.dbot.commands;
 
 import com.srgood.dbot.BotMain;
+import com.srgood.dbot.utils.ConfigUtils;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
@@ -16,7 +17,7 @@ public class CommandSetPrefix implements Command {
     @Override
     public void action(String[] args, GuildMessageReceivedEvent event) {
         try {
-            com.srgood.dbot.utils.XMLUtils.setGuildPrefix(event.getGuild(), args[0]);
+            ConfigUtils.setGuildPrefix(event.getGuild(), args[0]);
             event.getChannel().sendMessage("Prefix set to: " + args[0]);
         } catch (Exception e) {
             event.getChannel().sendMessage(help());
@@ -38,7 +39,7 @@ public class CommandSetPrefix implements Command {
     @Override
     public com.srgood.dbot.PermissionLevels permissionLevel(Guild guild) {
         // TODO Auto-generated method stub
-        return com.srgood.dbot.utils.XMLUtils.getCommandPermissionXML(guild, this);
+        return ConfigUtils.getCommandPermissionXML(guild, this);
     }
 
     @Override

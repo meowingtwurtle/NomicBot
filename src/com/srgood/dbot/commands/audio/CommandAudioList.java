@@ -5,6 +5,7 @@ import com.srgood.dbot.audio.MusicPlayer;
 import com.srgood.dbot.source.AudioInfo;
 import com.srgood.dbot.source.AudioSource;
 import com.srgood.dbot.source.AudioTimestamp;
+import com.srgood.dbot.utils.ConfigUtils;
 import net.dv8tion.jda.MessageBuilder;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
@@ -80,7 +81,7 @@ public class CommandAudioList implements AudioCommand {
     @Override
     public com.srgood.dbot.PermissionLevels permissionLevel(Guild guild) {
         // TODO Auto-generated method stub
-        return com.srgood.dbot.utils.XMLUtils.getCommandPermissionXML(guild, this);
+        return ConfigUtils.getCommandPermissionXML(guild, this);
     }
 
     @Override

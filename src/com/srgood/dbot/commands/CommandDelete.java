@@ -1,6 +1,7 @@
 package com.srgood.dbot.commands;
 
 import com.srgood.dbot.BotMain;
+import com.srgood.dbot.utils.ConfigUtils;
 import net.dv8tion.jda.Permission;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.entities.Message;
@@ -35,18 +36,7 @@ public class CommandDelete implements Command {
         String channel, delType;
         List<Message> messages = event.getChannel().getHistory().retrieveAll();
         List<Message> buffer = new ArrayList<>();
-        Boolean needsRecursion = false;
-
-        if (args.length >= 1) {
-            delType = args[0].toLowerCase();
-            if (args.length >= 2) {
-                channel = BotMain.cleanFileName(args[1]);
-            } else {
-                channel = BotMain.cleanFileName(event.getChannel().getName());
-            }
-        } else {
-            delType = "all";
-        }
+        boolean needsRecursion = false;
 
         if (messages.size() > 100) {
             for (; ;) {
@@ -58,7 +48,7 @@ public class CommandDelete implements Command {
 /*
         if (delType.equals("bot")) {
             for (Message message : messages) {
-                if (!message.getContent().startsWith(XMLUtils.getGuildPrefix(event.getGuild())) & !event.getJDA().getSelfInfo().getAsMention().equals(event.getMessage().getMentionedUsers().get(0).getAsMention()) & !event.getAuthor().getId().equals(event.getJDA().getSelfInfo().getId())) {
+                if (!message.getContent().startsWith(ConfigUtils.getGuildPrefix(event.getGuild())) & !event.getJDA().getSelfInfo().getAsMention().equals(event.getMessage().getMentionedUsers().get(0).getAsMention()) & !event.getAuthor().getId().equals(event.getJDA().getSelfInfo().getId())) {
                     messages.remove(message);
                 }
             }
@@ -90,7 +80,7 @@ public class CommandDelete implements Command {
     @Override
     public com.srgood.dbot.PermissionLevels permissionLevel(Guild guild) {
         // TODO Auto-generated method stub
-        return com.srgood.dbot.utils.XMLUtils.getCommandPermissionXML(guild, this);
+        return ConfigUtils.getCommandPermissionXML(guild, this);
     }
 
     @Override

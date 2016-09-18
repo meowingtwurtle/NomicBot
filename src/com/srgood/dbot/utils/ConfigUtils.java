@@ -15,7 +15,7 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.function.Function;
 
-public class XMLUtils {
+public class ConfigUtils {
     private static Map<String, Element> servers = new HashMap<>();
 
     private static Element getServerNode(Guild guild) {
@@ -65,7 +65,7 @@ public class XMLUtils {
 
     private static void initCommandsElement(Element commandsElement) {
         try {
-            for (String command : BotMain.commands.keySet()) {
+            for (String command : CommandUtils.commands.keySet()) {
                 initCommandElement(commandsElement, command);
             }
         } catch (Exception e4) {
@@ -74,7 +74,7 @@ public class XMLUtils {
     }
 
     private static void initCommandElement(Element commandsElement, String command) {
-        command = BotMain.getPrimaryCommandAlias(command);
+        command = CommandUtils.getPrimaryCommandAlias(command);
 
         if (commandElementExists(commandsElement, command)) { return; }
 
@@ -98,7 +98,7 @@ public class XMLUtils {
 
         Element defaultElement = getFirstSubElement(BotMain.PInputFile.getDocumentElement(), "default");
 
-        XMLUtils.nodeListToList(defaultElement.getChildNodes()).stream().filter(n -> n instanceof org.w3c.dom.Element).forEach(n -> {
+        ConfigUtils.nodeListToList(defaultElement.getChildNodes()).stream().filter(n -> n instanceof org.w3c.dom.Element).forEach(n -> {
             org.w3c.dom.Element elem = (org.w3c.dom.Element) n;
             server.appendChild(elem.cloneNode(true));
         });
@@ -195,12 +195,12 @@ public class XMLUtils {
     }
 
     private static Element getCommandEnabledElement(Guild guild, Command command) {
-        String commandName = BotMain.getNameFromCommand(command);
+        String commandName = CommandUtils.getNameFromCommand(command);
 
-        if (BotMain.commands.values().contains(command)) {
+        if (CommandUtils.commands.values().contains(command)) {
             Element commandsElement = getCommandsElement(guild);
 
-            List<Node> commandList = XMLUtils.nodeListToList(commandsElement.getElementsByTagName("command"));
+            List<Node> commandList = ConfigUtils.nodeListToList(commandsElement.getElementsByTagName("command"));
 
             for (Node n : commandList) {
                 Element elem = (Element) n;
@@ -241,7 +241,7 @@ public class XMLUtils {
         private static final long serialVersionUID = -710068261487017415L;
 
         {
-            put("permLevel", name -> BotMain.commands.get(name).defaultPermissionLevel().getLevel());
+            put("permLevel", name -> CommandUtils.commands.get(name).defaultPermissionLevel().getLevel());
             put("isEnabled", name -> true);
         }
     };
@@ -349,9 +349,9 @@ public class XMLUtils {
     public static com.srgood.dbot.PermissionLevels getCommandPermissionXML(Guild guild, Command command) {
 
 
-        String commandName = BotMain.getNameFromCommand(command);
+        String commandName = CommandUtils.getNameFromCommand(command);
 
-        if (BotMain.commands.values().contains(command)) {
+        if (CommandUtils.commands.values().contains(command)) {
             Element commandsElement = getFirstSubElement(getServerNode(guild), "commands");
 
             List<Node> commandList = nodeListToList(commandsElement.getElementsByTagName("command"));
@@ -368,9 +368,9 @@ public class XMLUtils {
     }
 
     public static void setCommandPermissionXML(Guild guild, Command command, PermissionLevels perm) {
-        String commandName = BotMain.getNameFromCommand(command);
+        String commandName = CommandUtils.getNameFromCommand(command);
 
-        if (BotMain.commands.values().contains(command)) {
+        if (CommandUtils.commands.values().contains(command)) {
             Element commandsElement = getFirstSubElement(getServerNode(guild), "commands");
 
             List<Node> commandList = nodeListToList(commandsElement.getElementsByTagName("command"));
@@ -424,7 +424,7 @@ public class XMLUtils {
     }
 
     public static boolean guildHasRoleForPermission(Guild guild, com.srgood.dbot.PermissionLevels roleLevel) {
-        Element serverElement = com.srgood.dbot.utils.XMLUtils.getServerNode(guild);
+        Element serverElement = ConfigUtils.getServerNode(guild);
 
         Element rolesElement = (Element) serverElement.getElementsByTagName("roles");
 

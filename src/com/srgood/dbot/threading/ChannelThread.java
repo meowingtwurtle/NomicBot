@@ -1,6 +1,5 @@
 package com.srgood.dbot.threading;
 
-import com.srgood.dbot.BotMain;
 import com.srgood.dbot.commands.CommandParser;
 import com.srgood.dbot.utils.CommandUtils;
 import net.dv8tion.jda.entities.Channel;
@@ -31,11 +30,11 @@ public class ChannelThread extends Thread {
                     CommandParser.CommandContainer commandContainer = commandItem.getCommandContainer();
                     if (commandItem.shouldExecute()) {
                         //then run the command and its post execution code (see command)
-                        BotMain.commands.get(commandContainer.invoke).action(commandContainer.args, commandContainer.event);
-                        BotMain.commands.get(commandContainer.invoke).executed(true, commandContainer.event);
+                        CommandUtils.commands.get(commandContainer.invoke).action(commandContainer.args, commandContainer.event);
+                        CommandUtils.commands.get(commandContainer.invoke).executed(true, commandContainer.event);
                     } else {
                         //else only run the execution code
-                        BotMain.commands.get(commandContainer.invoke).executed(false, commandContainer.event);
+                        CommandUtils.commands.get(commandContainer.invoke).executed(false, commandContainer.event);
                     }
                 }  catch (RateLimitedException e) {
                     try {

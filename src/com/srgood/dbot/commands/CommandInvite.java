@@ -1,6 +1,7 @@
 package com.srgood.dbot.commands;
 
 import com.srgood.dbot.BotMain;
+import com.srgood.dbot.utils.ConfigUtils;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
@@ -33,7 +34,7 @@ public class CommandInvite implements Command {
     @Override
     public com.srgood.dbot.PermissionLevels permissionLevel(Guild guild) {
         // TODO Auto-generated method stub
-        return com.srgood.dbot.utils.XMLUtils.getCommandPermissionXML(guild, this);
+        return ConfigUtils.getCommandPermissionXML(guild, this);
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.srgood.dbot.commands;
 
 import com.srgood.dbot.BotMain;
+import com.srgood.dbot.utils.ConfigUtils;
+import com.srgood.dbot.utils.SaveUtils;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
@@ -24,7 +26,7 @@ public class CommandShutdown implements Command {
             if (164117897025683456L == uid || 138048665112543233L == uid) {
                 event.getChannel().sendMessage("Shutting down! " + event.getAuthor().getAsMention());
                 try {
-                    BotMain.writeXML();
+                    SaveUtils.writeXML();
                 } catch (TransformerException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -35,7 +37,7 @@ public class CommandShutdown implements Command {
                     if (BotMain.overrideKey.equals(args[1])) {
                         event.getChannel().sendMessage("Valid key. Shutting down! " + event.getAuthor().getAsMention());
                         try {
-                            BotMain.writeXML();
+                            SaveUtils.writeXML();
                         } catch (TransformerException e) {
                             // TODO Auto-generated catch block
                             e.printStackTrace();
@@ -79,7 +81,7 @@ public class CommandShutdown implements Command {
     @Override
     public com.srgood.dbot.PermissionLevels permissionLevel(Guild guild) {
         // TODO Auto-generated method stub
-        return com.srgood.dbot.utils.XMLUtils.getCommandPermissionXML(guild, this);
+        return ConfigUtils.getCommandPermissionXML(guild, this);
     }
 
     @Override

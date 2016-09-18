@@ -3,7 +3,7 @@ package com.srgood.dbot.utils;
 public class GuildUtils {
     public static void initGuild(net.dv8tion.jda.entities.Guild guild) {
 
-        com.srgood.dbot.utils.XMLUtils.initGuildXML(guild);
+        ConfigUtils.initGuildXML(guild);
 
         try {
             for (com.srgood.dbot.PermissionLevels permission : com.srgood.dbot.PermissionLevels.values()) {
@@ -13,6 +13,6 @@ public class GuildUtils {
             net.dv8tion.jda.utils.SimpleLog.getLog("Reasons").warn("Could not create custom role! Possible permissions problem?");
         }
 
-        com.srgood.dbot.utils.XMLUtils.initGuildCommands(guild);
+        ConfigUtils.initGuildCommands(guild);
     }
 }

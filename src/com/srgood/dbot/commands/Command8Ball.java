@@ -2,6 +2,7 @@ package com.srgood.dbot.commands;
 
 import com.srgood.dbot.PermissionLevels;
 import com.srgood.dbot.Reference;
+import com.srgood.dbot.utils.ConfigUtils;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
@@ -33,7 +34,7 @@ public class Command8Ball implements Command {
 
     @Override
     public PermissionLevels permissionLevel(Guild guild) {
-        return com.srgood.dbot.utils.XMLUtils.getCommandPermissionXML(guild, this);
+        return ConfigUtils.getCommandPermissionXML(guild, this);
     }
 
     @Override

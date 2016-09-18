@@ -1,6 +1,8 @@
 package com.srgood.dbot.commands;
 
 import com.srgood.dbot.BotMain;
+import com.srgood.dbot.utils.CommandUtils;
+import com.srgood.dbot.utils.ConfigUtils;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
@@ -16,9 +18,9 @@ public class CommandToggle implements Command {
     @Override
     public void action(String[] args, GuildMessageReceivedEvent event) {
         // TODO Auto-generated method stub
-        Command mCommand = BotMain.getCommandByName(args[0]);
+        Command mCommand = CommandUtils.getCommandByName(args[0]);
         if (args.length > 0) {
-            com.srgood.dbot.utils.XMLUtils.setCommandIsEnabled(event.getGuild(), mCommand, !com.srgood.dbot.utils.XMLUtils.commandIsEnabled(event.getGuild(), mCommand));
+            ConfigUtils.setCommandIsEnabled(event.getGuild(), mCommand, !ConfigUtils.commandIsEnabled(event.getGuild(), mCommand));
         } else {
             event.getChannel().sendMessage("Please specify a command to toggle");
         }
@@ -39,7 +41,7 @@ public class CommandToggle implements Command {
     @Override
     public com.srgood.dbot.PermissionLevels permissionLevel(Guild guild) {
         // TODO Auto-generated method stub
-        return com.srgood.dbot.utils.XMLUtils.getCommandPermissionXML(guild, this);
+        return ConfigUtils.getCommandPermissionXML(guild, this);
     }
 
     @Override

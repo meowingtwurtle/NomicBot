@@ -1,5 +1,6 @@
 package com.srgood.dbot;
 
+import com.srgood.dbot.utils.ConfigUtils;
 import net.dv8tion.jda.events.ReadyEvent;
 import net.dv8tion.jda.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
@@ -27,13 +28,11 @@ public class BotListener extends ListenerAdapter {
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 
-        String localPrefix = com.srgood.dbot.utils.XMLUtils.getGuildPrefix(event.getGuild());
+        String localPrefix = ConfigUtils.getGuildPrefix(event.getGuild());
 
         if (event.getMessage().getContent().equals(com.srgood.dbot.Reference.Strings.TABLE_FLIP)) {
             event.getChannel().sendMessage(com.srgood.dbot.Reference.Strings.TABLE_UNFLIP_JOKE);
         }
-
-        com.srgood.dbot.BotMain.storeMessage(event);
 
         if (event.getMessage().getContent().startsWith(localPrefix) && !java.util.Objects.equals(event.getMessage().getAuthor().getId(), event.getJDA().getSelfInfo().getId())) {
             com.srgood.dbot.utils.CommandUtils.handleCommand(com.srgood.dbot.BotMain.parser.parse(event.getMessage().getContent().toLowerCase(), event, localPrefix));

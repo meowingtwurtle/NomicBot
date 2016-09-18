@@ -2,6 +2,8 @@ package com.srgood.dbot;
 
 import com.srgood.dbot.commands.Command;
 import com.srgood.dbot.commands.CommandParser;
+import com.srgood.dbot.utils.CommandUtils;
+import com.srgood.dbot.utils.ConfigUtils;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -10,7 +12,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import net.dv8tion.jda.JDA;
 import net.dv8tion.jda.JDABuilder;
-import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.utils.SimpleLog;
 import org.reflections.Reflections;
 import org.w3c.dom.Document;
@@ -19,19 +20,13 @@ import javax.imageio.ImageIO;
 import javax.security.auth.login.LoginException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.time.Instant;
 import java.util.Arrays;
-import java.util.Map;
-import java.util.TreeMap;
 
 public class BotMain extends Application {
 
@@ -46,7 +41,6 @@ public class BotMain extends Application {
     public static ByteArrayOutputStream out,errOut;
 
     public static final CommandParser parser = new CommandParser();
-    public static Map<String, Command> commands = new TreeMap<>();
 
     //XML variables
     public static DocumentBuilderFactory DomFactory;
@@ -118,7 +112,7 @@ public class BotMain extends Application {
 
         //load global parameters
         try {
-            com.srgood.dbot.utils.XMLUtils.initStorage();
+            ConfigUtils.initStorage();
         } catch (Exception e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
@@ -138,7 +132,7 @@ public class BotMain extends Application {
                     if (!cmdClass.isInterface()) {
                         Command cmdInstance = cmdClass.newInstance();
                         String[] names = (String[]) cmdClass.getMethod("names").invoke(cmdInstance);
-                        Arrays.stream(names).forEach(name -> commands.put(name, cmdInstance));
+                        Arrays.stream(names).forEach(name -> CommandUtils.commands.put(name, cmdInstance));
                     }
                 }
             }
@@ -242,153 +236,10 @@ public class BotMain extends Application {
     }
 
 
-    public static String generateDirtyXML() throws TransformerException {
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        Transformer transformer = transformerFactory.newTransformer();
-        // Beautify XML
-        // Set do indents
-        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-        // Set indent amount
-        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-        transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-        DOMSource source = new DOMSource(PInputFile);
-        StringWriter stringWriter = new StringWriter();
-        StreamResult result = new StreamResult(stringWriter);
-        transformer.transform(source, result);
-        return stringWriter.toString();
-    }
+//    private final static int[] illegalChars = { 34, 60, 62, 124, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 58, 42, 63, 92, 46, 47 };
 
-    public static String generateCleanXML() throws TransformerException  {
-        return cleanXMLString(generateDirtyXML());
-    }
+//    static {
+//        Arrays.sort(illegalChars);
+//    }
 
-    //TODO fix the exceptions here
-    public static void writeXML() throws TransformerException {
-        String cleanXML = generateCleanXML();
-
-        try (FileWriter fileWriter = new FileWriter(new File("servers.xml")); BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
-            bufferedWriter.write(cleanXML);
-            bufferedWriter.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    private final static int[] illegalChars = { 34, 60, 62, 124, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 58, 42, 63, 92, 46, 47 };
-
-    static {
-        Arrays.sort(illegalChars);
-    }
-
-    public static String cleanFileName(String badFileName) {
-        StringBuilder cleanName = new StringBuilder();
-        for (int i = 0; i < badFileName.length(); i++) {
-            int c = (int) badFileName.charAt(i);
-            if (Arrays.binarySearch(illegalChars, c) < 0) {
-                cleanName.append((char) c);
-            }
-        }
-        return cleanName.toString();
-    }
-
-    public static void storeMessage(GuildMessageReceivedEvent event) {
-        //creates a path based on a guild's readable name, which has illegal characters removed
-        //example guild: name = "ExampleGuild" channel = "ExampleChannel"
-        //our path for this example would be: "messages/guilds/ExampleGuild/ExampleChannel/all/
-        String truePath = "messages/guilds/" + cleanFileName(event.getGuild().getName()) + "/" + cleanFileName(event.getChannel().getName()) + "/all/";
-        try {
-
-            FileOutputStream allFileStream = new FileOutputStream(truePath + event.getMessage().getId() + ".ser");
-            ObjectOutputStream allObjectStream = new ObjectOutputStream(allFileStream);
-            allObjectStream.writeObject(event.getMessage().getContent());
-
-            allObjectStream.close();
-            Boolean mentioned = false;
-            //checks if jds is mentioned
-            //TODO move this to a more suitable place
-            if (!event.getMessage().getMentionedUsers().isEmpty()) {
-                if (event.getJDA().getSelfInfo().getAsMention().equals(event.getMessage().getMentionedUsers().get(0).getAsMention())) {
-                    mentioned = true;
-                }
-            }
-            //checks if the message is written by a bot, or mentions this bot, and, if it is, puts it in the /bot/ directory also
-            if (event.getAuthor().isBot() | event.getMessage().getContent().startsWith(com.srgood.dbot.utils.XMLUtils.getGuildPrefix(event.getGuild())) | mentioned) {
-                FileOutputStream botFileStream = new FileOutputStream(truePath.replace("/all/", "/bot/") + event.getMessage().getId() + ".ser");
-                ObjectOutputStream botObjectStream = new ObjectOutputStream(botFileStream);
-                botObjectStream.writeObject(event.getMessage().getContent());
-
-                botObjectStream.close();
-            }
-        } catch (FileNotFoundException e) {
-            //creates the file chain, if it dosent exist
-            //TODO can't we change this to a lambada thingy? you know wherever you do that ->
-            File allFile = new File(truePath);
-            File botFile = new File(truePath.replace("/all/", "/bot/"));
-
-            allFile.setWritable(true);
-            botFile.setWritable(true);
-            allFile.mkdirs();
-            botFile.mkdirs();
-
-            storeMessage(event);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-        //TODO Rank based delete
-    }
-
-    private static String cleanXMLString(String dirtyXML) {
-
-//        try (FileReader fr = new FileReader("servers.xml"); FileWriter fw = new FileWriter("temp.xml")) {
-//            BufferedReader br = new BufferedReader(fr);
-//            String line;
-//
-//            while ((line = br.readLine()) != null) {
-//                if (!line.trim().equals("")) // don't write out blank lines
-//                {
-//                    line = line.replace("\n", "").replace("\f", "").replace("\r", "");
-//                    fw.write(line + "\n", 0, line.length() + 1);
-//                }
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return;
-//        }
-//        try {
-//            Files.deleteIfExists(new File("servers.xml").toPath());
-//            Files.move(new File("temp.xml").toPath(), new File("servers.xml").toPath());
-//            Files.deleteIfExists(new File("temp.xml").toPath());
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
-        String[] lines = dirtyXML.split("\n");
-        StringBuilder buffer = new StringBuilder();
-
-        for (String line : lines) {
-            if (!line.trim().equals("") /* don't write out blank lines */ ) {
-                line = line.replace("\f", "").replace("\r", "").replaceAll("\\s+$", "");
-                buffer.append(line).append("\n");
-            }
-        }
-
-        return buffer.toString();
-    }
-
-    public static Command getCommandByName(String name) {
-        return commands.get(name);
-    }
-
-    public static String getPrimaryCommandAlias(String name) {
-        return getNameFromCommand(getCommandByName(name));
-    }
-
-    public static String getNameFromCommand(Command cmd) {
-        return cmd.names()[0];
-    }
 }
