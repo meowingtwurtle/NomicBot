@@ -136,10 +136,13 @@ public class BotMain extends Application {
                 Reflections mReflect = new Reflections(pack);
                 for (Class<? extends Command> cmdClass : mReflect.getSubTypesOf(Command.class)) {
                     if (!cmdClass.isInterface()) {
-                        commands.put(cmdClass.getSimpleName().toLowerCase().replace("command", "").replace("audio", ""), cmdClass.newInstance());
+                        Command cmdInstance = cmdClass.newInstance();
+                        String[] names = (String[]) cmdClass.getMethod("names").invoke(cmdInstance);
+                        Arrays.stream(names).forEach(name -> commands.put(name, cmdInstance));
                     }
                 }
             }
+
         }  catch (Exception e) {
             SimpleLog.getLog("Reasons").warn("One or more of the commands failed to map");
             e.printStackTrace();
