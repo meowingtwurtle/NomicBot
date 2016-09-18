@@ -6,7 +6,7 @@ import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.Random;
 
-public class CoinFlip implements Command {
+public class CommandCoinFlip implements Command {
 
     private final String help = "Flips a coin, and prints the result use:'" + BotMain.prefix + "flip'";
 
