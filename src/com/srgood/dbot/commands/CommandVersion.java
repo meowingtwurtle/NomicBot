@@ -1,10 +1,13 @@
 package com.srgood.dbot.commands;
 
+import com.srgood.dbot.BotMain;
 import com.srgood.dbot.utils.ConfigUtils;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
 public class CommandVersion implements Command {
+
+    private final String help = "Prints the version of Reasons. Use: '" + BotMain.prefix + "version'";
 
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {
@@ -29,7 +32,7 @@ public class CommandVersion implements Command {
     @Override
     public String help() {
         // TODO Auto-generated method stub
-        return null;
+        return help;
     }
 
     @Override

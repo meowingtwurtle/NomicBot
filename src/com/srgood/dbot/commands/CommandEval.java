@@ -3,6 +3,7 @@ package com.srgood.dbot.commands;
 import com.meowingtwurtle.math.api.IMathGroup;
 import com.meowingtwurtle.math.api.IMathHandler;
 import com.meowingtwurtle.math.api.MathExpressionParseException;
+import com.srgood.dbot.BotMain;
 import com.srgood.dbot.utils.ConfigUtils;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
@@ -11,6 +12,8 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 public class CommandEval implements Command {
+
+    private final String help = "Evaluates a math expression and prints result. Supports arithmetic operations, sin, cos, tan, abs, sqrt. Use: '" + BotMain.prefix + "eval <exp>'";
 
     private final static NumberFormat RESULT_FORMATTER = new DecimalFormat("#0.0###");
 
@@ -60,7 +63,7 @@ public class CommandEval implements Command {
 
     @Override
     public String help() {
-        return "no way man";
+        return help;
     }
 
     @Override

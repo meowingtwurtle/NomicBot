@@ -1,18 +1,21 @@
 package com.srgood.dbot.commands;
 
+import com.srgood.dbot.BotMain;
 import com.srgood.dbot.PermissionLevels;
 import com.srgood.dbot.utils.CommandUtils;
 import com.srgood.dbot.utils.ConfigUtils;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
-import static com.srgood.dbot.utils.PermissionUtils.stringToRole;
 import static com.srgood.dbot.utils.ConfigUtils.setCommandPermissionXML;
+import static com.srgood.dbot.utils.PermissionUtils.stringToRole;
 
 /**
  * Created by dmanl on 9/11/2016.
  */
 public class CommandSetPermLevel implements Command {
+    private final String help = "Sets the permission level required for a command on this server. Use: '" + BotMain.prefix + "setpermlevel <command> <role ID>'";
+
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {
         return true;
@@ -30,7 +33,7 @@ public class CommandSetPermLevel implements Command {
 
     @Override
     public String help() {
-        return null;
+        return help;
     }
 
     @Override

@@ -4,9 +4,10 @@ import com.srgood.dbot.BotMain;
 import com.srgood.dbot.utils.CommandUtils;
 import com.srgood.dbot.utils.ConfigUtils;
 import net.dv8tion.jda.entities.Guild;
+import net.dv8tion.jda.entities.PrivateChannel;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
-import java.util.Set;
+import java.util.Collection;
 
 public class CommandHelp implements Command {
     private final String help = "Lists all commands. Use: '" + BotMain.prefix + "help'";
@@ -21,18 +22,23 @@ public class CommandHelp implements Command {
     public void action(String[] args, GuildMessageReceivedEvent event) {
         // TODO Auto-generated method stub
 
-        Set<String> v = CommandUtils.commands.keySet();
-        StringBuilder z = new StringBuilder();
-        z.append("All commands: \n");
-
-
-        for (String i : v) {
-            String output = i.substring(0, 1).toUpperCase() + i.substring(1);
-            z.append("**").append(output).append(":** ").append("  `").append(CommandUtils.commands.get(i).help()).append("`").append("\n\n");
+        Collection<Command> commands = CommandUtils.commands.values();
+        PrivateChannel privateChannel = event.getAuthor().getPrivateChannel();
+        StringBuilder message = new StringBuilder();
+        message.append("All commands: ").append("\n\n");
+        for (Command c : commands) {
+            String cmdMessage = "**" + CommandUtils.getNameFromCommand(c) + ":** " + " `" + c.help() + "`\n\n";
+            if (message.length() + cmdMessage.length() >= 2000) {
+                privateChannel.sendMessage(message.toString());
+                message = new StringBuilder().append("\n");
+            }
+            message.append(cmdMessage);
         }
 
+        if (message.length() > 0) {
+            privateChannel.sendMessage(message.toString());
+        }
 
-        event.getAuthor().getPrivateChannel().sendMessage(z.toString());
         event.getChannel().sendMessage("Commands were set to you in a private message");
 
     }
