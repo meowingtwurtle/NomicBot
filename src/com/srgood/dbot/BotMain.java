@@ -384,12 +384,11 @@ public class BotMain extends Application {
         return commands.get(name);
     }
 
+    public static String getPrimaryCommandAlias(String name) {
+        return getNameFromCommand(getCommandByName(name));
+    }
+
     public static String getNameFromCommand(Command cmd) {
-        for (String s : commands.keySet()) {
-            if (commands.get(s) == cmd) {
-                return s;
-            }
-        }
-        return null;
+        return cmd.names()[0];
     }
 }

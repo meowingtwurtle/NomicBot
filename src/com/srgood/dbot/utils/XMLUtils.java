@@ -74,6 +74,10 @@ public class XMLUtils {
     }
 
     private static void initCommandElement(Element commandsElement, String command) {
+        command = BotMain.getPrimaryCommandAlias(command);
+
+        if (commandElementExists(commandsElement, command)) { return; }
+
         Element commandElement = BotMain.PInputFile.createElement("command");
 
         commandElement.setAttribute("name", command);
