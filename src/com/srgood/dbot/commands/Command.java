@@ -1,6 +1,7 @@
 package com.srgood.dbot.commands;
 
 
+import com.srgood.dbot.PermissionLevels;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
@@ -18,8 +19,12 @@ public interface Command {
     void executed(boolean success, GuildMessageReceivedEvent event);
 
     //required permission
-    com.srgood.dbot.PermissionLevels permissionLevel(Guild guild);
+    PermissionLevels permissionLevel(Guild guild);
 
     //used for XML
-    com.srgood.dbot.PermissionLevels defaultPermissionLevel();
+    PermissionLevels defaultPermissionLevel();
+
+    default String[] names() {
+        return new String[] {this.getClass().getSimpleName().toLowerCase().replaceAll("command(audio)?", "")};
+    }
 }
