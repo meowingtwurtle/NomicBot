@@ -130,7 +130,7 @@ public class BotMain extends Application {
 
         //catch null pointer exceptions when creating commands
         try {
-            String[] packages = { "com.srgood.dbot", "com.srgood.dbot.audio" };
+            String[] packages = { "com.srgood.dbot" };
 
             for (String pack : packages) {
                 Reflections mReflect = new Reflections(pack);
