@@ -40,4 +40,9 @@ public class Command8Ball implements Command {
     public PermissionLevels defaultPermissionLevel() {
         return PermissionLevels.STANDARD;
     }
+
+    @Override
+    public String[] names() {
+        return new String[] {"8ball"};
+    }
 }

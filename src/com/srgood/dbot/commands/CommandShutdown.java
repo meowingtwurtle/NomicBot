@@ -82,4 +82,9 @@ public class CommandShutdown implements Command {
         return com.srgood.dbot.utils.XMLUtils.getCommandPermissionXML(guild, this);
     }
 
+    @Override
+    public String[] names() {
+        return new String[] {"shutdown", "halt", "die", "kill"};
+    }
+
 }

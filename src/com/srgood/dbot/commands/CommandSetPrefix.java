@@ -47,4 +47,9 @@ public class CommandSetPrefix implements Command {
         return com.srgood.dbot.PermissionLevels.ADMINISTRATOR;
     }
 
+    @Override
+    public String[] names() {
+        return new String[] {"setprefix"};
+    }
+
 }

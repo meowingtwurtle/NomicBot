@@ -1,13 +1,10 @@
 package com.srgood.dbot.commands;
 
 import com.srgood.dbot.BotMain;
-import com.srgood.dbot.utils.XMLUtils;
 import net.dv8tion.jda.Permission;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.entities.Message;
-import net.dv8tion.jda.events.Event;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.exceptions.RateLimitedException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,6 +97,11 @@ public class CommandDelete implements Command {
     public com.srgood.dbot.PermissionLevels defaultPermissionLevel() {
         // TODO Auto-generated method stub
         return com.srgood.dbot.PermissionLevels.STANDARD;
+    }
+
+    @Override
+    public String[] names() {
+        return new String[] {"delete"};
     }
 
 }

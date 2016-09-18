@@ -42,4 +42,9 @@ public class CommandGetPrefix implements Command {
         return com.srgood.dbot.PermissionLevels.STANDARD;
     }
 
+    @Override
+    public String[] names() {
+        return new String[] {"getprefix"};
+    }
+
 }

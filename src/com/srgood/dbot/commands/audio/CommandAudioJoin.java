@@ -85,4 +85,9 @@ public class CommandAudioJoin implements AudioCommand {
         return com.srgood.dbot.PermissionLevels.STANDARD;
     }
 
+    @Override
+    public String[] names() {
+        return new String[] {"join"};
+    }
+
 }

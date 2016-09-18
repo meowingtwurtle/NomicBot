@@ -12,8 +12,6 @@ import net.dv8tion.jda.managers.AudioManager;
 
 import java.util.List;
 
-import static sun.audio.AudioPlayer.player;
-
 public class CommandAudioList implements AudioCommand {
 
     private final String help = "Lists the current Audio queue Use: '" + BotMain.prefix + "list'";
@@ -83,6 +81,11 @@ public class CommandAudioList implements AudioCommand {
     public com.srgood.dbot.PermissionLevels permissionLevel(Guild guild) {
         // TODO Auto-generated method stub
         return com.srgood.dbot.utils.XMLUtils.getCommandPermissionXML(guild, this);
+    }
+
+    @Override
+    public String[] names() {
+        return new String[] {"list"};
     }
 
     @Override
