@@ -42,11 +42,6 @@ public class BotMain extends Application {
 
     public static final CommandParser parser = new CommandParser();
 
-    //XML variables
-    public static DocumentBuilderFactory DomFactory;
-    public static DocumentBuilder DomInput;
-    public static Document PInputFile;
-
     private static com.srgood.dbot.app.Controller controller = null;
 
     private boolean firstTime;

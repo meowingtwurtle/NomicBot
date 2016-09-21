@@ -8,6 +8,7 @@ import net.dv8tion.jda.entities.Role;
 import net.dv8tion.jda.utils.SimpleLog;
 import org.w3c.dom.*;
 
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,7 +17,12 @@ import java.util.*;
 import java.util.function.Function;
 
 public class ConfigUtils {
+    private static Document document;
     private static Map<String, Element> servers = new HashMap<>();
+
+    static Document getDocument() {
+        return document;
+    }
 
     private static Element getServerNode(Guild guild) {
         return servers.get(guild.getId());
@@ -54,7 +60,7 @@ public class ConfigUtils {
     }
 
     public static void initGuildCommands(Guild guild) {
-        Element commandsElement = BotMain.PInputFile.createElement("commands");
+        Element commandsElement = getDocument().createElement("commands");
         getServerNode(guild).appendChild(commandsElement);
         initCommandsElement(commandsElement);
     }
@@ -78,7 +84,7 @@ public class ConfigUtils {
 
         if (commandElementExists(commandsElement, command)) { return; }
 
-        Element commandElement = BotMain.PInputFile.createElement("command");
+        Element commandElement = getDocument().createElement("command");
 
         commandElement.setAttribute("name", command);
 
@@ -88,32 +94,32 @@ public class ConfigUtils {
     }
 
     public static void initGuildXML(Guild guild) {
-        Element server = BotMain.PInputFile.createElement("server");
+        Element elementServer = getDocument().createElement("server");
 
-        Element elementServers = getFirstSubElement(BotMain.PInputFile.getDocumentElement(), "servers");
+        Element elementServers = getFirstSubElement(getDocument().getDocumentElement(), "servers");
 
-        Attr idAttr = BotMain.PInputFile.createAttribute("id");
-        idAttr.setValue(guild.getId());
-        server.setAttributeNode(idAttr);
+        Attr attrID = getDocument().createAttribute("id");
+        attrID.setValue(guild.getId());
+        elementServer.setAttributeNode(attrID);
 
-        Element defaultElement = getFirstSubElement(BotMain.PInputFile.getDocumentElement(), "default");
+        Element elementDefault = getFirstSubElement(getDocument().getDocumentElement(), "default");
 
-        ConfigUtils.nodeListToList(defaultElement.getChildNodes()).stream().filter(n -> n instanceof org.w3c.dom.Element).forEach(n -> {
+        ConfigUtils.nodeListToList(elementDefault.getChildNodes()).stream().filter(n -> n instanceof org.w3c.dom.Element).forEach(n -> {
             org.w3c.dom.Element elem = (org.w3c.dom.Element) n;
-            server.appendChild(elem.cloneNode(true));
+            elementServer.appendChild(elem.cloneNode(true));
         });
 
-        elementServers.appendChild(server);
-        servers.put(guild.getId(), server);
+        elementServers.appendChild(elementServer);
+        servers.put(guild.getId(), elementServer);
 
-        Element elementRoleContainer = BotMain.PInputFile.createElement("roles");
+        Element elementRoleContainer = getDocument().createElement("roles");
 
-        server.appendChild(elementRoleContainer);
+        elementServer.appendChild(elementRoleContainer);
     }
 
     public static boolean verifyXML() {
 
-        Document doc = BotMain.PInputFile;
+        Document doc = getDocument();
         SimpleLog.getLog("Reasons").warn("**XML IS BEING VERIFIED**");
 
         if (!doc.getDocumentElement().getTagName().equals("config")) {
@@ -198,14 +204,13 @@ public class ConfigUtils {
         String commandName = CommandUtils.getNameFromCommand(command);
 
         if (CommandUtils.commands.values().contains(command)) {
-            Element commandsElement = getCommandsElement(guild);
+            Element elementCommands = getCommandsElement(guild);
 
-            List<Node> commandList = ConfigUtils.nodeListToList(commandsElement.getElementsByTagName("command"));
+            List<Node> commandList = ConfigUtils.nodeListToList(elementCommands.getElementsByTagName("command"));
 
             for (Node n : commandList) {
                 Element elem = (Element) n;
                 if (elem.getAttribute("name").equals(commandName)) {
-//                  System.out.println("" + Boolean.parseBoolean(elem.getLastChild().getTextContent().trim()));
                     try {
                         return getFirstSubElement(elem, "isEnabled");
                     } catch (NullPointerException e) {
@@ -255,10 +260,10 @@ public class ConfigUtils {
             }
         }
 
-        for (String s : requiredCommandSubElements.keySet()) {
-            if (targetCommand.getElementsByTagName(s).getLength() < 1) {
-                Element subElement = BotMain.PInputFile.createElement(s);
-                subElement.setTextContent("" + requiredCommandSubElements.get(s).apply(commandName));
+        for (Map.Entry<String, Function<String, Object>> entry : requiredCommandSubElements.entrySet()) {
+            if (targetCommand.getElementsByTagName(entry.getKey()).getLength() < 1) {
+                Element subElement = getDocument().createElement(entry.getKey());
+                subElement.setTextContent("" + entry.getValue().apply(commandName));
                 targetCommand.appendChild(subElement);
             }
         }
@@ -324,14 +329,14 @@ public class ConfigUtils {
         try {
             servers = new HashMap<>();
 
-            BotMain.DomFactory = DocumentBuilderFactory.newInstance();
-            BotMain.DomInput = BotMain.DomFactory.newDocumentBuilder();
+            DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder domInput = domFactory.newDocumentBuilder();
 
-            BotMain.PInputFile = BotMain.DomInput.parse(inputStream);
-            BotMain.PInputFile.getDocumentElement().normalize();
+            document = domInput.parse(inputStream);
+            getDocument().getDocumentElement().normalize();
 
             // <config> element
-            Element rootElem = BotMain.PInputFile.getDocumentElement();
+            Element rootElem = getDocument().getDocumentElement();
             // <server> element list
             NodeList ServerNodes = rootElem.getElementsByTagName("server");
             for (int i = 0; i < ServerNodes.getLength(); i++) {
@@ -442,8 +447,8 @@ public class ConfigUtils {
     public static void registerRole(Guild guild, Role role, com.srgood.dbot.PermissionLevels roleLevel) {
         Element elementRoles = getFirstSubElement(getServerNode(guild), "roles");
 
-        Element elementRole = BotMain.PInputFile.createElement("role");
-        Attr roleAttr = BotMain.PInputFile.createAttribute("name");
+        Element elementRole = getDocument().createElement("role");
+        Attr roleAttr = getDocument().createAttribute("name");
         roleAttr.setValue(roleLevel.getXMLName());
         elementRole.setAttributeNode(roleAttr);
         elementRole.setTextContent(role.getId());
