@@ -25,24 +25,12 @@ public class CommandShutdown implements Command {
         try {
             if (164117897025683456L == uid || 138048665112543233L == uid) {
                 event.getChannel().sendMessage("Shutting down! " + event.getAuthor().getAsMention());
-                try {
-                    SaveUtils.writeXML();
-                } catch (TransformerException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                BotMain.jda.shutdown();
+                doShutdown();
             } else {
                 if (args[0].toLowerCase().equals("override")) {
                     if (BotMain.overrideKey.equals(args[1])) {
                         event.getChannel().sendMessage("Valid key. Shutting down! " + event.getAuthor().getAsMention());
-                        try {
-                            SaveUtils.writeXML();
-                        } catch (TransformerException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        }
-                        BotMain.jda.shutdown();
+                        doShutdown();
                     } else {
                         event.getChannel().sendMessage("Bad key " + event.getAuthor().getAsMention());
                     }
@@ -59,6 +47,16 @@ public class CommandShutdown implements Command {
 
         }
 
+    }
+
+    private void doShutdown() {
+        try {
+            SaveUtils.writeXML();
+        } catch (TransformerException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        BotMain.jda.shutdown();
     }
 
     @Override
