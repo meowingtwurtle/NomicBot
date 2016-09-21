@@ -1,6 +1,6 @@
 package com.srgood.dbot.commands;
 
-import com.srgood.dbot.Games.ChessGame;
+import com.srgood.dbot.games.ChessGame;
 import com.srgood.dbot.PermissionLevels;
 import com.srgood.dbot.utils.ConfigUtils;
 import net.dv8tion.jda.entities.Guild;
@@ -9,7 +9,7 @@ import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 /**
  * Created by dmanl on 9/11/2016.
  */
-public class CommandGame implements Command {
+public class CommandChess implements Command {
     private final String help = "A WIP chess game. Use: no usage available";
 
     @Override
@@ -46,6 +46,6 @@ public class CommandGame implements Command {
 
     @Override
     public String[] names() {
-        return new String[] {"game"};
+        return new String[] {"chess"};
     }
 }

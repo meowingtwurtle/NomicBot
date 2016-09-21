@@ -1,4 +1,4 @@
-package com.srgood.dbot.Games;
+package com.srgood.dbot.games;
 
 import net.dv8tion.jda.entities.Message;
 
