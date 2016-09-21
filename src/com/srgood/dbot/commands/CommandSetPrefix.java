@@ -6,7 +6,7 @@ import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
 public class CommandSetPrefix implements Command {
-    private final String help = "Sets the global prefix Use: '" + BotMain.prefix + "setprefix <prefix>'";
+    private final String help = "Sets the prefix on this server. Use: '" + BotMain.prefix + "setprefix <prefix>'";
 
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {

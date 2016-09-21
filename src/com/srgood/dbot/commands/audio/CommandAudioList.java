@@ -15,7 +15,7 @@ import java.util.List;
 
 public class CommandAudioList implements AudioCommand {
 
-    private final String help = "Lists the current Audio queue Use: '" + BotMain.prefix + "list'";
+    private final String help = "Lists the current audio queue for this server. Use: '" + BotMain.prefix + "list'";
 
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {

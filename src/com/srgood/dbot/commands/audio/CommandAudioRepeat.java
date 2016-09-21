@@ -8,7 +8,7 @@ import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.managers.AudioManager;
 
 public class CommandAudioRepeat implements AudioCommand {
-    private final String help = "Used to pause the audio that is playing Use:'" + BotMain.prefix + "pause'";
+    private final String help = "Used to repeat the audio that is playing on this server. Use: '" + BotMain.prefix + "pause'";
 
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {

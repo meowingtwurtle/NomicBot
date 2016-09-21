@@ -1,5 +1,6 @@
 package com.srgood.dbot.commands;
 
+import com.srgood.dbot.BotMain;
 import com.srgood.dbot.PermissionLevels;
 import com.srgood.dbot.Reference;
 import com.srgood.dbot.utils.ConfigUtils;
@@ -12,6 +13,9 @@ import java.util.Random;
  * Created by dmanl on 9/13/2016.
  */
 public class Command8Ball implements Command {
+
+    private final String help = "Prints a random string from our magic 8Ball machine. Use: '" + BotMain.prefix + "roll <# die>'";
+
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {
         return true;
@@ -24,7 +28,7 @@ public class Command8Ball implements Command {
 
     @Override
     public String help() {
-        return "Uses a magic 8Ball. ";
+        return help;
     }
 
     @Override

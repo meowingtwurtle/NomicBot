@@ -14,7 +14,7 @@ import static com.srgood.dbot.BotMain.jda;
 
 public class CommandDelete implements Command {
 
-    private final String help = "Deletes Messages Use: '" + BotMain.prefix + "delete [all|bot] [channel name]' Default is all in current channel";
+    private final String help = "Deletes messages. Use: '" + BotMain.prefix + "delete [all|bot] [channel name]' Default is all in current channel";
     int total;
 
     @Override
