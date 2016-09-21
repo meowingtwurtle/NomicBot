@@ -25,7 +25,7 @@ public class CommandDiceRoll implements Command {
         Random r = new Random();
 
         if (args.length > 0) {
-            if (Integer.parseInt(args[0]) > 10) {
+            if (Integer.parseInt(args[0]) > 50) {
                 event.getChannel().sendMessage("Whoa there, Im not going to roll " + args[0] + " dice, how about 50 instead?");
                 numRolls = 50;
             } else numRolls = Integer.parseInt(args[0]);
