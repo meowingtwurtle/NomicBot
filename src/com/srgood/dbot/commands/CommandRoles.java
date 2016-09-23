@@ -3,6 +3,7 @@ package com.srgood.dbot.commands;
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.PermissionLevels;
 import com.srgood.dbot.utils.ConfigUtils;
+import com.srgood.dbot.utils.MessageUtils;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.entities.Role;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
@@ -28,7 +29,7 @@ public class CommandRoles implements Command {
 
         StringBuilder stringBuilder = new StringBuilder();
         roleStrings.forEach(stringBuilder::append);
-        event.getChannel().sendMessage(stringBuilder.toString());
+        MessageUtils.sendMessageSafeSplitOnChar(event.getChannel(), stringBuilder.toString(), '\n');
     }
 
     @Override

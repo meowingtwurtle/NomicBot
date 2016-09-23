@@ -17,6 +17,10 @@ public class Reference {
         public static final String VERSION = "1.0.0";
     }
 
+    public static class Numbers {
+        public static final int MESSAGE_LIMIT = 2000;
+    }
+
     public static class Other {
         public static final java.util.List<String> BOT_DEVELOPERS = java.util.Collections.unmodifiableList(new java.util.ArrayList<String>() {
             {

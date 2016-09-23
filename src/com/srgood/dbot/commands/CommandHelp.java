@@ -3,6 +3,7 @@ package com.srgood.dbot.commands;
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.utils.CommandUtils;
 import com.srgood.dbot.utils.ConfigUtils;
+import com.srgood.dbot.utils.MessageUtils;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.entities.PrivateChannel;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
@@ -28,16 +29,11 @@ public class CommandHelp implements Command {
         message.append("All commands: ").append("\n\n");
         for (Command c : commands) {
             String cmdMessage = "**" + CommandUtils.getNameFromCommand(c) + ":** " + " `" + c.help() + "`\n\n";
-            if (message.length() + cmdMessage.length() >= 2000) {
-                privateChannel.sendMessage(message.toString());
-                message = new StringBuilder().append("\n");
-            }
             message.append(cmdMessage);
         }
 
-        if (message.length() > 0) {
-            privateChannel.sendMessage(message.toString());
-        }
+        MessageUtils.sendMessageSafeSplitOnChar(privateChannel, message.toString(), '\n');
+
 
         event.getChannel().sendMessage("Commands were set to you in a private message");
 
