@@ -8,8 +8,6 @@ import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.entities.PrivateChannel;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
-import java.util.Collection;
-
 public class CommandHelp implements Command {
     private final String help = "Lists all commands. Use: '" + BotMain.prefix + "help'";
 
@@ -21,20 +19,18 @@ public class CommandHelp implements Command {
 
     @Override
     public void action(String[] args, GuildMessageReceivedEvent event) {
-        // TODO Auto-generated method stub
-
-        Collection<Command> commands = CommandUtils.commands.values();
         PrivateChannel privateChannel = event.getAuthor().getPrivateChannel();
+
         StringBuilder message = new StringBuilder();
         message.append("All commands: ").append("\n\n");
-        for (Command c : commands) {
-            String cmdMessage = "**" + CommandUtils.getNameFromCommand(c) + ":** " + " `" + c.help() + "`\n\n";
-            message.append(cmdMessage);
-        }
+
+        CommandUtils.commands.values().stream()
+                .sorted(new CommandUtils.CommandComparator())
+                .map(command ->
+                        "**" + CommandUtils.getNameFromCommand(command) + ":** " + " `" + command.help() + "`\n\n")
+                .forEach(message::append);
 
         MessageUtils.sendMessageSafeSplitOnChar(privateChannel, message.toString(), '\n');
-
-
         event.getChannel().sendMessage("Commands were set to you in a private message");
 
     }
@@ -64,7 +60,7 @@ public class CommandHelp implements Command {
 
     @Override
     public String[] names() {
-        return new String[] {"help"};
+        return new String[] { "help" };
     }
 
 }
