@@ -7,7 +7,7 @@ import com.srgood.dbot.utils.ConfigUtils;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
-import static com.srgood.dbot.utils.ConfigUtils.setCommandPermissionXML;
+import static com.srgood.dbot.utils.ConfigUtils.setCommandPermission;
 import static com.srgood.dbot.utils.PermissionUtils.stringToRole;
 
 /**
@@ -26,7 +26,7 @@ public class CommandSetPermLevel implements Command {
         Command mCommand = CommandUtils.getCommandByName(args[0]);
         PermissionLevels perm = stringToRole(args[1]);
 
-        setCommandPermissionXML(event.getGuild(),mCommand,perm);
+        setCommandPermission(event.getGuild(),mCommand,perm);
 
         event.getChannel().sendMessage("Permission for " + CommandUtils.getNameFromCommand(mCommand) + " set to " + perm.getReadableName() + ".");
     }
@@ -43,7 +43,7 @@ public class CommandSetPermLevel implements Command {
 
     @Override
     public PermissionLevels permissionLevel(Guild guild) {
-        return ConfigUtils.getCommandPermissionXML(guild, this);
+        return ConfigUtils.getCommandPermission(guild, this);
     }
 
     @Override

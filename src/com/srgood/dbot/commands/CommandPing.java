@@ -37,7 +37,7 @@ public class CommandPing implements Command {
     @Override
     public com.srgood.dbot.PermissionLevels permissionLevel(Guild guild) {
 
-        return ConfigUtils.getCommandPermissionXML(guild, this);
+        return ConfigUtils.getCommandPermission(guild, this);
 
 
     }

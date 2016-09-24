@@ -35,7 +35,7 @@ public class CommandPoing implements Command {
 
     @Override
     public PermissionLevels permissionLevel(Guild guild) {
-        return ConfigUtils.getCommandPermissionXML(guild, this);
+        return ConfigUtils.getCommandPermission(guild, this);
     }
 
     @Override

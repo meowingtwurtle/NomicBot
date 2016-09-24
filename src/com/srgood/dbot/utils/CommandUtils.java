@@ -16,7 +16,7 @@ public class CommandUtils {
     public static void handleCommand(CommandParser.CommandContainer cmd) {
         // checks if the referenced command is in the command list
         if (commands.containsKey(cmd.invoke)) {
-            ConfigUtils.initCommandIfNotExists(cmd);
+            ConfigUtils.initCommandConfigIfNotExists(cmd);
             //if the command is enabled for the message's guild...
             //if the message author has the required permission level...
             if (ConfigUtils.commandIsEnabled(cmd.event.getGuild(), commands.get(cmd.invoke)))

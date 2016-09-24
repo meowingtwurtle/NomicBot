@@ -30,7 +30,7 @@ public class PermissionUtils {
 
         for (com.srgood.dbot.PermissionLevels permLevel : com.srgood.dbot.PermissionLevels.values()) {
             if ((permLevel.getLevel() > maxFound.getLevel())) {
-                if (containsAny(rolesToPermissions(guild, ConfigUtils.getGuildRolesFromInternalName(permLevel.getXMLName(), guild)), Roles)) {
+                if (containsAny(rolesToPermissions(guild, ConfigUtils.getGuildRolesFromPermissionName(guild, permLevel.getXMLName())), Roles)) {
                     maxFound = permLevel;
                     break;
                 }
@@ -81,7 +81,7 @@ public class PermissionUtils {
         Role role = roleMgr.getRole();
 
         if (addToXML) {
-            ConfigUtils.registerRole(guild, role, roleLevel);
+            ConfigUtils.registerRoleConfig(guild, role, roleLevel);
         }
 
 

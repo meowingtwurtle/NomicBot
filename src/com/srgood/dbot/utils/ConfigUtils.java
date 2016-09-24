@@ -24,11 +24,64 @@ public class ConfigUtils {
         return document;
     }
 
-    private static Element getServerNode(Guild guild) {
+    private static Element getCommandElement(Guild guild, String commandName) {
+        return getCommandElement(getCommandsElement(guild), commandName);
+    }
+
+    private static Element getCommandElement(Guild guild, Command command) {
+        return getCommandElement(guild, CommandUtils.getNameFromCommand(command));
+    }
+
+    private static Element getCommandElement(Element commandsElement, String commandName) {
+            List<Node> commandList = ConfigUtils.nodeListToList(commandsElement.getElementsByTagName("command"));
+
+            for (Node n : commandList) {
+                Element elem = (Element) n;
+                if (elem.getAttribute("name").equals(commandName)) {
+                    return elem;
+                }
+            }
+        return null;
+    }
+
+    private static Element getGuildNode(Guild guild) {
         return servers.get(guild.getId());
     }
 
-    public static Set<Role> getGuildRolesFromInternalName(String internalName, Guild guild) {
+
+    private static String getCommandProperty(Element commandElement, String property) {
+        return getFirstSubElement(commandElement, property).getTextContent();
+    }
+
+    private static String getCommandProperty(Guild guild, Command command, String property) {
+        return getCommandProperty(getCommandElement(guild, command), property);
+    }
+
+    private static String getCommandProperty(Guild guild, String commandName, String property) {
+        return getCommandProperty(guild, CommandUtils.getCommandByName(commandName), property);
+    }
+
+    private static void setCommandProperty(Element commandElement, String property, String value) {
+        Element firstMatchElement = getFirstSubElement(commandElement, property);
+        if (firstMatchElement == null) {
+            Element newPropElem = getDocument().createElement(property);
+            newPropElem.setTextContent(value);
+            commandElement.appendChild(newPropElem);
+            return;
+        }
+        firstMatchElement.setTextContent(value);
+    }
+
+    private static void setCommandProperty(Guild guild, Command command, String property, String value) {
+        setCommandProperty(getCommandElement(guild, command), property, value);
+    }
+
+    private static void setCommandProperty(Guild guild, String commandName, String property, String value) {
+        setCommandProperty(guild, CommandUtils.getCommandByName(commandName), property, value);
+    }
+
+
+    public static Set<Role> getGuildRolesFromPermissionName(Guild guild, String permissionName) {
         Element rolesElem = getRolesElement(guild);
 
         List<Node> roleNodes = nodeListToList(rolesElem.getElementsByTagName("role"));
@@ -37,7 +90,7 @@ public class ConfigUtils {
 
         for (Node i : roleNodes) {
             Element elem = (Element) i;
-            if (internalName.equals(elem.getAttribute(internalName))) {
+            if (permissionName.equals(elem.getAttribute(permissionName))) {
                 ret.add(guild.getRoleById(i.getTextContent()));
             }
         }
@@ -46,7 +99,7 @@ public class ConfigUtils {
     }
 
     private static Element getRolesElement(Guild guild) {
-        return getFirstSubElement(getServerNode(guild), "roles");
+        return getFirstSubElement(getGuildNode(guild), "roles");
     }
 
     private static List<Node> nodeListToList(NodeList nl) {
@@ -61,12 +114,12 @@ public class ConfigUtils {
 
     public static void initGuildCommands(Guild guild) {
         Element commandsElement = getDocument().createElement("commands");
-        getServerNode(guild).appendChild(commandsElement);
+        getGuildNode(guild).appendChild(commandsElement);
         initCommandsElement(commandsElement);
     }
 
     private static Element getCommandsElement(Guild guild) {
-        return getFirstSubElement(getServerNode(guild), "commands");
+        return getFirstSubElement(getGuildNode(guild), "commands");
     }
 
     private static void initCommandsElement(Element commandsElement) {
@@ -93,7 +146,7 @@ public class ConfigUtils {
         addMissingSubElementsToCommand(commandsElement, command);
     }
 
-    public static void initGuildXML(Guild guild) {
+    public static void initGuildConfig(Guild guild) {
         Element elementServer = getDocument().createElement("server");
 
         Element elementServers = getFirstSubElement(getDocument().getDocumentElement(), "servers");
@@ -104,8 +157,8 @@ public class ConfigUtils {
 
         Element elementDefault = getFirstSubElement(getDocument().getDocumentElement(), "default");
 
-        ConfigUtils.nodeListToList(elementDefault.getChildNodes()).stream().filter(n -> n instanceof org.w3c.dom.Element).forEach(n -> {
-            org.w3c.dom.Element elem = (org.w3c.dom.Element) n;
+        ConfigUtils.nodeListToList(elementDefault.getChildNodes()).stream().filter(n -> n instanceof Element).forEach(n -> {
+            Element elem = (Element) n;
             elementServer.appendChild(elem.cloneNode(true));
         });
 
@@ -117,7 +170,7 @@ public class ConfigUtils {
         elementServer.appendChild(elementRoleContainer);
     }
 
-    public static boolean verifyXML() {
+    public static boolean verifyConfig() {
 
         Document doc = getDocument();
         SimpleLog.getLog("Reasons").warn("**XML IS BEING VERIFIED**");
@@ -193,92 +246,52 @@ public class ConfigUtils {
     }
 
     private static List<Node> getRoleNodeListFromGuild(Guild guild) {
-        Element serverElem = getServerNode(guild);
+        Element serverElem = getGuildNode(guild);
 
         Element rolesElem = getFirstSubElement(serverElem, "roles");
 
         return nodeListToList(rolesElem.getElementsByTagName("role"));
     }
 
-    private static Element getCommandEnabledElement(Guild guild, Command command) {
-        String commandName = CommandUtils.getNameFromCommand(command);
-
-        if (CommandUtils.commands.values().contains(command)) {
-            Element elementCommands = getCommandsElement(guild);
-
-            List<Node> commandList = ConfigUtils.nodeListToList(elementCommands.getElementsByTagName("command"));
-
-            for (Node n : commandList) {
-                Element elem = (Element) n;
-                if (elem.getAttribute("name").equals(commandName)) {
-                    try {
-                        return getFirstSubElement(elem, "isEnabled");
-                    } catch (NullPointerException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            }
-        }
-        return null;
-    }
-
     public static boolean commandIsEnabled(Guild guild, Command command) {
-        return Boolean.parseBoolean(getCommandEnabledElement(guild, command).getTextContent());
+        return Boolean.parseBoolean(getCommandProperty(guild, command, "enabled"));
     }
 
     public static void setCommandIsEnabled(Guild guild, Command command, boolean enabled) {
-        getCommandEnabledElement(guild, command).setTextContent("" + enabled);
+        setCommandProperty(guild, command, "enabled", "" + enabled);
     }
 
     private static boolean commandElementExists(Element commandsElement, String cmdName) {
-        for (Node n : nodeListToList(commandsElement.getElementsByTagName("command"))) {
-            Element elem = (Element) n;
-            if (elem.getAttribute("name").equals(cmdName)) return true;
-        }
-        return false;
+        return getCommandElement(commandsElement, cmdName) != null;
     }
 
     private static final Map<String, Function<String, Object>> requiredCommandSubElements = new HashMap<String, Function<String, Object>>() {
-        /**
-         *
-         */
         private static final long serialVersionUID = -710068261487017415L;
 
         {
-            put("permLevel", name -> CommandUtils.commands.get(name).defaultPermissionLevel().getLevel());
+            put("permLevel", name -> CommandUtils.getCommandByName(name).defaultPermissionLevel().getLevel());
             put("isEnabled", name -> true);
         }
     };
 
     private static void addMissingSubElementsToCommand(Element commandsElement, String commandName) {
-        Element targetCommand = null;
-        for (Node n : nodeListToList(commandsElement.getElementsByTagName("command"))) {
-            if (((Element) n).getAttribute("name").equals(commandName)) {
-                targetCommand = (Element) n;
-                break;
-            }
-        }
+        Element targetCommand = getCommandElement(commandsElement, commandName);
 
         for (Map.Entry<String, Function<String, Object>> entry : requiredCommandSubElements.entrySet()) {
-            if (targetCommand.getElementsByTagName(entry.getKey()).getLength() < 1) {
-                Element subElement = getDocument().createElement(entry.getKey());
-                subElement.setTextContent("" + entry.getValue().apply(commandName));
-                targetCommand.appendChild(subElement);
-            }
+            setCommandProperty(targetCommand, entry.getKey(), entry.getValue().apply(commandName).toString());
         }
     }
 
     private static Element getFirstSubElement(Element parent, String subTagName) {
         List<Node> nList = nodeListToList(parent.getElementsByTagName(subTagName));
-        return (Element) nList.get(0);
+        return (Element) (nList.size() > 0 ? nList.get(0) : null);
     }
 
     public static void deleteGuild(Guild guild) {
-        for (Node n : nodeListToList(getFirstSubElement(getServerNode(guild), "roles").getElementsByTagName("role"))) {
+        for (Node n : nodeListToList(getFirstSubElement(getGuildNode(guild), "roles").getElementsByTagName("role"))) {
             guild.getRoleById(n.getTextContent()).getManager().delete();
         }
-        getServerNode(guild).getParentNode().removeChild(getServerNode(guild));
+        getGuildNode(guild).getParentNode().removeChild(getGuildNode(guild));
     }
 
     public static String getGuildPrefix(Guild guild) {
@@ -294,11 +307,11 @@ public class ConfigUtils {
     }
 
     private static Node getGuildPrefixNode(Guild guild) {
-        return getFirstSubElement(getServerNode(guild), "prefix");
+        return getFirstSubElement(getGuildNode(guild), "prefix");
     }
 
-    public static void initCommandIfNotExists(com.srgood.dbot.commands.CommandParser.CommandContainer cmd) {
-        Element serverElement = getServerNode(cmd.event.getGuild());
+    static void initCommandConfigIfNotExists(com.srgood.dbot.commands.CommandParser.CommandContainer cmd) {
+        Element serverElement = getGuildNode(cmd.event.getGuild());
         Element commandsElement;
         {
             NodeList commandsNodeList = serverElement.getElementsByTagName("commands");
@@ -351,47 +364,16 @@ public class ConfigUtils {
         }
     }
 
-    public static com.srgood.dbot.PermissionLevels getCommandPermissionXML(Guild guild, Command command) {
-
-
-        String commandName = CommandUtils.getNameFromCommand(command);
-
-        if (CommandUtils.commands.values().contains(command)) {
-            Element commandsElement = getFirstSubElement(getServerNode(guild), "commands");
-
-            List<Node> commandList = nodeListToList(commandsElement.getElementsByTagName("command"));
-
-            for (Node n : commandList) {
-                Element elem = (Element) n;
-                if (elem.getAttribute("name").equals(commandName)) {
-                    return PermissionUtils.intToEnum(Integer.parseInt(getFirstSubElement(elem, "permLevel").getTextContent()));
-                }
-            }
-        }
-
-        return null;
+    public static PermissionLevels getCommandPermission(Guild guild, Command command) {
+        return PermissionUtils.intToEnum(Integer.parseInt(getCommandProperty(guild, command, "permLevel")));
     }
 
-    public static void setCommandPermissionXML(Guild guild, Command command, PermissionLevels perm) {
-        String commandName = CommandUtils.getNameFromCommand(command);
-
-        if (CommandUtils.commands.values().contains(command)) {
-            Element commandsElement = getFirstSubElement(getServerNode(guild), "commands");
-
-            List<Node> commandList = nodeListToList(commandsElement.getElementsByTagName("command"));
-
-            for (Node n : commandList) {
-                Element elem = (Element) n;
-                if (elem.getAttribute("name").equals(commandName)) {
-                    getFirstSubElement(elem, "permLevel").setTextContent("" + perm.getLevel());
-                }
-            }
-        }
-
+    public static void setCommandPermission(Guild guild, Command command, PermissionLevels perm) {
+        setCommandProperty(guild, command, "permLevel" , "" + perm.getLevel());
     }
 
-    public static com.srgood.dbot.PermissionLevels roleToPermission(Role role, Guild guild) {
-        com.srgood.dbot.PermissionLevels permission = null;
+    public static PermissionLevels roleToPermission(Role role, Guild guild) {
+        PermissionLevels permission = null;
 
         if (role == null) {
             return null;
@@ -418,8 +400,8 @@ public class ConfigUtils {
                 continue;
             }
 
-            for (com.srgood.dbot.PermissionLevels permLevel : com.srgood.dbot.PermissionLevels.values()) {
-                if (permLevel.getLevel() >= (permission == null ? com.srgood.dbot.PermissionLevels.STANDARD : permission).getLevel() && permLevel.getXMLName().equals(roleXMLName)) {
+            for (PermissionLevels permLevel : PermissionLevels.values()) {
+                if (permLevel.getLevel() >= (permission == null ? PermissionLevels.STANDARD : permission).getLevel() && permLevel.getXMLName().equals(roleXMLName)) {
                     permission = permLevel;
                 }
             }
@@ -428,8 +410,8 @@ public class ConfigUtils {
         return permission;
     }
 
-    public static boolean guildHasRoleForPermission(Guild guild, com.srgood.dbot.PermissionLevels roleLevel) {
-        Element serverElement = ConfigUtils.getServerNode(guild);
+    public static boolean guildHasRoleForPermission(Guild guild, PermissionLevels roleLevel) {
+        Element serverElement = ConfigUtils.getGuildNode(guild);
 
         Element rolesElement = (Element) serverElement.getElementsByTagName("roles");
 
@@ -444,8 +426,8 @@ public class ConfigUtils {
         return false;
     }
 
-    public static void registerRole(Guild guild, Role role, com.srgood.dbot.PermissionLevels roleLevel) {
-        Element elementRoles = getFirstSubElement(getServerNode(guild), "roles");
+    public static void registerRoleConfig(Guild guild, Role role, PermissionLevels roleLevel) {
+        Element elementRoles = getFirstSubElement(getGuildNode(guild), "roles");
 
         Element elementRole = getDocument().createElement("role");
         Attr roleAttr = getDocument().createAttribute("name");

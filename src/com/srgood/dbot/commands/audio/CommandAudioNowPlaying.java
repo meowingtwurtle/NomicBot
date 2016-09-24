@@ -51,7 +51,7 @@ public class CommandAudioNowPlaying implements AudioCommand {
     @Override
     public com.srgood.dbot.PermissionLevels permissionLevel(Guild guild) {
         // TODO Auto-generated method stub
-        return ConfigUtils.getCommandPermissionXML(guild, this);
+        return ConfigUtils.getCommandPermission(guild, this);
     }
 
     @Override

@@ -31,7 +31,7 @@ public class CommandDebug implements Command {
                     break;
 
                 case "verifyxml":
-                    event.getChannel().sendMessage("" + ConfigUtils.verifyXML());
+                    event.getChannel().sendMessage("" + ConfigUtils.verifyConfig());
                     break;
 
                 case "getuptime":
@@ -49,7 +49,7 @@ public class CommandDebug implements Command {
                     break;
             }
         } else {
-            event.getChannel().sendMessage("Author Name: " + event.getAuthor().getUsername() + "\n" + "Author Nick: " + event.getAuthorNick() + "\n" + "id: " + event.getAuthor().getId() + "\n" + event.getAuthor().getAsMention() + "\n" + "Picture url: " + event.getAuthor().getAvatarUrl() + "\n" + "BotMain.jda.getSelfInfo().getAsMention().length()" + BotMain.jda.getSelfInfo().getAsMention().length() + "\n" + "BotMain.jda.getSelfInfo().getAsMention()" + BotMain.jda.getSelfInfo().getAsMention() + "\n" + "ConfigUtils.verifyXML() = " + ConfigUtils.verifyXML());
+            event.getChannel().sendMessage("Author Name: " + event.getAuthor().getUsername() + "\n" + "Author Nick: " + event.getAuthorNick() + "\n" + "id: " + event.getAuthor().getId() + "\n" + event.getAuthor().getAsMention() + "\n" + "Picture url: " + event.getAuthor().getAvatarUrl() + "\n" + "BotMain.jda.getSelfInfo().getAsMention().length()" + BotMain.jda.getSelfInfo().getAsMention().length() + "\n" + "BotMain.jda.getSelfInfo().getAsMention()" + BotMain.jda.getSelfInfo().getAsMention() + "\n" + "ConfigUtils.verifyConfig() = " + ConfigUtils.verifyConfig());
         }
 
     }
@@ -68,7 +68,7 @@ public class CommandDebug implements Command {
     @Override
     public com.srgood.dbot.PermissionLevels permissionLevel(Guild guild) {
         // TODO Auto-generated method stub
-        return ConfigUtils.getCommandPermissionXML(guild, this);
+        return ConfigUtils.getCommandPermission(guild, this);
     }
 
     @Override

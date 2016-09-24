@@ -21,7 +21,7 @@ public class CommandGetPermLevel implements Command {
         }
         String primaryAlias = CommandUtils.getPrimaryCommandAlias(args[0]);
         Command command = CommandUtils.getCommandByName(primaryAlias);
-        event.getChannel().sendMessage(String.format("Permission level for command `%s`: **%s**", primaryAlias, ConfigUtils.getCommandPermissionXML(event.getGuild(), command).getReadableName()));
+        event.getChannel().sendMessage(String.format("Permission level for command `%s`: **%s**", primaryAlias, ConfigUtils.getCommandPermission(event.getGuild(), command).getReadableName()));
     }
 
     @Override
@@ -36,7 +36,7 @@ public class CommandGetPermLevel implements Command {
 
     @Override
     public PermissionLevels permissionLevel(Guild guild) {
-        return ConfigUtils.getCommandPermissionXML(guild, this);
+        return ConfigUtils.getCommandPermission(guild, this);
     }
 
     @Override
