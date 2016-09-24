@@ -88,6 +88,14 @@
           <isEnabled>true</isEnabled>
           <permLevel>0</permLevel>
         </command>
+      <command name="getpermlevel">
+          <isEnabled>true</isEnabled>
+          <permLevel>0</permLevel>
+        </command>
+        <command name="poing">
+          <isEnabled>true</isEnabled>
+          <permLevel>0</permLevel>
+        </command>
       </commands>
     </server>
     <server id="206507749822038018">
