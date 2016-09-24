@@ -4,6 +4,7 @@ import com.srgood.dbot.commands.Command;
 import com.srgood.dbot.commands.CommandParser;
 import com.srgood.dbot.threading.ChannelThread;
 
+import java.util.Comparator;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -61,4 +62,13 @@ public class CommandUtils {
     public static Command getCommandByName(String name) {
         return commands.get(name);
     }
+
+    public static class CommandComparator implements Comparator<Command> {
+
+        @Override
+        public int compare(Command command0, Command command1) {
+            return getNameFromCommand(command0).compareTo(getNameFromCommand(command1));
+        }
+    }
+
 }
