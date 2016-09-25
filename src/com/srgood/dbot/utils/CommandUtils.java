@@ -21,17 +21,14 @@ public class CommandUtils {
             //if the message author has the required permission level...
             if (ConfigUtils.commandIsEnabled(cmd.event.getGuild(), commands.get(cmd.invoke)))
                 if (PermissionUtils.userPermissionLevel(cmd.event.getGuild(), cmd.event.getAuthor()).getLevel() >= commands.get(cmd.invoke).permissionLevel(cmd.event.getGuild()).getLevel()) {
-                    boolean safe = commands.get(cmd.invoke).called(cmd.args, cmd.event);
-                    if (channelThreadMap.containsKey(cmd.event.getChannel().getId())) {
-                        ChannelThread channelThread = channelThreadMap.get(cmd.event.getChannel().getId());
-                        channelThread.addCommand(new ChannelThread.CommandItem(cmd, safe));
-                        if (!channelThread.isAlive()) {
-                            channelThread.start();
-                        }
-                    } else {
-                        ChannelThread channelThread = new ChannelThread(cmd.event.getChannel());
-                        channelThread.addCommand(new ChannelThread.CommandItem(cmd, safe));
-                        channelThreadMap.put(cmd.event.getChannel().getId(), channelThread);
+                    boolean shouldExecute = commands.get(cmd.invoke).called(cmd.args, cmd.event);
+                    ChannelThread channelThread =
+                            channelThreadMap.containsKey(cmd.event.getChannel().getId())
+                                    ? channelThreadMap.get(cmd.event.getChannel().getId())
+                                    : new ChannelThread(cmd.event.getChannel());
+                    channelThreadMap.put(cmd.event.getChannel().getId(), channelThread);
+                    channelThread.addCommand(new ChannelThread.CommandItem(cmd, shouldExecute));
+                    if (channelThread.getState() == Thread.State.NEW) {
                         channelThread.start();
                     }
                 } else {
