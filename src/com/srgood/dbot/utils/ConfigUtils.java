@@ -258,7 +258,7 @@ public class ConfigUtils {
     }
 
     public static void setCommandIsEnabled(Guild guild, Command command, boolean enabled) {
-        setCommandProperty(guild, command, "enabled", "" + enabled);
+        setCommandProperty(guild, command, "isEnabled", "" + enabled);
     }
 
     private static boolean commandElementExists(Element commandsElement, String cmdName) {
