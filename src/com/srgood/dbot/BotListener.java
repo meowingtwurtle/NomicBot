@@ -5,7 +5,9 @@ import net.dv8tion.jda.events.ReadyEvent;
 import net.dv8tion.jda.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.events.message.guild.GuildMessageUpdateEvent;
+import net.dv8tion.jda.events.voice.VoiceLeaveEvent;
 import net.dv8tion.jda.hooks.ListenerAdapter;
+import net.dv8tion.jda.managers.AudioManager;
 import net.dv8tion.jda.utils.SimpleLog;
 
 /**
@@ -62,6 +64,15 @@ public class BotListener extends ListenerAdapter {
     public void onGuildMessageUpdate(GuildMessageUpdateEvent event) {
         GuildMessageReceivedEvent e = new GuildMessageReceivedEvent(event.getJDA(),event.getResponseNumber(),event.getMessage(),event.getChannel());
         this.onGuildMessageReceived(e);
+    }
+
+    @Override
+    public void onVoiceLeave(VoiceLeaveEvent event) {
+        if (event.getOldChannel().getUsers().size() == 1) {
+            AudioManager manager = event.getGuild().getAudioManager();
+
+            manager.closeAudioConnection();
+        }
     }
 
 }
