@@ -254,7 +254,7 @@ public class ConfigUtils {
     }
 
     public static boolean commandIsEnabled(Guild guild, Command command) {
-        return Boolean.parseBoolean(getCommandProperty(guild, command, "enabled"));
+        return Boolean.parseBoolean(getCommandProperty(guild, command, "isEnabled"));
     }
 
     public static void setCommandIsEnabled(Guild guild, Command command, boolean enabled) {
