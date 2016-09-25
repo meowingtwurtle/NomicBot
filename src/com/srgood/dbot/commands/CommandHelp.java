@@ -26,6 +26,7 @@ public class CommandHelp implements Command {
 
         CommandUtils.commands.values().stream()
                 .sorted(new CommandUtils.CommandComparator())
+                .distinct()
                 .map(command ->
                         "**" + CommandUtils.getNameFromCommand(command) + ":** " + " `" + command.help() + "`\n\n")
                 .forEach(message::append);
