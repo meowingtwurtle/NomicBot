@@ -2,7 +2,7 @@ package com.srgood.dbot.commands;
 
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.utils.CommandUtils;
-import com.srgood.dbot.utils.ConfigUtils;
+import com.srgood.dbot.utils.config.ConfigUtils;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
@@ -20,7 +20,7 @@ public class CommandToggle implements Command {
         // TODO Auto-generated method stub
         Command mCommand = CommandUtils.getCommandByName(args[0]);
         if (args.length > 0) {
-            ConfigUtils.setCommandIsEnabled(event.getGuild(), mCommand, !ConfigUtils.commandIsEnabled(event.getGuild(), mCommand));
+            ConfigUtils.setCommandEnabled(event.getGuild(), mCommand, !ConfigUtils.isCommandEnabled(event.getGuild(), mCommand));
         } else {
             event.getChannel().sendMessage("Please specify a command to toggle");
         }

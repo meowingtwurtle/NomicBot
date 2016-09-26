@@ -1,7 +1,7 @@
 package com.srgood.dbot.threading;
 
 import com.srgood.dbot.BotMain;
-import com.srgood.dbot.utils.SaveUtils;
+import com.srgood.dbot.utils.config.SaveUtils;
 
 import javax.xml.transform.TransformerException;
 

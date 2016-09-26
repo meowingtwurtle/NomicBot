@@ -1,7 +1,7 @@
 package com.srgood.dbot.commands;
 
 import com.srgood.dbot.BotMain;
-import com.srgood.dbot.utils.ConfigUtils;
+import com.srgood.dbot.utils.config.ConfigUtils;
 import net.dv8tion.jda.Permission;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.entities.Message;

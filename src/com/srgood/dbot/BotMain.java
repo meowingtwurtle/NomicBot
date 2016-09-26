@@ -3,7 +3,7 @@ package com.srgood.dbot;
 import com.srgood.dbot.commands.Command;
 import com.srgood.dbot.commands.CommandParser;
 import com.srgood.dbot.utils.CommandUtils;
-import com.srgood.dbot.utils.ConfigUtils;
+import com.srgood.dbot.utils.config.ConfigUtils;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -104,7 +104,7 @@ public class BotMain extends Application {
 
         //load global parameters
         try {
-            ConfigUtils.initStorage();
+            ConfigUtils.initConfig();
         } catch (Exception e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();

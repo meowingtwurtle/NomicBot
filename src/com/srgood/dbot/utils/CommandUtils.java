@@ -3,6 +3,7 @@ package com.srgood.dbot.utils;
 import com.srgood.dbot.commands.Command;
 import com.srgood.dbot.commands.CommandParser;
 import com.srgood.dbot.threading.ChannelThread;
+import com.srgood.dbot.utils.config.ConfigUtils;
 
 import java.util.Comparator;
 import java.util.Map;
@@ -19,7 +20,7 @@ public class CommandUtils {
             ConfigUtils.initCommandConfigIfNotExists(cmd);
             //if the command is enabled for the message's guild...
             //if the message author has the required permission level...
-            if (ConfigUtils.commandIsEnabled(cmd.event.getGuild(), commands.get(cmd.invoke)))
+            if (ConfigUtils.isCommandEnabled(cmd.event.getGuild(), commands.get(cmd.invoke)))
                 if (PermissionUtils.userPermissionLevel(cmd.event.getGuild(), cmd.event.getAuthor()).getLevel() >= commands.get(cmd.invoke).permissionLevel(cmd.event.getGuild()).getLevel()) {
                     boolean shouldExecute = commands.get(cmd.invoke).called(cmd.args, cmd.event);
                     ChannelThread channelThread =

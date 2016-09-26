@@ -3,12 +3,12 @@ package com.srgood.dbot.commands;
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.PermissionLevels;
 import com.srgood.dbot.utils.CommandUtils;
-import com.srgood.dbot.utils.ConfigUtils;
+import com.srgood.dbot.utils.config.ConfigUtils;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
-import static com.srgood.dbot.utils.ConfigUtils.setCommandPermission;
 import static com.srgood.dbot.utils.PermissionUtils.stringToRole;
+import static com.srgood.dbot.utils.config.ConfigUtils.setCommandPermission;
 
 /**
  * Created by dmanl on 9/11/2016.

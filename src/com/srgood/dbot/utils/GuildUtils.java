@@ -1,6 +1,7 @@
 package com.srgood.dbot.utils;
 
 import com.srgood.dbot.PermissionLevels;
+import com.srgood.dbot.utils.config.ConfigUtils;
 import net.dv8tion.jda.entities.Guild;
 
 import java.util.Set;
@@ -33,7 +34,7 @@ public class GuildUtils {
             if (!permLevel.isVisible()) {
                 continue;
             }
-            Set<String> roleIDs = ConfigUtils.getGuildRoleIDsFromPermissionName(guild, permLevel);
+            Set<String> roleIDs = ConfigUtils.getGuildRoleIDsFromPermission(guild, permLevel);
             for (String id : roleIDs) {
                 if (guild.getRoleById(id) == null) {
                     ConfigUtils.deregisterRoleConfig(guild, id);

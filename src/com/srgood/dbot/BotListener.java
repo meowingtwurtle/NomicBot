@@ -1,7 +1,7 @@
 package com.srgood.dbot;
 
-import com.srgood.dbot.utils.ConfigUtils;
 import com.srgood.dbot.utils.GuildUtils;
+import com.srgood.dbot.utils.config.ConfigUtils;
 import net.dv8tion.jda.events.ReadyEvent;
 import net.dv8tion.jda.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
