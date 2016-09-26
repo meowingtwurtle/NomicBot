@@ -14,7 +14,7 @@ import java.util.Random;
  */
 public class Command8Ball implements Command {
 
-    private final String help = "Prints a random string from our magic 8Ball machine. Use: '" + BotMain.prefix + "8ball'";
+    private static final String HELP = "Prints a random string from our magic 8Ball machine. Use: '" + BotMain.prefix + "8ball'";
 
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {
@@ -28,7 +28,7 @@ public class Command8Ball implements Command {
 
     @Override
     public String help() {
-        return help;
+        return HELP;
     }
 
     @Override

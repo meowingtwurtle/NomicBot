@@ -6,7 +6,7 @@ import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
 public class CommandInvite implements Command {
-    private final String help = "Prints the link to add Reasons to another server. Use: '" + BotMain.prefix + "invite'";
+    private static final String HELP = "Prints the link to add Reasons to another server. Use: '" + BotMain.prefix + "invite'";
 
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {
@@ -23,7 +23,7 @@ public class CommandInvite implements Command {
     @Override
     public String help() {
         // TODO Auto-generated method stub
-        return help;
+        return HELP;
     }
 
     @Override

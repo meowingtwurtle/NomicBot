@@ -7,7 +7,7 @@ import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
 public class CommandGetPrefix implements Command {
 
-    private final String help = "Prints the current prefix for this server. Use: '" + BotMain.prefix + "getprefix'";
+    private static final String HELP = "Prints the current prefix for this server. Use: '" + BotMain.prefix + "getprefix'";
 
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {
@@ -23,7 +23,7 @@ public class CommandGetPrefix implements Command {
     @Override
     public String help() {
         // TODO Auto-generated method stub
-        return help;
+        return HELP;
     }
 
     @Override

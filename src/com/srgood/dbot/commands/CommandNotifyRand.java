@@ -16,7 +16,7 @@ import java.util.Random;
  */
 public class CommandNotifyRand implements Command {
 
-    public final String help = "Notifies a random member of a Role. Use: '" + BotMain.prefix + "notifyrand <role ID>'";
+    private static final String HELP = "Notifies a random member of a Role. Use: '" + BotMain.prefix + "notifyrand <role ID>'";
 
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {
@@ -65,7 +65,7 @@ public class CommandNotifyRand implements Command {
 
     @Override
     public String help() {
-        return help;
+        return HELP;
     }
 
     @Override

@@ -20,7 +20,7 @@ import static com.srgood.dbot.BotMain.jda;
 
 public class CommandAudioPlay implements AudioCommand {
 
-    private final String help = "Used to play audio on this server. Use: '" + BotMain.prefix + "play [URL]'";
+    private static final String HELP = "Used to play audio on this server. Use: '" + BotMain.prefix + "play [URL]'";
 
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {
@@ -107,7 +107,7 @@ public class CommandAudioPlay implements AudioCommand {
     @Override
     public String help() {
         // TODO Auto-generated method stub
-        return help;
+        return HELP;
     }
 
     @Override

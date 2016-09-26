@@ -14,7 +14,7 @@ import static com.srgood.dbot.utils.PermissionUtils.stringToRole;
  * Created by dmanl on 9/11/2016.
  */
 public class CommandSetPermLevel implements Command {
-    private final String help = "Sets the permission level required for a command on this server. Use: '" + BotMain.prefix + "setpermlevel <command> <role ID>'";
+    private static final String HELP = "Sets the permission level required for a command on this server. Use: '" + BotMain.prefix + "setpermlevel <command> <role ID>'";
 
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {
@@ -33,7 +33,7 @@ public class CommandSetPermLevel implements Command {
 
     @Override
     public String help() {
-        return help;
+        return HELP;
     }
 
     @Override

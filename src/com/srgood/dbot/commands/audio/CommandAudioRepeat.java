@@ -8,7 +8,7 @@ import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.managers.AudioManager;
 
 public class CommandAudioRepeat implements AudioCommand {
-    private final String help = "Used to repeat the audio that is playing on this server. Use: '" + BotMain.prefix + "pause'";
+    private static final String HELP = "Used to repeat the audio that is playing on this server. Use: '" + BotMain.prefix + "pause'";
 
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {
@@ -34,7 +34,7 @@ public class CommandAudioRepeat implements AudioCommand {
     @Override
     public String help() {
         // TODO Auto-generated method stub
-        return help;
+        return HELP;
     }
 
     @Override

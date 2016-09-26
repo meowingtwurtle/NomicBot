@@ -9,7 +9,7 @@ import net.dv8tion.jda.managers.AudioManager;
 
 public class CommandAudioStop implements AudioCommand {
 
-    private final String help = "Used to stop ALL audio on this server. Use: '" + BotMain.prefix + "stop'";
+    private static final String HELP = "Used to stop ALL audio on this server. Use: '" + BotMain.prefix + "stop'";
 
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {
@@ -30,7 +30,7 @@ public class CommandAudioStop implements AudioCommand {
     @Override
     public String help() {
         // TODO Auto-generated method stub
-        return help;
+        return HELP;
     }
 
     @Override

@@ -6,7 +6,7 @@ import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
 public class CommandSetPrefix implements Command {
-    private final String help = "Sets the prefix on this server. Use: '" + BotMain.prefix + "setprefix <prefix>'";
+    private static final String HELP = "Sets the prefix on this server. Use: '" + BotMain.prefix + "setprefix <prefix>'";
 
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {
@@ -28,7 +28,7 @@ public class CommandSetPrefix implements Command {
     @Override
     public String help() {
         // TODO Auto-generated method stub
-        return help;
+        return HELP;
     }
 
     @Override

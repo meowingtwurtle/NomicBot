@@ -11,7 +11,7 @@ import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
  */
 public class CommandPoing implements Command {
 
-    private final String help = "Poing! Use: '" + BotMain.prefix + "poing'";
+    private static final String HELP = "Poing! Use: '" + BotMain.prefix + "poing'";
 
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {
@@ -25,7 +25,7 @@ public class CommandPoing implements Command {
 
     @Override
     public String help() {
-        return help;
+        return HELP;
     }
 
     @Override

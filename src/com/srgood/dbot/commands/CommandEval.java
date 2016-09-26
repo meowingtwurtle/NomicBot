@@ -13,7 +13,7 @@ import java.text.NumberFormat;
 
 public class CommandEval implements Command {
 
-    private final String help = "Evaluates a math expression and prints result. Supports arithmetic operations, sin, cos, tan, abs, sqrt. Use: '" + BotMain.prefix + "eval <exp>'";
+    private static final String HELP = "Evaluates a math expression and prints result. Supports arithmetic operations, sin, cos, tan, abs, sqrt. Use: '" + BotMain.prefix + "eval <exp>'";
 
     private final static NumberFormat RESULT_FORMATTER = new DecimalFormat("#0.0###");
 
@@ -63,7 +63,7 @@ public class CommandEval implements Command {
 
     @Override
     public String help() {
-        return help;
+        return HELP;
     }
 
     @Override

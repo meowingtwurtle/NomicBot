@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class CommandRoles implements Command {
 
-    private final String help = "Lists all roles and their ID's in the guild. Use: " + BotMain.prefix + "roles";
+    private static final String HELP = "Lists all roles and their ID's in the guild. Use: " + BotMain.prefix + "roles";
 
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {
@@ -34,7 +34,7 @@ public class CommandRoles implements Command {
 
     @Override
     public String help() {
-        return help;
+        return HELP;
     }
 
     @Override
