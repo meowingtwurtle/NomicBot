@@ -44,6 +44,12 @@ public class CommandDebug implements Command {
                 case "throw":
                     new Exception("Test Exception").printStackTrace();
                     break;
+                case "audiotest":
+                    //whatever url you want to pley...
+                    String url = "https://www.youtube.com/watch?v=IxijStMHzyA";
+
+
+                    break;
                 default:
                     event.getChannel().sendMessage("Invalid argument");
                     break;
