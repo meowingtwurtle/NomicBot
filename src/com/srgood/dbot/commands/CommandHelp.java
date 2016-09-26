@@ -9,7 +9,7 @@ import net.dv8tion.jda.entities.PrivateChannel;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
 public class CommandHelp implements Command {
-    private final String help = "Lists all commands. Use: '" + BotMain.prefix + "help'";
+    private final String help = "Lists all commands (only primary aliases). Use: '" + BotMain.prefix + "help'";
 
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {

@@ -7,7 +7,7 @@ import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
 public class CommandToggle implements Command {
-    private final String help = "Toggles a command's state to on or off on this server. Use: '" + BotMain.prefix + "toggle'";
+    private final String help = "Toggles a command's state to on or off on this server. Use: '" + BotMain.prefix + "toggle <command>'";
 
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {

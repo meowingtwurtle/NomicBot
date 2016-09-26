@@ -1,5 +1,6 @@
 package com.srgood.dbot.commands;
 
+import com.srgood.dbot.BotMain;
 import com.srgood.dbot.PermissionLevels;
 import com.srgood.dbot.utils.ConfigUtils;
 import net.dv8tion.jda.entities.Guild;
@@ -7,7 +8,6 @@ import net.dv8tion.jda.entities.Role;
 import net.dv8tion.jda.entities.User;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -15,6 +15,9 @@ import java.util.Random;
  * Created by dmanl on 9/24/2016.
  */
 public class CommandNotifyRand implements Command {
+
+    public final String help = "Notifies a random member of a Role. Use: '" + BotMain.prefix + "notifyrand <role ID>'";
+
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {
         return true;
@@ -62,7 +65,7 @@ public class CommandNotifyRand implements Command {
 
     @Override
     public String help() {
-        return "ahhhhhposterswooooo";
+        return help;
     }
 
     @Override

@@ -9,7 +9,7 @@ import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 import javax.xml.transform.TransformerException;
 
 public class CommandShutdown implements Command {
-    private final String help = "Used to shutdown Reasons. Use: '" + BotMain.prefix + "shutdown' -OR- '" + BotMain.prefix + "shutdown override [override key]'";
+    private final String help = "Used to shutdown Reasons. Use: '" + BotMain.prefix + "shutdown' -OR- '" + BotMain.prefix + "shutdown override <override key>'";
 
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {

@@ -9,7 +9,7 @@ import java.util.Random;
 
 public class CommandDiceRoll implements Command {
 
-    private final String help = "Rolls a dice (or die) and prints the results. Use: '" + BotMain.prefix + "roll <# die>'";
+    private final String help = "Rolls a dice (or die) and prints the results. Use: '" + BotMain.prefix + "roll [# dice MAX: 50; MIN: 0; DEFAULT: 1]'";
 
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {

@@ -9,7 +9,7 @@ import net.dv8tion.jda.managers.AudioManager;
 
 public class CommandAudioVolume implements AudioCommand {
 
-    private final String help = "Used to set the audio volume on this server. Use: '" + BotMain.prefix + "volume <0-100>'";
+    private final String help = "Used to get or set the audio volume on this server. No argument will get, one argument will set. Use: '" + BotMain.prefix + "volume [0-100]'";
 
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {
