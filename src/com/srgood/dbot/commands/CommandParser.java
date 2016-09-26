@@ -3,6 +3,7 @@ package com.srgood.dbot.commands;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 public class CommandParser {
     //creates a new method of type CommandContainer which is used for parsing
@@ -16,7 +17,9 @@ public class CommandParser {
                 beheaded = rw.replaceFirst(prefix, "");
             }
         } catch (IndexOutOfBoundsException ex) {
-            beheaded = rw.replaceFirst(prefix, "");
+            beheaded = Pattern.compile(prefix, Pattern.LITERAL) // Take prefix as a literal regex
+                    .matcher(rw)                                // Get the matcher for the command string
+                    .replaceFirst("");                          // Returns the actual changed string
         }
 
 
