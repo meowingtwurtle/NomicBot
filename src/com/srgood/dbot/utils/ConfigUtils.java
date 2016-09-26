@@ -15,6 +15,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class ConfigUtils {
     private static Document document;
@@ -82,16 +83,24 @@ public class ConfigUtils {
 
 
     public static Set<Role> getGuildRolesFromPermissionName(Guild guild, String permissionName) {
+        return getGuildRoleIDsFromPermissionName(guild, permissionName).stream().map(guild::getRoleById).collect(Collectors.toSet());
+    }
+
+    public static Set<String> getGuildRoleIDsFromPermissionName(Guild guild, PermissionLevels permissionLevel) {
+        return getGuildRoleIDsFromPermissionName(guild, permissionLevel.getXMLName());
+    }
+
+    public static Set<String> getGuildRoleIDsFromPermissionName(Guild guild, String permissionName) {
         Element rolesElem = getRolesElement(guild);
 
         List<Node> roleNodes = nodeListToList(rolesElem.getElementsByTagName("role"));
 
-        Set<Role> ret = new HashSet<>();
+        Set<String> ret = new HashSet<>();
 
         for (Node i : roleNodes) {
             Element elem = (Element) i;
             if (permissionName.equals(elem.getAttribute(permissionName))) {
-                ret.add(guild.getRoleById(i.getTextContent()));
+                ret.add(i.getTextContent());
             }
         }
 
@@ -411,11 +420,8 @@ public class ConfigUtils {
     }
 
     public static boolean guildHasRoleForPermission(Guild guild, PermissionLevels roleLevel) {
-        Element serverElement = ConfigUtils.getGuildNode(guild);
 
-        Element rolesElement = (Element) serverElement.getElementsByTagName("roles");
-
-        List<Node> roleElementList = nodeListToList(rolesElement.getElementsByTagName("role"));
+        List<Node> roleElementList = getRoleNodeListFromGuild(guild);
 
         for (Node n : roleElementList) {
             Element roleElem = (Element) n;
@@ -436,5 +442,23 @@ public class ConfigUtils {
         elementRole.setTextContent(role.getId());
 
         elementRoles.appendChild(elementRole);
+    }
+
+    public static void deregisterRoleConfig(Guild guild, String roleID) {
+        Element elementRole = null;
+
+        List<Node> roleNodeList = getRoleNodeListFromGuild(guild);
+        for (Node n : roleNodeList) {
+            Element elem = (Element) n;
+            String textContent = elem.getTextContent();
+            if (textContent.equals(textContent)) {
+                elementRole = elem;
+                break;
+            }
+        }
+        if (elementRole == null) {
+            return;
+        }
+        elementRole.getParentNode().removeChild(elementRole);
     }
 }
