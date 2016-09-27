@@ -19,6 +19,9 @@ public class Reference {
 
     public static class Numbers {
         public static final int MESSAGE_LIMIT = 2000;
+
+        public static final int VOTE_IMAGE_WIDTH = 800;
+        public static final int VOTE_IMAGE_HEIGHT = 600;
     }
 
     public static class Other {

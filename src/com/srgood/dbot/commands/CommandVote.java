@@ -2,11 +2,13 @@ package com.srgood.dbot.commands;
 
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.PermissionLevels;
+import com.srgood.dbot.utils.ImageUtils;
 import com.srgood.dbot.utils.Vote;
 import com.srgood.dbot.utils.config.ConfigUtils;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -32,13 +34,37 @@ public class CommandVote implements Command{
                 voteMap.put(args[i],0);
             }
 
-            new Vote(voteMap, Integer.parseInt(args[0]),event.getChannel(), () -> {
-                StringBuilder sb = new StringBuilder();
+            new Vote(voteMap, Integer.parseInt(args[0]),event.getChannel(), new Runnable() {
+                @Override
+                public void run() {
+                    StringBuilder sb = new StringBuilder();
 
-                for (String st : voteMap.keySet()) {
-                    sb.append(st).append(": ").append(voteMap.get(st)).append("\n");
+                    for (String st : voteMap.keySet()) {
+                        sb.append(st).append(": ").append(voteMap.get(st)).append("\n");
+                    }
+                    event.getChannel().sendMessage(sb.toString());
+                    try {
+                        event.getChannel().sendFile(ImageUtils.renderVote(
+                                "",
+                                voteMap.keySet().stream().toArray(String[]::new),
+                                integerArrToIntArr(
+                                        voteMap.values()
+                                                .<Integer>toArray(
+                                                        new Integer[] {}
+                                                        )
+                                )
+                        ), null);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-                event.getChannel().sendMessage(sb.toString());
+                private int[] integerArrToIntArr(Integer[] integers) {
+                    int[] ret = new int[integers.length];
+                    for (int i = 0; i < integers.length; i++) {
+                        ret[i] = integers[i];
+                    }
+                    return ret;
+                }
             });
         } else {
             event.getChannel().sendMessage("Incorrect arguments");
