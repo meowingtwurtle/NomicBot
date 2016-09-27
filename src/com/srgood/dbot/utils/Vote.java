@@ -3,10 +3,8 @@ package com.srgood.dbot.utils;
 import com.srgood.dbot.BotMain;
 import net.dv8tion.jda.entities.Channel;
 
-
 import java.time.Duration;
 import java.time.Instant;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -14,9 +12,8 @@ import java.util.Map;
  */
 public class Vote {
 
-    public Vote(LinkedHashMap<String,Integer> choiceMap, int voteDuration, Channel channel, Runnable action) {
-
-        Instant begin = Instant.now();
+    public Vote(Map<String,Integer> choiceMap, int voteDuration, Channel channel, Runnable action) {
+        final Instant begin = Instant.now();
         VoteListener voteListener = new VoteListener(channel,choiceMap);
         BotMain.jda.addEventListener(voteListener);
 
@@ -24,9 +21,7 @@ public class Vote {
             @Override
             public void run() {
                 while (true) {
-
-
-                    if (Duration.between(begin,Instant.now()).getSeconds() >=  voteDuration) {
+                    if (Duration.between(begin, Instant.now()).getSeconds() >=  voteDuration) {
                         action.run();
                         BotMain.jda.removeEventListener(voteListener);
                         break;
@@ -35,6 +30,5 @@ public class Vote {
             }
         };
         thread.run();
-
     }
 }

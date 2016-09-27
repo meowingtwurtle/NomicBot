@@ -1,25 +1,23 @@
 package com.srgood.dbot.utils;
 
 import net.dv8tion.jda.entities.Channel;
-import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.entities.User;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.hooks.ListenerAdapter;
 
-import java.awt.*;
-
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by dmanl on 9/26/2016.
  */
 public class VoteListener extends ListenerAdapter {
     private Channel voteChan;
-    private LinkedHashMap<String,Integer> selections;
-    private ArrayList<User> votedUsers = new ArrayList<>();
+    private Map<String,Integer> selections;
+    private List<User> votedUsers = new ArrayList<>();
 
-    public VoteListener(Channel channel, LinkedHashMap<String,Integer> choices) {
+    public VoteListener(Channel channel, Map<String, Integer> choices) {
         voteChan = channel;
         selections = choices;
     }
@@ -39,12 +37,9 @@ public class VoteListener extends ListenerAdapter {
                             event.getChannel().sendMessage("Your vote has been counted " + event.getAuthor().getAsMention());
                             votedUsers.add(event.getAuthor());
                         }
-
                     }
                 }
             }
         }
     }
-
-
 }

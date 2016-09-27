@@ -6,7 +6,6 @@ import com.srgood.dbot.utils.config.ConfigUtils;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -23,7 +22,7 @@ public class CommandVote implements Command{
     public void action(String[] args, GuildMessageReceivedEvent event) {
 
         if (args.length >= 3) {
-            LinkedHashMap<String,Integer> voteMap = new LinkedHashMap<>();
+            Map<String,Integer> voteMap = new LinkedHashMap<>();
 
             for (int i = 1; i < args.length; i++) {
                 voteMap.put(args[i],0);
