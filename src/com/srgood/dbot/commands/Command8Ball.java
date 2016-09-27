@@ -3,7 +3,7 @@ package com.srgood.dbot.commands;
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.PermissionLevels;
 import com.srgood.dbot.Reference;
-import com.srgood.dbot.utils.ConfigUtils;
+import com.srgood.dbot.utils.config.ConfigUtils;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
@@ -14,7 +14,7 @@ import java.util.Random;
  */
 public class Command8Ball implements Command {
 
-    private final String help = "Prints a random string from our magic 8Ball machine. Use: '" + BotMain.prefix + "roll <# die>'";
+    private static final String HELP = "Prints a random string from our magic 8Ball machine. Use: '" + BotMain.prefix + "8ball'";
 
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {
@@ -28,7 +28,7 @@ public class Command8Ball implements Command {
 
     @Override
     public String help() {
-        return help;
+        return HELP;
     }
 
     @Override

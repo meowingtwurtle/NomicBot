@@ -1,8 +1,8 @@
 package com.srgood.dbot.app;
 
 import com.srgood.dbot.BotMain;
-import com.srgood.dbot.utils.ConfigUtils;
-import com.srgood.dbot.utils.SaveUtils;
+import com.srgood.dbot.utils.config.ConfigUtils;
+import com.srgood.dbot.utils.config.SaveUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;

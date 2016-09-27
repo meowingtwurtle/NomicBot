@@ -1,4 +1,4 @@
-package com.srgood.dbot.utils;
+package com.srgood.dbot.utils.config;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -19,7 +19,7 @@ public class SaveUtils {
         transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
         transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
         transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-        DOMSource source = new DOMSource(ConfigUtils.getDocument());
+        DOMSource source = new DOMSource(ConfigBasicUtils.getDocument());
         StringWriter stringWriter = new StringWriter();
         StreamResult result = new StreamResult(stringWriter);
         transformer.transform(source, result);

@@ -1,7 +1,7 @@
 package com.srgood.dbot.commands;
 
 import com.srgood.dbot.BotMain;
-import com.srgood.dbot.utils.ConfigUtils;
+import com.srgood.dbot.utils.config.ConfigUtils;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
@@ -9,7 +9,7 @@ import java.time.Duration;
 import java.time.Instant;
 
 public class CommandDebug implements Command {
-    private final String help = "Used internally for debugging. Use: '" + BotMain.prefix + "debug [debug arg]'";
+    private static final String HELP = "Used internally for debugging. Use: '" + BotMain.prefix + "debug [debug arg]'";
     private static final boolean ALLOW_DEBUG = true;
 
     @Override
@@ -63,7 +63,7 @@ public class CommandDebug implements Command {
     @Override
     public String help() {
         // TODO Auto-generated method stub
-        return help;
+        return HELP;
     }
 
     @Override

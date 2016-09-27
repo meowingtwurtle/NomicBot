@@ -1,8 +1,8 @@
 package com.srgood.dbot.commands;
 
-import com.srgood.dbot.games.ChessGame;
 import com.srgood.dbot.PermissionLevels;
-import com.srgood.dbot.utils.ConfigUtils;
+import com.srgood.dbot.games.ChessGame;
+import com.srgood.dbot.utils.config.ConfigUtils;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
@@ -10,7 +10,7 @@ import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
  * Created by dmanl on 9/11/2016.
  */
 public class CommandChess implements Command {
-    private final String help = "A WIP chess game. Use: no usage available";
+    private static final String HELP = "A WIP chess game. Use: no usage available";
 
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {
@@ -26,7 +26,7 @@ public class CommandChess implements Command {
 
     @Override
     public String help() {
-        return help;
+        return HELP;
     }
 
     @Override

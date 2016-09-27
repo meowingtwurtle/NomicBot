@@ -1,14 +1,14 @@
 package com.srgood.dbot.commands.audio;
 
 import com.srgood.dbot.BotMain;
-import com.srgood.dbot.utils.ConfigUtils;
+import com.srgood.dbot.utils.config.ConfigUtils;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.managers.AudioManager;
 
 public class CommandAudioLeave implements AudioCommand {
 
-    private final String help = "Makes Reasons leave the connected voice channel on this server. Use: '" + BotMain.prefix + "leave'";
+    private static final String HELP = "Makes Reasons leave the connected voice channel on this server. Use: '" + BotMain.prefix + "leave'";
 
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {
@@ -27,7 +27,7 @@ public class CommandAudioLeave implements AudioCommand {
     @Override
     public String help() {
         // TODO Auto-generated method stub
-        return help;
+        return HELP;
     }
 
     @Override

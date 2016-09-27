@@ -2,14 +2,14 @@ package com.srgood.dbot.commands;
 
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.utils.CommandUtils;
-import com.srgood.dbot.utils.ConfigUtils;
 import com.srgood.dbot.utils.MessageUtils;
+import com.srgood.dbot.utils.config.ConfigUtils;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.entities.PrivateChannel;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
 public class CommandHelp implements Command {
-    private final String help = "Lists all commands. Use: '" + BotMain.prefix + "help'";
+    private static final String HELP = "Lists all commands (only primary aliases). Use: '" + BotMain.prefix + "HELP'";
 
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {
@@ -39,7 +39,7 @@ public class CommandHelp implements Command {
     @Override
     public String help() {
         // TODO Auto-generated method stub
-        return help;
+        return HELP;
     }
 
     @Override
@@ -61,7 +61,7 @@ public class CommandHelp implements Command {
 
     @Override
     public String[] names() {
-        return new String[] { "help" };
+        return new String[] { "HELP" };
     }
 
 }

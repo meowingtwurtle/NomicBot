@@ -1,12 +1,15 @@
 package com.srgood.dbot.commands;
 
+import com.srgood.dbot.BotMain;
 import com.srgood.dbot.PermissionLevels;
 import com.srgood.dbot.utils.CommandUtils;
-import com.srgood.dbot.utils.ConfigUtils;
+import com.srgood.dbot.utils.config.ConfigUtils;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
 public class CommandGetPermLevel implements Command {
+
+    private static final String HELP = "Prints the required permission level for a command in this Guild. Use: '" + BotMain.prefix + "getpermlevel <command>'";
 
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {
@@ -26,7 +29,7 @@ public class CommandGetPermLevel implements Command {
 
     @Override
     public String help() {
-        return null;
+        return HELP;
     }
 
     @Override

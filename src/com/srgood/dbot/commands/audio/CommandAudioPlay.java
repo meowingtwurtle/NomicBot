@@ -5,7 +5,7 @@ import com.srgood.dbot.audio.MusicPlayer;
 import com.srgood.dbot.audio.Playlist;
 import com.srgood.dbot.source.AudioInfo;
 import com.srgood.dbot.source.AudioSource;
-import com.srgood.dbot.utils.ConfigUtils;
+import com.srgood.dbot.utils.config.ConfigUtils;
 import net.dv8tion.jda.Permission;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
@@ -20,7 +20,7 @@ import static com.srgood.dbot.BotMain.jda;
 
 public class CommandAudioPlay implements AudioCommand {
 
-    private final String help = "Used to play audio on this server. Use: '" + BotMain.prefix + "play [URL]'";
+    private static final String HELP = "Used to play audio on this server. Use: '" + BotMain.prefix + "play [URL]'";
 
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {
@@ -107,7 +107,7 @@ public class CommandAudioPlay implements AudioCommand {
     @Override
     public String help() {
         // TODO Auto-generated method stub
-        return help;
+        return HELP;
     }
 
     @Override

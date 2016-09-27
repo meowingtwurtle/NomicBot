@@ -1,7 +1,7 @@
 package com.srgood.dbot.commands;
 
 import com.srgood.dbot.BotMain;
-import com.srgood.dbot.utils.ConfigUtils;
+import com.srgood.dbot.utils.config.ConfigUtils;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
@@ -9,7 +9,7 @@ import java.util.Random;
 
 public class CommandDiceRoll implements Command {
 
-    private final String help = "Rolls a dice (or die) and prints the results. Use: '" + BotMain.prefix + "roll <# die>'";
+    private static final String HELP = "Rolls a dice (or die) and prints the results. Use: '" + BotMain.prefix + "roll [# dice MAX: 50; MIN: 0; DEFAULT: 1]'";
 
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {
@@ -49,7 +49,7 @@ public class CommandDiceRoll implements Command {
     @Override
     public String help() {
         // TODO Auto-generated method stub
-        return help;
+        return HELP;
     }
 
     @Override

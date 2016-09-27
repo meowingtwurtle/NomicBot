@@ -2,14 +2,14 @@ package com.srgood.dbot.commands.audio;
 
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.audio.MusicPlayer;
-import com.srgood.dbot.utils.ConfigUtils;
+import com.srgood.dbot.utils.config.ConfigUtils;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.managers.AudioManager;
 
 public class CommandAudioSkip implements AudioCommand {
 
-    private final String help = "Used to skip the current audio on this server. Use: '" + BotMain.prefix + "skip'";
+    private static final String HELP = "Used to skip the current audio on this server. Use: '" + BotMain.prefix + "skip'";
 
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {
@@ -30,7 +30,7 @@ public class CommandAudioSkip implements AudioCommand {
     @Override
     public String help() {
         // TODO Auto-generated method stub
-        return help;
+        return HELP;
     }
 
     @Override
