@@ -1,5 +1,6 @@
 package com.srgood.dbot.commands;
 
+import com.srgood.dbot.BotMain;
 import com.srgood.dbot.PermissionLevels;
 import com.srgood.dbot.utils.Vote;
 import com.srgood.dbot.utils.config.ConfigUtils;
@@ -13,6 +14,9 @@ import java.util.Map;
  * Created by dmanl on 9/26/2016.
  */
 public class CommandVote implements Command{
+
+    private final static String HELP = "Begins a vote with the specified options that ends after the specified amount of seconds. Use: '" + BotMain.prefix + "vote <duration (seconds)> <option 1> <option 2> [option 3 [option 4 [option 5 [option 6 [...]]]]]'";
+
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {
         return true;
