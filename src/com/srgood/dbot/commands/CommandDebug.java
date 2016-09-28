@@ -1,10 +1,12 @@
 package com.srgood.dbot.commands;
 
 import com.srgood.dbot.BotMain;
+import com.srgood.dbot.utils.ImageUtils;
 import com.srgood.dbot.utils.config.ConfigUtils;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 
@@ -49,6 +51,14 @@ public class CommandDebug implements Command {
                     String url = "https://www.youtube.com/watch?v=IxijStMHzyA";
 
 
+                    break;
+                case "rendertest":
+                    int[] i = {Integer.parseInt(args[1]),Integer.parseInt(args[2])};
+                    try {
+                        event.getChannel().sendFile(ImageUtils.renderVote("Test", new String[] {},i),null);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 default:
                     event.getChannel().sendMessage("Invalid argument");

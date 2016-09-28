@@ -1,10 +1,13 @@
 package com.srgood.dbot.utils;
 
+import com.srgood.dbot.Reference;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 import java.util.stream.IntStream;
 
 import static com.srgood.dbot.Reference.Numbers.VOTE_IMAGE_HEIGHT;
@@ -13,18 +16,26 @@ import static com.srgood.dbot.Reference.Numbers.VOTE_IMAGE_WIDTH;
 public class ImageUtils {
 
     public static File renderVote(String voteName, String[] categoryNames, int[] categoryVotes) throws IOException {
-        BufferedImage workImage = new BufferedImage(VOTE_IMAGE_WIDTH, VOTE_IMAGE_HEIGHT, BufferedImage.TYPE_INT_RGB);
-
+        BufferedImage workImage = new BufferedImage(VOTE_IMAGE_WIDTH, VOTE_IMAGE_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+        int colorInt = 0;
         int totalVotes = IntStream.of(categoryVotes).sum();
-        int degreesUsed = 0;
+        float angle = 0;
+
         Graphics graphics = workImage.getGraphics();
+
         graphics.drawString(voteName, VOTE_IMAGE_WIDTH / 4, VOTE_IMAGE_WIDTH / 8);
-        for (int x : categoryVotes) {
-            float degrees = ((float) x) / ((float) totalVotes);
-            graphics.setColor(Color.WHITE);
-            graphics.fillArc(VOTE_IMAGE_WIDTH / 2, VOTE_IMAGE_HEIGHT / 2, VOTE_IMAGE_WIDTH / 3, VOTE_IMAGE_HEIGHT / 3, degreesUsed, (int)degrees);
-            degreesUsed += degrees;
+
+        for (int i : categoryVotes) {
+
+            float percentage = (float) i / (float) totalVotes;
+            float angle2 = angle + percentage * 360;
+            System.out.println((int) angle + "  " + (int) angle2 + "  " + colorInt + "  " + Reference.Strings.COLORS[colorInt].getRed() + "," + Reference.Strings.COLORS[colorInt].getGreen() + "," + Reference.Strings.COLORS[colorInt].getBlue());
+            graphics.setColor(Reference.Strings.COLORS[colorInt]);
+            graphics.fillArc(VOTE_IMAGE_WIDTH / 3 - 150,VOTE_IMAGE_HEIGHT / 2 - 150, 300,300,(int) angle,(int) (angle2) );
+            angle = angle2;
+            colorInt++;
         }
+
         graphics.dispose();
         workImage.flush();
         File file = File.createTempFile(SecureOverrideKeyGenerator.nextOverrideKey(), ".png");
@@ -32,4 +43,5 @@ public class ImageUtils {
         ImageIO.write(workImage, "png", file);
         return file;
     }
+
 }
