@@ -26,13 +26,15 @@ public class ImageUtils {
         graphics.drawString(voteName, VOTE_IMAGE_WIDTH / 4, VOTE_IMAGE_WIDTH / 8);
 
         for (int i : categoryVotes) {
+            float percent = (float) i / (float) totalVotes;
+            float angleM = percent * 360;
+            System.out.println("Slice percent: " + percent * 100 + " Slice angle: " + angleM + " Total Angle: " + angle);
+            System.out.println(((int) angle + (int) angleM) + "  " + (int) angle);
 
-            float percentage = (float) i / (float) totalVotes;
-            float angle2 = angle + percentage * 360;
-            System.out.println((int) angle + "  " + (int) angle2 + "  " + colorInt + "  " + Reference.Strings.COLORS[colorInt].getRed() + "," + Reference.Strings.COLORS[colorInt].getGreen() + "," + Reference.Strings.COLORS[colorInt].getBlue());
             graphics.setColor(Reference.Strings.COLORS[colorInt]);
-            graphics.fillArc(VOTE_IMAGE_WIDTH / 3 - 150,VOTE_IMAGE_HEIGHT / 2 - 150, 300,300,(int) angle,(int) (angle2) );
-            angle = angle2;
+            graphics.fillArc(VOTE_IMAGE_WIDTH / 3 - 150,VOTE_IMAGE_HEIGHT / 2 - 150, 300,300, (int) angle,(int) angle + (int) angleM);
+
+            angle += angleM;
             colorInt++;
         }
 
