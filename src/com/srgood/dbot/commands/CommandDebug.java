@@ -1,6 +1,7 @@
 package com.srgood.dbot.commands;
 
 import com.srgood.dbot.BotMain;
+import com.srgood.dbot.utils.GuildUtils;
 import com.srgood.dbot.utils.ImageUtils;
 import com.srgood.dbot.utils.config.ConfigUtils;
 import net.dv8tion.jda.entities.Guild;
@@ -27,11 +28,13 @@ public class CommandDebug implements Command {
         if (args.length > 0) {
             switch (args[0].toLowerCase()) {
                 case "flushandinitguild":
-                    ConfigUtils.deleteGuild(event.getGuild());
+                    GuildUtils.deleteGuild(event.getGuild());
                     com.srgood.dbot.utils.GuildUtils.initGuild(event.getGuild());
                     event.getChannel().sendMessage("Done");
                     break;
-
+                case "deleteguild":
+                    GuildUtils.deleteGuild(event.getGuild());
+                    break;
                 case "verifyxml":
                     event.getChannel().sendMessage("" + ConfigUtils.verifyConfig());
                     break;
