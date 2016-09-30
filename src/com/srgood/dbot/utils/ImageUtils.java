@@ -1,19 +1,13 @@
 package com.srgood.dbot.utils;
 
 import com.srgood.dbot.Reference;
-import com.sun.deploy.util.ArrayUtil;
-import org.apache.commons.lang3.ArrayUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.*;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Random;
 import java.util.stream.IntStream;
 
 import static com.srgood.dbot.Reference.Numbers.VOTE_IMAGE_HEIGHT;
