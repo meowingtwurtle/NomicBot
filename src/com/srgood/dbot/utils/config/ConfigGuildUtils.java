@@ -26,25 +26,27 @@ class ConfigGuildUtils {
         return getGuildRoleIDsFromPermissionName(guild, permissionLevel.getXMLName());
     }
 
+    static Set<String> getGuildRoleIDs(Guild guild) {
+        return getRoleNodeListFromGuild(guild).stream().map(Node::getTextContent).collect(Collectors.toSet());
+    }
+
     static Set<String> getGuildRoleIDsFromPermissionName(Guild guild, String permissionName) {
-        Element rolesElem = getRolesElement(guild);
-
-        List<Node> roleNodes = ConfigBasicUtils.nodeListToList(rolesElem.getElementsByTagName("role"));
-
-        Set<String> ret = new HashSet<>();
-
-        for (Node i : roleNodes) {
-            Element elem = (Element) i;
-            if (permissionName.equals(elem.getAttribute(permissionName))) {
-                ret.add(i.getTextContent());
-            }
-        }
-
-        return ret;
+        return getRoleNodeListFromGuild(guild).stream()
+                .filter(n -> n instanceof Element)
+                .map(n -> (Element) n)
+                .filter(elem -> elem.getAttribute("name").equals(permissionName))
+                .map(Node::getTextContent)
+                .collect(Collectors.toSet());
     }
 
     static Element getRolesElement(Guild guild) {
         return ConfigBasicUtils.getFirstSubElement(getGuildNode(guild), "roles");
+    }
+
+    static void initGuildConfigIfNotExists(Guild guild) {
+        if (getGuildNode(guild) == null) {
+            initGuildConfig(guild);
+        }
     }
 
     static void initGuildConfig(Guild guild) {
@@ -72,17 +74,12 @@ class ConfigGuildUtils {
     }
 
     static List<Node> getRoleNodeListFromGuild(Guild guild) {
-        Element serverElem = getGuildNode(guild);
-
-        Element rolesElem = ConfigBasicUtils.getFirstSubElement(serverElem, "roles");
+        Element rolesElem = getRolesElement(guild);
 
         return ConfigBasicUtils.nodeListToList(rolesElem.getElementsByTagName("role"));
     }
 
-    static void deleteGuild(Guild guild) {
-        for (Node n : ConfigBasicUtils.nodeListToList(ConfigBasicUtils.getFirstSubElement(getGuildNode(guild), "roles").getElementsByTagName("role"))) {
-            guild.getRoleById(n.getTextContent()).getManager().delete();
-        }
+    static void deleteGuildConfig(Guild guild) {
         getGuildNode(guild).getParentNode().removeChild(getGuildNode(guild));
     }
 
@@ -102,21 +99,11 @@ class ConfigGuildUtils {
         return ConfigBasicUtils.getFirstSubElement(getGuildNode(guild), "prefix");
     }
 
-    static PermissionLevels roleToPermission(Role role, Guild guild) {
+    static PermissionLevels roleToPermission(Guild guild, Role role) {
         PermissionLevels permission = null;
-
         if (role == null) {
             return null;
         }
-
-        //<config>
-        //  <servers>
-        //    <server>
-        //      <roles>
-        //        <role>
-
-        // <server>
-
 
         List<Node> roleNodeList = getRoleNodeListFromGuild(guild);
 
@@ -172,7 +159,7 @@ class ConfigGuildUtils {
         for (Node n : roleNodeList) {
             Element elem = (Element) n;
             String textContent = elem.getTextContent();
-            if (textContent.equals(textContent)) {
+            if (textContent.equals(roleID)) {
                 elementRole = elem;
                 break;
             }

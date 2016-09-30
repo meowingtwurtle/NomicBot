@@ -18,11 +18,11 @@ public class ConfigUtils {
     }
 
     public static void deleteGuild(Guild guild) {
-        ConfigGuildUtils.deleteGuild(guild);
+        ConfigGuildUtils.deleteGuildConfig(guild);
     }
 
-    public static void initGuildConfig(Guild guild) {
-        ConfigGuildUtils.initGuildConfig(guild);
+    public static void initGuildConfigIfNotExists(Guild guild) {
+        ConfigGuildUtils.initGuildConfigIfNotExists(guild);
     }
     public static String getGuildPrefix(Guild guild) {
         return ConfigGuildUtils.getGuildPrefix(guild);
@@ -32,7 +32,7 @@ public class ConfigUtils {
         ConfigGuildUtils.registerRoleConfig(guild, role, permLevel);
     }
     public static PermissionLevels roleToPermission(Role role) {
-        return ConfigGuildUtils.roleToPermission(role, role.getGuild());
+        return ConfigGuildUtils.roleToPermission(role.getGuild(), role);
     }
     public static Set<Role> getGuildRolesFromPermission(Guild guild, PermissionLevels permLevel) {
         return ConfigGuildUtils.getGuildRolesFromPermissionName(guild, permLevel.getXMLName());
@@ -40,6 +40,10 @@ public class ConfigUtils {
     public static Set<String> getGuildRoleIDsFromPermission(Guild guild, PermissionLevels permLevel) {
         return ConfigGuildUtils.getGuildRoleIDsFromPermission(guild, permLevel);
     }
+    public static Set<String> getGuildRoleIDs(Guild guild) {
+        return ConfigGuildUtils.getGuildRoleIDs(guild);
+    }
+
     public static void deregisterRoleConfig(Guild guild, String roleID) {
         ConfigGuildUtils.deregisterRoleConfig(guild, roleID);
     }
