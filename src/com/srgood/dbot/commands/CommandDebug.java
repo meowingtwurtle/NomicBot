@@ -53,9 +53,10 @@ public class CommandDebug implements Command {
 
                     break;
                 case "rendertest":
-                    int[] ops = {1,1,1};
+                    int[] ops = {1,2,3,2,4};
+
                     try {
-                        event.getChannel().sendFile(ImageUtils.renderVote("Test", new String[] {},ops),null);
+                        event.getChannel().sendFile(ImageUtils.renderVote("Test", new String[] {"A","B","C","D","E"},ops),null);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

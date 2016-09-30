@@ -2,6 +2,7 @@ package com.srgood.dbot.commands;
 
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.PermissionLevels;
+import com.srgood.dbot.Reference;
 import com.srgood.dbot.utils.ImageUtils;
 import com.srgood.dbot.utils.Vote;
 import com.srgood.dbot.utils.config.ConfigUtils;
@@ -27,13 +28,14 @@ public class CommandVote implements Command{
     @Override
     public void action(String[] args, GuildMessageReceivedEvent event) {
 
-        if (args.length >= 3) {
+        if (args.length >= 3 && args.length <= Reference.Strings.COLORS.length + 2) {
             Map<String,Integer> voteMap = new LinkedHashMap<>();
 
-            for (int i = 1; i < args.length; i++) {
+            for (int i = 2; i < args.length; i++) {
                 voteMap.put(args[i],0);
             }
 
+            event.getChannel().sendMessage("A vote has started! use `vote <option>` to vote!");
             new Vote(voteMap, Integer.parseInt(args[0]),event.getChannel(), new Runnable() {
                 @Override
                 public void run() {
@@ -45,7 +47,7 @@ public class CommandVote implements Command{
                     event.getChannel().sendMessage(sb.toString());
                     try {
                         event.getChannel().sendFile(ImageUtils.renderVote(
-                                "",
+                                args[1],
                                 voteMap.keySet().stream().toArray(String[]::new),
                                 integerArrToIntArr(
                                         voteMap.values()
@@ -67,7 +69,7 @@ public class CommandVote implements Command{
                 }
             });
         } else {
-            event.getChannel().sendMessage("Incorrect arguments");
+            event.getChannel().sendMessage("Incorrect arguments, correct usage: " + ConfigUtils.getGuildPrefix(event.getGuild()) + "vote <duration (seconds)> <option 1> <option 2> ... [option 5 (up to " +  Reference.Strings.COLORS.length + " max)]");
         }
     }
 

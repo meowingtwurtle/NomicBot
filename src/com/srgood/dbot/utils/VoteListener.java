@@ -22,7 +22,6 @@ public class VoteListener extends ListenerAdapter {
         selections = choices;
     }
 
-    @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         if (event.getChannel().equals(voteChan)) {
             String msg = event.getMessage().getContent().toLowerCase().trim();
@@ -31,7 +30,7 @@ public class VoteListener extends ListenerAdapter {
                 msg = msg.replace("vote ","");
                 for (String choice : selections.keySet()) {
                     if (choice.equals(msg)) {
-                        if (/*votedUsers.contains(event.getAuthor())*/ false) {
+                        if (votedUsers.contains(event.getAuthor())) {
                             event.getChannel().sendMessage("You have already voted " + event.getAuthor().getAsMention());
                         } else {
                             selections.replace(choice,selections.get(choice) + 1);

@@ -1,12 +1,18 @@
 package com.srgood.dbot.utils;
 
 import com.srgood.dbot.Reference;
+import com.sun.deploy.util.ArrayUtil;
+import org.apache.commons.lang3.ArrayUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.*;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Random;
 import java.util.stream.IntStream;
 
@@ -19,23 +25,50 @@ public class ImageUtils {
         BufferedImage workImage = new BufferedImage(VOTE_IMAGE_WIDTH, VOTE_IMAGE_HEIGHT, BufferedImage.TYPE_INT_ARGB);
         int colorInt = 0;
         int totalVotes = IntStream.of(categoryVotes).sum();
-        float angle = 0;
+
+        Arrays.sort(categoryVotes);
+        Arrays.sort(categoryNames);
+        //ArrayUtils.reverse(categoryVotes);
+        //ArrayUtils.reverse(categoryNames);
+
+        float angle = (float) totalVotes / (float) categoryVotes.length;
+        int shadowOffset = -8;
+        float oSpace = (((float) VOTE_IMAGE_HEIGHT - 320))/ (float) categoryNames.length ;
 
         Graphics graphics = workImage.getGraphics();
+        graphics.setFont(new Font("TimesRoman", Font.PLAIN, 35));
+        FontMetrics metrics = graphics.getFontMetrics();
 
-        graphics.drawString(voteName, VOTE_IMAGE_WIDTH / 4, VOTE_IMAGE_WIDTH / 8);
+        //shading
+        graphics.setColor(new Color(0,0,0,50));
+        graphics.fillArc(VOTE_IMAGE_WIDTH / 4 - 180 + shadowOffset,VOTE_IMAGE_HEIGHT / 2 - 180, 360,360,0,360);
+        graphics.drawString(voteName, VOTE_IMAGE_WIDTH / 2 + shadowOffset, VOTE_IMAGE_HEIGHT / 8);
+
+        graphics.setColor(Color.WHITE);
+        graphics.drawString(voteName, VOTE_IMAGE_WIDTH / 2, VOTE_IMAGE_HEIGHT / 8);
 
         for (int i : categoryVotes) {
             float percent = (float) i / (float) totalVotes;
             float angleM = percent * 360;
-            System.out.println("Slice percent: " + percent * 100 + " Slice angle: " + angleM + " Total Angle: " + angle);
-            System.out.println(((int) angle + (int) angleM) + "  " + (int) angle);
-
             graphics.setColor(Reference.Strings.COLORS[colorInt]);
-            graphics.fillArc(VOTE_IMAGE_WIDTH / 3 - 150,VOTE_IMAGE_HEIGHT / 2 - 150, 300,300, (int) angle,(int) angle + (int) angleM);
-
+            graphics.fillArc(VOTE_IMAGE_WIDTH / 4 - 175,VOTE_IMAGE_HEIGHT / 2 - 175, 350,350, (int) angle,(int) angleM);
             angle += angleM;
             colorInt++;
+        }
+        int totalKeyHeight = (int) (oSpace * (float) categoryNames.length);
+
+        for (int i = 0; i < categoryNames.length; i++) {
+
+            graphics.setColor(new Color(0,0,0,50));
+            graphics.drawString(categoryNames[i] + " (" + categoryVotes[i] + ")",((VOTE_IMAGE_WIDTH / 3) * 2) + 80 + (shadowOffset / 2),(int) (((VOTE_IMAGE_HEIGHT / 2) - (totalKeyHeight / 2)) + (i * oSpace) + metrics.getHeight()) + (shadowOffset / 2));
+            graphics.fillRect(((VOTE_IMAGE_WIDTH / 3) * 2) + 15 + (shadowOffset / 2),(int) (((VOTE_IMAGE_HEIGHT / 2) - (totalKeyHeight / 2)) + (i * oSpace) + 15) + (shadowOffset / 2),30,30);
+
+            graphics.setColor(Reference.Strings.COLORS[i]);
+            graphics.fillRect(((VOTE_IMAGE_WIDTH / 3) * 2) + 15,(int) (((VOTE_IMAGE_HEIGHT / 2) - (totalKeyHeight / 2)) + (i * oSpace) + 15),30,30);
+            graphics.setColor(Color.WHITE);
+
+            graphics.drawString(categoryNames[i] + " (" + categoryVotes[i] + ")",((VOTE_IMAGE_WIDTH / 3) * 2) + 80,(int) (((VOTE_IMAGE_HEIGHT / 2) - (totalKeyHeight / 2)) + (i * oSpace) + metrics.getHeight()));
+
         }
 
         graphics.dispose();
