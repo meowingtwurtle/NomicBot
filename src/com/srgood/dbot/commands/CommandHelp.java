@@ -61,7 +61,7 @@ public class CommandHelp implements Command {
 
     @Override
     public String[] names() {
-        return new String[] { "HELP" };
+        return new String[] { "help" };
     }
 
 }
