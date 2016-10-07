@@ -87,8 +87,6 @@ public class BotMain extends Application {
         System.setErr(errOutPS);
 
         //catch exceptions when building JDA
-        //invite temp: https://discordapp.com/oauth2/authorize?client_id=XXXX&scope=bot&permissions=0x33525237
-
 
         try {
             //create a JDA with one Event listener
