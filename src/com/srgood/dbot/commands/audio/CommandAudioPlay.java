@@ -56,7 +56,6 @@ public class CommandAudioPlay implements AudioCommand {
             }
         } else if (args.length > 0) {
             String url = event.getMessage().getContent().replace(ConfigUtils.getGuildPrefix(event.getGuild())+ "play ","");
-            event.getChannel().sendMessage(url);
             StringBuilder msg = new StringBuilder();
 
             Playlist playlist = Playlist.getPlaylist(url);
