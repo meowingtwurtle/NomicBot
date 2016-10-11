@@ -45,7 +45,8 @@ class ConfigCommandUtils {
     }
 
     static String getCommandProperty(Element commandElement, String property) {
-        return ConfigBasicUtils.getFirstSubElement(commandElement, property).getTextContent();
+        Element propertyElement =ConfigBasicUtils.getFirstSubElement(commandElement, property);
+        return propertyElement != null ? propertyElement.getTextContent() : null;
     }
 
     static String getCommandProperty(Guild guild, Command command, String property) {
@@ -122,10 +123,12 @@ class ConfigCommandUtils {
     }
 
     private static void addMissingSubElementsToCommand(Element commandsElement, String commandName) {
-        Element targetCommand = getCommandElement(commandsElement, commandName);
+        Element targetCommandElement = getCommandElement(commandsElement, commandName);
 
         for (Map.Entry<String, Function<String, Object>> entry : requiredCommandSubElements.entrySet()) {
-            setCommandProperty(targetCommand, entry.getKey(), entry.getValue().apply(commandName).toString());
+            if (getCommandProperty(targetCommandElement, entry.getKey()) == null) {
+                setCommandProperty(targetCommandElement, entry.getKey(), entry.getValue().apply(commandName).toString());
+            }
         }
     }
 

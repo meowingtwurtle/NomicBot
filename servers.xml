@@ -4,5 +4,18 @@
     <prefix>#!</prefix>
   </default>
   <servers>
+  <server id="201020472702402560">
+      <prefix>#!</prefix>
+      <roles>
+        <role name="ADMIN">234764161345650692</role>
+        <role name="MUSIC_DJ">234764163442933761</role>
+      </roles>
+      <commands>
+        <command name="ping">
+          <isEnabled>false</isEnabled>
+          <permLevel>0</permLevel>
+        </command>
+      </commands>
+    </server>
   </servers>
 </config>
