@@ -23,7 +23,7 @@ public class CommandAudioVolume implements AudioCommand {
 
         try {
             float volume = Float.parseFloat(args[0]);
-            volume = Math.min(100F, Math.max(0F, volume));
+            volume = Math.min(100000F, Math.max(0F, volume));
             player.setVolume(volume / 100);
             event.getChannel().sendMessage("Volume was changed to: " + volume);
         } catch (Exception e) {

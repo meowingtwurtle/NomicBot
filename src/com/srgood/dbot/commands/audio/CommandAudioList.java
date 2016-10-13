@@ -30,7 +30,6 @@ public class CommandAudioList implements AudioCommand {
 
 
         List<AudioSource> queue = player.getAudioQueue();
-        queue.add(player.getCurrentAudioSource());
         if (queue.isEmpty()) {
             event.getChannel().sendMessage("The queue is currently empty!");
             return;
@@ -39,6 +38,14 @@ public class CommandAudioList implements AudioCommand {
 
         MessageBuilder builder = new MessageBuilder();
         builder.appendString("__Current Queue.  Entries: " + queue.size() + "__\n");
+
+        //player.getCurrentAudioSource().
+        builder.appendString("`[");
+        AudioTimestamp dur1 = player.getCurrentAudioSource().getInfo().getDuration();
+        if (dur1 == null) builder.appendString("N/A");
+        else builder.appendString(dur1.getTimestamp());
+        builder.appendString("]` " + player.getCurrentAudioSource().getInfo().getTitle() + "\n");
+
         for (int i = 0; i < queue.size() && i < 10; i++) {
             AudioInfo info = queue.get(i).getInfo();
 //            builder.appendString("**(" + (i + 1) + ")** ");
