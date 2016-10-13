@@ -1,7 +1,9 @@
 package com.srgood.dbot.threading;
 
+import com.srgood.dbot.commands.Command;
 import com.srgood.dbot.commands.CommandParser;
 import com.srgood.dbot.utils.CommandUtils;
+import com.srgood.dbot.utils.config.ConfigUtils;
 import net.dv8tion.jda.entities.Channel;
 import net.dv8tion.jda.exceptions.RateLimitedException;
 
@@ -27,14 +29,22 @@ public class ChannelThread extends Thread {
             for (int i = 0; i < commandDeque.size(); i++) {
                 try {
                     CommandItem commandItem = commandDeque.getFirst();
+
+
                     CommandParser.CommandContainer commandContainer = commandItem.getCommandContainer();
-                    if (commandItem.shouldExecute()) {
-                        //then run the command and its post execution code (see command)
-                        CommandUtils.commands.get(commandContainer.invoke).action(commandContainer.args, commandContainer.event);
-                        CommandUtils.commands.get(commandContainer.invoke).executed(true, commandContainer.event);
+                    Command command = CommandUtils.getCommandByName(commandContainer.invoke);
+                    if (ConfigUtils.isCommandEnabled(commandContainer.event.getGuild(), command)) {
+
+                        if (commandItem.shouldExecute()) {
+                            //then run the command and its post execution code (see command)
+                            command.action(commandContainer.args, commandContainer.event);
+                            command.executed(true, commandContainer.event);
+                        } else {
+                            //else only run the execution code
+                            command.executed(false, commandContainer.event);
+                        }
                     } else {
-                        //else only run the execution code
-                        CommandUtils.commands.get(commandContainer.invoke).executed(false, commandContainer.event);
+                        commandContainer.event.getChannel().sendMessage("This command is not enabled.");
                     }
                 }  catch (RateLimitedException e) {
                     try {
