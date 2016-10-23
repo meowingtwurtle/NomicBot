@@ -1,11 +1,12 @@
 package com.srgood.dbot.commands;
 
 import com.srgood.dbot.BotMain;
+import com.srgood.dbot.Reference;
 import com.srgood.dbot.utils.config.ConfigUtils;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
-public class CommandVersion implements Command {
+public class CommandInfo implements Command {
 
     private static final String HELP = "Prints the version of Reasons. Use: '" + BotMain.prefix + "version'";
 
@@ -25,37 +26,32 @@ public class CommandVersion implements Command {
                 //TODO add an XML field for past and current Release notes. I.E. <notes ver= 0.1.2>Added Version command</Notes>
             }
         } else {
-            event.getChannel().sendMessage("The current version is: " + com.srgood.dbot.Reference.Strings.VERSION);
+            event.getChannel().sendMessage(String.format("The current version is: %s%n%s", Reference.Strings.VERSION, Reference.Strings.CREDITS));
         }
     }
 
     @Override
     public String help() {
-        // TODO Auto-generated method stub
         return HELP;
     }
 
     @Override
     public void executed(boolean success, GuildMessageReceivedEvent event) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public com.srgood.dbot.PermissionLevels permissionLevel(Guild guild) {
-        // TODO Auto-generated method stub
         return ConfigUtils.getCommandPermission(guild, this);
     }
 
     @Override
     public com.srgood.dbot.PermissionLevels defaultPermissionLevel() {
-        // TODO Auto-generated method stub
         return com.srgood.dbot.PermissionLevels.STANDARD;
     }
 
     @Override
     public String[] names() {
-        return new String[] {"version"};
+        return new String[] { "info", "version" };
     }
 
 }
