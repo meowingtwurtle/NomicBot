@@ -17,10 +17,15 @@ public class CommandToggle implements Command {
 
     @Override
     public void action(String[] args, GuildMessageReceivedEvent event) {
-        // TODO Auto-generated method stub
         if (args.length > 0) {
             Command mCommand = CommandUtils.getCommandByName(args[0]);
-            ConfigUtils.setCommandEnabled(event.getGuild(), mCommand, !ConfigUtils.isCommandEnabled(event.getGuild(), mCommand));
+            if (mCommand instanceof CommandToggle) {
+                event.getChannel().sendMessage("ERROR: Cannot toggle the toggle command!");
+            } else {
+                boolean oldStatus = ConfigUtils.isCommandEnabled(event.getGuild(), mCommand);
+                ConfigUtils.setCommandEnabled(event.getGuild(), mCommand, !oldStatus);
+                event.getChannel().sendMessage(String.format("Command %s %s", CommandUtils.getNameFromCommand(mCommand), oldStatus ? "DISABLED" : "ENABLED"));
+            }
         } else {
             event.getChannel().sendMessage("Please specify a command to toggle");
         }
