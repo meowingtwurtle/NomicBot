@@ -24,7 +24,8 @@ public class CommandSetPermLevel implements Command {
     @Override
     public void action(String[] args, GuildMessageReceivedEvent event) {
         Command mCommand = CommandUtils.getCommandByName(args[0]);
-        PermissionLevels perm = stringToRole(args[1]);
+        PermissionLevels perm;
+        perm = args[1].equalsIgnoreCase("DEFAULT") ? mCommand.defaultPermissionLevel() : stringToRole(args[1]);
 
         setCommandPermission(event.getGuild(),mCommand,perm);
 
