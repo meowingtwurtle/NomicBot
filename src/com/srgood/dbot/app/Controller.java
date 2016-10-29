@@ -2,7 +2,7 @@ package com.srgood.dbot.app;
 
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.utils.config.ConfigUtils;
-import com.srgood.dbot.utils.config.SaveUtils;
+import com.srgood.dbot.utils.config.ConfigPersistenceUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -63,7 +63,7 @@ public class Controller implements Initializable {
             try {
                 ConfigUtils.initFromStream(new ByteArrayInputStream(xmlEditArea.getText().getBytes(StandardCharsets.UTF_8))); // see http://stackoverflow.com/questions/782178/how-do-i-convert-a-string-to-an-inputstream-in-java
                 loadXMLToEditArea();
-                SaveUtils.writeXML();
+                ConfigPersistenceUtils.writeXML();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -80,7 +80,7 @@ public class Controller implements Initializable {
 
     private void loadXMLToEditArea() {
         try {
-            xmlEditArea.setText(SaveUtils.generateCleanXML());
+            xmlEditArea.setText(ConfigPersistenceUtils.generateCleanXML());
         } catch (TransformerException e) {
             e.printStackTrace();
         }

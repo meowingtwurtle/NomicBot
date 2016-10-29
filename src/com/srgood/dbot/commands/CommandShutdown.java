@@ -3,7 +3,7 @@ package com.srgood.dbot.commands;
 import com.srgood.dbot.BotMain;
 import com.srgood.dbot.Reference;
 import com.srgood.dbot.utils.config.ConfigUtils;
-import com.srgood.dbot.utils.config.SaveUtils;
+import com.srgood.dbot.utils.config.ConfigPersistenceUtils;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
@@ -52,7 +52,7 @@ public class CommandShutdown implements Command {
 
     private void doShutdown() {
         try {
-            SaveUtils.writeXML();
+            ConfigPersistenceUtils.writeXML();
         } catch (TransformerException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

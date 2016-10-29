@@ -7,7 +7,7 @@ import net.dv8tion.jda.entities.Role;
 
 public class GuildUtils {
     public static void initGuild(net.dv8tion.jda.entities.Guild guild) {
-        ConfigUtils.initGuildConfigIfNotExists(guild);
+        ConfigUtils.ensureGuildInitted(guild);
 
         try {
             for (com.srgood.dbot.PermissionLevels permission : com.srgood.dbot.PermissionLevels.values()) {
@@ -17,11 +17,11 @@ public class GuildUtils {
             net.dv8tion.jda.utils.SimpleLog.getLog("Reasons").warn("Could not create custom role! Possible permissions problem?");
         }
 
-        ConfigUtils.initGuildConfigIfNotExists(guild);
+        ConfigUtils.ensureGuildInitted(guild);
     }
 
     public static void deleteGuild(Guild guild) {
-        ConfigUtils.getGuildRoleIDs(guild).forEach(roleID -> {
+        ConfigUtils.getGuildRegisteredRoleIDs(guild).forEach(roleID -> {
             ConfigUtils.deregisterRoleConfig(guild,roleID);
             Role role = guild.getRoleById(roleID);
             if (role != null) {
@@ -32,7 +32,7 @@ public class GuildUtils {
     }
 
     public static void doPreMessageGuildCheck(Guild guild) {
-        ConfigUtils.initGuildConfigIfNotExists(guild);
+        ConfigUtils.ensureGuildInitted(guild);
         checkForRoles(guild);
     }
     private static void checkForRoles(Guild guild) {
@@ -40,7 +40,7 @@ public class GuildUtils {
         createMissingRoles(guild);
     }
     private static void deregisterPhantomRoles(Guild guild) {
-        ConfigUtils.getGuildRoleIDs(guild).stream().filter(s -> guild.getRoleById(s) == null).forEach(id -> ConfigUtils.deregisterRoleConfig(guild, id));
+        ConfigUtils.getGuildRegisteredRoleIDs(guild).stream().filter(s -> guild.getRoleById(s) == null).forEach(id -> ConfigUtils.deregisterRoleConfig(guild, id));
     }
     private static void createMissingRoles(Guild guild) {
         for (PermissionLevels permLevel : PermissionLevels.values()) {

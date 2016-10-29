@@ -1,17 +1,11 @@
 package com.srgood.dbot.utils.config;
 
-import com.srgood.dbot.BotMain;
 import net.dv8tion.jda.utils.SimpleLog;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +14,10 @@ class ConfigBasicUtils {
 
     static Document getDocument() {
         return document;
+    }
+
+    static void setDocument(Document document) {
+        ConfigBasicUtils.document = document;
     }
 
     static List<Node> nodeListToList(NodeList nl) {
@@ -112,35 +110,4 @@ class ConfigBasicUtils {
         return (Element) (nList.size() > 0 ? nList.get(0) : null);
     }
 
-    // TODO fix the exceptions here, too
-    public static void initStorage() throws Exception {
-        File inputFile = new File("servers.xml");
-        initFromStream(new FileInputStream(inputFile));
-    }
-
-    public static void initFromStream(InputStream inputStream) throws Exception {
-        try {
-            ConfigDangerUtils.resetServers();
-
-            DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder domInput = domFactory.newDocumentBuilder();
-
-            document = domInput.parse(inputStream);
-            getDocument().getDocumentElement().normalize();
-
-            // <config> element
-            Element rootElem = getDocument().getDocumentElement();
-            // <server> element list
-            NodeList ServerNodes = rootElem.getElementsByTagName("server");
-            for (int i = 0; i < ServerNodes.getLength(); i++) {
-                Element ServerNode = (Element) ServerNodes.item(i);
-
-                ConfigDangerUtils.addServer(ServerNode.getAttribute("id"), ServerNode);
-            }
-
-            BotMain.prefix = getFirstSubElement(getFirstSubElement(rootElem, "default"), "prefix").getTextContent();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }

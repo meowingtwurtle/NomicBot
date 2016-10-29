@@ -1,29 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <config>
-  <default>
-    <prefix>#!</prefix>
-  </default>
-  <servers>
-  <server id="201020472702402560">
-      <prefix>#!</prefix>
-      <roles>
-      <role name="ADMIN">239816304301834250</role>
-        <role name="MUSIC_DJ">239816309552971786</role>
-      </roles>
-      <commands>
-        <command name="ping">
-          <isEnabled>false</isEnabled>
-          <permLevel>0</permLevel>
-        </command>
-      <command name="version">
-          <isEnabled>true</isEnabled>
-          <permLevel>0</permLevel>
-        </command>
-        <command name="shutdown">
-          <isEnabled>true</isEnabled>
-          <permLevel>3</permLevel>
-        </command>
-      </commands>
-    </server>
-  </servers>
+    <default>
+        <prefix>#!</prefix>
+        <roles/>
+        <commands/>
+    </default>
+    <servers>
+        <server id="201020472702402560">
+            <prefix>#!</prefix>
+            <roles>
+                <role name="ADMIN">239816304301834250</role>
+                <role name="MUSIC_DJ">239816309552971786</role>
+            </roles>
+            <commands>
+                <command name="ping">
+                    <isEnabled>false</isEnabled>
+                    <permLevel>0</permLevel>
+                </command>
+                <command name="version">
+                    <isEnabled>true</isEnabled>
+                    <permLevel>0</permLevel>
+                </command>
+                <command name="shutdown">
+                    <isEnabled>true</isEnabled>
+                    <permLevel>3</permLevel>
+                </command>
+            </commands>
+        </server>
+    </servers>
 </config>

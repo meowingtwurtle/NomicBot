@@ -1,7 +1,7 @@
 package com.srgood.dbot.threading;
 
 import com.srgood.dbot.BotMain;
-import com.srgood.dbot.utils.config.SaveUtils;
+import com.srgood.dbot.utils.config.ConfigPersistenceUtils;
 
 import javax.xml.transform.TransformerException;
 
@@ -10,7 +10,7 @@ public class ShutdownThread extends Thread {
     public void start() {
 
         try {
-            SaveUtils.writeXML();
+            ConfigPersistenceUtils.writeXML();
         } catch (TransformerException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

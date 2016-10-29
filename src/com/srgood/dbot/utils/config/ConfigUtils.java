@@ -11,55 +11,61 @@ import java.util.Set;
 
 public class ConfigUtils {
     public static void initConfig() throws Exception {
-        ConfigBasicUtils.initStorage();
+        ConfigPersistenceUtils.initConfig();
     }
+
     public static void initFromStream(InputStream inputStream) throws Exception {
-        ConfigBasicUtils.initFromStream(inputStream);
+        ConfigPersistenceUtils.initConfigFromStream(inputStream);
     }
 
     public static void deleteGuild(Guild guild) {
         ConfigGuildUtils.deleteGuildConfig(guild);
     }
 
-    public static void initGuildConfigIfNotExists(Guild guild) {
-        ConfigGuildUtils.initGuildConfigIfNotExists(guild);
+    public static void ensureGuildInitted(Guild guild) {
+        ConfigGuildUtils.ensureGuildInitted(guild);
     }
+    
     public static String getGuildPrefix(Guild guild) {
         return ConfigGuildUtils.getGuildPrefix(guild);
     }
 
     public static void registerRoleConfig(Guild guild, Role role, PermissionLevels permLevel) {
-        ConfigGuildUtils.registerRoleConfig(guild, role, permLevel);
+        ConfigRoleUtils.registerRoleConfig(guild, role, permLevel);
     }
+
     public static PermissionLevels roleToPermission(Role role) {
-        return ConfigGuildUtils.roleToPermission(role.getGuild(), role);
+        return ConfigRoleUtils.roleToPermission(role.getGuild(), role);
     }
+
     public static Set<Role> getGuildRolesFromPermission(Guild guild, PermissionLevels permLevel) {
-        return ConfigGuildUtils.getGuildRolesFromPermissionName(guild, permLevel.getXMLName());
+        return ConfigRoleUtils.getGuildRolesFromPermissionLevel(guild, permLevel);
     }
-    public static Set<String> getGuildRoleIDsFromPermission(Guild guild, PermissionLevels permLevel) {
-        return ConfigGuildUtils.getGuildRoleIDsFromPermission(guild, permLevel);
-    }
-    public static Set<String> getGuildRoleIDs(Guild guild) {
-        return ConfigGuildUtils.getGuildRoleIDs(guild);
+
+    public static Set<String> getGuildRegisteredRoleIDs(Guild guild) {
+        return ConfigRoleUtils.getGuildRegisteredRoleIDs(guild);
     }
 
     public static void deregisterRoleConfig(Guild guild, String roleID) {
-        ConfigGuildUtils.deregisterRoleConfig(guild, roleID);
+        ConfigRoleUtils.deregisterRoleConfig(guild, roleID);
     }
+
     public static boolean guildHasRoleForPermission(Guild guild, PermissionLevels permLevel) {
-        return ConfigGuildUtils.guildHasRoleForPermission(guild, permLevel);
+        return ConfigRoleUtils.guildHasRoleForPermission(guild, permLevel);
     }
 
     public static void initCommandConfigIfNotExists(CommandParser.CommandContainer cmd) {
         ConfigCommandUtils.initCommandConfigIfNotExists(cmd);
     }
+
     public static boolean isCommandEnabled(Guild guild, Command command) {
         return ConfigCommandUtils.isCommandEnabled(guild, command);
     }
+
     public static void setCommandEnabled(Guild guild, Command command, boolean enabled) {
         ConfigCommandUtils.setCommandIsEnabled(guild, command, enabled);
     }
+
     public static PermissionLevels getCommandPermission(Guild guild, Command command) {
         return ConfigCommandUtils.getCommandPermission(guild, command);
     }
