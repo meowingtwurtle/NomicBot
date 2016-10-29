@@ -1,6 +1,7 @@
 package com.srgood.dbot.commands;
 
 import com.srgood.dbot.BotMain;
+import com.srgood.dbot.Reference;
 import com.srgood.dbot.utils.config.ConfigUtils;
 import com.srgood.dbot.utils.config.SaveUtils;
 import net.dv8tion.jda.entities.Guild;
@@ -23,7 +24,7 @@ public class CommandShutdown implements Command {
 
 
         try {
-            if (164117897025683456L == uid || 138048665112543233L == uid) {
+            if (Reference.Other.BOT_DEVELOPERS.contains(String.valueOf(uid))) {
                 event.getChannel().sendMessage("Shutting down! " + event.getAuthor().getAsMention());
                 doShutdown();
             } else {
