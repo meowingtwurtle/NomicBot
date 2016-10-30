@@ -88,7 +88,7 @@ class ConfigCommandUtils {
 
     private static void initCommandsElement(Element commandsElement) {
         try {
-            for (String command : CommandUtils.commands.keySet()) {
+            for (String command : CommandUtils.getCommandsMap().keySet()) {
                 initCommandElement(commandsElement, command);
             }
         } catch (Exception e4) {

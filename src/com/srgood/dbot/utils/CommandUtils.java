@@ -11,7 +11,7 @@ import java.util.TreeMap;
 
 public class CommandUtils {
 
-    public static Map<String, Command> commands = new TreeMap<>();
+    private static Map<String, Command> commands = new TreeMap<>();
     private static java.util.Map<String, ChannelThread> channelThreadMap = new java.util.HashMap<>();
 
     public static void handleCommand(CommandParser.CommandContainer cmd) {
@@ -59,6 +59,10 @@ public class CommandUtils {
 
     public static Command getCommandByName(String name) {
         return commands.get(name);
+    }
+
+    public static Map<String, Command> getCommandsMap() {
+        return commands;
     }
 
     public static class CommandComparator implements Comparator<Command> {
