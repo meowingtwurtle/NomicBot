@@ -6,12 +6,11 @@ import com.srgood.dbot.utils.config.ConfigUtils;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
-public class CommandToggle implements Command {
-    private static final String HELP = "Toggles a command's state to on or off on this server. Use: '" + BotMain.prefix + "toggle <command>'";
+public class CommandDisable implements Command {
+    private static final String HELP = "Disables a command on this server. Use: '" + BotMain.prefix + "disable <command>'";
 
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {
-        // TODO Auto-generated method stub
         return true;
     }
 
@@ -19,12 +18,11 @@ public class CommandToggle implements Command {
     public void action(String[] args, GuildMessageReceivedEvent event) {
         if (args.length > 0) {
             Command mCommand = CommandUtils.getCommandByName(args[0]);
-            if (mCommand instanceof CommandToggle) {
-                event.getChannel().sendMessage("ERROR: Cannot toggle the toggle command!");
-            } else {
-                boolean oldStatus = ConfigUtils.isCommandEnabled(event.getGuild(), mCommand);
-                ConfigUtils.setCommandEnabled(event.getGuild(), mCommand, !oldStatus);
-                event.getChannel().sendMessage(String.format("Command %s %s", CommandUtils.getNameFromCommand(mCommand), oldStatus ? "DISABLED" : "ENABLED"));
+            try {
+                CommandUtils.setCommandEnabled(event.getGuild(), mCommand, false);
+                event.getChannel().sendMessage(String.format("Command %s disabled.", CommandUtils.getNameFromCommand(mCommand)));
+            } catch (IllegalArgumentException e) {
+                event.getChannel().sendMessage(String.format("Cannot disable command %s.", CommandUtils.getNameFromCommand(mCommand)));
             }
         } else {
             event.getChannel().sendMessage("Please specify a command to toggle");
@@ -57,7 +55,7 @@ public class CommandToggle implements Command {
 
     @Override
     public String[] names() {
-        return new String[] {"toggle"};
+        return new String[] { "disable" };
     }
 
 }
