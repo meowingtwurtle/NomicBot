@@ -134,26 +134,31 @@ class ConfigCommandUtils {
         }
     }
 
-    public static void initCommandConfigIfNotExists(com.srgood.dbot.commands.CommandParser.CommandContainer cmd) {
-        Element serverElement = ConfigGuildUtils.getGuildNode(cmd.event.getGuild());
+    static void initCommandConfigIfNotExists(com.srgood.dbot.commands.CommandParser.CommandContainer cmd) {
+        initCommandConfigIfNotExists(cmd.event.getGuild(), CommandUtils.getCommandByName(cmd.invoke));
+    }
+
+    static void initCommandConfigIfNotExists(Guild guild, Command cmd) {
+        Element serverElement = ConfigGuildUtils.getGuildNode(guild);
         Element commandsElement;
+        String realCommandName = CommandUtils.getNameFromCommand(cmd);
         {
             NodeList commandsNodeList = serverElement.getElementsByTagName("commands");
             if (commandsNodeList.getLength() == 0) {
-                initGuildCommands(cmd.event.getGuild());
+                initGuildCommands(guild);
             }
-            commandsElement = getCommandsElement(cmd.event.getGuild());
+            commandsElement = getCommandsElement(guild);
 
             NodeList commandNodeList = commandsElement.getElementsByTagName("command");
             if (commandNodeList.getLength() == 0) {
                 initCommandsElement(commandsElement);
             }
         }
-        if (commandElementExists(commandsElement, cmd.invoke)) {
-            addMissingSubElementsToCommand(commandsElement, cmd.invoke);
+        if (commandElementExists(commandsElement, realCommandName)) {
+            addMissingSubElementsToCommand(commandsElement, realCommandName);
             return;
         }
-        initCommandElement(commandsElement, cmd.invoke);
+        initCommandElement(commandsElement, realCommandName);
     }
 
     public static PermissionLevels getCommandPermission(Guild guild, Command command) {
