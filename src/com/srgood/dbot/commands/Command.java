@@ -27,4 +27,8 @@ public interface Command {
     default String[] names() {
         return new String[] {this.getClass().getSimpleName().toLowerCase().replaceAll("command(audio)?", "")};
     }
+
+    default boolean canSetEnabled() {
+        return true;
+    }
 }

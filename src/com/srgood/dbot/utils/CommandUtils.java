@@ -4,6 +4,7 @@ import com.srgood.dbot.commands.Command;
 import com.srgood.dbot.commands.CommandParser;
 import com.srgood.dbot.threading.ChannelThread;
 import com.srgood.dbot.utils.config.ConfigUtils;
+import net.dv8tion.jda.entities.Guild;
 
 import java.util.Comparator;
 import java.util.Map;
@@ -63,6 +64,13 @@ public class CommandUtils {
 
     public static Map<String, Command> getCommandsMap() {
         return commands;
+    }
+
+    public static void setCommandEnabled(Guild guild, Command cmd, boolean enabled) {
+        if (!cmd.canSetEnabled()) {
+            throw new IllegalArgumentException("Cannot toggle this command");
+        }
+        ConfigUtils.setCommandEnabled(guild, cmd, enabled);
     }
 
     public static class CommandComparator implements Comparator<Command> {

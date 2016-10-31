@@ -59,7 +59,7 @@ public class ConfigUtils {
     }
 
     public static void initCommandConfigIfNotExists(Guild guild, Command cmd) {
-        ConfigUtils.initCommandConfigIfNotExists(guild, cmd);
+        ConfigCommandUtils.initCommandConfigIfNotExists(guild, cmd);
     }
 
     public static boolean isCommandEnabled(Guild guild, Command command) {
