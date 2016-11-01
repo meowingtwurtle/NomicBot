@@ -1,6 +1,7 @@
 package com.srgood.dbot.utils.config;
 
 import com.srgood.dbot.BotMain;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -25,11 +26,15 @@ public class ConfigPersistenceUtils {
         transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
         transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
         transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-        DOMSource source = new DOMSource(ConfigBasicUtils.getDocument());
-        StringWriter stringWriter = new StringWriter();
-        StreamResult result = new StreamResult(stringWriter);
-        transformer.transform(source, result);
-        return stringWriter.toString();
+        try {
+            DOMSource source = new DOMSource(ConfigBasicUtils.lockAndGetDocument());
+            StringWriter stringWriter = new StringWriter();
+            StreamResult result = new StreamResult(stringWriter);
+            transformer.transform(source, result);
+            return stringWriter.toString();
+        } finally {
+            ConfigBasicUtils.releaseDocument();
+        }
     }
 
     public static String generateCleanXML() throws TransformerException {
@@ -75,20 +80,24 @@ public class ConfigPersistenceUtils {
             DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder domInput = domFactory.newDocumentBuilder();
 
-            ConfigBasicUtils.setDocument(domInput.parse(inputStream));
-            ConfigBasicUtils.getDocument().getDocumentElement().normalize();
+            try {
+                Document doc = ConfigBasicUtils.lockAndGetDocument();
+                ConfigBasicUtils.setDocument(domInput.parse(inputStream));
+                doc.getDocumentElement().normalize();
 
-            // <config> element
-            Element rootElem = ConfigBasicUtils.getDocument().getDocumentElement();
-            // <server> element list
-            NodeList ServerNodes = rootElem.getElementsByTagName("server");
-            for (int i = 0; i < ServerNodes.getLength(); i++) {
-                Element ServerNode = (Element) ServerNodes.item(i);
+                // <config> element
+                Element rootElem = ConfigBasicUtils.lockAndGetDocument().getDocumentElement();
+                // <server> element list
+                NodeList ServerNodes = rootElem.getElementsByTagName("server");
+                for (int i = 0; i < ServerNodes.getLength(); i++) {
+                    Element ServerNode = (Element) ServerNodes.item(i);
 
-                ConfigGuildUtils.addServer(ServerNode.getAttribute("id"), ServerNode);
+                    ConfigGuildUtils.addServer(ServerNode.getAttribute("id"), ServerNode);
+                }
+                BotMain.prefix = ConfigBasicUtils.getFirstSubElement(ConfigBasicUtils.getFirstSubElement(rootElem, "default"), "prefix").getTextContent();
+            } finally {
+                ConfigBasicUtils.releaseDocument();
             }
-
-            BotMain.prefix = ConfigBasicUtils.getFirstSubElement(ConfigBasicUtils.getFirstSubElement(rootElem, "default"), "prefix").getTextContent();
         } catch (Exception e) {
             e.printStackTrace();
         }

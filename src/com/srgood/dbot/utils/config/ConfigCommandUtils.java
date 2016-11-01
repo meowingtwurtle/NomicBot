@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+import static com.srgood.dbot.utils.config.ConfigBasicUtils.lockAndGetDocument;
+import static com.srgood.dbot.utils.config.ConfigBasicUtils.releaseDocument;
+
 class ConfigCommandUtils {
     private static final Map<String, Function<String, Object>> requiredCommandSubElements = new HashMap<String, Function<String, Object>>() {
         private static final long serialVersionUID = -710068261487017415L;
@@ -33,20 +36,30 @@ class ConfigCommandUtils {
     }
 
     private static Element getCommandElement(Element commandsElement, String commandName) {
-        List<Node> commandList = ConfigBasicUtils.nodeListToList(commandsElement.getElementsByTagName("command"));
+        try {
+            lockAndGetDocument();
+            List<Node> commandList = ConfigBasicUtils.nodeListToList(commandsElement.getElementsByTagName("command"));
 
-        for (Node n : commandList) {
-            Element elem = (Element) n;
-            if (elem.getAttribute("name").equals(commandName)) {
-                return elem;
+            for (Node n : commandList) {
+                Element elem = (Element) n;
+                if (elem.getAttribute("name").equals(commandName)) {
+                    return elem;
+                }
             }
+        } finally {
+            releaseDocument();
         }
         return null;
     }
 
     private static String getCommandProperty(Element commandElement, String property) {
-        Element propertyElement = ConfigBasicUtils.getFirstSubElement(commandElement, property);
-        return propertyElement != null ? propertyElement.getTextContent() : null;
+        try {
+            lockAndGetDocument();
+            Element propertyElement = ConfigBasicUtils.getFirstSubElement(commandElement, property);
+            return propertyElement != null ? propertyElement.getTextContent() : null;
+        } finally {
+            releaseDocument();
+        }
     }
 
     private static String getCommandProperty(Guild guild, Command command, String property) {
@@ -60,12 +73,16 @@ class ConfigCommandUtils {
     private static void setCommandProperty(Element commandElement, String property, String value) {
         Element firstMatchElement = ConfigBasicUtils.getFirstSubElement(commandElement, property);
         if (firstMatchElement == null) {
-            Element newPropElem = ConfigBasicUtils.getDocument().createElement(property);
-            newPropElem.setTextContent(value);
-            commandElement.appendChild(newPropElem);
-            return;
+            try {
+                Element newPropElem = lockAndGetDocument().createElement(property);
+                newPropElem.setTextContent(value);
+                commandElement.appendChild(newPropElem);
+            } finally {
+                ConfigBasicUtils.releaseDocument();
+            }
+        } else {
+            firstMatchElement.setTextContent(value);
         }
-        firstMatchElement.setTextContent(value);
     }
 
     private static void setCommandProperty(Guild guild, Command command, String property, String value) {
@@ -81,9 +98,13 @@ class ConfigCommandUtils {
     }
 
     private static void initGuildCommands(Guild guild) {
-        Element commandsElement = ConfigBasicUtils.getDocument().createElement("commands");
-        ConfigGuildUtils.getGuildNode(guild).appendChild(commandsElement);
-        initCommandsElement(commandsElement);
+        try {
+            Element commandsElement = lockAndGetDocument().createElement("commands");
+            ConfigGuildUtils.getGuildNode(guild).appendChild(commandsElement);
+            initCommandsElement(commandsElement);
+        } finally {
+            ConfigBasicUtils.releaseDocument();
+        }
     }
 
     private static void initCommandsElement(Element commandsElement) {
@@ -103,13 +124,17 @@ class ConfigCommandUtils {
             return;
         }
 
-        Element commandElement = ConfigBasicUtils.getDocument().createElement("command");
+        try {
+            Element commandElement = lockAndGetDocument().createElement("command");
 
-        commandElement.setAttribute("name", command);
+            commandElement.setAttribute("name", command);
 
-        commandsElement.appendChild(commandElement);
+            commandsElement.appendChild(commandElement);
 
-        addMissingSubElementsToCommand(commandsElement, command);
+            addMissingSubElementsToCommand(commandsElement, command);
+        } finally {
+            ConfigBasicUtils.releaseDocument();
+        }
     }
 
     public static boolean isCommandEnabled(Guild guild, Command command) {
@@ -139,26 +164,31 @@ class ConfigCommandUtils {
     }
 
     static void initCommandConfigIfNotExists(Guild guild, Command cmd) {
-        Element serverElement = ConfigGuildUtils.getGuildNode(guild);
-        Element commandsElement;
-        String realCommandName = CommandUtils.getNameFromCommand(cmd);
-        {
-            NodeList commandsNodeList = serverElement.getElementsByTagName("commands");
-            if (commandsNodeList.getLength() == 0) {
-                initGuildCommands(guild);
-            }
-            commandsElement = getCommandsElement(guild);
+        try {
+            lockAndGetDocument();
+            Element serverElement = ConfigGuildUtils.getGuildNode(guild);
+            Element commandsElement;
+            String realCommandName = CommandUtils.getNameFromCommand(cmd);
+            {
+                NodeList commandsNodeList = serverElement.getElementsByTagName("commands");
+                if (commandsNodeList.getLength() == 0) {
+                    initGuildCommands(guild);
+                }
+                commandsElement = getCommandsElement(guild);
 
-            NodeList commandNodeList = commandsElement.getElementsByTagName("command");
-            if (commandNodeList.getLength() == 0) {
-                initCommandsElement(commandsElement);
+                NodeList commandNodeList = commandsElement.getElementsByTagName("command");
+                if (commandNodeList.getLength() == 0) {
+                    initCommandsElement(commandsElement);
+                }
             }
+            if (commandElementExists(commandsElement, realCommandName)) {
+                addMissingSubElementsToCommand(commandsElement, realCommandName);
+                return;
+            }
+            initCommandElement(commandsElement, realCommandName);
+        } finally {
+            releaseDocument();
         }
-        if (commandElementExists(commandsElement, realCommandName)) {
-            addMissingSubElementsToCommand(commandsElement, realCommandName);
-            return;
-        }
-        initCommandElement(commandsElement, realCommandName);
     }
 
     public static PermissionLevels getCommandPermission(Guild guild, Command command) {

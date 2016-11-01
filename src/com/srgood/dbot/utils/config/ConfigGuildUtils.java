@@ -2,13 +2,13 @@ package com.srgood.dbot.utils.config;
 
 import net.dv8tion.jda.entities.Guild;
 import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.srgood.dbot.utils.config.ConfigBasicUtils.getDocument;
-import static com.srgood.dbot.utils.config.ConfigBasicUtils.getFirstSubElement;
+import static com.srgood.dbot.utils.config.ConfigBasicUtils.*;
 
 class ConfigGuildUtils {
     private static Map<String, Element> servers = new HashMap<>();
@@ -26,48 +26,71 @@ class ConfigGuildUtils {
     }
 
     private static void addMissingDefaultElementsToGuild(Element elementServer) {
-        Element elementDefault = getFirstSubElement(getDocument().getDocumentElement(), "default");
+        try {
+            lockAndGetDocument();
+            Element elementDefault = getFirstSubElement(lockAndGetDocument().getDocumentElement(), "default");
 
-        ConfigBasicUtils.nodeListToList(elementDefault.getChildNodes()).stream().filter(n -> n instanceof Element).forEach(n -> {
-            Element elem = (Element) n;
-            if (getFirstSubElement(elementServer, elem.getTagName()) == null) {
-                elementServer.appendChild(elem.cloneNode(true));
-            }
-        });
+            ConfigBasicUtils.nodeListToList(elementDefault.getChildNodes()).stream().filter(n -> n instanceof Element).forEach(n -> {
+                Element elem = (Element) n;
+                if (getFirstSubElement(elementServer, elem.getTagName()) == null) {
+                    elementServer.appendChild(elem.cloneNode(true));
+                }
+            });
+        } finally {
+            releaseDocument();
+        }
     }
 
     private static void initGuildConfig(Guild guild) {
-        Element elementServer = getDocument().createElement("server");
+        try {
+            Document doc = lockAndGetDocument();
+            Element elementServer = doc.createElement("server");
 
-        Element elementServers = getFirstSubElement(getDocument().getDocumentElement(), "servers");
+            Element elementServers = getFirstSubElement(doc.getDocumentElement(), "servers");
 
-        Attr attrID = getDocument().createAttribute("id");
-        attrID.setValue(guild.getId());
-        elementServer.setAttributeNode(attrID);
+            Attr attrID = doc.createAttribute("id");
+            attrID.setValue(guild.getId());
+            elementServer.setAttributeNode(attrID);
 
-        addMissingDefaultElementsToGuild(elementServer);
+            addMissingDefaultElementsToGuild(elementServer);
 
-        elementServers.appendChild(elementServer);
-        servers.put(guild.getId(), elementServer);
+            elementServers.appendChild(elementServer);
+            servers.put(guild.getId(), elementServer);
+        } finally {
+            releaseDocument();
+        }
     }
 
     static void deleteGuildConfig(Guild guild) {
-        getGuildNode(guild).getParentNode().removeChild(getGuildNode(guild));
+        try {
+            getGuildNode(guild).getParentNode().removeChild(getGuildNode(guild));
+        } finally {
+            lockAndGetDocument();
+        }
     }
 
     static String getGuildSimpleProperty(Guild guild, String property) {
-        Element propertyElement = getFirstSubElement(getGuildNode(guild), property);
-        return propertyElement != null ? propertyElement.getTextContent() : null;
+        try {
+            lockAndGetDocument();
+            Element propertyElement = getFirstSubElement(getGuildNode(guild), property);
+            return propertyElement != null ? propertyElement.getTextContent() : null;
+        } finally {
+            releaseDocument();
+        }
     }
 
     static void setGuildSimpleProperty(Guild guild, String property, String value) {
-        Element guildElement = getGuildNode(guild);
-        Element targetElement = getFirstSubElement(guildElement, property);
-        if (targetElement == null) {
-            targetElement = getDocument().createElement(property);
-            guildElement.appendChild(targetElement);
+        try {
+            Element guildElement = getGuildNode(guild);
+            Element targetElement = getFirstSubElement(guildElement, property);
+            if (targetElement == null) {
+                targetElement = lockAndGetDocument().createElement(property);
+                guildElement.appendChild(targetElement);
+            }
+            targetElement.setTextContent(value);
+        } finally {
+            releaseDocument();
         }
-        targetElement.setTextContent(value);
     }
 
     static Element getGuildComplexPropertyElement(Guild guild, String property) {
