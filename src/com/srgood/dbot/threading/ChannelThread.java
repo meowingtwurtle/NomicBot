@@ -10,6 +10,8 @@ import net.dv8tion.jda.exceptions.RateLimitedException;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
+import static com.srgood.dbot.utils.CommandUtils.getChannelThreadMapLock;
+
 public class ChannelThread extends Thread {
 
     private Channel channel;
@@ -63,15 +65,23 @@ public class ChannelThread extends Thread {
                 commandDeque.removeFirst();
             }
             if (!commandWasAdded) {
-                endOfLife();
-                return;
+                boolean threadLifeOver = attemptEndOfLife();
+                if (threadLifeOver) {
+                    return;
+                }
             }
             commandWasAdded = false;
         }
     }
 
-    private void endOfLife() {
-        CommandUtils.deregisterThread(this);
+    private boolean attemptEndOfLife() {
+        getChannelThreadMapLock().lock();
+        boolean shouldEnd = commandDeque.size() == 0;
+        if (shouldEnd) {
+            CommandUtils.deregisterThread(this);
+        }
+        getChannelThreadMapLock().unlock();
+        return shouldEnd;
     }
 
     public void addCommand(CommandItem commandItem) {
