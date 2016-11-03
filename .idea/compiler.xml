@@ -16,15 +16,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="Bot" />
-        <module name="ReasonsBot" />
+        <module name="Reasons" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="ReasonsBot" target="1.8" />
+      <module name="Reasons" target="1.8" />
     </bytecodeTargetLevel>
-  </component>
-  <component name="EclipseCompilerSettings">
-    <option name="PROCEED_ON_ERROR" value="false" />
   </component>
 </project>
