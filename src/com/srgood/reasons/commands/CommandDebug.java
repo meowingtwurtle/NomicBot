@@ -27,18 +27,20 @@ public class CommandDebug implements Command {
 
         if (args.length > 0) {
             switch (args[0].toLowerCase()) {
+                case "reinitguild":
                 case "flushandinitguild":
                     GuildUtils.deleteGuild(event.getGuild());
                     com.srgood.reasons.utils.GuildUtils.initGuild(event.getGuild());
                     event.getChannel().sendMessage("Done");
                     break;
+                case "flushguild":
                 case "deleteguild":
                     GuildUtils.deleteGuild(event.getGuild());
                     break;
+                case "verifyconfig":
                 case "verifyxml":
                     event.getChannel().sendMessage("" + ConfigUtils.verifyConfig());
                     break;
-
                 case "getuptime":
                     long seconds = Duration.between(BotMain.startInstant, Instant.now()).getSeconds();
                     long absSeconds = Math.abs(seconds);
@@ -46,18 +48,16 @@ public class CommandDebug implements Command {
                     String x = seconds < 0 ? "-" + positive : positive;
                     event.getChannel().sendMessage(x);
                     break;
+                case "except":
                 case "throw":
                     new Exception("Test Exception").printStackTrace();
                     break;
                 case "audiotest":
                     //whatever url you want to pley...
                     String url = "https://www.youtube.com/watch?v=IxijStMHzyA";
-
-
                     break;
                 case "rendertest":
                     int[] ops = {1,2,3,2,4};
-
                     try {
                         event.getChannel().sendFile(ImageUtils.renderVote("Test", new String[] {"A","B","C","D","E"},ops),null);
                     } catch (IOException e) {
