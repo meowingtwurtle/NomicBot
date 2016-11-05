@@ -90,7 +90,7 @@ public class BotMain extends Application {
 
         try {
             //create a JDA with one Event listener
-            jda = new JDABuilder().addListener(new BotListener()).setBotToken(Reference.Strings.BOT_TOKEN_REASONS_DEV_2).buildBlocking();
+            jda = new JDABuilder().addListener(new BotListener()).setBotToken(Reference.Strings.BOT_TOKEN_REASONS).buildBlocking();
             jda.setAutoReconnect(true);
             jda.getAccountManager().setGame("type '@Reasons help'");
         } catch (LoginException e) {
@@ -114,7 +114,7 @@ public class BotMain extends Application {
 
         //catch null pointer exceptions when creating commands
         try {
-            String[] packages = { "com.srgood.dbot" };
+            String[] packages = { "com.srgood.reasons" };
 
             for (String pack : packages) {
                 Reflections mReflect = new Reflections(pack);

@@ -27,8 +27,8 @@ class ConfigGuildUtils {
 
     private static void addMissingDefaultElementsToGuild(Element elementServer) {
         try {
-            lockAndGetDocument();
-            Element elementDefault = getFirstSubElement(lockAndGetDocument().getDocumentElement(), "default");
+            Document doc = lockAndGetDocument();
+            Element elementDefault = getFirstSubElement(doc.getDocumentElement(), "default");
 
             ConfigBasicUtils.nodeListToList(elementDefault.getChildNodes()).stream().filter(n -> n instanceof Element).forEach(n -> {
                 Element elem = (Element) n;
@@ -63,9 +63,10 @@ class ConfigGuildUtils {
 
     static void deleteGuildConfig(Guild guild) {
         try {
+            lockAndGetDocument();
             getGuildNode(guild).getParentNode().removeChild(getGuildNode(guild));
         } finally {
-            lockAndGetDocument();
+            releaseDocument();
         }
     }
 

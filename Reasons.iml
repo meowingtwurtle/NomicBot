@@ -13,9 +13,15 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: Reflections" level="project" />
     <orderEntry type="library" name="Maven: Google Guava" level="project" />
-    <orderEntry type="library" name="Maven: org.javassist:javassist:3.19.0-GA" level="project" />
     <orderEntry type="library" name="Maven: Google FindBugs Annotations" level="project" />
     <orderEntry type="library" name="Maven: JDA" level="project" />
+    <orderEntry type="library" name="Maven: MeowingTwurtle MathParser" level="project" />
+    <orderEntry type="library" name="Maven: JUnit" level="project" />
+    <orderEntry type="library" name="Maven: org.reflections:reflections:0.9.10" level="project" />
+    <orderEntry type="library" name="Maven: com.google.guava:guava:15.0" level="project" />
+    <orderEntry type="library" name="Maven: org.javassist:javassist:3.19.0-GA" level="project" />
+    <orderEntry type="library" name="Maven: com.google.code.findbugs:annotations:2.0.1" level="project" />
+    <orderEntry type="library" name="Maven: net.dv8tion:JDA:2.2.1_353" level="project" />
     <orderEntry type="library" name="Maven: net.sourceforge.jaadec:jaad:0.8.5" level="project" />
     <orderEntry type="library" name="Maven: jflac:jflac:1.3" level="project" />
     <orderEntry type="library" name="Maven: com.mashape.unirest:unirest-java:1.4.7" level="project" />
@@ -34,8 +40,8 @@
     <orderEntry type="library" name="Maven: com.googlecode.soundlibs:tritonus-share:0.3.7-2" level="project" />
     <orderEntry type="library" name="Maven: org.json:json:20150729" level="project" />
     <orderEntry type="library" name="Maven: com.neovisionaries:nv-websocket-client:1.16" level="project" />
-    <orderEntry type="library" name="Maven: MeowingTwurtle MathParser" level="project" />
-    <orderEntry type="library" name="Maven: JUnit" level="project" />
+    <orderEntry type="library" name="Maven: com.github.meowingtwurtle:mathParser:1.0.1" level="project" />
+    <orderEntry type="library" name="Maven: junit:junit:4.12" level="project" />
     <orderEntry type="library" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />
   </component>
 </module>

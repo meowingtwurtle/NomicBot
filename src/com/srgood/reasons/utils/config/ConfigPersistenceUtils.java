@@ -86,7 +86,7 @@ public class ConfigPersistenceUtils {
                 doc.getDocumentElement().normalize();
 
                 // <config> element
-                Element rootElem = ConfigBasicUtils.lockAndGetDocument().getDocumentElement();
+                Element rootElem = doc.getDocumentElement();
                 // <server> element list
                 NodeList ServerNodes = rootElem.getElementsByTagName("server");
                 for (int i = 0; i < ServerNodes.getLength(); i++) {
