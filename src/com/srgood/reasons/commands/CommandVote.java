@@ -1,11 +1,10 @@
 package com.srgood.reasons.commands;
 
-import com.srgood.reasons.BotMain;
-import com.srgood.reasons.PermissionLevels;
+import com.srgood.reasons.ReasonsMain;
 import com.srgood.reasons.Reference;
 import com.srgood.reasons.utils.ImageUtils;
 import com.srgood.reasons.utils.Vote;
-import com.srgood.reasons.utils.config.ConfigUtils;
+import com.srgood.reasons.config.ConfigUtils;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
@@ -18,7 +17,7 @@ import java.util.Map;
  */
 public class CommandVote implements Command{
 
-    private final static String HELP = "Begins a vote with the specified options that ends after the specified amount of seconds. Use: '" + BotMain.prefix + "vote <duration (seconds)> <option 1> <option 2> [option 3 [option 4 [option 5 [option 6 [...]]]]]'";
+    private final static String HELP = "Begins a vote with the specified options that ends after the specified amount of seconds. Use: '" + ReasonsMain.prefix + "vote <duration (seconds)> <option 1> <option 2> [option 3 [option 4 [option 5 [option 6 [...]]]]]'";
 
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {

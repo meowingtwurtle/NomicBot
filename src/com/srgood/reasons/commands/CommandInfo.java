@@ -1,14 +1,14 @@
 package com.srgood.reasons.commands;
 
-import com.srgood.reasons.BotMain;
+import com.srgood.reasons.ReasonsMain;
 import com.srgood.reasons.Reference;
-import com.srgood.reasons.utils.config.ConfigUtils;
+import com.srgood.reasons.config.ConfigUtils;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
 public class CommandInfo implements Command {
 
-    private static final String HELP = "Prints the version of Reasons. Use: '" + BotMain.prefix + "version'";
+    private static final String HELP = "Prints the version of Reasons. Use: '" + ReasonsMain.prefix + "version'";
 
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {
@@ -40,13 +40,13 @@ public class CommandInfo implements Command {
     }
 
     @Override
-    public com.srgood.reasons.PermissionLevels permissionLevel(Guild guild) {
+    public PermissionLevels permissionLevel(Guild guild) {
         return ConfigUtils.getCommandPermission(guild, this);
     }
 
     @Override
-    public com.srgood.reasons.PermissionLevels defaultPermissionLevel() {
-        return com.srgood.reasons.PermissionLevels.STANDARD;
+    public PermissionLevels defaultPermissionLevel() {
+        return PermissionLevels.STANDARD;
     }
 
     @Override

@@ -1,9 +1,8 @@
 package com.srgood.reasons.commands;
 
-import com.srgood.reasons.BotMain;
-import com.srgood.reasons.PermissionLevels;
+import com.srgood.reasons.ReasonsMain;
 import com.srgood.reasons.Reference;
-import com.srgood.reasons.utils.config.ConfigUtils;
+import com.srgood.reasons.config.ConfigUtils;
 import net.dv8tion.jda.entities.Guild;
 import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
 
@@ -14,7 +13,7 @@ import java.util.Random;
  */
 public class Command8Ball implements Command {
 
-    private static final String HELP = "Prints a random string from our magic 8Ball machine. Use: '" + BotMain.prefix + "8ball'";
+    private static final String HELP = "Prints a random string from our magic 8Ball machine. Use: '" + ReasonsMain.prefix + "8ball'";
 
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {

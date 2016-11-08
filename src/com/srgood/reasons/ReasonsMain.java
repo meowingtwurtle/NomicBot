@@ -3,7 +3,7 @@ package com.srgood.reasons;
 import com.srgood.reasons.commands.Command;
 import com.srgood.reasons.commands.CommandParser;
 import com.srgood.reasons.utils.CommandUtils;
-import com.srgood.reasons.utils.config.ConfigUtils;
+import com.srgood.reasons.config.ConfigUtils;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -25,7 +25,7 @@ import java.io.PrintStream;
 import java.time.Instant;
 import java.util.Arrays;
 
-public class BotMain extends Application {
+public class ReasonsMain extends Application {
 
     public static JDA jda;
 
@@ -90,7 +90,7 @@ public class BotMain extends Application {
 
         try {
             //create a JDA with one Event listener
-            jda = new JDABuilder().addListener(new BotListener()).setBotToken(Reference.Strings.BOT_TOKEN_REASONS).buildBlocking();
+            jda = new JDABuilder().addListener(new DiscordEventListener()).setBotToken(Reference.Strings.BOT_TOKEN_REASONS).buildBlocking();
             jda.setAutoReconnect(true);
             jda.getAccountManager().setGame("type '@Reasons help'");
         } catch (LoginException e) {
