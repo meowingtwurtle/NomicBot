@@ -2,7 +2,6 @@ package com.srgood.reasons.commands.audio;
 
 import com.srgood.reasons.audio.MusicPlayer;
 import com.srgood.reasons.commands.Command;
-import net.dv8tion.jda.managers.AudioManager;
 
 interface AudioCommand extends Command {
     float DEFAULT_VOLUME = 0.35f;

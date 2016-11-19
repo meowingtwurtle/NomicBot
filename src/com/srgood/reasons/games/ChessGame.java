@@ -1,6 +1,7 @@
 package com.srgood.reasons.games;
 
-import net.dv8tion.jda.entities.Message;
+
+import net.dv8tion.jda.core.entities.Message;
 
 import java.util.HashMap;
 import java.util.Map;

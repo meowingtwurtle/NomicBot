@@ -4,9 +4,8 @@ import com.srgood.reasons.ReasonsMain;
 import com.srgood.reasons.audio.MusicPlayer;
 import com.srgood.reasons.commands.PermissionLevels;
 import com.srgood.reasons.config.ConfigUtils;
-import net.dv8tion.jda.entities.Guild;
-import net.dv8tion.jda.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.managers.AudioManager;
+import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 public class CommandAudioSkip implements AudioCommand {
 

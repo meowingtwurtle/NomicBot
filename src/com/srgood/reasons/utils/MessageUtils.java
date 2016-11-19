@@ -1,7 +1,7 @@
 package com.srgood.reasons.utils;
 
 import com.srgood.reasons.Reference;
-import net.dv8tion.jda.entities.MessageChannel;
+import net.dv8tion.jda.core.entities.MessageChannel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,7 +27,7 @@ public class MessageUtils {
                 Thread.sleep(1000);
             } catch (InterruptedException ignored) {
             }
-            channel.sendMessage(s);
+            channel.sendMessage(s).queue();
         });
     }
 
@@ -46,12 +46,6 @@ public class MessageUtils {
 
         subMessageList.add(stringBuilder.toString());
 
-        subMessageList.stream().filter(s -> s.length() > 0).forEach(s -> {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ignored) {
-            }
-            channel.sendMessage(s);
-        });
+        subMessageList.stream().filter(s -> s.length() > 0).forEach(s -> channel.sendMessage(s).queue());
     }
 }
