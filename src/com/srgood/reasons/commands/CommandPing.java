@@ -11,13 +11,13 @@ public class CommandPing implements Command {
 
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {
-        // TODO Auto-generated method stub
+        
         return true;
     }
 
     @Override
     public void action(String[] args, GuildMessageReceivedEvent event) {
-        // TODO Auto-generated method stub
+        
         event.getChannel().sendMessage("Pong " + event.getAuthor().getAsMention());
 
 
@@ -25,13 +25,13 @@ public class CommandPing implements Command {
 
     @Override
     public String help() {
-        // TODO Auto-generated method stub
+        
         return HELP;
     }
 
     @Override
     public void executed(boolean success, GuildMessageReceivedEvent event) {
-        // TODO Auto-generated method stub
+        
     }
 
     @Override

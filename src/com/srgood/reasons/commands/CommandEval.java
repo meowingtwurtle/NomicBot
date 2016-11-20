@@ -23,7 +23,7 @@ public class CommandEval implements Command {
 
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {
-        // TODO Auto-generated method stub
+        
         return true;
     }
 
@@ -72,7 +72,7 @@ public class CommandEval implements Command {
 
     @Override
     public PermissionLevels permissionLevel(Guild guild) {
-        // TODO Auto-generated method stub
+        
         return ConfigUtils.getCommandPermission(guild, this);
     }
 

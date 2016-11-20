@@ -104,7 +104,7 @@ public class ReasonsMain extends Application {
         try {
             ConfigUtils.initConfig();
         } catch (Exception e1) {
-            // TODO Auto-generated catch block
+            
             e1.printStackTrace();
         }
 

@@ -12,13 +12,13 @@ public class CommandInfo implements Command {
 
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {
-        // TODO Auto-generated method stub
+        
         return true;
     }
 
     @Override
     public void action(String[] args, GuildMessageReceivedEvent event) {
-        // TODO Auto-generated method stub
+        
 
         //see http://stackoverflow.com/questions/396429/how-do-you-know-what-version-number-to-use
         if (args.length >= 1) {
