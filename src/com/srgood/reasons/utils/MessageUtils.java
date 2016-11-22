@@ -22,13 +22,7 @@ public class MessageUtils {
             stringList.add(message.substring(i * Reference.Numbers.MESSAGE_LIMIT, endIndex > message.length() ? message.length() : endIndex));
         }
 
-        stringList.stream().filter(s -> s.length() > 0).forEach(s -> {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ignored) {
-            }
-            channel.sendMessage(s).queue();
-        });
+        stringList.stream().filter(s -> s.length() > 0).forEach(s -> channel.sendMessage(s).queue());
     }
 
     public static void sendMessageSafeSplitOnChar(MessageChannel channel, String message, char splitOn) {
