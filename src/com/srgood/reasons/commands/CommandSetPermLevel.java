@@ -7,7 +7,7 @@ import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 import static com.srgood.reasons.config.ConfigUtils.setCommandPermission;
-import static com.srgood.reasons.utils.PermissionUtils.stringToRole;
+import static com.srgood.reasons.utils.Permissions.PermissionUtils.stringToRole;
 
 /**
  * Created by dmanl on 9/11/2016.
