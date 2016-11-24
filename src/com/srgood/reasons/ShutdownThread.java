@@ -11,7 +11,7 @@ public class ShutdownThread extends Thread {
         try {
             ConfigPersistenceUtils.writeXML();
         } catch (TransformerException e) {
-            // TODO Auto-generated catch block
+            
             e.printStackTrace();
         }
 

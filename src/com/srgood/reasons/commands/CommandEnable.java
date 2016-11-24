@@ -31,7 +31,7 @@ public class CommandEnable implements Command {
 
     @Override
     public String help() {
-        // TODO Auto-generated method stub
+        
         return HELP;
     }
 
