@@ -1,7 +1,7 @@
 package com.srgood.reasons.games;
 
 import net.dv8tion.jda.core.entities.MessageChannel;
-import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by HiItsMe on 11/27/2016.
@@ -16,7 +16,7 @@ public class TicTacToeGame {
         {" ", " ", " "},
         {" ", " ", " "},
         {" ", " ", " "}
-    }; 
+    };
     public int[] x = {};
     public int[] o = {};
     public boolean turn = false;
@@ -35,14 +35,12 @@ public class TicTacToeGame {
             }
             output += boardFormat[3];
         }
-        channel.sendMessage(output).queue(m -> {
-            ready = true;
-        });
+        channel.sendMessage(output);
     }
-    public play(int X, int Y) {
+    public void play(int X, int Y) {
         x = Arrays.copyOf(x, x.length+1);
         x[x.length-1] = magicSquare[X][Y];
-        private int valid = true
+        boolean valid = true;
         for(int i = 0; i < o.length; i++) {
             if(x[x.length-1] == o[i])
                 valid = false;
@@ -58,21 +56,88 @@ public class TicTacToeGame {
             //Output a reprimand to discord
         }
     }
-    public AIplay() {
+    public void AIplay() {
         o = Arrays.copyOf(o, o.length+1);
-        private int out;
-        private int finout;
+        int out = 0;
+        int finout = 0;
+        int t = 0;
         if(x.length > 1) {
-            //check if there's a winning move, if so play- see below
-            for(int i = 0; i < x.length; i++) {
-                for(int j = 0; j < x.length) {
-                    //check if there's a blocking move, if so play- code written, too lazy to transfer rn
+            for (int i = 0; i < o.length; i++) {
+                for (int j = 0; j < o.length; i++) {
+                    if (i != j) {
+                        t = o[i] + o[j];
+                        if (t < 15) {
+                            t = 15 - t;
+                            if (t != o[i] && t != o[j]) {
+                                out = t;
+                                for(int k = 0; k < x.length; k++) {
+                                    if (x[k] == t) {
+                                        out = 0;
+                                    }
+                                }
+                                for(int k = 0; k < o.length; k++) {
+                                    if(o[k] == t) {
+                                        out = 0;
+                                    }
+                                }
+                                if (out != 0) {
+                                    finout = out;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if(finout != 0) {
+                o[o.length - 1] = finout;
+            } else {
+                for (int i = 0; i < x.length; i++) {
+                    for (int j = 0; j < x.length; i++) {
+                        if(i != j) {
+                            t = x[i]+x[j];
+                            if(t < 15) {
+                                t = 15 - t;
+                                if(t != x[i] && t != x[j]) {
+                                    out = t;
+                                    for(int k = 0; k < o.length; k++) {
+                                        if(o[k] == t) {
+                                            out = 0;
+                                        }
+                                    }
+                                    for(int k = 0; k < x.length; k++) {
+                                        if (x[k] == t) {
+                                            out = 0;
+                                        }
+                                    }
+                                    if(out != 0) {
+                                        finout = out;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } if(finout != 0) {
+                    o[o.length - 1] = finout;
+                } else {
+                    boolean loop = true;
+                    while(loop) {
+                        o[o.length] = (int)(Math.floor(Math.random()*9)+1);
+                        loop = false;
+                        for(int i = 0; i < x.length; i++) {
+                            if(o[o.length-1] == x[i])
+                                loop = true;
+                        }
+                        for(int i = 0; i < o.length - 1; i++) {
+                            if(o[o.length-1] == o[i])
+                                loop = true;
+                        }
+                    }
                 }
             }
         } else {
-            private boolean loop = true;
+            boolean loop = true;
             while(loop) {
-                o[o.length] = Math.floor(Math.random()*9)+1;
+                o[o.length] = (int)(Math.floor(Math.random()*9)+1);
                 loop = false;
                 for(int i = 0; i < x.length; i++) {
                     if(o[o.length-1] == x[i])
@@ -86,10 +151,67 @@ public class TicTacToeGame {
         }
         turn = false;
     }
-    public drawBoard() {
-        //compile board variable and output to Discord
+    public void drawBoard() {
+        for(int i = 0; i < x.length; i++) {
+            for(int j = 0; j < 3; j++) {
+                for(int k = 0; k < 3; k++) {
+                    if(x[i] == magicSquare[j][k]) {
+                        board[j][k] = "X";
+                    }
+                }
+            }
+        }
+        for(int i = 0; i < o.length; i++) {
+            for(int j = 0; j < 3; j++) {
+                for(int k = 0; k < 3; k++) {
+                    if(o[i] == magicSquare[j][k]) {
+                        board[j][k] = "O";
+                    }
+                }
+            }
+        }
+        output = "";
+        for(int i = 0; i < 3; i++) {
+            for(int j = 0; j < 3; j++) {
+                output += boardFormat[j];
+                output += board[i][j];
+            }
+            output += boardFormat[3];
+        }
+        channel.sendMessage(output);
     }
-    public checkWin() {
-        //Check if either player has won.  if so, output respective message to Discord and kill instance
+    public void checkWin() {
+        if(x.length == 5 || o.length == 5) {
+            channel.sendMessage("Cat's game");
+            dead = true;
+        }
+        if(x.length >= 3) {
+            for (int i = 0; i < x.length; i++) {
+                for (int j = 0; j < x.length; j++) {
+                    for (int k = 0; k < x.length; k++) {
+                        if (i != j && i != k && j != k) {
+                            if(x[i] + x[j] + x[k] == 15) {
+                                dead = true;
+                                channel.sendMessage("X wins");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if(o.length >= 3) {
+            for (int i = 0; i < o.length; i++) {
+                for (int j = 0; j < o.length; j++) {
+                    for (int k = 0; k < o.length; k++) {
+                        if (i != j && i != k && j != k) {
+                            if(o[i] + o[j] + o[k] == 15) {
+                                dead = true;
+                                channel.sendMessage("O wins");
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
