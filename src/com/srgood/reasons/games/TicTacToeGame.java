@@ -39,8 +39,11 @@ public class TicTacToeGame {
     }
     public void play(int X, int Y) {
         x = Arrays.copyOf(x, x.length+1);
-        x[x.length-1] = magicSquare[X][Y];
+        x[x.length-1] = magicSquare[X+1][Y+1];
         boolean valid = true;
+        if(X > 3 || X < 1 || Y > 3 || Y < 1) {
+            valid = false;
+        }
         for(int i = 0; i < o.length; i++) {
             if(x[x.length-1] == o[i])
                 valid = false;
@@ -53,12 +56,12 @@ public class TicTacToeGame {
             turn = true;
         } else {
             x = Arrays.copyOf(x, x.length-1);
-            //Output a reprimand to discord
+            channel.sendMessage("Please input a valid position");
         }
     }
     public void AIplay() {
         o = Arrays.copyOf(o, o.length+1);
-        int out = 0;
+        int out;
         int finout = 0;
         int t = 0;
         if(x.length > 1) {
