@@ -15,7 +15,7 @@ public class TicTacToeGame {
         {" ", " ", " "},
         {" ", " ", " "},
         {" ", " ", " "}
-    };
+    }; 
     public int[] x = {};
     public int[] o = {};
     public boolean ready = false;
