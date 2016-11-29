@@ -2,7 +2,9 @@ package com.srgood.reasons.commands;
 
 import com.srgood.reasons.ReasonsMain;
 import com.srgood.reasons.config.ConfigUtils;
+import com.srgood.reasons.games.TicTacToeGame;
 import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import java.util.Map;
 import java.util.HashMap;
@@ -13,7 +15,7 @@ import java.util.HashMap;
 public class CommandTicTacToe implements Command {
 
     private static final String HELP = "Starts a game of Tic Tac Toe. Use: '" + ReasonsMain.prefix + "tictactoe'\n\tUse '" + ReasonsMain.prefix + "tictactoe <x> <y> to place an X";
-    static HashMap<MessageChannel, TicTacToeGame> tictactoe = new HashMap<MessageChannel, TicTacToeGame>();
+    static HashMap<TextChannel, TicTacToeGame> tictactoe = new HashMap<>();
     
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {
@@ -49,7 +51,7 @@ public class CommandTicTacToe implements Command {
                     if(!tictactoe.get(event.getChannel()).dead) {
                         tictactoe.get(event.getChannel()).AIplay();
                         tictactoe.get(event.getChannel()).checkWin();
-                        tictactoe.get(event.getChannel().drawBoard();
+                        tictactoe.get(event.getChannel()).drawBoard();
                         if(tictactoe.get(event.getChannel()).dead)
                             tictactoe.remove(event.getChannel());
                     } else {
