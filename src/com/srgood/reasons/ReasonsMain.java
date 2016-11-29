@@ -93,7 +93,7 @@ public class ReasonsMain extends Application {
 
         try {
             //create a JDA with one Event listener
-            jda = new JDABuilder(AccountType.BOT).addListener(new DiscordEventListener()).setToken(Reference.Strings.BOT_TOKEN_REASONS).setGame(Game.of("Type @Reasons help")).setAutoReconnect(true).buildBlocking();
+            jda = new JDABuilder(AccountType.BOT).addListener(new DiscordEventListener()).setToken(Reference.Strings.BOT_TOKEN_REASONS_DEV_2).setGame(Game.of("Type @Reasons help")).setAutoReconnect(true).buildBlocking();
         } catch (LoginException e) {
             SimpleLog.getLog("Reasons").fatal("**COULD NOT LOG IN**");
         } catch (InterruptedException e) {
