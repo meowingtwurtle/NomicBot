@@ -35,7 +35,7 @@ public class TicTacToeGame {
             }
             output += boardFormat[3];
         }
-        channel.sendMessage(output);
+        channel.sendMessage(output).queue();
     }
     public void play(int X, int Y) {
         x = Arrays.copyOf(x, x.length+1);
@@ -56,14 +56,14 @@ public class TicTacToeGame {
             turn = true;
         } else {
             x = Arrays.copyOf(x, x.length-1);
-            channel.sendMessage("Please input a valid position");
+            channel.sendMessage("Please input a valid position").queue();
         }
     }
     public void AIplay() {
         o = Arrays.copyOf(o, o.length+1);
         int out;
         int finout = 0;
-        int t = 0;
+        int t;
         if(x.length > 1) {
             for (int i = 0; i < o.length; i++) {
                 for (int j = 0; j < o.length; i++) {
@@ -181,11 +181,11 @@ public class TicTacToeGame {
             }
             output += boardFormat[3];
         }
-        channel.sendMessage(output);
+        channel.sendMessage(output).queue();
     }
     public void checkWin() {
         if(x.length == 5 || o.length == 5) {
-            channel.sendMessage("Cat's game");
+            channel.sendMessage("Cat's game").queue();
             dead = true;
         }
         if(x.length >= 3) {
@@ -195,7 +195,7 @@ public class TicTacToeGame {
                         if (i != j && i != k && j != k) {
                             if(x[i] + x[j] + x[k] == 15) {
                                 dead = true;
-                                channel.sendMessage("X wins");
+                                channel.sendMessage("X wins").queue();
                             }
                         }
                     }
@@ -209,7 +209,7 @@ public class TicTacToeGame {
                         if (i != j && i != k && j != k) {
                             if(o[i] + o[j] + o[k] == 15) {
                                 dead = true;
-                                channel.sendMessage("O wins");
+                                channel.sendMessage("O wins").queue();
                             }
                         }
                     }
