@@ -7,36 +7,46 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.srgood.reasons.permissions.PermissionSet.PermissionAction.*;
+import static com.srgood.reasons.permissions.PermissionStatus.*;
 
 public class PermissionSet implements Serializable {
 
-    private Map<PermissibleAction, PermissionAction> permissionMap = new HashMap<>();
+    private Map<PermissibleAction, PermissionStatus> permissionMap = new HashMap<>();
 
-    public PermissionSet(Collection<PermissibleAction> allowedPerms) {
-        this(allowedPerms, null, null);
+
+
+    public PermissionSet(Collection<PermissibleAction> allowedActions) {
+        this(allowedActions, null, null);
     }
 
-    public PermissionSet(Collection<PermissibleAction> allowedPerms, Collection<PermissibleAction> deniedPerms, Collection<PermissibleAction> deferredPerms) {
+    public PermissionSet(Collection<PermissibleAction> allowedActions, Collection<PermissibleAction> deniedActions) {
+        this(allowedActions, deniedActions, null);
+    }
+
+    public PermissionSet(Collection<PermissibleAction> allowedActions, Collection<PermissibleAction> deniedActions, Collection<PermissibleAction> deferredActions) {
         this();
 
-        if (allowedPerms != null) {
-            for (PermissibleAction action : allowedPerms) {
-                permissionMap.put(action, ALLOW);
+        if (allowedActions != null) {
+            for (PermissibleAction action : allowedActions) {
+                permissionMap.put(action, ALLOWED);
             }
         }
 
-        if (deniedPerms != null) {
-            for (PermissibleAction action : deniedPerms) {
-                permissionMap.put(action, DENY);
+        if (deniedActions != null) {
+            for (PermissibleAction action : deniedActions) {
+                permissionMap.put(action, DENIED);
             }
         }
 
-        if (deferredPerms != null) {
-            for (PermissibleAction action : deferredPerms) {
-                permissionMap.put(action, DEFER);
+        if (deferredActions != null) {
+            for (PermissibleAction action : deferredActions) {
+                permissionMap.put(action, DEFERRED);
             }
         }
+    }
+
+    public PermissionSet(PermissionSet setToDuplicate) {
+        permissionMap = new HashMap<>(new HashMap<>(setToDuplicate.permissionMap));
     }
 
     public PermissionSet() {
@@ -46,33 +56,26 @@ public class PermissionSet implements Serializable {
     private void populatePermissionMap() {
         for (PermissibleAction action : PermissibleAction.values()) {
             if (!permissionMap.containsKey(action)) {
-                permissionMap.put(action, DEFER);
+                permissionMap.put(action, DEFERRED);
             }
         }
     }
 
-    public PermissionSet(Collection<PermissibleAction> allowedPerms, Collection<PermissibleAction> deniedPerms) {
-        this(allowedPerms, deniedPerms, null);
-    }
 
-
-    public PermissionSet(PermissionSet setToDuplicate) {
-        permissionMap = new HashMap<>(new HashMap<>(setToDuplicate.permissionMap));
-    }
 
     public Set<PermissibleAction> getAllowedActions() {
-        return getPermissibleActionsByPermissionAction(ALLOW);
+        return getActionsByStatus(ALLOWED);
     }
 
     public Set<PermissibleAction> getDeniedActions() {
-        return getPermissibleActionsByPermissionAction(DENY);
+        return getActionsByStatus(DENIED);
     }
 
     public Set<PermissibleAction> getDefferedActions() {
-        return getPermissibleActionsByPermissionAction(DEFER);
+        return getActionsByStatus(DEFERRED);
     }
 
-    private Set<PermissibleAction> getPermissibleActionsByPermissionAction(PermissionAction action) {
+    public Set<PermissibleAction> getActionsByStatus(PermissionStatus action) {
         return permissionMap.entrySet()
                             .stream()
                             .filter(entry -> entry.getValue() == action)
@@ -80,7 +83,8 @@ public class PermissionSet implements Serializable {
                             .collect(Collectors.toSet());
     }
 
-    public enum PermissionAction {
-        ALLOW, DEFER, DENY
+    public void setActionStatus(PermissibleAction action, PermissionStatus status) {
+        permissionMap.put(action, status);
     }
+
 }
