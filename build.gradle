@@ -1,0 +1,21 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+group = 'com.srgood'
+version = '0.1-ALPHA'
+
+description = """The Reasons Discord Bot"""
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+     maven { url "http://jcenter.bintray.com" }
+     maven { url "http://repo.maven.apache.org/maven2" }
+}
+dependencies {
+    compile group: 'org.json', name: 'json', version:'RELEASE'
+    compile group: 'org.reflections', name: 'reflections', version:'RELEASE'
+    compile group: 'net.dv8tion', name: 'JDA', version:'LATEST'
+    compile group: 'com.github.meowingtwurtle', name: 'mathParser', version:'LATEST'
+}
