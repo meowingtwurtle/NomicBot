@@ -7,24 +7,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.srgood.reasons.permissions.PermissionSet.PermissionAction.ALLOW;
-import static com.srgood.reasons.permissions.PermissionSet.PermissionAction.DEFER;
-import static com.srgood.reasons.permissions.PermissionSet.PermissionAction.DENY;
+import static com.srgood.reasons.permissions.PermissionSet.PermissionAction.*;
 
 public class PermissionSet implements Serializable {
-
-    public PermissionSet() {
-        populatePermissionMap();
-    }
 
     private Map<PermissibleAction, PermissionAction> permissionMap = new HashMap<>();
 
     public PermissionSet(Collection<PermissibleAction> allowedPerms) {
         this(allowedPerms, null, null);
-    }
-
-    public PermissionSet(Collection<PermissibleAction> allowedPerms, Collection<PermissibleAction> deniedPerms) {
-        this(allowedPerms, deniedPerms, null);
     }
 
     public PermissionSet(Collection<PermissibleAction> allowedPerms, Collection<PermissibleAction> deniedPerms, Collection<PermissibleAction> deferredPerms) {
@@ -49,6 +39,10 @@ public class PermissionSet implements Serializable {
         }
     }
 
+    public PermissionSet() {
+        populatePermissionMap();
+    }
+
     private void populatePermissionMap() {
         for (PermissibleAction action : PermissibleAction.values()) {
             if (!permissionMap.containsKey(action)) {
@@ -57,32 +51,31 @@ public class PermissionSet implements Serializable {
         }
     }
 
+    public PermissionSet(Collection<PermissibleAction> allowedPerms, Collection<PermissibleAction> deniedPerms) {
+        this(allowedPerms, deniedPerms, null);
+    }
+
 
     public PermissionSet(PermissionSet setToDuplicate) {
         permissionMap = new HashMap<>(new HashMap<>(setToDuplicate.permissionMap));
     }
 
-
     public Set<PermissibleAction> getAllowedActions() {
-        return permissionMap.entrySet()
-                            .stream()
-                            .filter(entry -> entry.getValue() == ALLOW)
-                            .map(Map.Entry::getKey)
-                            .collect(Collectors.toSet());
+        return getPermissibleActionsByPermissionAction(ALLOW);
     }
 
     public Set<PermissibleAction> getDeniedActions() {
-        return permissionMap.entrySet()
-                            .stream()
-                            .filter(entry -> entry.getValue() == DENY)
-                            .map(Map.Entry::getKey)
-                            .collect(Collectors.toSet());
+        return getPermissibleActionsByPermissionAction(DENY);
     }
 
     public Set<PermissibleAction> getDefferedActions() {
+        return getPermissibleActionsByPermissionAction(DEFER);
+    }
+
+    private Set<PermissibleAction> getPermissibleActionsByPermissionAction(PermissionAction action) {
         return permissionMap.entrySet()
                             .stream()
-                            .filter(entry -> entry.getValue() == DEFER)
+                            .filter(entry -> entry.getValue() == action)
                             .map(Map.Entry::getKey)
                             .collect(Collectors.toSet());
     }
