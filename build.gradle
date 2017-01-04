@@ -14,8 +14,7 @@ repositories {
      maven { url "http://repo.maven.apache.org/maven2" }
 }
 dependencies {
-    compile group: 'org.json', name: 'json', version:'RELEASE'
-    compile group: 'org.reflections', name: 'reflections', version:'RELEASE'
-    compile group: 'net.dv8tion', name: 'JDA', version:'LATEST'
-    compile group: 'com.github.meowingtwurtle', name: 'mathParser', version:'LATEST'
+    compile group: 'org.reflections', name: 'reflections', version:'0.9.10'
+    compile group: 'net.dv8tion', name: 'JDA', version:'3.0.BETA2_118'
+    compile group: 'com.github.meowingtwurtle', name: 'mathParser', version:'1.0.1'
 }
