@@ -83,6 +83,14 @@ public class ConfigUtils {
         ConfigCommandUtils.setCommandPermission(guild, command, permLevel);
     }
 
+    public static String getGuildProperty(Guild guild, String property) {
+        return ConfigGuildUtils.getGuildSimpleProperty(guild, property);
+    }
+
+    public static void setGuildProperty(Guild guild, String property, String value) {
+        ConfigGuildUtils.setGuildSimpleProperty(guild, property, value);
+    }
+
     public static boolean verifyConfig() {
         return ConfigBasicUtils.verifyConfig();
     }
