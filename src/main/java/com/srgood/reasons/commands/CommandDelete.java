@@ -2,13 +2,13 @@ package com.srgood.reasons.commands;
 
 import com.srgood.reasons.ReasonsMain;
 import com.srgood.reasons.config.ConfigUtils;
+import net.dv8tion.jda.core.MessageHistory;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 public class CommandDelete implements Command {
 
@@ -27,36 +27,9 @@ public class CommandDelete implements Command {
             return;
         }
 
-        String channel, delType;
-        List<Message> messages = event.getChannel().getHistory().getCachedHistory();
-        List<Message> buffer = new ArrayList<>();
-        boolean needsRecursion = false;
-
-        if (messages.size() > 100) {
-            for (; ;) {
-                messages.remove(messages.size()-1);
-                if (messages.size() == 100) break;
-            }
-            needsRecursion = true;
-        }
-/*
-        if (delType.equals("bot")) {
-            for (Message message : messages) {
-                if (!message.getContent().startsWith(ConfigUtils.getGuildPrefix(event.getGuild())) & !event.getJDA().getSelfInfo().getAsMention().equals(event.getMessage().getMentionedUsers().get(0).getAsMention()) & !event.getAuthor().getId().equals(event.getJDA().getSelfInfo().getId())) {
-                    messages.remove(message);
-                }
-            }
-        }
-*/
-
-        event.getChannel().deleteMessages(messages).queue();
-
-        if (needsRecursion) {
-            this.action(args,event);
-        } else {
-            event.getChannel().sendMessage("Successfully Deleted **" + messages.size() + "** messages").queue();
-        }
-
+        MessageHistory historyHistory = event.getChannel().getHistoryAround(event.getMessage(), 100).complete();
+        Collection<Message> cachedHistory = historyHistory.getCachedHistory();
+        event.getChannel().deleteMessages(cachedHistory).queue( x -> event.getChannel().sendMessage(String.format("Successfully deleted **%s** messages.", cachedHistory.size())).queue());
 
     }
 
