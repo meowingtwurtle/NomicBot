@@ -82,10 +82,11 @@ class ConfigGuildUtils {
 
     static void setGuildSimpleProperty(Guild guild, String property, String value) {
         try {
+            Document document = lockAndGetDocument();
             Element guildElement = getGuildNode(guild);
             Element targetElement = getFirstSubElement(guildElement, property);
             if (targetElement == null) {
-                targetElement = lockAndGetDocument().createElement(property);
+                targetElement = document.createElement(property);
                 guildElement.appendChild(targetElement);
             }
             targetElement.setTextContent(value);
