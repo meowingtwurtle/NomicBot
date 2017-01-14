@@ -28,7 +28,7 @@ class ConfigGuildUtils {
     private static void addMissingDefaultElementsToGuild(Element elementServer) {
         try {
             Document doc = lockAndGetDocument();
-            Element elementDefault = getFirstSubElement(doc.getDocumentElement(), "default");
+            Element elementDefault = getOrCreateFirstSubElement(doc.getDocumentElement(), "default");
 
             ConfigBasicUtils.nodeListToList(elementDefault.getChildNodes()).stream().filter(n -> n instanceof Element).forEach(n -> {
                 Element elem = (Element) n;
@@ -46,7 +46,7 @@ class ConfigGuildUtils {
             Document doc = lockAndGetDocument();
             Element elementServer = doc.createElement("server");
 
-            Element elementServers = getFirstSubElement(doc.getDocumentElement(), "servers");
+            Element elementServers = getOrCreateFirstSubElement(doc.getDocumentElement(), "servers");
 
             Attr attrID = doc.createAttribute("id");
             attrID.setValue(guild.getId());
@@ -84,11 +84,7 @@ class ConfigGuildUtils {
         try {
             Document document = lockAndGetDocument();
             Element guildElement = getGuildNode(guild);
-            Element targetElement = getFirstSubElement(guildElement, property);
-            if (targetElement == null) {
-                targetElement = document.createElement(property);
-                guildElement.appendChild(targetElement);
-            }
+            Element targetElement = getOrCreateFirstSubElement(guildElement, property);
             targetElement.setTextContent(value);
         } finally {
             releaseDocument();
