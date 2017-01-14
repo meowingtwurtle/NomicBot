@@ -38,10 +38,6 @@ public class CommandDebug implements Command {
                 case "deleteguild":
                     GuildUtils.deleteGuild(event.getGuild());
                     break;
-                case "verifyconfig":
-                case "verifyxml":
-                    event.getChannel().sendMessage("" + ConfigUtils.verifyConfig()).queue();
-                    break;
                 case "getuptime":
                     long seconds = Duration.between(ReasonsMain.START_INSTANT, Instant.now()).getSeconds();
                     long absSeconds = Math.abs(seconds);
@@ -79,7 +75,7 @@ public class CommandDebug implements Command {
                     .getJda()
                     .getSelfUser().getAsMention().length() + "\n" + "ReasonsMain.jda.getSelfInfo().getAsMention()" + ReasonsMain
                     .getJda()
-                    .getSelfUser().getAsMention() + "\n" + "ConfigUtils.verifyConfig() = " + ConfigUtils.verifyConfig()).queue();
+                    .getSelfUser().getAsMention() + "\n").queue();
         }
 
     }
