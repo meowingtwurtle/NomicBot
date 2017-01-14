@@ -1,6 +1,7 @@
 package com.srgood.reasons;
 
 import com.srgood.reasons.config.ConfigUtils;
+import com.srgood.reasons.utils.CensorUtils;
 import com.srgood.reasons.utils.GuildUtils;
 import net.dv8tion.jda.core.events.ReadyEvent;
 import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
@@ -10,13 +11,6 @@ import net.dv8tion.jda.core.events.message.guild.GuildMessageUpdateEvent;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.dv8tion.jda.core.utils.SimpleLog;
-
-import java.io.ByteArrayInputStream;
-import java.io.ObjectInputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * <h1>DiscordEventListener</h1>
@@ -65,24 +59,7 @@ public class DiscordEventListener extends ListenerAdapter {
             }
         }
 
-        if(ConfigUtils.getGuildProperty(event.getGuild(), "censorlist") != null) {
-            List<String> censorList = new ArrayList<>();
-            try {
-                String serialized = ConfigUtils.getGuildProperty(event.getGuild(), "censorlist");
-                ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(serialized.getBytes()));
-                censorList = (ArrayList<String>) ois.readObject();
-            } catch(Exception e) {
-                e.printStackTrace();
-            }
-            for(int i = 0; i < censorList.size(); i++) {
-                Pattern p = Pattern.compile("\\b" + censorList.get(i) + "\\b");
-                Matcher m = p.matcher(event.getMessage().getContent().toLowerCase());
-                if(m.find()) {
-                    event.getAuthor().getPrivateChannel().sendMessage(censorList.get(i) + " is not allowed.").queue();
-                    event.getMessage().deleteMessage().queue();
-                }
-            }
-        }
+        CensorUtils.checkCensor(event.getMessage());
     }
 
 

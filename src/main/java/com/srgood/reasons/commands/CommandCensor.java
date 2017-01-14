@@ -2,13 +2,10 @@ package com.srgood.reasons.commands;
 
 import com.srgood.reasons.ReasonsMain;
 import com.srgood.reasons.config.ConfigUtils;
+import com.srgood.reasons.utils.CensorUtils;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,69 +18,53 @@ public class CommandCensor implements Command {
 
     @Override
     public void action(String[] args, GuildMessageReceivedEvent event) {
-        List<String> censoredWords = new ArrayList<>();
-        if(ConfigUtils.getGuildProperty(event.getGuild(), "censorlist") == null) {
-            try {
-                List<String> strings = new ArrayList<>();
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                ObjectOutputStream oos = new ObjectOutputStream(baos);
-                oos.writeObject(strings);
-                String serialized = baos.toString("UTF-8");
-                ConfigUtils.setGuildProperty(event.getGuild(), "censorlist", serialized);
-            } catch(Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            try {
-                String serialized = ConfigUtils.getGuildProperty(event.getGuild(), "censorlist");
-                ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(serialized.getBytes()));
-                censoredWords = (ArrayList<String>)ois.readObject();
-            } catch(Exception e) {
-                e.printStackTrace();
-            }
-        }
+        event.getMessage().deleteMessage().queue();
+
+        List<String> censoredWords = new ArrayList<>(CensorUtils.getGuildCensorList(event.getGuild()));
 
         if(args.length == 1) {
             if(args[0].equals("list")) {
                 String out = "__**Censored Words**__ ```\n";
-                for(int i = 0; i < censoredWords.size(); i++) {
-                    out += "-";
-                    out += censoredWords.get(i);
+                for (String censoredWord : censoredWords) {
+                    out += "- ";
+                    out += censoredWord;
                     out += "\n";
                 }
                 out += "```";
                 if(censoredWords.size() == 0) out = "There are no censored words on this server.";
-                event.getAuthor().getPrivateChannel().sendMessage(out).queue();
-
+                final String finalOut = out; // Because of lambda requirement
+                event.getAuthor().openPrivateChannel().queue(c -> c.sendMessage(finalOut).queue());
             }
         } else if(args.length == 2) {
-            if(args[0].equals("add")) {
-                censoredWords.add(args[1].toLowerCase());
-                save(censoredWords, event, args[1], true);
-            }
-            if(args[0].equals("remove")) {
-                if(censoredWords.remove(args[1].toLowerCase())) {
-                    save(censoredWords, event, args[1], false);
-                } else {
-                    event.getAuthor().getPrivateChannel().sendMessage("\"" + args[1] + "\" not found in list of censored words.").queue();
+            String messageVerb = "";
+            try {
+                if (args[0].equals("add")) {
+                    messageVerb = "added to";
+                    censoredWords.add(args[1].toLowerCase());
+                    CensorUtils.setGuildCensorList(event.getGuild(), censoredWords);
                 }
+                if (args[0].equals("remove")) {
+                    messageVerb = "removed from";
+                    if (censoredWords.remove(args[1].toLowerCase())) {
+                        CensorUtils.setGuildCensorList(event.getGuild(), censoredWords);
+                    } else {
+                        event.getAuthor()
+                             .openPrivateChannel().queue(channel -> channel
+                             .sendMessage(String.format("The word `%s` was not found in the censor list.", args[1]))
+                             .queue());
+                        return;
+                    }
+                }
+                final String finalMessageVerb = messageVerb; // Because of lambda requirement
+                event.getAuthor()
+                     .openPrivateChannel().queue(channel -> channel
+                        .sendMessage(String.format("The word `%s` was %s the censor list.", args[1], finalMessageVerb)).queue());
+            } catch (Exception e) {
+                final String finalMessageVerb = messageVerb; // Because of lambda requirement
+                event.getAuthor()
+                     .openPrivateChannel().queue(channel -> channel
+                        .sendMessage(String.format("The word `%s` could not be %s the censor list.", args[1], finalMessageVerb)).queue());
             }
-        }
-    }
-
-    private void save(List<String> strings, GuildMessageReceivedEvent event, String arg, boolean added) {
-        String addsub;
-        if(added) { addsub = "added to"; } else { addsub = "removed from"; }
-        try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ObjectOutputStream oos = new ObjectOutputStream(baos);
-            oos.writeObject(strings);
-            String serialized = baos.toString("UTF-8");
-            ConfigUtils.setGuildProperty(event.getGuild(), "censorlist", serialized);
-            event.getAuthor().getPrivateChannel().sendMessage("\"" + arg + "\" " + addsub + " list of censored words.").queue();
-        } catch(Exception e) {
-            e.printStackTrace();
-            event.getAuthor().getPrivateChannel().sendMessage("\"" + arg + "\" could not be " + addsub + " list of censored words.").queue();
         }
     }
 
