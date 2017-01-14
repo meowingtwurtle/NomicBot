@@ -32,8 +32,9 @@ public class Reference {
     public static class Other {
         public static final java.util.List<String> BOT_DEVELOPERS = java.util.Collections.unmodifiableList(new java.util.ArrayList<String>() {
             {
-                add("164117897025683456");
-                add("138048665112543233");
+                add("138048665112543233"); // srgood
+                add("164117897025683456"); // MeowingTwurtle
+                add("181061030799998977"); // HiItsMe
             }
         });
     }
