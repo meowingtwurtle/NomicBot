@@ -91,7 +91,4 @@ public class ConfigUtils {
         ConfigGuildUtils.setGuildSimpleProperty(guild, property, value);
     }
 
-    public static boolean verifyConfig() {
-        return ConfigBasicUtils.verifyConfig();
-    }
 }

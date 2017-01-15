@@ -70,17 +70,12 @@ class ConfigCommandUtils {
     }
 
     private static void setCommandProperty(Element commandElement, String property, String value) {
-        Element firstMatchElement = ConfigBasicUtils.getFirstSubElement(commandElement, property);
-        if (firstMatchElement == null) {
-            try {
-                Element newPropElem = lockAndGetDocument().createElement(property);
-                newPropElem.setTextContent(value);
-                commandElement.appendChild(newPropElem);
-            } finally {
-                ConfigBasicUtils.releaseDocument();
-            }
-        } else {
+        try {
+            lockDocument();
+            Element firstMatchElement = ConfigBasicUtils.getOrCreateFirstSubElement(commandElement, property);
             firstMatchElement.setTextContent(value);
+        } finally {
+            releaseDocument();
         }
     }
 
@@ -93,7 +88,7 @@ class ConfigCommandUtils {
     }
 
     private static Element getCommandsElement(Guild guild) {
-        return ConfigBasicUtils.getFirstSubElement(ConfigGuildUtils.getGuildNode(guild), "commands");
+        return ConfigBasicUtils.getOrCreateFirstSubElement(ConfigGuildUtils.getGuildNode(guild), "commands");
     }
 
     private static void initGuildCommands(Guild guild) {

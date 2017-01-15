@@ -28,7 +28,7 @@ class ConfigGuildUtils {
     private static void addMissingDefaultElementsToGuild(Element elementServer) {
         try {
             Document doc = lockAndGetDocument();
-            Element elementDefault = getFirstSubElement(doc.getDocumentElement(), "default");
+            Element elementDefault = getOrCreateFirstSubElement(doc.getDocumentElement(), "default");
 
             ConfigBasicUtils.nodeListToList(elementDefault.getChildNodes()).stream().filter(n -> n instanceof Element).forEach(n -> {
                 Element elem = (Element) n;
@@ -46,7 +46,7 @@ class ConfigGuildUtils {
             Document doc = lockAndGetDocument();
             Element elementServer = doc.createElement("server");
 
-            Element elementServers = getFirstSubElement(doc.getDocumentElement(), "servers");
+            Element elementServers = getOrCreateFirstSubElement(doc.getDocumentElement(), "servers");
 
             Attr attrID = doc.createAttribute("id");
             attrID.setValue(guild.getId());
@@ -73,7 +73,7 @@ class ConfigGuildUtils {
     static String getGuildSimpleProperty(Guild guild, String property) {
         try {
             lockDocument();
-            Element propertyElement = getFirstSubElement(getGuildNode(guild), property);
+            Element propertyElement = ConfigBasicUtils.getElementFromPath(getGuildNode(guild), property);
             return propertyElement != null ? propertyElement.getTextContent() : null;
         } finally {
             releaseDocument();
@@ -82,14 +82,9 @@ class ConfigGuildUtils {
 
     static void setGuildSimpleProperty(Guild guild, String property, String value) {
         try {
-            Document document = lockAndGetDocument();
-            Element guildElement = getGuildNode(guild);
-            Element targetElement = getFirstSubElement(guildElement, property);
-            if (targetElement == null) {
-                targetElement = document.createElement(property);
-                guildElement.appendChild(targetElement);
-            }
-            targetElement.setTextContent(value);
+            lockDocument();
+            Element propertyElement = ConfigBasicUtils.getOrCreateElementFromPath(getGuildNode(guild), property);
+            propertyElement.setTextContent(value);
         } finally {
             releaseDocument();
         }

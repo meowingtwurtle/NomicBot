@@ -14,8 +14,11 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.*;
+import java.nio.file.Files;
 
 public class ConfigPersistenceUtils {
+    private static final String DEFAULT_CONFIG_TEXT = "<config />";
+
     public static String generateDirtyXML() throws TransformerException {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
@@ -70,7 +73,11 @@ public class ConfigPersistenceUtils {
 
     public static void initConfig() throws IOException {
         File inputFile = new File("servers.xml");
-        initConfigFromStream(new FileInputStream(inputFile));
+
+        try (ByteArrayInputStream byteInputStream = new ByteArrayInputStream(inputFile.exists() ? Files.readAllBytes(inputFile
+                .toPath()) : DEFAULT_CONFIG_TEXT.getBytes())) {
+            initConfigFromStream(byteInputStream);
+        }
     }
 
     public static void initConfigFromStream(InputStream inputStream) {
@@ -80,28 +87,27 @@ public class ConfigPersistenceUtils {
             DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder domInput = domFactory.newDocumentBuilder();
 
-            try {
 
-                ConfigBasicUtils.lockDocument();
-                Document doc = domInput.parse(inputStream);
-                ConfigBasicUtils.setDocument(doc);
-                doc.getDocumentElement().normalize();
+            ConfigBasicUtils.lockDocument();
+            Document doc = domInput.parse(inputStream);
+            ConfigBasicUtils.setDocument(doc);
+            doc.getDocumentElement().normalize();
 
-                // <config> element
-                Element rootElem = doc.getDocumentElement();
-                // <server> element list
-                NodeList ServerNodes = rootElem.getElementsByTagName("server");
-                for (int i = 0; i < ServerNodes.getLength(); i++) {
-                    Element ServerNode = (Element) ServerNodes.item(i);
+            // <config> element
+            Element rootElem = doc.getDocumentElement();
+            // <server> element list
+            NodeList ServerNodes = rootElem.getElementsByTagName("server");
+            for (int i = 0; i < ServerNodes.getLength(); i++) {
+                Element ServerNode = (Element) ServerNodes.item(i);
 
-                    ConfigGuildUtils.addServer(ServerNode.getAttribute("id"), ServerNode);
-                }
-                ReasonsMain.prefix = ConfigBasicUtils.getFirstSubElement(ConfigBasicUtils.getFirstSubElement(rootElem, "default"), "prefix").getTextContent();
-            } finally {
-                ConfigBasicUtils.releaseDocument();
+                ConfigGuildUtils.addServer(ServerNode.getAttribute("id"), ServerNode);
             }
+            ReasonsMain.prefix = ConfigBasicUtils.getOrCreateFirstSubElement(ConfigBasicUtils.getOrCreateFirstSubElement(rootElem, "default"), "prefix", "#!")
+                                                 .getTextContent();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            ConfigBasicUtils.releaseDocument();
         }
     }
 }
