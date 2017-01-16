@@ -1,10 +1,8 @@
 package com.srgood.reasons.commands;
 
 import com.srgood.reasons.ReasonsMain;
-import com.srgood.reasons.config.ConfigUtils;
 import net.dv8tion.jda.core.MessageHistory;
 import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
@@ -37,17 +35,6 @@ public class CommandDelete implements Command {
     public String help() {
         
         return HELP;
-    }
-
-    @Override
-    public void executed(boolean success, GuildMessageReceivedEvent event) {
-        
-    }
-
-    @Override
-    public PermissionLevels permissionLevel(Guild guild) {
-        
-        return ConfigUtils.getCommandPermission(guild, this);
     }
 
     @Override

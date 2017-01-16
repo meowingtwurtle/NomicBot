@@ -1,12 +1,10 @@
 package com.srgood.reasons.commands;
 
 import com.srgood.reasons.ReasonsMain;
-import com.srgood.reasons.config.ConfigUtils;
 import com.srgood.reasons.games.TicTacToeGame;
-import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
-import java.util.Map;
+
 import java.util.HashMap;
 
 /**
@@ -83,16 +81,6 @@ public class CommandTicTacToe implements Command {
 
     @Override
     public void executed(boolean success, GuildMessageReceivedEvent event) {}
-
-    @Override
-    public PermissionLevels permissionLevel(Guild guild) {
-        return ConfigUtils.getCommandPermission(guild, this);
-    }
-
-    @Override
-    public PermissionLevels defaultPermissionLevel() {
-        return PermissionLevels.STANDARD;
-    }
 
     @Override
     public String[] names() {

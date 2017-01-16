@@ -1,8 +1,6 @@
 package com.srgood.reasons.commands;
 
 import com.srgood.reasons.ReasonsMain;
-import com.srgood.reasons.config.ConfigUtils;
-import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.User;
@@ -17,11 +15,6 @@ import java.util.Random;
 public class CommandNotifyRand implements Command {
 
     private static final String HELP = "Notifies a random member of a Role. Use: '" + ReasonsMain.prefix + "notifyrand <role ID>'";
-
-    @Override
-    public boolean called(String[] args, GuildMessageReceivedEvent event) {
-        return true;
-    }
 
     public User getRandomUser(List<User> users, Boolean isOnline) {
         User user = null;
@@ -68,18 +61,4 @@ public class CommandNotifyRand implements Command {
         return HELP;
     }
 
-    @Override
-    public void executed(boolean success, GuildMessageReceivedEvent event) {
-
-    }
-
-    @Override
-    public PermissionLevels permissionLevel(Guild guild) {
-        return ConfigUtils.getCommandPermission(guild, this);
-    }
-
-    @Override
-    public PermissionLevels defaultPermissionLevel() {
-        return PermissionLevels.STANDARD;
-    }
 }

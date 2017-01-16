@@ -3,17 +3,11 @@ package com.srgood.reasons.commands;
 import com.srgood.reasons.ReasonsMain;
 import com.srgood.reasons.config.ConfigUtils;
 import com.srgood.reasons.utils.CommandUtils;
-import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 public class CommandGetPermLevel implements Command {
 
     private static final String HELP = "Prints the required permission level for a command in this Guild. Use: '" + ReasonsMain.prefix + "getpermlevel <command>'";
-
-    @Override
-    public boolean called(String[] args, GuildMessageReceivedEvent event) {
-        return true;
-    }
 
     @Override
     public void action(String[] args, GuildMessageReceivedEvent event) {
@@ -29,21 +23,6 @@ public class CommandGetPermLevel implements Command {
     @Override
     public String help() {
         return HELP;
-    }
-
-    @Override
-    public void executed(boolean success, GuildMessageReceivedEvent event) {
-
-    }
-
-    @Override
-    public PermissionLevels permissionLevel(Guild guild) {
-        return ConfigUtils.getCommandPermission(guild, this);
-    }
-
-    @Override
-    public PermissionLevels defaultPermissionLevel() {
-        return PermissionLevels.STANDARD;
     }
 
     @Override

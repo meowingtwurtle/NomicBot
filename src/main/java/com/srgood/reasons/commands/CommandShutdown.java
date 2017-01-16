@@ -3,20 +3,12 @@ package com.srgood.reasons.commands;
 import com.srgood.reasons.ReasonsMain;
 import com.srgood.reasons.Reference;
 import com.srgood.reasons.config.ConfigPersistenceUtils;
-import com.srgood.reasons.config.ConfigUtils;
-import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 import javax.xml.transform.TransformerException;
 
 public class CommandShutdown implements Command {
     private static final String HELP = "Used to shutdown Reasons. Use: '" + ReasonsMain.prefix + "shutdown' -OR- '" + ReasonsMain.prefix + "shutdown override <override key>'";
-
-    @Override
-    public boolean called(String[] args, GuildMessageReceivedEvent event) {
-        
-        return true;
-    }
 
     @Override
     public void action(String[] args, GuildMessageReceivedEvent event) {
@@ -67,20 +59,9 @@ public class CommandShutdown implements Command {
     }
 
     @Override
-    public void executed(boolean success, GuildMessageReceivedEvent event) {
-        
-    }
-
-    @Override
     public PermissionLevels defaultPermissionLevel() {
         
         return PermissionLevels.ADMINISTRATOR;
-    }
-
-    @Override
-    public PermissionLevels permissionLevel(Guild guild) {
-        
-        return ConfigUtils.getCommandPermission(guild, this);
     }
 
     @Override

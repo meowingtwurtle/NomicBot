@@ -2,17 +2,10 @@ package com.srgood.reasons.commands;
 
 import com.srgood.reasons.ReasonsMain;
 import com.srgood.reasons.config.ConfigUtils;
-import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 public class CommandSetPrefix implements Command {
     private static final String HELP = "Sets the prefix on this server. Use: '" + ReasonsMain.prefix + "setprefix <prefix>'";
-
-    @Override
-    public boolean called(String[] args, GuildMessageReceivedEvent event) {
-        
-        return true;
-    }
 
     @Override
     public void action(String[] args, GuildMessageReceivedEvent event) {
@@ -29,17 +22,6 @@ public class CommandSetPrefix implements Command {
     public String help() {
         
         return HELP;
-    }
-
-    @Override
-    public void executed(boolean success, GuildMessageReceivedEvent event) {
-        
-    }
-
-    @Override
-    public PermissionLevels permissionLevel(Guild guild) {
-        
-        return ConfigUtils.getCommandPermission(guild, this);
     }
 
     @Override

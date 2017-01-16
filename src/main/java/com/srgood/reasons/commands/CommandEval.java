@@ -4,8 +4,6 @@ import com.meowingtwurtle.math.api.IMathGroup;
 import com.meowingtwurtle.math.api.IMathHandler;
 import com.meowingtwurtle.math.api.MathExpressionParseException;
 import com.srgood.reasons.ReasonsMain;
-import com.srgood.reasons.config.ConfigUtils;
-import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 import java.text.DecimalFormat;
@@ -16,16 +14,6 @@ public class CommandEval implements Command {
     private static final String HELP = "Evaluates a math expression and prints result. Supports arithmetic operations, sin, cos, tan, abs, sqrt. Use: '" + ReasonsMain.prefix + "eval <exp>'";
 
     private final static NumberFormat RESULT_FORMATTER = new DecimalFormat("#0.0###");
-
-    public CommandEval() {
-
-    }
-
-    @Override
-    public boolean called(String[] args, GuildMessageReceivedEvent event) {
-        
-        return true;
-    }
 
     @Override
     public void action(String[] args, GuildMessageReceivedEvent event) {
@@ -64,21 +52,6 @@ public class CommandEval implements Command {
     @Override
     public String help() {
         return HELP;
-    }
-
-    @Override
-    public void executed(boolean success, GuildMessageReceivedEvent event) {
-    }
-
-    @Override
-    public PermissionLevels permissionLevel(Guild guild) {
-        
-        return ConfigUtils.getCommandPermission(guild, this);
-    }
-
-    @Override
-    public PermissionLevels defaultPermissionLevel() {
-        return PermissionLevels.STANDARD;
     }
 
     @Override

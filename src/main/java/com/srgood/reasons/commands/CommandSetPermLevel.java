@@ -1,9 +1,7 @@
 package com.srgood.reasons.commands;
 
 import com.srgood.reasons.ReasonsMain;
-import com.srgood.reasons.config.ConfigUtils;
 import com.srgood.reasons.utils.CommandUtils;
-import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 import static com.srgood.reasons.config.ConfigUtils.setCommandPermission;
@@ -14,11 +12,6 @@ import static com.srgood.reasons.utils.Permissions.PermissionUtils.stringToRole;
  */
 public class CommandSetPermLevel implements Command {
     private static final String HELP = "Sets the permission level required for a command on this server. Use: '" + ReasonsMain.prefix + "setpermlevel <command> <role ID>'";
-
-    @Override
-    public boolean called(String[] args, GuildMessageReceivedEvent event) {
-        return true;
-    }
 
     @Override
     public void action(String[] args, GuildMessageReceivedEvent event) {
@@ -34,16 +27,6 @@ public class CommandSetPermLevel implements Command {
     @Override
     public String help() {
         return HELP;
-    }
-
-    @Override
-    public void executed(boolean success, GuildMessageReceivedEvent event) {
-
-    }
-
-    @Override
-    public PermissionLevels permissionLevel(Guild guild) {
-        return ConfigUtils.getCommandPermission(guild, this);
     }
 
     @Override

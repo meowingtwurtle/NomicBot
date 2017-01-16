@@ -12,12 +12,6 @@ public class CommandDiceRoll implements Command {
     private static final String HELP = "Rolls a dice (or die) and prints the results. Use: '" + ReasonsMain.prefix + "roll [# dice MAX: 50; MIN: 0; DEFAULT: 1]'";
 
     @Override
-    public boolean called(String[] args, GuildMessageReceivedEvent event) {
-        
-        return true;
-    }
-
-    @Override
     public void action(String[] args, GuildMessageReceivedEvent event) {
         
         int numRolls;

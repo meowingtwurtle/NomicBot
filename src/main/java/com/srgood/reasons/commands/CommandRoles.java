@@ -1,7 +1,6 @@
 package com.srgood.reasons.commands;
 
 import com.srgood.reasons.ReasonsMain;
-import com.srgood.reasons.config.ConfigUtils;
 import com.srgood.reasons.utils.MessageUtils;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Role;
@@ -13,11 +12,6 @@ import java.util.stream.Collectors;
 public class CommandRoles implements Command {
 
     private static final String HELP = "Lists all roles and their ID's in the guild. Use: " + ReasonsMain.prefix + "roles";
-
-    @Override
-    public boolean called(String[] args, GuildMessageReceivedEvent event) {
-        return true;
-    }
 
     @Override
     public void action(String[] args, GuildMessageReceivedEvent event) {
@@ -34,21 +28,6 @@ public class CommandRoles implements Command {
     @Override
     public String help() {
         return HELP;
-    }
-
-    @Override
-    public void executed(boolean success, GuildMessageReceivedEvent event) {
-
-    }
-
-    @Override
-    public PermissionLevels defaultPermissionLevel() {
-        return PermissionLevels.STANDARD;
-    }
-
-    @Override
-    public PermissionLevels permissionLevel(Guild guild) {
-        return ConfigUtils.getCommandPermission(guild, this);
     }
 
     @Override
