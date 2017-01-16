@@ -29,12 +29,22 @@ public class CommandDebug implements Command {
                 case "reinitguild":
                 case "flushandinitguild":
                     GuildUtils.deleteGuild(event.getGuild());
+
                     com.srgood.reasons.utils.GuildUtils.initGuild(event.getGuild());
                     event.getChannel().sendMessage("Done").queue();
                     break;
                 case "flushguild":
                 case "deleteguild":
                     GuildUtils.deleteGuild(event.getGuild());
+                    break;
+                case "removeoldroles":
+                case "removeroles":
+                    for (Role r : event.getGuild().getRoles()) {
+                        if (r.getName().equals("Reasons Admin") || r.getName().equals("DJ")) {
+                            r.delete().queue(s -> event.getChannel().sendMessage(String.format("Removed role: **`%s`**", r
+                                    .getName())).queue());
+                        }
+                    }
                     break;
                 case "getuptime":
                     long seconds = Duration.between(ReasonsMain.START_INSTANT, Instant.now()).getSeconds();
