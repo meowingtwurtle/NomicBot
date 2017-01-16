@@ -31,7 +31,7 @@ public class CommandSetPermLevel implements Command {
 
     @Override
     public PermissionLevels defaultPermissionLevel() {
-        return PermissionLevels.STANDARD;
+        return PermissionLevels.ADMINISTRATOR;
     }
 
     @Override

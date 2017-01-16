@@ -4,6 +4,7 @@ import com.srgood.reasons.ReasonsMain;
 import com.srgood.reasons.utils.GuildUtils;
 import com.srgood.reasons.utils.ImageUtils;
 import com.srgood.reasons.utils.Permissions.PermissionUtils;
+import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
@@ -18,7 +19,6 @@ public class CommandDebug implements Command {
 
     @Override
     public boolean called(String[] args, GuildMessageReceivedEvent event) {
-        
         return ALLOW_DEBUG;
     }
 
@@ -80,8 +80,12 @@ public class CommandDebug implements Command {
 
     @Override
     public String help() {
-        
         return HELP;
+    }
+
+    @Override
+    public PermissionLevels permissionLevel(Guild guild) {
+        return PermissionLevels.DEVELOPER;
     }
 
     @Override

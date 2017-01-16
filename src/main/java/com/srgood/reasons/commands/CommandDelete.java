@@ -33,14 +33,13 @@ public class CommandDelete implements Command {
 
     @Override
     public String help() {
-        
         return HELP;
     }
 
     @Override
     public PermissionLevels defaultPermissionLevel() {
         
-        return PermissionLevels.STANDARD;
+        return PermissionLevels.ADMINISTRATOR;
     }
 
     @Override

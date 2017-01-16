@@ -20,13 +20,11 @@ public class CommandSetPrefix implements Command {
 
     @Override
     public String help() {
-        
         return HELP;
     }
 
     @Override
     public PermissionLevels defaultPermissionLevel() {
-        
         return PermissionLevels.ADMINISTRATOR;
     }
 

@@ -28,6 +28,12 @@ public class CommandEnable implements Command {
         return HELP;
     }
 
+
+    @Override
+    public boolean canSetEnabled() {
+        return false;
+    }
+
     @Override
     public PermissionLevels defaultPermissionLevel() {
         return PermissionLevels.ADMINISTRATOR;

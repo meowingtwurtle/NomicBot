@@ -3,6 +3,7 @@ package com.srgood.reasons.commands;
 import com.srgood.reasons.ReasonsMain;
 import com.srgood.reasons.Reference;
 import com.srgood.reasons.config.ConfigPersistenceUtils;
+import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 import javax.xml.transform.TransformerException;
@@ -54,14 +55,12 @@ public class CommandShutdown implements Command {
 
     @Override
     public String help() {
-        
         return HELP;
     }
 
     @Override
-    public PermissionLevels defaultPermissionLevel() {
-        
-        return PermissionLevels.ADMINISTRATOR;
+    public PermissionLevels permissionLevel(Guild guild) {
+        return PermissionLevels.DEVELOPER;
     }
 
     @Override

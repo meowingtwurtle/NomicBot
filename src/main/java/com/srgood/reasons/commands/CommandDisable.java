@@ -29,8 +29,12 @@ public class CommandDisable implements Command {
     }
 
     @Override
+    public boolean canSetEnabled() {
+        return false;
+    }
+
+    @Override
     public PermissionLevels defaultPermissionLevel() {
-        
         return PermissionLevels.ADMINISTRATOR;
     }
 
