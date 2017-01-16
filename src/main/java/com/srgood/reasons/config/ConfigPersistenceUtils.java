@@ -15,9 +15,14 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.nio.file.Files;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class ConfigPersistenceUtils {
     private static final String DEFAULT_CONFIG_TEXT = "<config />";
+
+    public static ScheduledExecutorService EXECUTOR_SERVICE = Executors.newSingleThreadScheduledExecutor();
 
     public static String generateDirtyXML() throws TransformerException {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -78,6 +83,18 @@ public class ConfigPersistenceUtils {
                 .toPath()) : DEFAULT_CONFIG_TEXT.getBytes())) {
             initConfigFromStream(byteInputStream);
         }
+
+        scheduleConfigAutoSaving();
+    }
+
+    private static void scheduleConfigAutoSaving() {
+        EXECUTOR_SERVICE.schedule(() -> {
+            try {
+                writeXML();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }, 3, TimeUnit.MINUTES);
     }
 
     public static void initConfigFromStream(InputStream inputStream) {
