@@ -48,7 +48,7 @@ public class CommandVote implements Command{
                                                         new Integer[] {}
                                                         )
                                 )
-                        ), null);
+                        ), null).queue();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
