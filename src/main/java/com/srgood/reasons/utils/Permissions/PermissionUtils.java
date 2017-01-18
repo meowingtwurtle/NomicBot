@@ -76,7 +76,7 @@ public class PermissionUtils {
 
         System.out.println("Creating role");
 
-        Role role = guild.getController().createRole().block();
+        Role role = guild.getController().createRole().complete();
 
         RoleManagerUpdatable roleManagerUpdatable = role.getManagerUpdatable();
         roleManagerUpdatable.getNameField().setValue(roleLevel.getReadableName());
