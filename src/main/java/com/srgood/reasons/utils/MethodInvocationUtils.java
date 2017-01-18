@@ -11,45 +11,34 @@ import java.lang.reflect.Modifier;
 /**
  * Utility methods not directly related to the RuntimeCompiler
  */
-public class MethodInvocationUtils
-{
+public class MethodInvocationUtils {
     /**
      * Utility method to invoke the first static method in the given
      * class that can accept the given parameters.
      *
-     * @param c The class
+     * @param c          The class
      * @param methodName The method name
-     * @param args The arguments for the method call
+     * @param args       The arguments for the method call
+     *
      * @return The return value of the method call
+     *
      * @throws RuntimeException If either the class or a matching method
-     * could not be found
+     *                          could not be found
      */
-    public static Object invokeStaticMethod(
-            Class<?> c, String methodName, Object... args)
-    {
+    public static Object invokeStaticMethod(Class<?> c, String methodName, Object... args) {
         Method m = findFirstMatchingStaticMethod(c, methodName, args);
-        if (m == null)
-        {
+        if (m == null) {
             throw new RuntimeException("No matching method found");
         }
-        try
-        {
+        try {
             return m.invoke(null, args);
-        }
-        catch (IllegalAccessException e)
-        {
+        } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
-        }
-        catch (IllegalArgumentException e)
-        {
+        } catch (IllegalArgumentException e) {
             throw new RuntimeException(e);
-        }
-        catch (InvocationTargetException e)
-        {
+        } catch (InvocationTargetException e) {
             throw new RuntimeException(e);
-        }
-        catch (SecurityException e)
-        {
+        } catch (SecurityException e) {
             throw new RuntimeException(e);
         }
     }
@@ -60,21 +49,18 @@ public class MethodInvocationUtils
      * arguments. Returns <code>null</code> if no such method
      * can be found.
      *
-     * @param c The class
+     * @param c          The class
      * @param methodName The name of the method
-     * @param args The arguments
+     * @param args       The arguments
+     *
      * @return The first matching static method.
      */
-    private static Method findFirstMatchingStaticMethod(Class<?> c, String methodName, Object ... args) {
+    private static Method findFirstMatchingStaticMethod(Class<?> c, String methodName, Object... args) {
         Method methods[] = c.getDeclaredMethods();
-        for (Method m : methods)
-        {
-            if (m.getName().equals(methodName) &&
-                    Modifier.isStatic(m.getModifiers()))
-            {
+        for (Method m : methods) {
+            if (m.getName().equals(methodName) && Modifier.isStatic(m.getModifiers())) {
                 Class<?>[] parameterTypes = m.getParameterTypes();
-                if (areAssignable(parameterTypes, args))
-                {
+                if (areAssignable(parameterTypes, args)) {
                     return m;
                 }
             }
@@ -87,21 +73,18 @@ public class MethodInvocationUtils
      * respective types
      *
      * @param types The types
-     * @param args The arguments
+     * @param args  The arguments
+     *
      * @return Whether the arguments are assignable
      */
-    private static boolean areAssignable(Class<?> types[], Object ...args)
-    {
-        if (types.length != args.length)
-        {
+    private static boolean areAssignable(Class<?> types[], Object... args) {
+        if (types.length != args.length) {
             return false;
         }
-        for (int i=0; i<types.length; i++)
-        {
+        for (int i = 0; i < types.length; i++) {
             Object arg = args[i];
             Class<?> type = types[i];
-            if (arg != null && !type.isAssignableFrom(arg.getClass()))
-            {
+            if (arg != null && !type.isAssignableFrom(arg.getClass())) {
                 return false;
             }
         }

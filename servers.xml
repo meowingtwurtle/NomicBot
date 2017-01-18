@@ -148,7 +148,7 @@
                 </command>
                 <command name="setpermlevel">
                     <isEnabled>true</isEnabled>
-                    <permLevel>0</permLevel>
+                    <permLevel>3</permLevel>
                 </command>
                 <command name="setprefix">
                     <isEnabled>true</isEnabled>

@@ -4,9 +4,6 @@ import javax.tools.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.net.URI;
 import java.util.*;
 
@@ -15,13 +12,11 @@ import java.util.*;
  */
 
 
-
 /**
  * Utility class for compiling classes whose source code is given as
  * strings, in-memory, at runtime, using the JavaCompiler tools.
  */
-public class RuntimeCompiler
-{
+public class RuntimeCompiler {
     /**
      * The Java Compiler
      */
@@ -53,25 +48,20 @@ public class RuntimeCompiler
      * Creates a new RuntimeCompiler
      *
      * @throws NullPointerException If no JavaCompiler could be obtained.
-     * This is the case when the application was not started with a JDK,
-     * but only with a JRE. (More specifically: When the JDK tools are
-     * not in the classpath).
+     *                              This is the case when the application was not started with a JDK,
+     *                              but only with a JRE. (More specifically: When the JDK tools are
+     *                              not in the classpath).
      */
-    public RuntimeCompiler()
-    {
+    public RuntimeCompiler() {
         this.javaCompiler = ToolProvider.getSystemJavaCompiler();
-        if (javaCompiler == null)
-        {
-            throw new NullPointerException(
-                    "No JavaCompiler found. Make sure to run this with "
-                            + "a JDK, and not only with a JRE");
+        if (javaCompiler == null) {
+            throw new NullPointerException("No JavaCompiler found. Make sure to run this with " + "a JDK, and not only with a JRE");
         }
         this.classData = new LinkedHashMap<String, byte[]>();
         this.mapClassLoader = new MapClassLoader();
-        this.classDataFileManager =
-                new ClassDataFileManager(
+        this.classDataFileManager = new ClassDataFileManager(
 
-                        javaCompiler.getStandardFileManager(null, null, null));
+                javaCompiler.getStandardFileManager(null, null, null));
         this.compilationUnits = new ArrayList<JavaFileObject>();
     }
 
@@ -80,13 +70,11 @@ public class RuntimeCompiler
      * with the next call to {@link #compile()}
      *
      * @param className The class name
-     * @param code The code of the class
+     * @param code      The code of the class
      */
-    public void addClass(String className, String code)
-    {
+    public void addClass(String className, String code) {
         String javaFileName = className + ".java";
-        JavaFileObject javaFileObject =
-                new MemoryJavaSourceFileObject(javaFileName, code);
+        JavaFileObject javaFileObject = new MemoryJavaSourceFileObject(javaFileName, code);
         compilationUnits.add(javaFileObject);
     }
 
@@ -101,7 +89,7 @@ public class RuntimeCompiler
 
         List<String> optionList = new ArrayList<String>();
 
-        optionList.addAll(Arrays.asList("-classpath",System.getProperty("java.class.path")));
+        optionList.addAll(Arrays.asList("-classpath", System.getProperty("java.class.path")));
 
         //optionList.addAll(Arrays.asList(options));
 
@@ -122,19 +110,17 @@ public class RuntimeCompiler
      * {@link #addClass(String, String)} and calling {@link #compile()}.
      *
      * @param className The class name
+     *
      * @return The class. Returns <code>null</code> if the compilation failed.
      */
-    public Class<?> getCompiledClass(String className)
-    {
+    public Class<?> getCompiledClass(String className) {
         return mapClassLoader.findClass(className);
     }
 
     /**
      * In-memory representation of a source JavaFileObject
      */
-    private static final class MemoryJavaSourceFileObject extends
-            SimpleJavaFileObject
-    {
+    private static final class MemoryJavaSourceFileObject extends SimpleJavaFileObject {
         /**
          * The source code of the class
          */
@@ -144,18 +130,15 @@ public class RuntimeCompiler
          * Creates a new in-memory representation of a Java file
          *
          * @param fileName The file name
-         * @param code The source code of the file
+         * @param code     The source code of the file
          */
-        private MemoryJavaSourceFileObject(String fileName, String code)
-        {
+        private MemoryJavaSourceFileObject(String fileName, String code) {
             super(URI.create("string:///" + fileName), Kind.SOURCE);
             this.code = code;
         }
 
         @Override
-        public CharSequence getCharContent(boolean ignoreEncodingErrors)
-                throws IOException
-        {
+        public CharSequence getCharContent(boolean ignoreEncodingErrors) throws IOException {
             return code;
         }
     }
@@ -163,11 +146,9 @@ public class RuntimeCompiler
     /**
      * A class loader that will look up classes in the {@link #classData}
      */
-    private class MapClassLoader extends ClassLoader
-    {
+    private class MapClassLoader extends ClassLoader {
         @Override
-        public Class<?> findClass(String name)
-        {
+        public Class<?> findClass(String name) {
             byte[] b = classData.get(name);
             return defineClass(name, b, 0, b.length);
         }
@@ -175,11 +156,10 @@ public class RuntimeCompiler
 
     /**
      * In-memory representation of a class JavaFileObject
-     * @author User
      *
+     * @author User
      */
-    private class MemoryJavaClassFileObject extends SimpleJavaFileObject
-    {
+    private class MemoryJavaClassFileObject extends SimpleJavaFileObject {
         /**
          * The name of the class represented by the file object
          */
@@ -190,16 +170,13 @@ public class RuntimeCompiler
          *
          * @param className THe name of the class
          */
-        private MemoryJavaClassFileObject(String className)
-        {
-            super(URI.create("string:///" + className + ".class"),
-                    Kind.CLASS);
+        private MemoryJavaClassFileObject(String className) {
+            super(URI.create("string:///" + className + ".class"), Kind.CLASS);
             this.className = className;
         }
 
         @Override
-        public OutputStream openOutputStream() throws IOException
-        {
+        public OutputStream openOutputStream() throws IOException {
             return new ClassDataOutputStream(className);
         }
     }
@@ -209,25 +186,18 @@ public class RuntimeCompiler
      * A JavaFileManager that manages the compiled classes by passing
      * them to the {@link #classData} map via a ClassDataOutputStream
      */
-    private class ClassDataFileManager extends
-            ForwardingJavaFileManager<StandardJavaFileManager>
-    {
+    private class ClassDataFileManager extends ForwardingJavaFileManager<StandardJavaFileManager> {
         /**
          * Create a new file manager that delegates to the given file manager
          *
          * @param standardJavaFileManager The delegate file manager
          */
-        private ClassDataFileManager(
-                StandardJavaFileManager standardJavaFileManager)
-        {
+        private ClassDataFileManager(StandardJavaFileManager standardJavaFileManager) {
             super(standardJavaFileManager);
         }
 
         @Override
-        public JavaFileObject getJavaFileForOutput(final Location location,
-                                                   final String className, JavaFileObject.Kind kind, FileObject sibling)
-                throws IOException
-        {
+        public JavaFileObject getJavaFileForOutput(final Location location, final String className, JavaFileObject.Kind kind, FileObject sibling) throws IOException {
             return new MemoryJavaClassFileObject(className);
         }
     }
@@ -237,8 +207,7 @@ public class RuntimeCompiler
      * An output stream that is used by the ClassDataFileManager
      * to store the compiled classes in the  {@link #classData} map
      */
-    private class ClassDataOutputStream extends OutputStream
-    {
+    private class ClassDataOutputStream extends OutputStream {
         /**
          * The name of the class that the received class data represents
          */
@@ -255,21 +224,18 @@ public class RuntimeCompiler
          *
          * @param className The class name
          */
-        private ClassDataOutputStream(String className)
-        {
+        private ClassDataOutputStream(String className) {
             this.className = className;
             this.baos = new ByteArrayOutputStream();
         }
 
         @Override
-        public void write(int b) throws IOException
-        {
+        public void write(int b) throws IOException {
             baos.write(b);
         }
 
         @Override
-        public void close() throws IOException
-        {
+        public void close() throws IOException {
             classData.put(className, baos.toByteArray());
             super.close();
         }
