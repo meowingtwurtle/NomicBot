@@ -30,8 +30,8 @@
     <server id="201020472702402560">
             <prefix>#!</prefix>
             <roles>
-            <role name="ADMIN">269540001874837506</role>
-                <role name="MUSIC_DJ">269540002373959691</role>
+            <role name="ADMIN">271156845031194629</role>
+                <role name="MUSIC_DJ">271156846482554880</role>
             </roles>
             <commands>
                 <command name="8ball">
@@ -163,6 +163,123 @@
                     <permLevel>0</permLevel>
                 </command>
                 <command name="volume">
+                    <isEnabled>true</isEnabled>
+                    <permLevel>0</permLevel>
+                </command>
+                <command name="vote">
+                    <isEnabled>true</isEnabled>
+                    <permLevel>3</permLevel>
+                </command>
+            <command name="execute">
+                    <isEnabled>true</isEnabled>
+                    <permLevel>99</permLevel>
+                </command>
+            </commands>
+        </server>
+    <server id="222489916053913611">
+            <prefix>#!</prefix>
+            <roles>
+                <role name="ADMIN">271151856816750592</role>
+                <role name="MUSIC_DJ">271151857664131072</role>
+            </roles>
+            <commands>
+                <command name="8ball">
+                    <isEnabled>true</isEnabled>
+                    <permLevel>0</permLevel>
+                </command>
+                <command name="chess">
+                    <isEnabled>true</isEnabled>
+                    <permLevel>0</permLevel>
+                </command>
+                <command name="coinflip">
+                    <isEnabled>true</isEnabled>
+                    <permLevel>0</permLevel>
+                </command>
+                <command name="getenabled">
+                    <isEnabled>true</isEnabled>
+                    <permLevel>0</permLevel>
+                </command>
+                <command name="debug">
+                    <isEnabled>true</isEnabled>
+                    <permLevel>0</permLevel>
+                </command>
+                <command name="delete">
+                    <isEnabled>true</isEnabled>
+                    <permLevel>3</permLevel>
+                </command>
+                <command name="diceroll">
+                    <isEnabled>true</isEnabled>
+                    <permLevel>0</permLevel>
+                </command>
+                <command name="shutdown">
+                    <isEnabled>true</isEnabled>
+                    <permLevel>0</permLevel>
+                </command>
+                <command name="disable">
+                    <isEnabled>true</isEnabled>
+                    <permLevel>3</permLevel>
+                </command>
+                <command name="enable">
+                    <isEnabled>true</isEnabled>
+                    <permLevel>3</permLevel>
+                </command>
+                <command name="eval">
+                    <isEnabled>true</isEnabled>
+                    <permLevel>0</permLevel>
+                </command>
+                <command name="execute">
+                    <isEnabled>true</isEnabled>
+                    <permLevel>99</permLevel>
+                </command>
+                <command name="roles">
+                    <isEnabled>true</isEnabled>
+                    <permLevel>0</permLevel>
+                </command>
+                <command name="getpermlevel">
+                    <isEnabled>true</isEnabled>
+                    <permLevel>0</permLevel>
+                </command>
+                <command name="getprefix">
+                    <isEnabled>true</isEnabled>
+                    <permLevel>0</permLevel>
+                </command>
+                <command name="help">
+                    <isEnabled>true</isEnabled>
+                    <permLevel>0</permLevel>
+                </command>
+                <command name="info">
+                    <isEnabled>true</isEnabled>
+                    <permLevel>0</permLevel>
+                </command>
+                <command name="invite">
+                    <isEnabled>true</isEnabled>
+                    <permLevel>0</permLevel>
+                </command>
+                <command name="notifyrand">
+                    <isEnabled>true</isEnabled>
+                    <permLevel>0</permLevel>
+                </command>
+                <command name="ping">
+                    <isEnabled>true</isEnabled>
+                    <permLevel>0</permLevel>
+                </command>
+                <command name="poing">
+                    <isEnabled>true</isEnabled>
+                    <permLevel>0</permLevel>
+                </command>
+                <command name="pong">
+                    <isEnabled>true</isEnabled>
+                    <permLevel>0</permLevel>
+                </command>
+                <command name="setpermlevel">
+                    <isEnabled>true</isEnabled>
+                    <permLevel>3</permLevel>
+                </command>
+                <command name="setprefix">
+                    <isEnabled>true</isEnabled>
+                    <permLevel>3</permLevel>
+                </command>
+                <command name="tictactoe">
                     <isEnabled>true</isEnabled>
                     <permLevel>0</permLevel>
                 </command>
