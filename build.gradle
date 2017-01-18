@@ -14,7 +14,7 @@ repositories {
     mavenCentral()
 }
 dependencies {
+    compile group: 'net.dv8tion', name: 'JDA', version:'3.0.BETA2_121'
     compile group: 'org.reflections', name: 'reflections', version: '0.9.10'
-    compile group: 'net.dv8tion', name: 'JDA', version:'3.0.BETA2_120'
     compile group: 'com.github.meowingtwurtle', name: 'mathParser', version:'1.0.1'
 }
