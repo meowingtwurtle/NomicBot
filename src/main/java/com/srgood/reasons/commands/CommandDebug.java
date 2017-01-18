@@ -3,7 +3,7 @@ package com.srgood.reasons.commands;
 import com.srgood.reasons.ReasonsMain;
 import com.srgood.reasons.utils.GuildUtils;
 import com.srgood.reasons.utils.ImageUtils;
-import com.srgood.reasons.utils.Permissions.PermissionUtils;
+import com.srgood.reasons.utils.PermissionUtils;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;

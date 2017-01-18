@@ -3,7 +3,7 @@ package com.srgood.reasons.config;
 import com.srgood.reasons.commands.Command;
 import com.srgood.reasons.commands.PermissionLevels;
 import com.srgood.reasons.utils.CommandUtils;
-import com.srgood.reasons.utils.Permissions.PermissionUtils;
+import com.srgood.reasons.utils.PermissionUtils;
 import net.dv8tion.jda.core.entities.Guild;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

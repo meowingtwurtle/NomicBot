@@ -3,7 +3,6 @@ package com.srgood.reasons.utils;
 
 import com.srgood.reasons.commands.PermissionLevels;
 import com.srgood.reasons.config.ConfigUtils;
-import com.srgood.reasons.utils.Permissions.PermissionUtils;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.exceptions.PermissionException;
