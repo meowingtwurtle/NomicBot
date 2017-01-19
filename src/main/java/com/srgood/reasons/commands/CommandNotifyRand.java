@@ -1,6 +1,8 @@
 package com.srgood.reasons.commands;
 
 import com.srgood.reasons.ReasonsMain;
+import com.srgood.reasons.utils.MemberUtils;
+import com.srgood.reasons.utils.RoleUtils;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.User;
@@ -16,43 +18,13 @@ public class CommandNotifyRand implements Command {
 
     private static final String HELP = "Notifies a random member of a Role. Use: '" + ReasonsMain.prefix + "notifyrand <role ID>'";
 
-    public User getRandomUser(List<User> users, Boolean isOnline) {
-        User user = null;
-
-        if (isOnline) {
-
-        }
-        return null;
+    @Override
+    public boolean called(String[] args, GuildMessageReceivedEvent event) {
+        return args.length < 0;
     }
 
     @Override
     public void action(String[] args, GuildMessageReceivedEvent event) {
-        Random r = new Random();
-
-        Role role = event.getGuild().getRoleById(args[0]);
-        List<Member> users = event.getGuild().getMembersWithRoles(role);
-        Member member = null;
-
-        if (args.length > 0) {
-
-            if (args.length > 1) {
-
-            } else {
-
-            }
-
-        } else {
-
-        }
-
-
-
-
-        member.getUser().getPrivateChannel().sendMessage(event.getMember().getUser().getName() + " has requested your presence at " + event.getGuild().getName() + " in #" + event.getChannel().getName()).queue();
-        event.getChannel().sendMessage(member.getEffectiveName() + " has been notified").queue();
-
-
-
 
     }
 
@@ -60,5 +32,6 @@ public class CommandNotifyRand implements Command {
     public String help() {
         return HELP;
     }
+
 
 }
