@@ -83,6 +83,10 @@ public class BasicPermissionSet implements Serializable {
                             .collect(Collectors.toSet());
     }
 
+    public PermissionStatus getActionStatus(PermissibleAction action) {
+        return permissionMap.get(action);
+    }
+
     public void setActionStatus(PermissibleAction action, PermissionStatus status) {
         permissionMap.put(action, status);
     }
