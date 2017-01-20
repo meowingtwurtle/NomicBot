@@ -9,21 +9,21 @@ import java.util.stream.Collectors;
 
 import static com.srgood.reasons.permissions.PermissionStatus.*;
 
-public class PermissionSet implements Serializable {
+public class BasicPermissionSet implements Serializable {
 
     private Map<PermissibleAction, PermissionStatus> permissionMap = new HashMap<>();
 
 
 
-    public PermissionSet(Collection<PermissibleAction> allowedActions) {
+    public BasicPermissionSet(Collection<PermissibleAction> allowedActions) {
         this(allowedActions, null, null);
     }
 
-    public PermissionSet(Collection<PermissibleAction> allowedActions, Collection<PermissibleAction> deniedActions) {
+    public BasicPermissionSet(Collection<PermissibleAction> allowedActions, Collection<PermissibleAction> deniedActions) {
         this(allowedActions, deniedActions, null);
     }
 
-    public PermissionSet(Collection<PermissibleAction> allowedActions, Collection<PermissibleAction> deniedActions, Collection<PermissibleAction> deferredActions) {
+    public BasicPermissionSet(Collection<PermissibleAction> allowedActions, Collection<PermissibleAction> deniedActions, Collection<PermissibleAction> deferredActions) {
         this();
 
         if (allowedActions != null) {
@@ -45,11 +45,11 @@ public class PermissionSet implements Serializable {
         }
     }
 
-    public PermissionSet(PermissionSet setToDuplicate) {
+    public BasicPermissionSet(BasicPermissionSet setToDuplicate) {
         permissionMap = new HashMap<>(new HashMap<>(setToDuplicate.permissionMap));
     }
 
-    public PermissionSet() {
+    public BasicPermissionSet() {
         populatePermissionMap();
     }
 
