@@ -4,6 +4,7 @@ import com.srgood.reasons.commands.ChannelCommandThread;
 import com.srgood.reasons.commands.Command;
 import com.srgood.reasons.commands.CommandParser;
 import com.srgood.reasons.config.ConfigUtils;
+import com.srgood.reasons.permissions.PermissionUtils;
 import net.dv8tion.jda.core.entities.Guild;
 
 import java.util.Comparator;

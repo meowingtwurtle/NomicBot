@@ -1,4 +1,4 @@
-package com.srgood.reasons.utils;
+package com.srgood.reasons.permissions;
 
 import com.srgood.reasons.Reference;
 import com.srgood.reasons.commands.PermissionLevels;
