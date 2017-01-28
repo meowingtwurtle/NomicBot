@@ -79,7 +79,7 @@ public class GuildPermissionSet implements Serializable {
         if (role == null) {
             throw new IllegalArgumentException("Role cannot be null");
         }
-        if (!role.getGuild().equals(role.getJDA().getGuildById(guildID))) {
+        if (!role.getGuild().getId().equals(guildID)) {
             throw new IllegalArgumentException("Role must be in same guild as registered");
         }
     }
