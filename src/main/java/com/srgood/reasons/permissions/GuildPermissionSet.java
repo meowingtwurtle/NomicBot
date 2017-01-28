@@ -11,21 +11,16 @@ import java.util.*;
 public class GuildPermissionSet implements Serializable {
     private final String guildID;
     private final Map<String, BasicPermissionSet> rolePermissions = new HashMap<>();
-    private transient JDA jda = null;
     private transient boolean initComplete = false;
 
     private static final Collection<PermissibleAction> PERMISSIBLE_ACTION_COLLECTION = Arrays.asList(PermissibleAction.values());
 
     public GuildPermissionSet(Guild guild) {
         guildID = guild.getId();
-        jda = guild.getJDA();
         initComplete = true;
     }
 
     public void init(JDA jda) {
-        if (this.jda != null) {
-            this.jda = jda;
-        }
         if (jda.getGuildById(guildID) == null) throw new IllegalStateException("Associated Guild has been deleted");
         Guild guild = jda.getGuildById(guildID);
         for (String roleID : rolePermissions.keySet()) {
@@ -54,7 +49,7 @@ public class GuildPermissionSet implements Serializable {
     public void setPermissionStatus(Role role, PermissibleAction action, PermissionStatus permissionStatus) {
         checkInit();
         checkRole(role);
-        if (jda.getGuildById(guildID).getPublicRole().equals(role) && permissionStatus == PermissionStatus.DEFERRED) {
+        if (role.getGuild().getPublicRole().equals(role) && permissionStatus == PermissionStatus.DEFERRED) {
             throw new IllegalArgumentException("Cannot defer on the everyone role");
         }
         rolePermissions.get(role.getId()).setActionStatus(action, permissionStatus);
@@ -84,7 +79,7 @@ public class GuildPermissionSet implements Serializable {
         if (role == null) {
             throw new IllegalArgumentException("Role cannot be null");
         }
-        if (!role.getGuild().equals(jda.getGuildById(guildID))) {
+        if (!role.getGuild().equals(role.getJDA().getGuildById(guildID))) {
             throw new IllegalArgumentException("Role must be in same guild as registered");
         }
     }
