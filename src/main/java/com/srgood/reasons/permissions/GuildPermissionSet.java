@@ -20,7 +20,7 @@ public class GuildPermissionSet implements Serializable {
         initComplete = true;
     }
 
-    public void init(JDA jda) {
+    public void clean(JDA jda) {
         if (jda.getGuildById(guildID) == null) throw new IllegalStateException("Associated Guild has been deleted");
         Guild guild = jda.getGuildById(guildID);
         for (String roleID : rolePermissions.keySet()) {
@@ -41,13 +41,11 @@ public class GuildPermissionSet implements Serializable {
     }
 
     public PermissionStatus getPermissionStatus(Role role, PermissibleAction action) {
-        checkInit();
         checkRole(role);
         return rolePermissions.get(role.getId()).getActionStatus(action);
     }
 
     public void setPermissionStatus(Role role, PermissibleAction action, PermissionStatus permissionStatus) {
-        checkInit();
         checkRole(role);
         if (role.getGuild().getPublicRole().equals(role) && permissionStatus == PermissionStatus.DEFERRED) {
             throw new IllegalArgumentException("Cannot defer on the everyone role");
@@ -56,7 +54,6 @@ public class GuildPermissionSet implements Serializable {
     }
 
     public boolean checkMemberPermission(Member member, PermissibleAction action) {
-        checkInit();
         if (!member.getGuild().getId().equals(guildID)) {
             throw new IllegalArgumentException("Member must be in same guild as registered");
         }
@@ -67,12 +64,6 @@ public class GuildPermissionSet implements Serializable {
             }
         }
         return false;
-    }
-
-    private void checkInit() {
-        if (!initComplete) {
-            throw new IllegalStateException("Cannot use GuildPermissionSet before init complete");
-        }
     }
 
     private void checkRole(Role role) {
