@@ -2,9 +2,11 @@ package com.srgood.reasons.commands;
 
 import com.srgood.reasons.ReasonsMain;
 import com.srgood.reasons.config.ConfigUtils;
+import com.srgood.reasons.utils.GreetingUtils;
 import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
+
+import java.util.Arrays;
 
 /**
  * Created by HiItsMe on 1/18/2017.
@@ -20,14 +22,19 @@ public class CommandSetGoodbye implements Command {
 
     @Override
     public void action(String[] args, GuildMessageReceivedEvent event) {
-        String arg = event.getMessage().getContent().substring(13);
-        if(arg.trim().toLowerCase().equals("off")) {
-            ConfigUtils.setGuildProperty(event.getGuild(), "goodbye", "OFF");
+        String message;
+        {
+            String[] argsWithCase = Arrays.copyOfRange(event.getMessage().getContent().split(" "), 1, args.length + 1);
+            message = String.join(" ", argsWithCase);
+        }
+
+        if(message.trim().equalsIgnoreCase("OFF")) {
+            ConfigUtils.setGuildProperty(event.getGuild(), GreetingUtils.formatPropertyName("goodbye"), "OFF");
             event.getChannel().sendMessage("Goodbye message turned off").queue();
         } else {
-            ConfigUtils.setGuildProperty(event.getGuild(), "goodbye", arg);
-            ConfigUtils.setGuildProperty(event.getGuild(), "goodbyechannel", event.getChannel().getId());
-            event.getChannel().sendMessage("Goodbye message set to " + arg).queue();
+            ConfigUtils.setGuildProperty(event.getGuild(), GreetingUtils.formatPropertyName("goodbye"), message);
+            ConfigUtils.setGuildProperty(event.getGuild(), GreetingUtils.formatPropertyName("goodbyechannel"), event.getChannel().getId());
+            event.getChannel().sendMessage(String.format("Goodbye message set to **`%s`**. Messages will be sent in this channel.", message)).queue();
         }
     }
 

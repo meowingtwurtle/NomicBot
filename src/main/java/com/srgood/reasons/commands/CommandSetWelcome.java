@@ -2,9 +2,11 @@ package com.srgood.reasons.commands;
 
 import com.srgood.reasons.ReasonsMain;
 import com.srgood.reasons.config.ConfigUtils;
+import com.srgood.reasons.utils.GreetingUtils;
 import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
+
+import java.util.Arrays;
 
 /**
  * Created by HiItsMe on 1/18/2017.
@@ -20,14 +22,19 @@ public class CommandSetWelcome implements Command {
 
     @Override
     public void action(String[] args, GuildMessageReceivedEvent event) {
-        String arg = event.getMessage().getContent().substring(13);
-        if(arg.trim().toLowerCase().equals("off")) {
-            ConfigUtils.setGuildProperty(event.getGuild(), "welcome", "OFF");
+        String message;
+        {
+            String[] argsWithCase = Arrays.copyOfRange(event.getMessage().getContent().split(" "), 1, args.length + 1);
+            message = String.join(" ", argsWithCase);
+        }
+
+        if(message.trim().equalsIgnoreCase("OFF")) {
+            ConfigUtils.setGuildProperty(event.getGuild(), GreetingUtils.formatPropertyName("welcome"), "OFF");
             event.getChannel().sendMessage("Welcome message turned off").queue();
         } else {
-            ConfigUtils.setGuildProperty(event.getGuild(), "welcome", arg);
-            ConfigUtils.setGuildProperty(event.getGuild(), "welcomechannel", event.getChannel().getId());
-            event.getChannel().sendMessage("Welcome message set to " + arg).queue();
+            ConfigUtils.setGuildProperty(event.getGuild(), GreetingUtils.formatPropertyName("welcome"), message);
+            ConfigUtils.setGuildProperty(event.getGuild(), GreetingUtils.formatPropertyName("welcomechannel"), event.getChannel().getId());
+            event.getChannel().sendMessage(String.format("Welcome message set to **`%s`**. Messages will be sent in this channel.", message)).queue();
         }
     }
 

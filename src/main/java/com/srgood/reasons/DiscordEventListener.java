@@ -2,6 +2,7 @@ package com.srgood.reasons;
 
 import com.srgood.reasons.config.ConfigUtils;
 import com.srgood.reasons.utils.CensorUtils;
+import com.srgood.reasons.utils.GreetingUtils;
 import com.srgood.reasons.utils.GuildUtils;
 import net.dv8tion.jda.core.events.ReadyEvent;
 import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
@@ -66,15 +67,11 @@ public class DiscordEventListener extends ListenerAdapter {
 
     @Override
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
-        if(ConfigUtils.getGuildProperty(event.getGuild(), "welcome") != null && !ConfigUtils.getGuildProperty(event.getGuild(), "welcome").equals("OFF") && !ConfigUtils.getGuildProperty(event.getGuild(), "welcome").equals("")) {
-            event.getGuild().getTextChannelById(ConfigUtils.getGuildProperty(event.getGuild(), "welcomechannel")).sendMessage(ConfigUtils.getGuildProperty(event.getGuild(), "welcome").replaceAll("@USER",event.getMember().getAsMention())).queue();
-        }
+        GreetingUtils.tryGreeting(event.getMember());
     }
     @Override
     public void onGuildMemberLeave(GuildMemberLeaveEvent event) {
-        if(ConfigUtils.getGuildProperty(event.getGuild(), "goodbye") != null && !ConfigUtils.getGuildProperty(event.getGuild(), "goodbye").equals("OFF") && !ConfigUtils.getGuildProperty(event.getGuild(), "goodbye").equals("")) {
-            event.getGuild().getTextChannelById(ConfigUtils.getGuildProperty(event.getGuild(), "goodbyechannel")).sendMessage(ConfigUtils.getGuildProperty(event.getGuild(), "goodbye").replaceAll("@USER",event.getMember().getAsMention())).queue();
-        }
+        GreetingUtils.tryGoodbye(event.getMember());
     }
 
 
