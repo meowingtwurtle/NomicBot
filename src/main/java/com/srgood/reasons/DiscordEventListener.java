@@ -1,9 +1,13 @@
 package com.srgood.reasons;
 
 import com.srgood.reasons.config.ConfigUtils;
+import com.srgood.reasons.utils.CensorUtils;
+import com.srgood.reasons.utils.GreetingUtils;
 import com.srgood.reasons.utils.GuildUtils;
 import net.dv8tion.jda.core.events.ReadyEvent;
 import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
+import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
+import net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent;
 import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageUpdateEvent;
@@ -58,6 +62,16 @@ public class DiscordEventListener extends ListenerAdapter {
             }
         }
 
+        CensorUtils.checkCensor(event.getMessage());
+    }
+
+    @Override
+    public void onGuildMemberJoin(GuildMemberJoinEvent event) {
+        GreetingUtils.tryGreeting(event.getMember());
+    }
+    @Override
+    public void onGuildMemberLeave(GuildMemberLeaveEvent event) {
+        GreetingUtils.tryGoodbye(event.getMember());
     }
 
 
