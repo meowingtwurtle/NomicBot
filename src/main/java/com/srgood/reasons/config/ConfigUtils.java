@@ -83,6 +83,10 @@ public class ConfigUtils {
         ConfigCommandUtils.setCommandPermission(guild, command, permLevel);
     }
 
+    public static boolean guildPropertyExists(Guild guild, String property) {
+        return ConfigGuildUtils.guildPropertyExists(guild, property);
+    }
+
     public static String getGuildProperty(Guild guild, String property) {
         return ConfigGuildUtils.getGuildSimpleProperty(guild, property);
     }

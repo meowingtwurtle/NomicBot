@@ -76,11 +76,26 @@ class ConfigGuildUtils {
         }
     }
 
-    static String getGuildSimpleProperty(Guild guild, String property) {
+    static boolean guildPropertyExists(Guild guild, String property) {
         try {
             lockDocument();
             Element propertyElement = ConfigBasicUtils.getElementFromPath(getGuildNode(guild), property);
-            return propertyElement != null ? propertyElement.getTextContent() : null;
+            return propertyElement != null;
+        } finally {
+          releaseDocument();
+        }
+    }
+
+    static String getGuildSimpleProperty(Guild guild, String property) {
+        try {
+            lockDocument();
+
+            if (!guildPropertyExists(guild, property)) {
+                return null;
+            }
+
+            Element propertyElement = ConfigBasicUtils.getElementFromPath(getGuildNode(guild), property);
+            return propertyElement.getTextContent();
         } finally {
             releaseDocument();
         }
