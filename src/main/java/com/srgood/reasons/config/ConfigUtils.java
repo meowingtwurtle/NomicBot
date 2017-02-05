@@ -87,8 +87,15 @@ public class ConfigUtils {
         return ConfigGuildUtils.getGuildSimpleProperty(guild, property);
     }
 
+    public static <T> T getGuildSerializedProperty(Guild guild, String property, Class<T> propertyClass) {
+        return ConfigGuildUtils.getGuildSerializedProperty(guild, property, propertyClass);
+    }
+
     public static void setGuildProperty(Guild guild, String property, String value) {
         ConfigGuildUtils.setGuildSimpleProperty(guild, property, value);
+    }
+    public static void setGuildSerializedProperty(Guild guild, String property, Object value) {
+        ConfigGuildUtils.setGuildSerializedProperty(guild, property, value);
     }
 
 }

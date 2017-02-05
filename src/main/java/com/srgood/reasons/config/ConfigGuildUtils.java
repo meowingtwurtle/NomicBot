@@ -1,10 +1,16 @@
 package com.srgood.reasons.config;
 
+import com.google.common.base.Throwables;
 import net.dv8tion.jda.core.entities.Guild;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -80,6 +86,25 @@ class ConfigGuildUtils {
         }
     }
 
+    static <T> T getGuildSerializedProperty(Guild guild, String property, Class<T> propertyClass) {
+        String raw = getGuildSimpleProperty(guild, property);
+
+        if (raw == null || raw.equals("null")) {
+            return null;
+        }
+
+        byte[] decoded = Base64.getDecoder().decode(raw);
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(decoded);
+        try {
+            ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
+            Object deserialized = objectInputStream.readObject();
+            return propertyClass.cast(deserialized);
+        } catch (Exception e) {
+            Throwables.propagate(e);
+        }
+        return null; // Should never happen, either returns within try-catch or propagates an exception
+    }
+
     static void setGuildSimpleProperty(Guild guild, String property, String value) {
         try {
             lockDocument();
@@ -87,6 +112,24 @@ class ConfigGuildUtils {
             propertyElement.setTextContent(value);
         } finally {
             releaseDocument();
+        }
+    }
+
+    static void setGuildSerializedProperty(Guild guild, String property, Object value) {
+        try {
+            if (value == null) {
+                setGuildSimpleProperty(guild, property, "null");
+                return;
+            }
+
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+            objectOutputStream.writeObject(value);
+            byte[] serialized = byteArrayOutputStream.toByteArray();
+            String base64 = Base64.getEncoder().encodeToString(serialized);
+            setGuildSimpleProperty(guild, property, base64);
+        } catch (Exception e) {
+            Throwables.propagate(e);
         }
     }
 
