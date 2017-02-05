@@ -133,10 +133,6 @@ class ConfigGuildUtils {
         }
     }
 
-    static Element getGuildComplexPropertyElement(Guild guild, String property) {
-        return getFirstSubElement(getGuildNode(guild), property);
-    }
-
     static String getGuildPrefix(Guild guild) {
         return getGuildSimpleProperty(guild, "prefix");
     }
