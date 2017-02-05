@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class CensorUtils {
 
     public static List<String> getGuildCensorList(Guild guild) {
-        return ConfigUtils.guildPropertyExists(guild, "censorlist") ? ConfigUtils.getGuildSerializedProperty(guild, "censorlist", List.class) : Collections.emptyList();
+        return ConfigUtils.guildPropertyExists(guild, "moderation/censorlist") ? ConfigUtils.getGuildSerializedProperty(guild, "moderation/censorlist", List.class) : Collections.emptyList();
     }
 
     public static void setGuildCensorList(Guild guild, Collection<String> newCensorList) {
@@ -22,13 +22,13 @@ public class CensorUtils {
                                                 .sorted()
                                                 .distinct()
                                                 .collect(Collectors.toList());
-        ConfigUtils.setGuildSerializedProperty(guild, "censorlist", patchedList);
+        ConfigUtils.setGuildSerializedProperty(guild, "moderation/censorlist", patchedList);
     }
 
     public static void checkCensor(Message message) {
         if (message.getContent().startsWith(ConfigUtils.getGuildPrefix(message.getGuild()) + "censor")) return;
 
-        if (ConfigUtils.guildPropertyExists(message.getGuild(), "censorlist")) {
+        if (ConfigUtils.guildPropertyExists(message.getGuild(), "moderation/censorlist")) {
             Collection<String> censorList = CensorUtils.getGuildCensorList(message.getGuild());
             for (String aCensorList : censorList) {
                 Pattern p = Pattern.compile("\\b" + aCensorList + "\\b");

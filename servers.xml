@@ -27,11 +27,11 @@
                 </command>
             </commands>
         </server>
-    <server id="201020472702402560">
+        <server id="201020472702402560">
             <prefix>#!</prefix>
             <roles>
-            <role name="ADMIN">275448412868968449</role>
-                <role name="MUSIC_DJ">275448414223990784</role>
+            <role name="ADMIN">277610336264126466</role>
+                <role name="MUSIC_DJ">277610337677606912</role>
             </roles>
             <commands>
                 <command name="8ball">
@@ -170,26 +170,26 @@
                     <isEnabled>true</isEnabled>
                     <permLevel>3</permLevel>
                 </command>
-            <command name="execute">
+                <command name="execute">
                     <isEnabled>true</isEnabled>
                     <permLevel>99</permLevel>
                 </command>
-            <command name="setwelcome">
+                <command name="setwelcome">
                     <isEnabled>true</isEnabled>
                     <permLevel>0</permLevel>
                 </command>
-            <command name="censor">
+                <command name="censor">
                     <isEnabled>true</isEnabled>
                     <permLevel>3</permLevel>
                 </command>
             </commands>
-        <moderation>
+            <moderation>
                 <welcome>Please leave now, @USER!</welcome>
                 <welcomechannel>220039465006137345</welcomechannel>
+                <censorlist>rO0ABXNyABNqYXZhLnV0aWwuQXJyYXlMaXN0eIHSHZnHYZ0DAAFJAARzaXpleHAAAAACdwQAAAACdAAEZnVja3QABG1lb3d4</censorlist>
             </moderation>
-        <censorlist>rO0ABXNyABNqYXZhLnV0aWwuQXJyYXlMaXN0eIHSHZnHYZ0DAAFJAARzaXpleHAAAAABdwQAAAABdAAEZnVja3g=</censorlist>
         </server>
-    <server id="222489916053913611">
+        <server id="222489916053913611">
             <prefix>#!</prefix>
             <roles>
                 <role name="ADMIN">271151856816750592</role>
