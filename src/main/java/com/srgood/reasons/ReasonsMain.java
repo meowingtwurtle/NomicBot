@@ -60,11 +60,15 @@ public class ReasonsMain {
                                                  .buildBlocking();
         } catch (LoginException | IllegalArgumentException e) {
             SimpleLog.getLog("Reasons").fatal("**COULD NOT LOG IN** An invalid token was provided.");
+            System.exit(-1);
         } catch (RateLimitedException e) {
             SimpleLog.getLog("Reasons").fatal("**We are being ratelimited**");
             e.printStackTrace();
-        }  catch (InterruptedException e) {
-
+            System.exit(-1);
+        } catch (InterruptedException e) {
+            SimpleLog.getLog("Reasons").fatal("InterruptedException");
+            e.printStackTrace();
+            System.exit(-1);
         }
     }
 
