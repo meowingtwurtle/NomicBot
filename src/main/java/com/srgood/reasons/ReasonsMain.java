@@ -40,21 +40,31 @@ public class ReasonsMain {
     }
 
     public static void main(String[] args) {
-        new ReasonsMain().init();
+        String token = getToken(args);
+        new ReasonsMain().init(token);
     }
 
-    public void init() {
-        initJDA();
+    private static String getToken(String[] args) {
+        if (args.length < 1) {
+            throw new IllegalArgumentException("No token was provided");
+        } else if (args.length > 1) {
+            throw new IllegalArgumentException("Only one argument should be provided");
+        }
+        return args[0];
+    }
+
+    public void init(String token) {
+        initJDA(token);
         initConfig();
         initCommands();
 
         addToTray();
     }
 
-    private void initJDA() {
+    private void initJDA(String token) {
         try {
             jda = new JDABuilder(AccountType.BOT).addListener(new DiscordEventListener())
-                                                 .setToken(Reference.Strings.BOT_TOKEN_REASONS)
+                                                 .setToken(token)
                                                  .setGame(Game.of("Type @Reasons help"))
                                                  .setAutoReconnect(true)
                                                  .buildBlocking();
