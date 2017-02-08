@@ -4,7 +4,6 @@ import com.srgood.reasons.commands.Command;
 import com.srgood.reasons.commands.CommandParser;
 import com.srgood.reasons.config.ConfigUtils;
 import com.srgood.reasons.utils.CommandUtils;
-import com.srgood.reasons.utils.SecureOverrideKeyGenerator;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -29,7 +28,6 @@ public class ReasonsMain {
 
     public static JDA jda;
     public static String prefix;
-    public static String overrideKey = SecureOverrideKeyGenerator.nextOverrideKey();
     public static ByteArrayOutputStream out, errOut;
 
     private boolean firstTime;
@@ -91,8 +89,6 @@ public class ReasonsMain {
     }
 
     private void initCommands() {
-        SimpleLog.getLog("Reasons").info("Session override Key: " + overrideKey);
-
         try {
             String[] packages = { "com.srgood.reasons" };
 

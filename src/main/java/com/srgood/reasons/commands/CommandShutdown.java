@@ -20,15 +20,6 @@ public class CommandShutdown implements Command {
             if (Reference.Other.BOT_DEVELOPERS.contains(String.valueOf(uid))) {
                 event.getChannel().sendMessage("Shutting down! " + event.getAuthor().getAsMention()).queue();
                 doShutdown();
-            } else {
-                if (args[0].toLowerCase().equals("override")) {
-                    if (ReasonsMain.overrideKey.equals(args[1])) {
-                        event.getChannel().sendMessage("Valid key. Shutting down! " + event.getAuthor().getAsMention()).queue();
-                        doShutdown();
-                    } else {
-                        event.getChannel().sendMessage("Bad key " + event.getAuthor().getAsMention()).queue();
-                    }
-                }
             }
         } catch (ArrayIndexOutOfBoundsException e) {
             try {

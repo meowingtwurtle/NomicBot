@@ -8,6 +8,7 @@ import java.awt.image.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Random;
 import java.util.stream.IntStream;
 
 import static com.srgood.reasons.Reference.Numbers.VOTE_IMAGE_HEIGHT;
@@ -67,7 +68,7 @@ public class ImageUtils {
 
         graphics.dispose();
         workImage.flush();
-        File file = File.createTempFile(SecureOverrideKeyGenerator.nextOverrideKey(), ".png");
+        File file = File.createTempFile("" + new Random().nextLong(), ".png");
         file.deleteOnExit();
         ImageIO.write(workImage, "png", file);
         return file;
