@@ -19,6 +19,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import static com.srgood.reasons.config.ConfigBasicUtils.getDocumentLock;
+
 public class ConfigPersistenceUtils {
     private static final String DEFAULT_CONFIG_TEXT = "<config />";
 
@@ -35,13 +37,14 @@ public class ConfigPersistenceUtils {
         transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
         transformer.setOutputProperty(OutputKeys.METHOD, "xml");
         try {
-            DOMSource source = new DOMSource(ConfigBasicUtils.lockAndGetDocument());
+            getDocumentLock().readLock().lock();
+            DOMSource source = new DOMSource(ConfigBasicUtils.getDocument());
             StringWriter stringWriter = new StringWriter();
             StreamResult result = new StreamResult(stringWriter);
             transformer.transform(source, result);
             return stringWriter.toString();
         } finally {
-            ConfigBasicUtils.releaseDocument();
+            getDocumentLock().readLock().unlock();
         }
     }
 
@@ -99,13 +102,14 @@ public class ConfigPersistenceUtils {
 
     public static void initConfigFromStream(InputStream inputStream) {
         try {
+            getDocumentLock().writeLock().lock();
+
             ConfigGuildUtils.resetServers();
 
             DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder domInput = domFactory.newDocumentBuilder();
 
 
-            ConfigBasicUtils.lockDocument();
             Document doc = domInput.parse(inputStream);
             ConfigBasicUtils.setDocument(doc);
             doc.getDocumentElement().normalize();
@@ -124,7 +128,7 @@ public class ConfigPersistenceUtils {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            ConfigBasicUtils.releaseDocument();
+            getDocumentLock().writeLock().unlock();
         }
     }
 }

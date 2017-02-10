@@ -1,6 +1,5 @@
 package com.srgood.reasons.config;
 
-
 import com.srgood.reasons.commands.PermissionLevels;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Role;
@@ -13,7 +12,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.srgood.reasons.config.ConfigBasicUtils.*;
+import static com.srgood.reasons.config.ConfigBasicUtils.getDocument;
+import static com.srgood.reasons.config.ConfigBasicUtils.getDocumentLock;
 
 class ConfigRoleUtils {
     private static Element getRolesElement(Guild guild) {
@@ -22,18 +22,18 @@ class ConfigRoleUtils {
 
     private static List<Node> getRoleNodeListFromGuild(Guild guild) {
         try {
-            lockDocument();
+            getDocumentLock().readLock().lock();
             Element rolesElem = getRolesElement(guild);
 
             return ConfigBasicUtils.nodeListToList(rolesElem.getElementsByTagName("role"));
         } finally {
-            releaseDocument();
+            getDocumentLock().readLock().unlock();
         }
     }
 
     static PermissionLevels roleToPermission(Guild guild, Role role) {
         try {
-            lockDocument();
+            getDocumentLock().readLock().lock();
             PermissionLevels permission = null;
             if (role == null) {
                 throw new IllegalArgumentException("role cannot be null");
@@ -60,13 +60,13 @@ class ConfigRoleUtils {
 
             return permission;
         } finally {
-            releaseDocument();
+            getDocumentLock().readLock().unlock();
         }
     }
 
     static boolean guildHasRoleForPermission(Guild guild, PermissionLevels roleLevel) {
         try {
-            lockDocument();
+            getDocumentLock().readLock().lock();
             List<Node> roleElementList = getRoleNodeListFromGuild(guild);
 
             for (Node n : roleElementList) {
@@ -77,13 +77,14 @@ class ConfigRoleUtils {
             }
             return false;
         } finally {
-            releaseDocument();
+            getDocumentLock().readLock().unlock();
         }
     }
 
     static void registerRoleConfig(Guild guild, Role role, PermissionLevels roleLevel) {
         try {
-            Document doc = lockAndGetDocument();
+            getDocumentLock().writeLock().lock();
+            Document doc = getDocument();
             Element elementRoles = ConfigBasicUtils.getOrCreateFirstSubElement(ConfigGuildUtils.getGuildNode(guild), "roles");
 
             Element elementRole = doc.createElement("role");
@@ -94,13 +95,13 @@ class ConfigRoleUtils {
 
             elementRoles.appendChild(elementRole);
         } finally {
-            releaseDocument();
+            getDocumentLock().writeLock().unlock();
         }
     }
 
     static void deregisterRoleConfig(Guild guild, String roleID) {
         try {
-            lockDocument();
+            getDocumentLock().writeLock().lock();
             Element elementRole = null;
 
             List<Node> roleNodeList = getRoleNodeListFromGuild(guild);
@@ -117,7 +118,7 @@ class ConfigRoleUtils {
             }
             elementRole.getParentNode().removeChild(elementRole);
         } finally {
-            releaseDocument();
+            getDocumentLock().writeLock().unlock();
         }
     }
 
@@ -127,11 +128,11 @@ class ConfigRoleUtils {
 
     static Set<Role> getGuildRolesFromPermissionLevel(Guild guild, PermissionLevels permissionLevel) {
         try {
-            lockDocument();
+            getDocumentLock().readLock().lock();
             String permissionName = permissionLevel.getXMLName();
             return getRoleNodeListFromGuild(guild).stream().filter(n -> n instanceof Element).map(n -> (Element) n).filter(elem -> elem.getAttribute("name").equals(permissionName)).map(Node::getTextContent).map(guild::getRoleById).collect(Collectors.toSet());
         } finally {
-            releaseDocument();
+            getDocumentLock().readLock().unlock();
         }
     }
 }

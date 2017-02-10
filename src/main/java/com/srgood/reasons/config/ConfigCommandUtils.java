@@ -36,7 +36,7 @@ class ConfigCommandUtils {
 
     private static Element getCommandElement(Element commandsElement, String commandName) {
         try {
-            lockDocument();
+            getDocumentLock().readLock().lock();
             List<Node> commandList = ConfigBasicUtils.nodeListToList(commandsElement.getElementsByTagName("command"));
 
             for (Node n : commandList) {
@@ -46,18 +46,18 @@ class ConfigCommandUtils {
                 }
             }
         } finally {
-            releaseDocument();
+            getDocumentLock().readLock().unlock();
         }
         return null;
     }
 
     private static String getCommandProperty(Element commandElement, String property) {
         try {
-            lockDocument();
+            getDocumentLock().readLock().lock();
             Element propertyElement = ConfigBasicUtils.getFirstSubElement(commandElement, property);
             return propertyElement != null ? propertyElement.getTextContent() : null;
         } finally {
-            releaseDocument();
+            getDocumentLock().readLock().unlock();
         }
     }
 
@@ -71,11 +71,11 @@ class ConfigCommandUtils {
 
     private static void setCommandProperty(Element commandElement, String property, String value) {
         try {
-            lockDocument();
+            getDocumentLock().readLock().lock();
             Element firstMatchElement = ConfigBasicUtils.getOrCreateFirstSubElement(commandElement, property);
             firstMatchElement.setTextContent(value);
         } finally {
-            releaseDocument();
+            getDocumentLock().readLock().unlock();
         }
     }
 
@@ -93,11 +93,12 @@ class ConfigCommandUtils {
 
     private static void initGuildCommands(Guild guild) {
         try {
-            Element commandsElement = lockAndGetDocument().createElement("commands");
+            getDocumentLock().writeLock().lock();
+            Element commandsElement = getDocument().createElement("commands");
             ConfigGuildUtils.getGuildNode(guild).appendChild(commandsElement);
             initCommandsElement(commandsElement);
         } finally {
-            ConfigBasicUtils.releaseDocument();
+            getDocumentLock().writeLock().unlock();
         }
     }
 
@@ -119,7 +120,8 @@ class ConfigCommandUtils {
         }
 
         try {
-            Element commandElement = lockAndGetDocument().createElement("command");
+            getDocumentLock().writeLock().lock();
+            Element commandElement = getDocument().createElement("command");
 
             commandElement.setAttribute("name", command);
 
@@ -127,7 +129,7 @@ class ConfigCommandUtils {
 
             addMissingSubElementsToCommand(commandsElement, command);
         } finally {
-            ConfigBasicUtils.releaseDocument();
+            getDocumentLock().writeLock().unlock();
         }
     }
 
@@ -159,7 +161,7 @@ class ConfigCommandUtils {
 
     static void initCommandConfigIfNotExists(Guild guild, Command cmd) {
         try {
-            lockDocument();
+            getDocumentLock().writeLock().lock();
             Element serverElement = ConfigGuildUtils.getGuildNode(guild);
             Element commandsElement;
             String realCommandName = CommandUtils.getNameFromCommand(cmd);
@@ -181,7 +183,7 @@ class ConfigCommandUtils {
             }
             initCommandElement(commandsElement, realCommandName);
         } finally {
-            releaseDocument();
+            getDocumentLock().writeLock().unlock();
         }
     }
 
