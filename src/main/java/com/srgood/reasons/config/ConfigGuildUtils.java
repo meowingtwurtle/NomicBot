@@ -104,27 +104,22 @@ class ConfigGuildUtils {
     }
 
     static <T> T getGuildSerializedProperty(Guild guild, String property, Class<T> propertyClass) {
-        try {
-            getDocumentLock().readLock().lock();
-            String raw = getGuildSimpleProperty(guild, property);
+        String raw = getGuildSimpleProperty(guild, property);
 
-            if (raw == null || raw.equals("null")) {
-                return null;
-            }
-
-            byte[] decoded = Base64.getDecoder().decode(raw);
-            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(decoded);
-            try {
-                ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
-                Object deserialized = objectInputStream.readObject();
-                return propertyClass.cast(deserialized);
-            } catch (Exception e) {
-                Throwables.propagate(e);
-            }
-            return null; // Should never happen, either returns within try-catch or propagates an exception
-        } finally {
-            getDocumentLock().readLock().unlock();
+        if (raw == null || raw.equals("null")) {
+            return null;
         }
+
+        byte[] decoded = Base64.getDecoder().decode(raw);
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(decoded);
+        try {
+            ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
+            Object deserialized = objectInputStream.readObject();
+            return propertyClass.cast(deserialized);
+        } catch (Exception e) {
+            Throwables.propagate(e);
+        }
+        return null; // Should never happen, either returns within try-catch or propagates an exception
     }
 
     static void setGuildSimpleProperty(Guild guild, String property, String value) {
@@ -139,7 +134,6 @@ class ConfigGuildUtils {
 
     static void setGuildSerializedProperty(Guild guild, String property, Object value) {
         try {
-            getDocumentLock().writeLock().lock();
             if (value == null) {
                 setGuildSimpleProperty(guild, property, "null");
                 return;
@@ -153,8 +147,6 @@ class ConfigGuildUtils {
             setGuildSimpleProperty(guild, property, base64);
         } catch (Exception e) {
             Throwables.propagate(e);
-        } finally {
-            getDocumentLock().writeLock().unlock();
         }
     }
 

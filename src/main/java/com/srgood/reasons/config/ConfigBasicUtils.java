@@ -73,21 +73,30 @@ class ConfigBasicUtils {
 
     static Element getOrCreateElementFromPath(Element parent, String path) {
         try {
-            getDocumentLock().writeLock().lock();
+            getDocumentLock().readLock().lock();
             Document doc = getDocument();
             String[] parts = path.split(PATH_SPLIT_REGEX);
             Element firstPartElement = getFirstSubElement(parent, parts[0]);
             if (firstPartElement == null) {
-                Element newFirst = doc.createElement(parts[0]);
-                parent.appendChild(newFirst);
-                firstPartElement = newFirst;
+                try {
+                    getDocumentLock().readLock().unlock();
+                    getDocumentLock().writeLock().lock();
+                    if (getFirstSubElement(parent, parts[0]) == null) {
+                        Element newFirst = doc.createElement(parts[0]);
+                        parent.appendChild(newFirst);
+                        firstPartElement = newFirst;
+                    }
+                } finally {
+                    getDocumentLock().writeLock().unlock();
+                    getDocumentLock().readLock().lock();
+                }
             }
             if (parts.length == 1) {
                 return firstPartElement;
             }
             return getOrCreateElementFromPath(firstPartElement, path.substring(parts[0].length() + 1));
         } finally {
-            getDocumentLock().writeLock().unlock();
+            getDocumentLock().readLock().unlock();
         }
     }
 
@@ -97,19 +106,27 @@ class ConfigBasicUtils {
 
     static Element getOrCreateFirstSubElement(Element parent, String subTagName, String defaultValue) {
         try {
-            getDocumentLock().writeLock().lock();
+            getDocumentLock().readLock().lock();
             Document doc = getDocument();
             Element ret = getFirstSubElement(parent, subTagName);
             if (ret == null) {
-                ret = doc.createElement(subTagName);
-                parent.appendChild(ret);
-                if (defaultValue != null) {
-                    ret.setTextContent(defaultValue);
+                try {
+                    getDocumentLock().writeLock().lock();
+                    if (getFirstSubElement(parent, subTagName) == null) {
+                        ret = doc.createElement(subTagName);
+                        parent.appendChild(ret);
+                        if (defaultValue != null) {
+                            ret.setTextContent(defaultValue);
+                        }
+                    }
+                } finally {
+                    getDocumentLock().writeLock().unlock();
+                    getDocumentLock().readLock().lock();
                 }
             }
             return ret;
         } finally {
-            getDocumentLock().writeLock().unlock();
+            getDocumentLock().readLock().unlock();
         }
     }
 

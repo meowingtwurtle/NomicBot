@@ -21,27 +21,22 @@ class ConfigRoleUtils {
     }
 
     private static List<Node> getRoleNodeListFromGuild(Guild guild) {
-        try {
-            getDocumentLock().readLock().lock();
             Element rolesElem = getRolesElement(guild);
-
             return ConfigBasicUtils.nodeListToList(rolesElem.getElementsByTagName("role"));
-        } finally {
-            getDocumentLock().readLock().unlock();
-        }
     }
 
     static PermissionLevels roleToPermission(Guild guild, Role role) {
+        PermissionLevels permission = null;
+        if (role == null) {
+            throw new IllegalArgumentException("role cannot be null");
+        }
+
+        List<Node> roleNodeList = getRoleNodeListFromGuild(guild);
+
+        String roleID = role.getId();
+
         try {
             getDocumentLock().readLock().lock();
-            PermissionLevels permission = null;
-            if (role == null) {
-                throw new IllegalArgumentException("role cannot be null");
-            }
-
-            List<Node> roleNodeList = getRoleNodeListFromGuild(guild);
-
-            String roleID = role.getId();
 
             for (Node n : roleNodeList) {
                 Element roleElem = (Element) n;

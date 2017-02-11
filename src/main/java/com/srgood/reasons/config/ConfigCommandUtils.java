@@ -71,11 +71,11 @@ class ConfigCommandUtils {
 
     private static void setCommandProperty(Element commandElement, String property, String value) {
         try {
-            getDocumentLock().readLock().lock();
+            getDocumentLock().writeLock().lock();
             Element firstMatchElement = ConfigBasicUtils.getOrCreateFirstSubElement(commandElement, property);
             firstMatchElement.setTextContent(value);
         } finally {
-            getDocumentLock().readLock().unlock();
+            getDocumentLock().writeLock().unlock();
         }
     }
 
@@ -113,14 +113,15 @@ class ConfigCommandUtils {
     }
 
     private static void initCommandElement(Element commandsElement, String command) {
-        command = CommandUtils.getPrimaryCommandAlias(command);
-
-        if (commandElementExists(commandsElement, command)) {
-            return;
-        }
-
         try {
             getDocumentLock().writeLock().lock();
+
+            command = CommandUtils.getPrimaryCommandAlias(command);
+
+            if (commandElementExists(commandsElement, command)) {
+                return;
+            }
+
             Element commandElement = getDocument().createElement("command");
 
             commandElement.setAttribute("name", command);
@@ -131,6 +132,7 @@ class ConfigCommandUtils {
         } finally {
             getDocumentLock().writeLock().unlock();
         }
+
     }
 
     public static boolean isCommandEnabled(Guild guild, Command command) {
