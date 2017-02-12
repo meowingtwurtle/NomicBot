@@ -111,6 +111,7 @@ class ConfigBasicUtils {
             Element ret = getFirstSubElement(parent, subTagName);
             if (ret == null) {
                 try {
+                    getDocumentLock().readLock().unlock();
                     getDocumentLock().writeLock().lock();
                     if (getFirstSubElement(parent, subTagName) == null) {
                         ret = doc.createElement(subTagName);
