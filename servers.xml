@@ -125,11 +125,7 @@
                 <command name="pause">
                     <isEnabled>true</isEnabled>
                     <permLevel>0</permLevel>
-                </command>
-                <command name="ping">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>0</permLevel>
-                </command>
+                </command>git
                 <command name="play">
                     <isEnabled>true</isEnabled>
                     <permLevel>0</permLevel>
