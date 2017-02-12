@@ -74,8 +74,6 @@ public class PermissionUtils {
     public static Role createRole(PermissionLevels roleLevel, Guild guild, boolean addToXML) throws RateLimitedException {
         if (!roleLevel.isVisible()) return null;
 
-        System.out.println("Creating role");
-
         Role role = guild.getController().createRole().complete();
 
         RoleManagerUpdatable roleManagerUpdatable = role.getManagerUpdatable();

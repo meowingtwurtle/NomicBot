@@ -17,7 +17,6 @@ public class CommandRoles implements Command {
     public void action(String[] args, GuildMessageReceivedEvent event) {
         Guild guild = event.getGuild();
         List<Role> roles = guild.getRoles();
-        System.out.println(roles.stream().map(Role::getName).collect(Collectors.toList()));
         List<String> roleStrings = roles.stream().filter(role -> role.compareTo(event.getGuild().getPublicRole()) != 0).map(role -> role.getName() + ": " + role.getId() + "\n").collect(Collectors.toList());
 
         StringBuilder stringBuilder = new StringBuilder();
