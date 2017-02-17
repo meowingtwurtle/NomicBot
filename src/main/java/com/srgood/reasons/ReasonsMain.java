@@ -63,7 +63,7 @@ public class ReasonsMain {
         try {
             jda = new JDABuilder(AccountType.BOT).addListener(new DiscordEventListener())
                                                  .setToken(token)
-                                                 .setGame(Game.of("Type @Reasons help"))
+                                                 .setGame(Game.of("Type @Theta help"))
                                                  .setAutoReconnect(true)
                                                  .buildBlocking();
         } catch (LoginException | IllegalArgumentException e) {
