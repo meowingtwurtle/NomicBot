@@ -38,7 +38,7 @@ public class CensorUtils {
                            .openPrivateChannel()
                            .queue(channel -> channel.sendMessage(String.format("The word `%s` is not allowed on this server.", aCensorList))
                                                     .queue());
-                    message.deleteMessage().queue();
+                    message.delete().queue();
                     break;
                 }
             }

@@ -1,7 +1,7 @@
 package com.srgood.reasons.commands;
 
 import com.srgood.reasons.ReasonsMain;
-import net.dv8tion.jda.core.MessageHistory;
+import net.dv8tion.jda.core.entities.MessageHistory;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
@@ -26,7 +26,7 @@ public class CommandDelete implements Command {
         }
 
         MessageHistory historyHistory = event.getChannel().getHistoryAround(event.getMessage(), 100).complete();
-        Collection<Message> cachedHistory = historyHistory.getCachedHistory();
+        Collection<Message> cachedHistory = historyHistory.getRetrievedHistory();
         event.getChannel().deleteMessages(cachedHistory).queue( x -> event.getChannel().sendMessage(String.format("Successfully deleted **%s** messages.", cachedHistory.size())).queue());
 
     }

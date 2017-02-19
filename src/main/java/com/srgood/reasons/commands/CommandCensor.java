@@ -18,7 +18,7 @@ public class CommandCensor implements Command {
 
     @Override
     public void action(String[] args, GuildMessageReceivedEvent event) {
-        event.getMessage().deleteMessage().queue();
+        event.getMessage().delete().queue();
 
         List<String> censoredWords = new ArrayList<>(CensorUtils.getGuildCensorList(event.getGuild()));
 
