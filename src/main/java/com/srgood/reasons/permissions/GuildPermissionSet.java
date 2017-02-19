@@ -11,13 +11,11 @@ import java.util.*;
 public class GuildPermissionSet implements Serializable {
     private final String guildID;
     private final Map<String, BasicPermissionSet> rolePermissions = new HashMap<>();
-    private transient boolean initComplete = false;
 
     private static final Collection<PermissibleAction> PERMISSIBLE_ACTION_COLLECTION = Arrays.asList(PermissibleAction.values());
 
     public GuildPermissionSet(Guild guild) {
         guildID = guild.getId();
-        initComplete = true;
     }
 
     public void clean(JDA jda) {
@@ -37,7 +35,6 @@ public class GuildPermissionSet implements Serializable {
                 }
             }
         }
-        initComplete = true;
     }
 
     public PermissionStatus getPermissionStatus(Role role, PermissibleAction action) {
