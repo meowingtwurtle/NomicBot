@@ -1,6 +1,6 @@
 package com.srgood.reasons.permissions;
 
-public enum PermissibleAction {
+public enum Permission {
 
     // Basic one-off chat commands
     GET_HELP,

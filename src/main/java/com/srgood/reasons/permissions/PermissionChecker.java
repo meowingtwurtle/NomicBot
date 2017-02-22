@@ -10,15 +10,15 @@ import net.dv8tion.jda.core.entities.Member;
  */
 public class PermissionChecker {
     /**
-     * Fails if the {@link net.dv8tion.jda.core.entities.Member} does not have the permission to perform the {@link com.srgood.reasons.permissions.PermissibleAction}.
+     * Fails if the {@link net.dv8tion.jda.core.entities.Member} does not have the permission to perform the {@link Permission}.
      * The method will never fail if the {@link net.dv8tion.jda.core.entities.Member} is the owner of their {@link net.dv8tion.jda.core.entities.Guild}, as returned by {@link net.dv8tion.jda.core.entities.Member#isOwner()}
      *
      * @param member The {@link net.dv8tion.jda.core.entities.Member} to check the permission for
-     * @param action The {@link com.srgood.reasons.permissions.PermissibleAction} to check
+     * @param action The {@link Permission} to check
      *
      * @throws com.srgood.reasons.permissions.InsufficientPermissionException If the {@link net.dv8tion.jda.core.entities.Member} does not have the permission required
      */
-    public static void checkMemberPermission(Member member, PermissibleAction action) throws InsufficientPermissionException {
+    public static void checkMemberPermission(Member member, Permission action) throws InsufficientPermissionException {
         if (member.isOwner()) {
             return;
         }

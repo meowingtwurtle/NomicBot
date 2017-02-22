@@ -11,35 +11,35 @@ import static com.srgood.reasons.permissions.PermissionStatus.*;
 
 public class BasicPermissionSet implements Serializable {
 
-    private Map<PermissibleAction, PermissionStatus> permissionMap = new HashMap<>();
+    private Map<Permission, PermissionStatus> permissionMap = new HashMap<>();
 
 
 
-    public BasicPermissionSet(Collection<PermissibleAction> allowedActions) {
+    public BasicPermissionSet(Collection<Permission> allowedActions) {
         this(allowedActions, null, null);
     }
 
-    public BasicPermissionSet(Collection<PermissibleAction> allowedActions, Collection<PermissibleAction> deniedActions) {
+    public BasicPermissionSet(Collection<Permission> allowedActions, Collection<Permission> deniedActions) {
         this(allowedActions, deniedActions, null);
     }
 
-    public BasicPermissionSet(Collection<PermissibleAction> allowedActions, Collection<PermissibleAction> deniedActions, Collection<PermissibleAction> deferredActions) {
+    public BasicPermissionSet(Collection<Permission> allowedActions, Collection<Permission> deniedActions, Collection<Permission> deferredActions) {
         this();
 
         if (allowedActions != null) {
-            for (PermissibleAction action : allowedActions) {
+            for (Permission action : allowedActions) {
                 permissionMap.put(action, ALLOWED);
             }
         }
 
         if (deniedActions != null) {
-            for (PermissibleAction action : deniedActions) {
+            for (Permission action : deniedActions) {
                 permissionMap.put(action, DENIED);
             }
         }
 
         if (deferredActions != null) {
-            for (PermissibleAction action : deferredActions) {
+            for (Permission action : deferredActions) {
                 permissionMap.put(action, DEFERRED);
             }
         }
@@ -54,7 +54,7 @@ public class BasicPermissionSet implements Serializable {
     }
 
     private void populatePermissionMap() {
-        for (PermissibleAction action : PermissibleAction.values()) {
+        for (Permission action : Permission.values()) {
             if (!permissionMap.containsKey(action)) {
                 permissionMap.put(action, DEFERRED);
             }
@@ -63,19 +63,19 @@ public class BasicPermissionSet implements Serializable {
 
 
 
-    public Set<PermissibleAction> getAllowedActions() {
+    public Set<Permission> getAllowedActions() {
         return getActionsByStatus(ALLOWED);
     }
 
-    public Set<PermissibleAction> getDeniedActions() {
+    public Set<Permission> getDeniedActions() {
         return getActionsByStatus(DENIED);
     }
 
-    public Set<PermissibleAction> getDefferedActions() {
+    public Set<Permission> getDefferedActions() {
         return getActionsByStatus(DEFERRED);
     }
 
-    public Set<PermissibleAction> getActionsByStatus(PermissionStatus action) {
+    public Set<Permission> getActionsByStatus(PermissionStatus action) {
         return permissionMap.entrySet()
                             .stream()
                             .filter(entry -> entry.getValue() == action)
@@ -83,11 +83,11 @@ public class BasicPermissionSet implements Serializable {
                             .collect(Collectors.toSet());
     }
 
-    public PermissionStatus getActionStatus(PermissibleAction action) {
+    public PermissionStatus getActionStatus(Permission action) {
         return permissionMap.get(action);
     }
 
-    public void setActionStatus(PermissibleAction action, PermissionStatus status) {
+    public void setActionStatus(Permission action, PermissionStatus status) {
         permissionMap.put(action, status);
     }
 

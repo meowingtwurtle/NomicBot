@@ -12,7 +12,7 @@ public class GuildPermissionSet implements Serializable {
     private final String guildID;
     private final Map<String, BasicPermissionSet> rolePermissions = new HashMap<>();
 
-    private static final Collection<PermissibleAction> PERMISSIBLE_ACTION_COLLECTION = Arrays.asList(PermissibleAction.values());
+    private static final Collection<Permission> PERMISSIBLE_ACTION_COLLECTION = Arrays.asList(Permission.values());
 
     public GuildPermissionSet(Guild guild) {
         guildID = guild.getId();
@@ -37,12 +37,12 @@ public class GuildPermissionSet implements Serializable {
         }
     }
 
-    public PermissionStatus getPermissionStatus(Role role, PermissibleAction action) {
+    public PermissionStatus getPermissionStatus(Role role, Permission action) {
         checkRole(role);
         return rolePermissions.get(role.getId()).getActionStatus(action);
     }
 
-    public void setPermissionStatus(Role role, PermissibleAction action, PermissionStatus permissionStatus) {
+    public void setPermissionStatus(Role role, Permission action, PermissionStatus permissionStatus) {
         checkRole(role);
         if (role.getGuild().getPublicRole().equals(role) && permissionStatus == PermissionStatus.DEFERRED) {
             throw new IllegalArgumentException("Cannot defer on the everyone role");
@@ -50,7 +50,7 @@ public class GuildPermissionSet implements Serializable {
         rolePermissions.get(role.getId()).setActionStatus(action, permissionStatus);
     }
 
-    public boolean checkMemberPermission(Member member, PermissibleAction action) {
+    public boolean checkMemberPermission(Member member, Permission action) {
         if (!member.getGuild().getId().equals(guildID)) {
             throw new IllegalArgumentException("Member must be in same guild as registered");
         }
