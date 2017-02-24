@@ -5,10 +5,9 @@ import com.srgood.reasons.commands.Command;
 import com.srgood.reasons.commands.CommandParser;
 import com.srgood.reasons.config.ConfigUtils;
 import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.Message;
 
-import java.util.Comparator;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -75,6 +74,45 @@ public class CommandUtils {
 
     public static Lock getChannelThreadMapLock() {
         return channelThreadMapLock;
+    }
+
+    public static boolean isCommandMessage(Message message) {
+        String prefix = ConfigUtils.getGuildPrefix(message.getGuild());
+        String normalMention = message.getGuild().getSelfMember().getAsMention();
+        String altMention = new StringBuilder(normalMention).insert(2, '!').toString(); // Discord is weird
+        return message.getRawContent().startsWith(prefix) ||
+                message.getRawContent().startsWith(normalMention) ||
+                message.getRawContent().startsWith(altMention);
+    }
+
+    public static String getCommandMessageArgsSection(Message message) {
+        if (!isCommandMessage(message)) {
+            return null;
+        }
+        String noPrefix = removeCommandMessagePrefix(message);
+        String command = getCalledCommand(message);
+        return noPrefix.substring(command.length());
+    }
+
+    public static String getCalledCommand(Message message) {
+        if (!isCommandMessage(message)) {
+            return null;
+        }
+        String noPrefix = removeCommandMessagePrefix(message).trim();
+        String commandName = noPrefix.split("\\s")[0];
+        return commandName;
+    }
+
+    public static String removeCommandMessagePrefix(Message message) {
+        if (!isCommandMessage(message)) {
+            return null;
+        }
+        String basicPrefix = ConfigUtils.getGuildPrefix(message.getGuild());
+        String mention = message.getGuild().getSelfMember().getAsMention();
+        String rawContent = message.getRawContent();
+        String actualPrefix = rawContent.startsWith(basicPrefix) ? basicPrefix : mention;
+        String noPrefix = rawContent.substring(actualPrefix.length());
+        return noPrefix;
     }
 
     public static void setCommandEnabled(Guild guild, Command cmd, boolean enabled) {
