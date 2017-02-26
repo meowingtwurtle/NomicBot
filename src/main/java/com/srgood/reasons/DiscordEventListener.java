@@ -2,6 +2,7 @@ package com.srgood.reasons;
 
 import com.srgood.reasons.config.ConfigUtils;
 import com.srgood.reasons.utils.CensorUtils;
+import com.srgood.reasons.utils.CommandUtils;
 import com.srgood.reasons.utils.GreetingUtils;
 import com.srgood.reasons.utils.GuildUtils;
 import net.dv8tion.jda.core.events.ReadyEvent;
@@ -46,8 +47,8 @@ public class DiscordEventListener extends ListenerAdapter {
             event.getChannel().sendMessage(com.srgood.reasons.Reference.Strings.TABLE_UNFLIP_JOKE).queue();
         }
 
-        if (event.getMessage().getContent().startsWith(localPrefix) && !java.util.Objects.equals(event.getMessage().getAuthor().getId(), event.getJDA().getSelfUser().getId())) {
-            com.srgood.reasons.utils.CommandUtils.handleCommand(ReasonsMain.COMMAND_PARSER.parse(event.getMessage().getContent().toLowerCase(), event, localPrefix));
+        if (CommandUtils.isCommandMessage(event.getMessage())) {
+            CommandUtils.handleCommand(ReasonsMain.COMMAND_PARSER.parse(event.getMessage().getContent().toLowerCase(), event, localPrefix));
             SimpleLog.getLog("Reasons").info("Got prefixed input: " + event.getMessage().getContent());
         } else {
             try {
@@ -55,7 +56,7 @@ public class DiscordEventListener extends ListenerAdapter {
                 if (event.getJDA().getSelfUser().getAsMention().equals(event.getMessage().getMentionedUsers().get(0).getAsMention())) {
 
                     SimpleLog.getLog("Reasons").info("Got prefixed input (mention): " + event.getMessage().getContent());
-                    com.srgood.reasons.utils.CommandUtils.handleCommand(ReasonsMain.COMMAND_PARSER.parse(event.getMessage().getContent().toLowerCase(), event, localPrefix));
+                    CommandUtils.handleCommand(ReasonsMain.COMMAND_PARSER.parse(event.getMessage().getContent().toLowerCase(), event, localPrefix));
                 }
             } catch (Exception ignored) {
 

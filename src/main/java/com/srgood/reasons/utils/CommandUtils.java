@@ -115,6 +115,56 @@ public class CommandUtils {
         return noPrefix;
     }
 
+    public static List<String> parseCommandMessageArguments(Message message) {
+        if (!isCommandMessage(message)) {
+            return Collections.emptyList();
+        }
+        String argsOnly = getCommandMessageArgsSection(message);
+
+        boolean isEscaped = false;
+        boolean inQuote = false;
+        List<String> args = new ArrayList<>();
+        StringBuilder currentArgBuilder = new StringBuilder();
+
+        for (char c : argsOnly.toCharArray()) {
+            if (!isEscaped) {
+                if (Character.isWhitespace(c)) {
+                    if (!inQuote) { // Not in a quote, so whitespace separates the args
+                        String arg = currentArgBuilder.toString();
+                        if (!arg.isEmpty()) {
+                            args.add(arg);
+                            currentArgBuilder = new StringBuilder();
+                        }
+                    } else { // In a quote, just append to the arg
+                        currentArgBuilder.append(c);
+                    }
+                } else if (c == '\\') { // Next character is escaped, set the flag
+                    isEscaped = true;
+                } else if (c == '\"') { // Either start or end a quote. Add anything in the arg
+                    String arg = currentArgBuilder.toString();
+                    if (!arg.isEmpty()) {
+                        args.add(arg);
+                        currentArgBuilder = new StringBuilder();
+                    }
+                    inQuote = !inQuote;
+                } else { // No special character, just append to arg
+                    currentArgBuilder.append(c);
+                }
+            } else { // Escaped, bypass any special character behavior
+                currentArgBuilder.append(c);
+                isEscaped = false;
+            }
+        }
+
+        // Add final arg, if any
+        String arg = currentArgBuilder.toString();
+        if (!arg.isEmpty()) {
+            args.add(arg);
+        }
+
+        return args;
+    }
+
     public static void setCommandEnabled(Guild guild, Command cmd, boolean enabled) {
         if (!cmd.canSetEnabled()) {
             throw new IllegalArgumentException("Cannot toggle this command");
