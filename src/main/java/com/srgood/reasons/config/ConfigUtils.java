@@ -1,8 +1,8 @@
 package com.srgood.reasons.config;
 
 
-import com.srgood.reasons.commands.Command;
-import com.srgood.reasons.commands.CommandParser;
+import com.srgood.reasons.commands.old.Command;
+import com.srgood.reasons.commands.old.CommandParser;
 import net.dv8tion.jda.core.entities.Guild;
 
 import java.io.InputStream;

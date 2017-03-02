@@ -1,8 +1,8 @@
 package com.srgood.reasons.utils;
 
-import com.srgood.reasons.commands.ChannelCommandThread;
-import com.srgood.reasons.commands.Command;
-import com.srgood.reasons.commands.CommandParser;
+import com.srgood.reasons.commands.old.ChannelCommandThread;
+import com.srgood.reasons.commands.old.Command;
+import com.srgood.reasons.commands.old.CommandParser;
 import com.srgood.reasons.config.ConfigUtils;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;

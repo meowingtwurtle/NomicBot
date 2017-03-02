@@ -1,7 +1,7 @@
 package com.srgood.reasons;
 
-import com.srgood.reasons.commands.Command;
-import com.srgood.reasons.commands.CommandParser;
+import com.srgood.reasons.commands.old.Command;
+import com.srgood.reasons.commands.old.CommandParser;
 import com.srgood.reasons.config.ConfigUtils;
 import com.srgood.reasons.utils.CommandUtils;
 import net.dv8tion.jda.core.AccountType;

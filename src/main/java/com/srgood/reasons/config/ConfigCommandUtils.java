@@ -1,6 +1,8 @@
 package com.srgood.reasons.config;
 
-import com.srgood.reasons.commands.Command;
+
+import com.srgood.reasons.commands.old.Command;
+import com.srgood.reasons.commands.old.CommandParser;
 import com.srgood.reasons.utils.CommandUtils;
 import net.dv8tion.jda.core.entities.Guild;
 import org.w3c.dom.Element;
@@ -154,7 +156,7 @@ class ConfigCommandUtils {
         }
     }
 
-    static void initCommandConfigIfNotExists(com.srgood.reasons.commands.CommandParser.CommandContainer cmd) {
+    static void initCommandConfigIfNotExists(CommandParser.CommandContainer cmd) {
         initCommandConfigIfNotExists(cmd.event.getGuild(), CommandUtils.getCommandByName(cmd.invoke));
     }
 

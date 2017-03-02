@@ -1,6 +1,5 @@
 package com.srgood.reasons.utils;
 
-
 import com.srgood.reasons.config.ConfigUtils;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Role;
