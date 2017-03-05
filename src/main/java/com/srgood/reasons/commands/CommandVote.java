@@ -70,9 +70,4 @@ public class CommandVote implements Command{
     public String help() {
         return null;
     }
-
-    @Override
-    public PermissionLevels defaultPermissionLevel() {
-        return PermissionLevels.ADMINISTRATOR;
-    }
 }
