@@ -1,6 +1,9 @@
 package com.srgood.reasons.commands.old;
 
 
+import com.srgood.reasons.commands.upcoming.CommandDescriptor;
+import com.srgood.reasons.commands.upcoming.CommandExecutionData;
+import com.srgood.reasons.commands.upcoming.CommandExecutor;
 import com.srgood.reasons.config.ConfigUtils;
 import com.srgood.reasons.utils.CommandUtils;
 import net.dv8tion.jda.core.entities.Channel;
@@ -14,7 +17,7 @@ public class ChannelCommandThread extends Thread {
 
     private Channel channel;
 
-    private final Deque<CommandItem> commandDeque = new ArrayDeque<>();
+    private final Deque<CommandParser.CommandContainer> commandDeque = new ArrayDeque<>();
 
     private boolean commandWasAdded = false;
 
@@ -28,27 +31,22 @@ public class ChannelCommandThread extends Thread {
             //if the commands get method returns true (see command.class)...
             for (int i = 0; i < commandDeque.size(); i++) {
                 try {
-                    CommandItem commandItem = commandDeque.getFirst();
-
-
-                    CommandParser.CommandContainer commandContainer = commandItem.getCommandContainer();
-                    Command command = CommandUtils.getCommandByName(commandContainer.invoke);
-                    if (ConfigUtils.isCommandEnabled(commandContainer.event.getGuild(), command)) {
-
-                        if (commandItem.shouldExecute()) {
+                    CommandParser.CommandContainer commandContainer = commandDeque.getFirst();
+                    CommandDescriptor descriptor = CommandUtils.getCommandDescriptorByName(commandContainer.invoke);
+                    CommandExecutionData executionData = new CommandExecutionData(commandContainer.event.getMessage());
+                    CommandExecutor executor = descriptor.getExecutor(executionData);
+                    if (ConfigUtils.isCommandEnabled(commandContainer.event.getGuild(), descriptor)) {
+                        if (executor.shouldExecute()) {
                             //then run the command and its post execution code (see command)
-                            command.action(commandContainer.args, commandContainer.event);
-                            command.executed(true, commandContainer.event);
-                        } else {
-                            //else only run the execution code
-                            command.executed(false, commandContainer.event);
+                            executor.execute();
+                            executor.postExecution();
                         }
+                        // Otherwise do nothing
                     } else {
                         commandContainer.event.getChannel().sendMessage("This command is not enabled.");
                     }
                 } catch (Exception e) {
-                    CommandItem commandItem = commandDeque.getFirst();
-                    CommandParser.CommandContainer commandContainer = commandItem.getCommandContainer();
+                    CommandParser.CommandContainer commandContainer = commandDeque.getFirst();
                     commandContainer.event.getChannel().sendMessage("A ***FATAL*** exception occurred ( `" + e.getMessage()+ "` ) , please notify us. If possible, store the date and time.").queue();
                     e.printStackTrace();
 
@@ -75,28 +73,11 @@ public class ChannelCommandThread extends Thread {
         return shouldEnd;
     }
 
-    public void addCommand(CommandItem commandItem) {
+    public void addCommand(CommandParser.CommandContainer commandItem) {
         commandDeque.addLast(commandItem);
         commandWasAdded = true;
     }
 
-    public static class CommandItem {
-        private final CommandParser.CommandContainer commandContainer;
-        private final boolean shouldExecute;
-
-        public CommandItem(CommandParser.CommandContainer commandContainer, boolean shouldExecute) {
-            this.commandContainer = commandContainer;
-            this.shouldExecute = shouldExecute;
-        }
-
-        public CommandParser.CommandContainer getCommandContainer() {
-            return commandContainer;
-        }
-
-        public boolean shouldExecute() {
-            return shouldExecute;
-        }
-    }
 
     public String getChannelID() {
         return channel.getId();

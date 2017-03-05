@@ -18,7 +18,7 @@ public class CommandHelp implements Command {
                         .sorted(new CommandUtils.CommandComparator())
                         .distinct()
                         .map(command ->
-                                "**" + CommandUtils.getNameFromCommand(command) + ":** " + " `" + command.help() + "`\n\n")
+                                "**" + CommandUtils.getNameFromCommandDescriptor(command) + ":** " + " `" + command.getHelp() + "`\n\n")
                         .forEach(message::append);
 
             MessageUtils.sendMessageSafeSplitOnChar(privateChannel, message.toString(), '\n');

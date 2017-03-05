@@ -1,8 +1,8 @@
 package com.srgood.reasons.config;
 
 
-import com.srgood.reasons.commands.old.Command;
 import com.srgood.reasons.commands.old.CommandParser;
+import com.srgood.reasons.commands.upcoming.CommandDescriptor;
 import net.dv8tion.jda.core.entities.Guild;
 
 import java.io.InputStream;
@@ -41,15 +41,15 @@ public class ConfigUtils {
         ConfigCommandUtils.initCommandConfigIfNotExists(cmd);
     }
 
-    public static void initCommandConfigIfNotExists(Guild guild, Command cmd) {
+    public static void initCommandConfigIfNotExists(Guild guild, CommandDescriptor cmd) {
         ConfigCommandUtils.initCommandConfigIfNotExists(guild, cmd);
     }
 
-    public static boolean isCommandEnabled(Guild guild, Command command) {
+    public static boolean isCommandEnabled(Guild guild, CommandDescriptor command) {
         return ConfigCommandUtils.isCommandEnabled(guild, command);
     }
 
-    public static void setCommandEnabled(Guild guild, Command command, boolean enabled) {
+    public static void setCommandEnabled(Guild guild, CommandDescriptor command, boolean enabled) {
         ConfigCommandUtils.setCommandIsEnabled(guild, command, enabled);
     }
 

@@ -1,8 +1,8 @@
 package com.srgood.reasons.config;
 
 
-import com.srgood.reasons.commands.old.Command;
 import com.srgood.reasons.commands.old.CommandParser;
+import com.srgood.reasons.commands.upcoming.CommandDescriptor;
 import com.srgood.reasons.utils.CommandUtils;
 import net.dv8tion.jda.core.entities.Guild;
 import org.w3c.dom.Element;
@@ -29,8 +29,8 @@ class ConfigCommandUtils {
         return getCommandElement(getCommandsElement(guild), commandName);
     }
 
-    private static Element getCommandElement(Guild guild, Command command) {
-        return getCommandElement(guild, CommandUtils.getNameFromCommand(command));
+    private static Element getCommandElement(Guild guild, CommandDescriptor command) {
+        return getCommandElement(guild, CommandUtils.getNameFromCommandDescriptor(command));
     }
 
     private static Element getCommandElement(Element commandsElement, String commandName) {
@@ -60,12 +60,12 @@ class ConfigCommandUtils {
         }
     }
 
-    private static String getCommandProperty(Guild guild, Command command, String property) {
+    private static String getCommandProperty(Guild guild, CommandDescriptor command, String property) {
         return getCommandProperty(getCommandElement(guild, command), property);
     }
 
     private static String getCommandProperty(Guild guild, String commandName, String property) {
-        return getCommandProperty(guild, CommandUtils.getCommandByName(commandName), property);
+        return getCommandProperty(guild, CommandUtils.getCommandDescriptorByName(commandName), property);
     }
 
     private static void setCommandProperty(Element commandElement, String property, String value) {
@@ -78,12 +78,12 @@ class ConfigCommandUtils {
         }
     }
 
-    private static void setCommandProperty(Guild guild, Command command, String property, String value) {
+    private static void setCommandProperty(Guild guild, CommandDescriptor command, String property, String value) {
         setCommandProperty(getCommandElement(guild, command), property, value);
     }
 
     static void setCommandProperty(Guild guild, String commandName, String property, String value) {
-        setCommandProperty(guild, CommandUtils.getCommandByName(commandName), property, value);
+        setCommandProperty(guild, CommandUtils.getCommandDescriptorByName(commandName), property, value);
     }
 
     private static Element getCommandsElement(Guild guild) {
@@ -134,11 +134,11 @@ class ConfigCommandUtils {
 
     }
 
-    public static boolean isCommandEnabled(Guild guild, Command command) {
+    public static boolean isCommandEnabled(Guild guild, CommandDescriptor command) {
         return Boolean.parseBoolean(getCommandProperty(guild, command, "isEnabled"));
     }
 
-    public static void setCommandIsEnabled(Guild guild, Command command, boolean enabled) {
+    public static void setCommandIsEnabled(Guild guild, CommandDescriptor command, boolean enabled) {
         setCommandProperty(guild, command, "isEnabled", "" + enabled);
     }
 
@@ -157,15 +157,15 @@ class ConfigCommandUtils {
     }
 
     static void initCommandConfigIfNotExists(CommandParser.CommandContainer cmd) {
-        initCommandConfigIfNotExists(cmd.event.getGuild(), CommandUtils.getCommandByName(cmd.invoke));
+        initCommandConfigIfNotExists(cmd.event.getGuild(), CommandUtils.getCommandDescriptorByName(cmd.invoke));
     }
 
-    static void initCommandConfigIfNotExists(Guild guild, Command cmd) {
+    static void initCommandConfigIfNotExists(Guild guild, CommandDescriptor cmd) {
         try {
             getDocumentLock().writeLock().lock();
             Element serverElement = ConfigGuildUtils.getGuildNode(guild);
             Element commandsElement;
-            String realCommandName = CommandUtils.getNameFromCommand(cmd);
+            String realCommandName = CommandUtils.getNameFromCommandDescriptor(cmd);
             {
                 NodeList commandsNodeList = serverElement.getElementsByTagName("commands");
                 if (commandsNodeList.getLength() == 0) {
