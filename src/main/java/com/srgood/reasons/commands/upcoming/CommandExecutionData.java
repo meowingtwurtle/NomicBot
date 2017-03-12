@@ -4,6 +4,7 @@ import com.srgood.reasons.utils.CommandUtils;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
+import net.dv8tion.jda.core.entities.User;
 
 import java.util.Collections;
 import java.util.List;
@@ -12,18 +13,28 @@ public class CommandExecutionData {
     private final String rawData;
     private final String rawArgs;
     private final List<String> parsedArguments;
-    private final Message message;
     private final MessageChannel channel;
     private final Guild guild;
+    private final User sender;
 
     public CommandExecutionData(Message message) {
-        this.rawData = message.getRawContent();
-        this.rawArgs = CommandUtils.getCommandMessageArgsSection(message);
-        this.parsedArguments = CommandUtils.parseCommandMessageArguments(message);
-        this.message = message;
-        this.channel = message.getChannel();
-        this.guild = message.getGuild();
+        this(   message.getRawContent(),
+                CommandUtils.getCommandMessageArgsSection(message),
+                CommandUtils.parseCommandMessageArguments(message),
+                message.getChannel(),
+                message.getGuild(),
+                message.getAuthor());
     }
+
+    public CommandExecutionData(String rawData, String rawArgs, List<String> parsedArguments, MessageChannel channel, Guild guild, User sender) {
+        this.rawData = rawData;
+        this.rawArgs = rawArgs;
+        this.parsedArguments = parsedArguments;
+        this.channel = channel;
+        this.guild = guild;
+        this.sender = sender;
+    }
+
 
     public String getRawData() {
         return rawData;
@@ -37,15 +48,15 @@ public class CommandExecutionData {
         return Collections.unmodifiableList(parsedArguments);
     }
 
-    public Message getMessage() {
-        return message;
-    }
-
     public MessageChannel getChannel() {
         return channel;
     }
 
     public Guild getGuild() {
         return guild;
+    }
+
+    public User getSender() {
+        return sender;
     }
 }

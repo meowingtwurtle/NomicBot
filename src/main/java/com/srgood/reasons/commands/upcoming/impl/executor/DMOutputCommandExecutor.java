@@ -9,6 +9,6 @@ public abstract class DMOutputCommandExecutor extends BaseCommandExecutor {
 
     @Override
     protected void sendOutput(String message) {
-        executionData.getMessage().getAuthor().openPrivateChannel().queue(chan -> chan.sendMessage(message).queue());
+        executionData.getSender().openPrivateChannel().queue(chan -> chan.sendMessage(message).queue());
     }
 }
