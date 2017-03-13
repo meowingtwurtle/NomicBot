@@ -1,8 +1,12 @@
 package com.srgood.reasons.commands.upcoming.impl.descriptor;
 
+import com.srgood.reasons.commands.upcoming.CommandDescriptor;
 import com.srgood.reasons.commands.upcoming.CommandExecutionData;
 import com.srgood.reasons.commands.upcoming.CommandExecutor;
-import com.srgood.reasons.commands.upcoming.CommandDescriptor;
+import com.srgood.reasons.commands.upcoming.impl.executor.EmptyCommandExecutor;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import java.util.*;
 import java.util.function.Function;
@@ -12,14 +16,19 @@ public abstract class MultiTierCommandDescriptor extends BaseCommandDescriptor {
     private final Set<CommandDescriptor> subCommands;
 
     public MultiTierCommandDescriptor(Set<CommandDescriptor> subCommands, String help, String... names) {
-        super(generateDataToExecutorFunction(subCommands), help, names);
+        this(subCommands, executionData -> EmptyCommandExecutor.INSTANCE, help, names);
+    }
+
+    public MultiTierCommandDescriptor(Set<CommandDescriptor> subCommands, Function<CommandExecutionData, CommandExecutor> defaultExecutorFunction, String help, String... names) {
+        super(generateDataToExecutorFunction(subCommands, defaultExecutorFunction), help, names);
         this.subCommands = new HashSet<>(subCommands);
     }
 
-    private static Function<CommandExecutionData, CommandExecutor> generateDataToExecutorFunction(Collection<CommandDescriptor> subCommandDescriptors) {
+    private static Function<CommandExecutionData, CommandExecutor> generateDataToExecutorFunction(Collection<CommandDescriptor> subCommandDescriptors,
+                                                                                                  Function<CommandExecutionData, CommandExecutor> defaultExecutorFunction) {
         return executionData -> {
             if (executionData.getParsedArguments().isEmpty()) {
-                return null;
+                return defaultExecutorFunction.apply(executionData);
             }
 
             String targetName = executionData.getParsedArguments().get(0);
@@ -30,7 +39,7 @@ public abstract class MultiTierCommandDescriptor extends BaseCommandDescriptor {
                 }
             }
 
-            return null;
+            return defaultExecutorFunction.apply(executionData);
         };
     }
 
