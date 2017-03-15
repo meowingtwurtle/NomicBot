@@ -6,7 +6,8 @@ import com.srgood.reasons.commands.upcoming.CommandExecutionData;
 import com.srgood.reasons.commands.upcoming.CommandExecutor;
 import com.srgood.reasons.config.ConfigUtils;
 import com.srgood.reasons.utils.CommandUtils;
-import net.dv8tion.jda.core.entities.Channel;
+import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.entities.MessageChannel;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -15,13 +16,13 @@ import static com.srgood.reasons.utils.CommandUtils.getChannelThreadMapLock;
 
 public class ChannelCommandThread extends Thread {
 
-    private Channel channel;
+    private MessageChannel channel;
 
-    private final Deque<CommandParser.CommandContainer> commandDeque = new ArrayDeque<>();
+    private final Deque<Message> commandDeque = new ArrayDeque<>();
 
     private boolean commandWasAdded = false;
 
-    public ChannelCommandThread(Channel channel) {
+    public ChannelCommandThread(MessageChannel channel) {
         this.channel = channel;
     }
 
@@ -30,12 +31,13 @@ public class ChannelCommandThread extends Thread {
         while (true) {
             //if the commands get method returns true (see command.class)...
             for (int i = 0; i < commandDeque.size(); i++) {
+                Message message = commandDeque.getFirst();
                 try {
-                    CommandParser.CommandContainer commandContainer = commandDeque.getFirst();
-                    CommandDescriptor descriptor = CommandUtils.getCommandDescriptorByName(commandContainer.invoke);
-                    CommandExecutionData executionData = new CommandExecutionData(commandContainer.event.getMessage());
+                    String calledCommad = CommandUtils.getCalledCommand(message);
+                    CommandDescriptor descriptor = CommandUtils.getCommandDescriptorByName(calledCommad);
+                    CommandExecutionData executionData = new CommandExecutionData(message);
                     CommandExecutor executor = descriptor.getExecutor(executionData);
-                    if (ConfigUtils.isCommandEnabled(commandContainer.event.getGuild(), descriptor)) {
+                    if (ConfigUtils.isCommandEnabled(message.getGuild(), descriptor)) {
                         if (executor.shouldExecute()) {
                             //then run the command and its post execution code (see command)
                             executor.execute();
@@ -43,11 +45,10 @@ public class ChannelCommandThread extends Thread {
                         }
                         // Otherwise do nothing
                     } else {
-                        commandContainer.event.getChannel().sendMessage("This command is not enabled.");
+                        message.getChannel().sendMessage("This command is not enabled.").queue();
                     }
                 } catch (Exception e) {
-                    CommandParser.CommandContainer commandContainer = commandDeque.getFirst();
-                    commandContainer.event.getChannel().sendMessage("A ***FATAL*** exception occurred ( `" + e.getMessage()+ "` ) , please notify us. If possible, store the date and time.").queue();
+                    message.getChannel().sendMessage("A ***FATAL*** exception occurred ( `" + e.getMessage()+ "` ) , please notify us. If possible, store the date and time.").queue();
                     e.printStackTrace();
 
                 }
@@ -73,8 +74,8 @@ public class ChannelCommandThread extends Thread {
         return shouldEnd;
     }
 
-    public void addCommand(CommandParser.CommandContainer commandItem) {
-        commandDeque.addLast(commandItem);
+    public void addCommand(Message commandMessage) {
+        commandDeque.addLast(commandMessage);
         commandWasAdded = true;
     }
 

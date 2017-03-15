@@ -1,7 +1,6 @@
 package com.srgood.reasons.utils;
 
 import com.srgood.reasons.commands.old.ChannelCommandThread;
-import com.srgood.reasons.commands.old.CommandParser;
 import com.srgood.reasons.commands.upcoming.CommandDescriptor;
 import com.srgood.reasons.commands.upcoming.CommandExecutionData;
 import com.srgood.reasons.commands.upcoming.CommandExecutor;
@@ -19,38 +18,39 @@ public class CommandUtils {
     private static java.util.Map<String, ChannelCommandThread> channelThreadMap = new java.util.HashMap<>();
     private static final Lock channelThreadMapLock = new ReentrantLock();
 
-    public static void handleCommand(CommandParser.CommandContainer cmd) {
-        CommandExecutionData executionData = new CommandExecutionData(cmd.event.getMessage());
-        CommandDescriptor descriptor = getCommandDescriptorByName(cmd.invoke);
+    public static void handleCommand(Message cmd) {
+        CommandExecutionData executionData = new CommandExecutionData(cmd);
+        String calledCommand = getCalledCommand(cmd);
+        CommandDescriptor descriptor = getCommandDescriptorByName(calledCommand);
         CommandExecutor executor = descriptor.getExecutor(executionData);
 
         // checks if the referenced command is in the command list
-        if (commands.containsKey(cmd.invoke)) {
-            ConfigUtils.initCommandConfigIfNotExists(cmd);
+        if (commands.containsKey(calledCommand)) {
+            ConfigUtils.initCommandConfigIfNotExists(cmd.getGuild(), calledCommand);
             //if the command is enabled for the message's guild...
             //if the message author has the required permission level...
-            if (ConfigUtils.isCommandEnabled(cmd.event.getGuild(), descriptor))
+            if (ConfigUtils.isCommandEnabled(cmd.getGuild(), descriptor))
                 if (true) {
                     boolean shouldExecute = executor.shouldExecute();
                     getChannelThreadMapLock().lock();
                     ChannelCommandThread channelCommandThread =
-                            channelThreadMap.containsKey(cmd.event.getChannel().getId())
-                                    ? channelThreadMap.get(cmd.event.getChannel().getId())
-                                    : new ChannelCommandThread(cmd.event.getChannel());
-                    channelThreadMap.put(cmd.event.getChannel().getId(), channelCommandThread);
+                            channelThreadMap.containsKey(cmd.getChannel().getId())
+                                    ? channelThreadMap.get(cmd.getChannel().getId())
+                                    : new ChannelCommandThread(cmd.getChannel());
+                    channelThreadMap.put(cmd.getChannel().getId(), channelCommandThread);
                     getChannelThreadMapLock().unlock();
                     channelCommandThread.addCommand(cmd);
                     if (channelCommandThread.getState() == Thread.State.NEW) {
                         channelCommandThread.start();
                     }
                 } else {
-                    cmd.event.getChannel().sendMessage("You lack the required permission to preform this action").queue();
+                    cmd.getChannel().sendMessage("You lack the required permission to preform this action").queue();
                 }
             else {
-                cmd.event.getChannel().sendMessage("This command is disabled").queue();
+                cmd.getChannel().sendMessage("This command is disabled").queue();
             }
         } else {
-            cmd.event.getChannel().sendMessage("Unknown command `" + cmd.invoke+"`").queue();
+            cmd.getChannel().sendMessage(String.format("Unknown command `%s`", calledCommand)).queue();
         }
     }
 

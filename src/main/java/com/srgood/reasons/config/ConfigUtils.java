@@ -1,7 +1,6 @@
 package com.srgood.reasons.config;
 
 
-import com.srgood.reasons.commands.old.CommandParser;
 import com.srgood.reasons.commands.upcoming.CommandDescriptor;
 import net.dv8tion.jda.core.entities.Guild;
 
@@ -37,11 +36,7 @@ public class ConfigUtils {
         ConfigRoleUtils.deregisterRoleConfig(guild, roleID);
     }
 
-    public static void initCommandConfigIfNotExists(CommandParser.CommandContainer cmd) {
-        ConfigCommandUtils.initCommandConfigIfNotExists(cmd);
-    }
-
-    public static void initCommandConfigIfNotExists(Guild guild, CommandDescriptor cmd) {
+    public static void initCommandConfigIfNotExists(Guild guild, String cmd) {
         ConfigCommandUtils.initCommandConfigIfNotExists(guild, cmd);
     }
 

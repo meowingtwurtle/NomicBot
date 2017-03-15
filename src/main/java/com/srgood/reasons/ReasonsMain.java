@@ -1,6 +1,5 @@
 package com.srgood.reasons;
 
-import com.srgood.reasons.commands.old.CommandParser;
 import com.srgood.reasons.config.ConfigUtils;
 
 import net.dv8tion.jda.core.AccountType;
@@ -21,7 +20,6 @@ import java.time.Instant;
 public class ReasonsMain {
 
     public static final Instant START_INSTANT = Instant.now();
-    public static final CommandParser COMMAND_PARSER = new CommandParser();
 
     public static JDA jda;
     public static String prefix;

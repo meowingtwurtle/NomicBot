@@ -1,6 +1,5 @@
 package com.srgood.reasons;
 
-import com.srgood.reasons.config.ConfigUtils;
 import com.srgood.reasons.utils.CensorUtils;
 import com.srgood.reasons.utils.CommandUtils;
 import com.srgood.reasons.utils.GreetingUtils;
@@ -41,26 +40,13 @@ public class DiscordEventListener extends ListenerAdapter {
             e.printStackTrace();
         }
 
-        String localPrefix = ConfigUtils.getGuildPrefix(event.getGuild());
-
         if (event.getMessage().getContent().equals(com.srgood.reasons.Reference.Strings.TABLE_FLIP)) {
             event.getChannel().sendMessage(com.srgood.reasons.Reference.Strings.TABLE_UNFLIP_JOKE).queue();
         }
 
         if (CommandUtils.isCommandMessage(event.getMessage())) {
-            CommandUtils.handleCommand(ReasonsMain.COMMAND_PARSER.parse(event.getMessage().getContent().toLowerCase(), event, localPrefix));
-            SimpleLog.getLog("Reasons").info("Got prefixed input: " + event.getMessage().getContent());
-        } else {
-            try {
-
-                if (event.getJDA().getSelfUser().getAsMention().equals(event.getMessage().getMentionedUsers().get(0).getAsMention())) {
-
-                    SimpleLog.getLog("Reasons").info("Got prefixed input (mention): " + event.getMessage().getContent());
-                    CommandUtils.handleCommand(ReasonsMain.COMMAND_PARSER.parse(event.getMessage().getContent().toLowerCase(), event, localPrefix));
-                }
-            } catch (Exception ignored) {
-
-            }
+            CommandUtils.handleCommand(event.getMessage());
+            SimpleLog.getLog("Reasons").info("Got command message: " + event.getMessage().getContent());
         }
 
         CensorUtils.checkCensor(event.getMessage());

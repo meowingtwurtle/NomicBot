@@ -1,7 +1,6 @@
 package com.srgood.reasons.config;
 
 
-import com.srgood.reasons.commands.old.CommandParser;
 import com.srgood.reasons.commands.upcoming.CommandDescriptor;
 import com.srgood.reasons.utils.CommandUtils;
 import net.dv8tion.jda.core.entities.Guild;
@@ -14,7 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import static com.srgood.reasons.config.ConfigBasicUtils.*;
+import static com.srgood.reasons.config.ConfigBasicUtils.getDocument;
+import static com.srgood.reasons.config.ConfigBasicUtils.getDocumentLock;
 
 class ConfigCommandUtils {
     private static final Map<String, Function<String, Object>> requiredCommandSubElements = new HashMap<String, Function<String, Object>>() {
@@ -156,16 +156,12 @@ class ConfigCommandUtils {
         }
     }
 
-    static void initCommandConfigIfNotExists(CommandParser.CommandContainer cmd) {
-        initCommandConfigIfNotExists(cmd.event.getGuild(), CommandUtils.getCommandDescriptorByName(cmd.invoke));
-    }
-
-    static void initCommandConfigIfNotExists(Guild guild, CommandDescriptor cmd) {
+    static void initCommandConfigIfNotExists(Guild guild, String cmd) {
         try {
             getDocumentLock().writeLock().lock();
             Element serverElement = ConfigGuildUtils.getGuildNode(guild);
             Element commandsElement;
-            String realCommandName = CommandUtils.getNameFromCommandDescriptor(cmd);
+            String realCommandName = CommandUtils.getNameFromCommandDescriptor(CommandUtils.getCommandDescriptorByName(cmd));
             {
                 NodeList commandsNodeList = serverElement.getElementsByTagName("commands");
                 if (commandsNodeList.getLength() == 0) {
