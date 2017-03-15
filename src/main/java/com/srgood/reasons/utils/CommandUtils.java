@@ -4,7 +4,6 @@ import com.srgood.reasons.commands.ChannelCommandThread;
 import com.srgood.reasons.commands.Command;
 import com.srgood.reasons.commands.CommandParser;
 import com.srgood.reasons.config.ConfigUtils;
-import com.srgood.reasons.utils.Permissions.PermissionUtils;
 import net.dv8tion.jda.core.entities.Guild;
 
 import java.util.Comparator;
@@ -26,7 +25,7 @@ public class CommandUtils {
             //if the command is enabled for the message's guild...
             //if the message author has the required permission level...
             if (ConfigUtils.isCommandEnabled(cmd.event.getGuild(), commands.get(cmd.invoke)))
-                if (PermissionUtils.userPermissionLevel(cmd.event.getGuild(), cmd.event.getAuthor()).getLevel() >= commands.get(cmd.invoke).permissionLevel(cmd.event.getGuild()).getLevel()) {
+                if (true) {
                     boolean shouldExecute = commands.get(cmd.invoke).called(cmd.args, cmd.event);
                     getChannelThreadMapLock().lock();
                     ChannelCommandThread channelCommandThread =

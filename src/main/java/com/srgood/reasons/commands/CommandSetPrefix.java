@@ -24,11 +24,6 @@ public class CommandSetPrefix implements Command {
     }
 
     @Override
-    public PermissionLevels defaultPermissionLevel() {
-        return PermissionLevels.ADMINISTRATOR;
-    }
-
-    @Override
     public String[] names() {
         return new String[] {"setprefix"};
     }

@@ -1,7 +1,5 @@
 package com.srgood.reasons.commands;
 
-import com.srgood.reasons.config.ConfigUtils;
-import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 
@@ -19,16 +17,6 @@ public interface Command {
 
     //use this to run post command actions if need be
     default void executed(boolean success, GuildMessageReceivedEvent event) {
-    }
-
-    //required permission
-    default PermissionLevels permissionLevel(Guild guild) {
-        return ConfigUtils.getCommandPermission(guild, this);
-    }
-
-    //used for XML
-    default PermissionLevels defaultPermissionLevel() {
-        return PermissionLevels.STANDARD;
     }
 
     default String[] names() {

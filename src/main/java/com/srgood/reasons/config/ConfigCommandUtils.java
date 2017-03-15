@@ -1,9 +1,7 @@
 package com.srgood.reasons.config;
 
 import com.srgood.reasons.commands.Command;
-import com.srgood.reasons.commands.PermissionLevels;
 import com.srgood.reasons.utils.CommandUtils;
-import com.srgood.reasons.utils.Permissions.PermissionUtils;
 import net.dv8tion.jda.core.entities.Guild;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -21,7 +19,6 @@ class ConfigCommandUtils {
         private static final long serialVersionUID = -710068261487017415L;
 
         {
-            put("permLevel", name -> CommandUtils.getCommandByName(name).defaultPermissionLevel().getLevel());
             put("isEnabled", name -> true);
         }
     };
@@ -187,13 +184,5 @@ class ConfigCommandUtils {
         } finally {
             getDocumentLock().writeLock().unlock();
         }
-    }
-
-    public static PermissionLevels getCommandPermission(Guild guild, Command command) {
-        return PermissionUtils.intToEnum(Integer.parseInt(getCommandProperty(guild, command, "permLevel")));
-    }
-
-    public static void setCommandPermission(Guild guild, Command command, PermissionLevels perm) {
-        setCommandProperty(guild, command, "permLevel", "" + perm.getLevel());
     }
 }

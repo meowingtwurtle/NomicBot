@@ -2,7 +2,6 @@ package com.srgood.reasons.commands;
 
 import com.srgood.reasons.utils.MethodInvocationUtils;
 import com.srgood.reasons.utils.RuntimeCompiler;
-import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 
@@ -36,10 +35,4 @@ public class CommandExecute implements Command {
     public String help() {
         return null;
     }
-
-    @Override
-    public PermissionLevels permissionLevel(Guild guild) {
-        return PermissionLevels.DEVELOPER;
-    }
-
 }

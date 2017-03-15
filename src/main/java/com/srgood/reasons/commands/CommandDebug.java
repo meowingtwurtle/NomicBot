@@ -3,8 +3,6 @@ package com.srgood.reasons.commands;
 import com.srgood.reasons.ReasonsMain;
 import com.srgood.reasons.utils.GuildUtils;
 import com.srgood.reasons.utils.ImageUtils;
-import com.srgood.reasons.utils.Permissions.PermissionUtils;
-import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
@@ -69,11 +67,6 @@ public class CommandDebug implements Command {
                         e.printStackTrace();
                     }
                     break;
-                case "roletest":
-                    Role role = PermissionUtils.createRole(PermissionLevels.ADMINISTRATOR, event.getGuild(), false);
-                    role.getManager().setMentionable(true);
-                    event.getChannel().sendMessage(role.getAsMention()).queue();
-                    break;
                 default:
                     event.getChannel().sendMessage("Invalid argument").queue();
                     break;
@@ -91,11 +84,6 @@ public class CommandDebug implements Command {
     @Override
     public String help() {
         return HELP;
-    }
-
-    @Override
-    public PermissionLevels permissionLevel(Guild guild) {
-        return PermissionLevels.DEVELOPER;
     }
 
     @Override

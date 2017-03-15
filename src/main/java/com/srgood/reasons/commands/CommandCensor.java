@@ -1,9 +1,7 @@
 package com.srgood.reasons.commands;
 
 import com.srgood.reasons.ReasonsMain;
-import com.srgood.reasons.config.ConfigUtils;
 import com.srgood.reasons.utils.CensorUtils;
-import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.ArrayList;
@@ -75,16 +73,6 @@ public class CommandCensor implements Command {
 
     @Override
     public void executed(boolean success, GuildMessageReceivedEvent event) {}
-
-    @Override
-    public PermissionLevels permissionLevel(Guild guild) {
-        return ConfigUtils.getCommandPermission(guild, this);
-    }
-
-    @Override
-    public PermissionLevels defaultPermissionLevel() {
-        return PermissionLevels.ADMINISTRATOR;
-    }
 
     @Override
     public String[] names() {
