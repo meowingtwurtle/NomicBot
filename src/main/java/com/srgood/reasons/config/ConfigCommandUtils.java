@@ -2,7 +2,7 @@ package com.srgood.reasons.config;
 
 
 import com.srgood.reasons.commands.upcoming.CommandDescriptor;
-import com.srgood.reasons.utils.CommandUtils;
+import com.srgood.reasons.commands.upcoming.CommandManager;
 import net.dv8tion.jda.core.entities.Guild;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -30,7 +30,7 @@ class ConfigCommandUtils {
     }
 
     private static Element getCommandElement(Guild guild, CommandDescriptor command) {
-        return getCommandElement(guild, CommandUtils.getNameFromCommandDescriptor(command));
+        return getCommandElement(guild, CommandManager.getNameFromCommandDescriptor(command));
     }
 
     private static Element getCommandElement(Element commandsElement, String commandName) {
@@ -65,7 +65,7 @@ class ConfigCommandUtils {
     }
 
     private static String getCommandProperty(Guild guild, String commandName, String property) {
-        return getCommandProperty(guild, CommandUtils.getCommandDescriptorByName(commandName), property);
+        return getCommandProperty(guild, CommandManager.getCommandDescriptorByName(commandName), property);
     }
 
     private static void setCommandProperty(Element commandElement, String property, String value) {
@@ -83,7 +83,7 @@ class ConfigCommandUtils {
     }
 
     static void setCommandProperty(Guild guild, String commandName, String property, String value) {
-        setCommandProperty(guild, CommandUtils.getCommandDescriptorByName(commandName), property, value);
+        setCommandProperty(guild, CommandManager.getCommandDescriptorByName(commandName), property, value);
     }
 
     private static Element getCommandsElement(Guild guild) {
@@ -103,7 +103,7 @@ class ConfigCommandUtils {
 
     private static void initCommandsElement(Element commandsElement) {
         try {
-            for (String command : CommandUtils.getCommandsMap().keySet()) {
+            for (String command : CommandManager.getCommandsMap().keySet()) {
                 initCommandElement(commandsElement, command);
             }
         } catch (Exception e4) {
@@ -115,7 +115,7 @@ class ConfigCommandUtils {
         try {
             getDocumentLock().writeLock().lock();
 
-            command = CommandUtils.getPrimaryCommandAlias(command);
+            command = CommandManager.getPrimaryCommandAlias(command);
 
             if (commandElementExists(commandsElement, command)) {
                 return;
@@ -161,7 +161,7 @@ class ConfigCommandUtils {
             getDocumentLock().writeLock().lock();
             Element serverElement = ConfigGuildUtils.getGuildNode(guild);
             Element commandsElement;
-            String realCommandName = CommandUtils.getNameFromCommandDescriptor(CommandUtils.getCommandDescriptorByName(cmd));
+            String realCommandName = CommandManager.getNameFromCommandDescriptor(CommandManager.getCommandDescriptorByName(cmd));
             {
                 NodeList commandsNodeList = serverElement.getElementsByTagName("commands");
                 if (commandsNodeList.getLength() == 0) {

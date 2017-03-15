@@ -1,6 +1,5 @@
 package com.srgood.reasons.commands.upcoming;
 
-import com.srgood.reasons.utils.CommandUtils;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;

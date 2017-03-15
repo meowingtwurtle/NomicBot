@@ -2,8 +2,8 @@ package com.srgood.reasons.commands.old;
 
 import com.srgood.reasons.ReasonsMain;
 import com.srgood.reasons.commands.upcoming.CommandDescriptor;
+import com.srgood.reasons.commands.upcoming.CommandManager;
 import com.srgood.reasons.config.ConfigUtils;
-import com.srgood.reasons.utils.CommandUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 public class CommandGetEnabled implements Command {
@@ -11,9 +11,9 @@ public class CommandGetEnabled implements Command {
 
     @Override
     public void action(String[] args, GuildMessageReceivedEvent event) {
-        CommandDescriptor command = CommandUtils.getCommandDescriptorByName(args[0]);
+        CommandDescriptor command = CommandManager.getCommandDescriptorByName(args[0]);
         //ConfigUtils.initCommandConfigIfNotExists(event.getGuild(), command);
-        event.getChannel().sendMessage(String.format("Command %s is %s.", CommandUtils.getNameFromCommandDescriptor(command), ConfigUtils.isCommandEnabled(event.getGuild(), command) ? "enabled" : "disabled")).queue();
+        event.getChannel().sendMessage(String.format("Command %s is %s.", CommandManager.getNameFromCommandDescriptor(command), ConfigUtils.isCommandEnabled(event.getGuild(), command) ? "enabled" : "disabled")).queue();
     }
 
     @Override

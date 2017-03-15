@@ -1,7 +1,8 @@
 package com.srgood.reasons;
 
+import com.srgood.reasons.commands.upcoming.CommandManager;
 import com.srgood.reasons.utils.CensorUtils;
-import com.srgood.reasons.utils.CommandUtils;
+import com.srgood.reasons.commands.upcoming.CommandUtils;
 import com.srgood.reasons.utils.GreetingUtils;
 import com.srgood.reasons.utils.GuildUtils;
 import net.dv8tion.jda.core.events.ReadyEvent;
@@ -45,7 +46,7 @@ public class DiscordEventListener extends ListenerAdapter {
         }
 
         if (CommandUtils.isCommandMessage(event.getMessage())) {
-            CommandUtils.handleCommand(event.getMessage());
+            CommandManager.handleCommand(event.getMessage());
             SimpleLog.getLog("Reasons").info("Got command message: " + event.getMessage().getContent());
         }
 

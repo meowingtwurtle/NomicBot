@@ -1,18 +1,14 @@
-package com.srgood.reasons.commands.old;
+package com.srgood.reasons.commands.upcoming;
 
 
-import com.srgood.reasons.commands.upcoming.CommandDescriptor;
-import com.srgood.reasons.commands.upcoming.CommandExecutionData;
-import com.srgood.reasons.commands.upcoming.CommandExecutor;
 import com.srgood.reasons.config.ConfigUtils;
-import com.srgood.reasons.utils.CommandUtils;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-import static com.srgood.reasons.utils.CommandUtils.getChannelThreadMapLock;
+import static com.srgood.reasons.commands.upcoming.CommandManager.getChannelThreadMapLock;
 
 public class ChannelCommandThread extends Thread {
 
@@ -34,7 +30,7 @@ public class ChannelCommandThread extends Thread {
                 Message message = commandDeque.getFirst();
                 try {
                     String calledCommad = CommandUtils.getCalledCommand(message);
-                    CommandDescriptor descriptor = CommandUtils.getCommandDescriptorByName(calledCommad);
+                    CommandDescriptor descriptor = CommandManager.getCommandDescriptorByName(calledCommad);
                     CommandExecutionData executionData = new CommandExecutionData(message);
                     CommandExecutor executor = descriptor.getExecutor(executionData);
                     if (ConfigUtils.isCommandEnabled(message.getGuild(), descriptor)) {
@@ -68,7 +64,7 @@ public class ChannelCommandThread extends Thread {
         getChannelThreadMapLock().lock();
         boolean shouldEnd = commandDeque.size() == 0;
         if (shouldEnd) {
-            CommandUtils.deregisterThread(this);
+            CommandManager.deregisterThread(this);
         }
         getChannelThreadMapLock().unlock();
         return shouldEnd;
