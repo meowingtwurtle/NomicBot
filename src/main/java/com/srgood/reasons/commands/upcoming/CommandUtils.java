@@ -3,7 +3,9 @@ package com.srgood.reasons.commands.upcoming;
 import com.srgood.reasons.config.ConfigUtils;
 import net.dv8tion.jda.core.entities.Message;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class CommandUtils {
 
@@ -40,8 +42,10 @@ public class CommandUtils {
         }
         String basicPrefix = ConfigUtils.getGuildPrefix(message.getGuild());
         String mention = message.getGuild().getSelfMember().getAsMention();
+        String altMention = new StringBuilder(mention).insert(2, '!').toString();
         String rawContent = message.getRawContent();
-        String actualPrefix = rawContent.startsWith(basicPrefix) ? basicPrefix : mention;
+        String actualPrefix = rawContent.startsWith(basicPrefix) ? basicPrefix :
+                rawContent.startsWith(mention) ? mention : altMention;
         String noPrefix = rawContent.substring(actualPrefix.length());
         return noPrefix;
     }
