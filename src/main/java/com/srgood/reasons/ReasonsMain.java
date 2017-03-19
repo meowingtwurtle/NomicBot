@@ -1,5 +1,6 @@
 package com.srgood.reasons;
 
+import com.srgood.reasons.commands.upcoming.impl.actual.CommandRegistrar;
 import com.srgood.reasons.config.ConfigUtils;
 
 import net.dv8tion.jda.core.AccountType;
@@ -84,7 +85,7 @@ public class ReasonsMain {
     }
 
     private void initCommands() {
-        // TODO register commands in util class
+        CommandRegistrar.registerCommands();
     }
 
     public void addToTray() {
