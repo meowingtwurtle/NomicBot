@@ -14,7 +14,7 @@ public class CommandHelp implements Command {
             StringBuilder message = new StringBuilder();
             message.append("All commands: ").append("\n\n");
 
-            CommandManager.getCommandsMap().values().stream()
+            CommandManager.getRegisteredCommandDescriptors().stream()
                           .sorted(new CommandManager.CommandComparator())
                           .distinct()
                           .map(command ->

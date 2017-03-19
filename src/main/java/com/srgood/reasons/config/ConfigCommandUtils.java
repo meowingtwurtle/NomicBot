@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static com.srgood.reasons.config.ConfigBasicUtils.getDocument;
 import static com.srgood.reasons.config.ConfigBasicUtils.getDocumentLock;
@@ -25,12 +26,30 @@ class ConfigCommandUtils {
         }
     };
 
-    private static Element getCommandElement(Guild guild, String commandName) {
-        return getCommandElement(getCommandsElement(guild), commandName);
+    private static String getCommandProperty(Guild guild, String commandName, String property) {
+        return getCommandProperty(guild, CommandManager.getCommandDescriptorByName(commandName), property);
+    }
+
+    private static String getCommandProperty(Guild guild, CommandDescriptor command, String property) {
+        return getCommandProperty(getCommandElement(guild, command), property);
+    }
+
+    private static String getCommandProperty(Element commandElement, String property) {
+        try {
+            getDocumentLock().readLock().lock();
+            Element propertyElement = ConfigBasicUtils.getFirstSubElement(commandElement, property);
+            return propertyElement != null ? propertyElement.getTextContent() : null;
+        } finally {
+            getDocumentLock().readLock().unlock();
+        }
     }
 
     private static Element getCommandElement(Guild guild, CommandDescriptor command) {
         return getCommandElement(guild, CommandManager.getNameFromCommandDescriptor(command));
+    }
+
+    private static Element getCommandElement(Guild guild, String commandName) {
+        return getCommandElement(getCommandsElement(guild), commandName);
     }
 
     private static Element getCommandElement(Element commandsElement, String commandName) {
@@ -50,22 +69,16 @@ class ConfigCommandUtils {
         return null;
     }
 
-    private static String getCommandProperty(Element commandElement, String property) {
-        try {
-            getDocumentLock().readLock().lock();
-            Element propertyElement = ConfigBasicUtils.getFirstSubElement(commandElement, property);
-            return propertyElement != null ? propertyElement.getTextContent() : null;
-        } finally {
-            getDocumentLock().readLock().unlock();
-        }
+    private static Element getCommandsElement(Guild guild) {
+        return ConfigBasicUtils.getOrCreateFirstSubElement(ConfigGuildUtils.getGuildNode(guild), "commands");
     }
 
-    private static String getCommandProperty(Guild guild, CommandDescriptor command, String property) {
-        return getCommandProperty(getCommandElement(guild, command), property);
+    static void setCommandProperty(Guild guild, String commandName, String property, String value) {
+        setCommandProperty(guild, CommandManager.getCommandDescriptorByName(commandName), property, value);
     }
 
-    private static String getCommandProperty(Guild guild, String commandName, String property) {
-        return getCommandProperty(guild, CommandManager.getCommandDescriptorByName(commandName), property);
+    private static void setCommandProperty(Guild guild, CommandDescriptor command, String property, String value) {
+        setCommandProperty(getCommandElement(guild, command), property, value);
     }
 
     private static void setCommandProperty(Element commandElement, String property, String value) {
@@ -76,18 +89,6 @@ class ConfigCommandUtils {
         } finally {
             getDocumentLock().writeLock().unlock();
         }
-    }
-
-    private static void setCommandProperty(Guild guild, CommandDescriptor command, String property, String value) {
-        setCommandProperty(getCommandElement(guild, command), property, value);
-    }
-
-    static void setCommandProperty(Guild guild, String commandName, String property, String value) {
-        setCommandProperty(guild, CommandManager.getCommandDescriptorByName(commandName), property, value);
-    }
-
-    private static Element getCommandsElement(Guild guild) {
-        return ConfigBasicUtils.getOrCreateFirstSubElement(ConfigGuildUtils.getGuildNode(guild), "commands");
     }
 
     private static void initGuildCommands(Guild guild) {
@@ -103,7 +104,11 @@ class ConfigCommandUtils {
 
     private static void initCommandsElement(Element commandsElement) {
         try {
-            for (String command : CommandManager.getCommandsMap().keySet()) {
+            List<String> allCommandNames = CommandManager.getRegisteredCommandDescriptors()
+                                                         .stream()
+                                                         .map(CommandManager::getNameFromCommandDescriptor)
+                                                         .collect(Collectors.toList());
+            for (String command : allCommandNames) {
                 initCommandElement(commandsElement, command);
             }
         } catch (Exception e4) {
@@ -151,7 +156,9 @@ class ConfigCommandUtils {
 
         for (Map.Entry<String, Function<String, Object>> entry : requiredCommandSubElements.entrySet()) {
             if (getCommandProperty(targetCommandElement, entry.getKey()) == null) {
-                setCommandProperty(targetCommandElement, entry.getKey(), entry.getValue().apply(commandName).toString());
+                setCommandProperty(targetCommandElement, entry.getKey(), entry.getValue()
+                                                                              .apply(commandName)
+                                                                              .toString());
             }
         }
     }

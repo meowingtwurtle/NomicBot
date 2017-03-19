@@ -4,9 +4,7 @@ import com.srgood.reasons.config.ConfigUtils;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;
 
-import java.util.Comparator;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -79,8 +77,15 @@ public class CommandManager {
         return commands.get(name);
     }
 
-    public static Map<String, CommandDescriptor> getCommandsMap() {
-        return commands;
+    public static void registerCommandDescriptor(CommandDescriptor descriptor) {
+        String[] names = descriptor.getNames();
+        for (String name : names) {
+            commands.put(name, descriptor);
+        }
+    }
+
+    public static Set<CommandDescriptor> getRegisteredCommandDescriptors() {
+        return new HashSet<>(commands.values());
     }
 
     public static Lock getChannelThreadMapLock() {
