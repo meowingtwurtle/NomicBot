@@ -1,4 +1,4 @@
-package com.srgood.reasons.commands.upcoming.impl.executor;
+package com.srgood.reasons.commands.upcoming.impl.base.executor;
 
 import com.srgood.reasons.commands.upcoming.CommandExecutor;
 

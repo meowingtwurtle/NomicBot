@@ -1,8 +1,8 @@
-package com.srgood.reasons.commands.upcoming.impl.descriptor;
+package com.srgood.reasons.commands.upcoming.impl.base.descriptor;
 
 import com.srgood.reasons.commands.upcoming.CommandExecutionData;
 import com.srgood.reasons.commands.upcoming.CommandExecutor;
-import com.srgood.reasons.commands.upcoming.impl.executor.ChannelOutputCommandExecutor;
+import com.srgood.reasons.commands.upcoming.impl.base.executor.ChannelOutputCommandExecutor;
 
 import java.util.function.Function;
 

@@ -1,4 +1,4 @@
-package com.srgood.reasons.commands.upcoming.impl.descriptor;
+package com.srgood.reasons.commands.upcoming.impl.base.descriptor;
 
 import com.srgood.reasons.commands.upcoming.CommandDescriptor;
 import com.srgood.reasons.commands.upcoming.CommandExecutionData;

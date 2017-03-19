@@ -1,9 +1,9 @@
-package com.srgood.reasons.commands.upcoming.impl.descriptor;
+package com.srgood.reasons.commands.upcoming.impl.base.descriptor;
 
 import com.srgood.reasons.commands.upcoming.CommandDescriptor;
 import com.srgood.reasons.commands.upcoming.CommandExecutionData;
 import com.srgood.reasons.commands.upcoming.CommandExecutor;
-import com.srgood.reasons.commands.upcoming.impl.executor.EmptyCommandExecutor;
+import com.srgood.reasons.commands.upcoming.impl.base.executor.EmptyCommandExecutor;
 
 import java.util.HashSet;
 import java.util.Set;
