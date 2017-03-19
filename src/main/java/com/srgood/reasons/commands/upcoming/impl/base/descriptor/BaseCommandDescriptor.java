@@ -4,15 +4,28 @@ import com.srgood.reasons.commands.upcoming.CommandDescriptor;
 import com.srgood.reasons.commands.upcoming.CommandExecutionData;
 import com.srgood.reasons.commands.upcoming.CommandExecutor;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Function;
 
 public class BaseCommandDescriptor implements CommandDescriptor {
-    protected final String[] names;
+    protected final List<String> names;
     protected final String help;
     protected final Function<CommandExecutionData, CommandExecutor> dataToExecutorFunction;
 
-    public BaseCommandDescriptor(Function<CommandExecutionData, CommandExecutor> dataToExecutorFunction, String help, String... names) {
-        this.names = names;
+    public BaseCommandDescriptor(Function<CommandExecutionData, CommandExecutor> dataToExecutorFunction, String help, String name) {
+        this.names = new ArrayList<String>() {
+            {
+                add(name);
+            }
+        };
+        this.help = help;
+        this.dataToExecutorFunction = dataToExecutorFunction;
+    }
+
+    public BaseCommandDescriptor(Function<CommandExecutionData, CommandExecutor> dataToExecutorFunction, String help, List<String> names) {
+        this.names = new ArrayList<>(names);
         this.help = help;
         this.dataToExecutorFunction = dataToExecutorFunction;
     }
@@ -28,7 +41,7 @@ public class BaseCommandDescriptor implements CommandDescriptor {
     }
 
     @Override
-    public String[] getNames() {
-        return names;
+    public List<String> getNames() {
+        return Collections.unmodifiableList(names);
     }
 }

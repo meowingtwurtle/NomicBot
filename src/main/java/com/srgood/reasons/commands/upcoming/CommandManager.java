@@ -17,7 +17,7 @@ public class CommandManager {
 
         @Override
         public int compare(CommandDescriptor command0, CommandDescriptor command1) {
-            return getNameFromCommandDescriptor(command0).compareTo(getNameFromCommandDescriptor(command1));
+            return command0.getPrimaryName().compareTo(command1.getPrimaryName());
         }
     }
 
@@ -25,31 +25,22 @@ public class CommandManager {
         CommandExecutionData executionData = new CommandExecutionData(cmd);
         String calledCommand = CommandUtils.getCalledCommand(cmd);
         CommandDescriptor descriptor = getCommandDescriptorByName(calledCommand);
-        CommandExecutor executor = descriptor.getExecutor(executionData);
-
         // checks if the referenced command is in the command list
-        if (commands.containsKey(calledCommand)) {
+        if (descriptor != null) {
+            CommandExecutor executor = descriptor.getExecutor(executionData);
             ConfigUtils.initCommandConfigIfNotExists(cmd.getGuild(), calledCommand);
             //if the command is enabled for the message's guild...
             //if the message author has the required permission level...
-            if (ConfigUtils.isCommandEnabled(cmd.getGuild(), descriptor))
-                if (true) {
-                    boolean shouldExecute = executor.shouldExecute();
-                    getChannelThreadMapLock().lock();
-                    ChannelCommandThread channelCommandThread =
-                            channelThreadMap.containsKey(cmd.getChannel().getId())
-                                    ? channelThreadMap.get(cmd.getChannel().getId())
-                                    : new ChannelCommandThread(cmd.getChannel());
-                    channelThreadMap.put(cmd.getChannel().getId(), channelCommandThread);
-                    getChannelThreadMapLock().unlock();
-                    channelCommandThread.addCommand(cmd);
-                    if (channelCommandThread.getState() == Thread.State.NEW) {
-                        channelCommandThread.start();
-                    }
-                } else {
-                    cmd.getChannel().sendMessage("You lack the required permission to preform this action").queue();
+            if (ConfigUtils.isCommandEnabled(cmd.getGuild(), descriptor)) {
+                getChannelThreadMapLock().lock();
+                ChannelCommandThread channelCommandThread = channelThreadMap.computeIfAbsent(
+                        cmd.getChannel().getId(), id -> new ChannelCommandThread(cmd.getChannel()));
+                getChannelThreadMapLock().unlock();
+                channelCommandThread.addCommand(cmd);
+                if (channelCommandThread.getState() == Thread.State.NEW) {
+                    channelCommandThread.start();
                 }
-            else {
+            } else {
                 cmd.getChannel().sendMessage("This command is disabled").queue();
             }
         } else {
@@ -57,7 +48,15 @@ public class CommandManager {
         }
     }
 
-    public static void deregisterThread(ChannelCommandThread thread) {
+    public static CommandDescriptor getCommandDescriptorByName(String name) {
+        return commands.get(name);
+    }
+
+    static Lock getChannelThreadMapLock() {
+        return channelThreadMapLock;
+    }
+
+    static void deregisterThread(ChannelCommandThread thread) {
         getChannelThreadMapLock().lock();
         if (channelThreadMap.containsKey(thread.getChannelID())) {
             channelThreadMap.remove(thread.getChannelID());
@@ -65,20 +64,8 @@ public class CommandManager {
         getChannelThreadMapLock().unlock();
     }
 
-    public static String getNameFromCommandDescriptor(CommandDescriptor cmd) {
-        return cmd.getNames()[0];
-    }
-
-    public static String getPrimaryCommandAlias(String name) {
-        return getNameFromCommandDescriptor(getCommandDescriptorByName(name));
-    }
-
-    public static CommandDescriptor getCommandDescriptorByName(String name) {
-        return commands.get(name);
-    }
-
     public static void registerCommandDescriptor(CommandDescriptor descriptor) {
-        String[] names = descriptor.getNames();
+        List<String> names = descriptor.getNames();
         for (String name : names) {
             commands.put(name, descriptor);
         }
@@ -86,10 +73,6 @@ public class CommandManager {
 
     public static Set<CommandDescriptor> getRegisteredCommandDescriptors() {
         return new HashSet<>(commands.values());
-    }
-
-    public static Lock getChannelThreadMapLock() {
-        return channelThreadMapLock;
     }
 
     public static void setCommandEnabled(Guild guild, CommandDescriptor cmd, boolean enabled) {

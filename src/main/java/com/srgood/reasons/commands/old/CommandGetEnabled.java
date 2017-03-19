@@ -13,7 +13,7 @@ public class CommandGetEnabled implements Command {
     public void action(String[] args, GuildMessageReceivedEvent event) {
         CommandDescriptor command = CommandManager.getCommandDescriptorByName(args[0]);
         //ConfigUtils.initCommandConfigIfNotExists(event.getGuild(), command);
-        event.getChannel().sendMessage(String.format("Command %s is %s.", CommandManager.getNameFromCommandDescriptor(command), ConfigUtils.isCommandEnabled(event.getGuild(), command) ? "enabled" : "disabled")).queue();
+        event.getChannel().sendMessage(String.format("Command %s is %s.", command.getPrimaryName(), ConfigUtils.isCommandEnabled(event.getGuild(), command) ? "enabled" : "disabled")).queue();
     }
 
     @Override

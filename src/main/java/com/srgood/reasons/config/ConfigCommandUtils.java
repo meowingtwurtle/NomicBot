@@ -45,7 +45,7 @@ class ConfigCommandUtils {
     }
 
     private static Element getCommandElement(Guild guild, CommandDescriptor command) {
-        return getCommandElement(guild, CommandManager.getNameFromCommandDescriptor(command));
+        return getCommandElement(guild, command.getPrimaryName());
     }
 
     private static Element getCommandElement(Guild guild, String commandName) {
@@ -106,7 +106,7 @@ class ConfigCommandUtils {
         try {
             List<String> allCommandNames = CommandManager.getRegisteredCommandDescriptors()
                                                          .stream()
-                                                         .map(CommandManager::getNameFromCommandDescriptor)
+                                                         .map(CommandDescriptor::getPrimaryName)
                                                          .collect(Collectors.toList());
             for (String command : allCommandNames) {
                 initCommandElement(commandsElement, command);
@@ -120,7 +120,7 @@ class ConfigCommandUtils {
         try {
             getDocumentLock().writeLock().lock();
 
-            command = CommandManager.getPrimaryCommandAlias(command);
+            command = CommandManager.getCommandDescriptorByName(command).getPrimaryName();
 
             if (commandElementExists(commandsElement, command)) {
                 return;
@@ -168,7 +168,7 @@ class ConfigCommandUtils {
             getDocumentLock().writeLock().lock();
             Element serverElement = ConfigGuildUtils.getGuildNode(guild);
             Element commandsElement;
-            String realCommandName = CommandManager.getNameFromCommandDescriptor(CommandManager.getCommandDescriptorByName(cmd));
+            String realCommandName = CommandManager.getCommandDescriptorByName(cmd).getPrimaryName();
             {
                 NodeList commandsNodeList = serverElement.getElementsByTagName("commands");
                 if (commandsNodeList.getLength() == 0) {

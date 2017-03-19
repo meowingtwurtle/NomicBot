@@ -14,9 +14,9 @@ public class CommandEnable implements Command {
             CommandDescriptor mCommand = CommandManager.getCommandDescriptorByName(args[0]);
             try {
                 CommandManager.setCommandEnabled(event.getGuild(), mCommand, true);
-                event.getChannel().sendMessage(String.format("Command %s enabled.", CommandManager.getNameFromCommandDescriptor(mCommand))).queue();
+                event.getChannel().sendMessage(String.format("Command %s enabled.", mCommand.getPrimaryName())).queue();
             } catch (IllegalArgumentException e) {
-                event.getChannel().sendMessage(String.format("Cannot enable command %s.", CommandManager.getNameFromCommandDescriptor(mCommand))).queue();
+                event.getChannel().sendMessage(String.format("Cannot enable command %s.", mCommand.getPrimaryName())).queue();
             }
         } else {
             event.getChannel().sendMessage("Please specify a command to enable.").queue();

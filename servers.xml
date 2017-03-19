@@ -24,7 +24,7 @@
                 <command name="shutdown">
                     <isEnabled>true</isEnabled>
                     <permLevel>3</permLevel>
-                    g
+                                                                                g
                 </command>
             </commands>
         </server>
@@ -126,7 +126,8 @@
                 <command name="pause">
                     <isEnabled>true</isEnabled>
                     <permLevel>0</permLevel>
-                </command>git
+                </command>
+                                                git
                 <command name="play">
                     <isEnabled>true</isEnabled>
                     <permLevel>0</permLevel>
@@ -178,6 +179,9 @@
                 <command name="censor">
                     <isEnabled>true</isEnabled>
                     <permLevel>3</permLevel>
+                </command>
+                <command name="ping">
+                    <isEnabled>true</isEnabled>
                 </command>
             </commands>
             <moderation>

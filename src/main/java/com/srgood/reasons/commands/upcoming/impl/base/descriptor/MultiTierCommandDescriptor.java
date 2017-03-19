@@ -20,7 +20,7 @@ public abstract class MultiTierCommandDescriptor extends BaseCommandDescriptor {
     }
 
     public MultiTierCommandDescriptor(Set<CommandDescriptor> subCommands, Function<CommandExecutionData, CommandExecutor> defaultExecutorFunction, String help, String... names) {
-        super(generateDataToExecutorFunction(subCommands, defaultExecutorFunction), help, names);
+        super(generateDataToExecutorFunction(subCommands, defaultExecutorFunction), help, Arrays.asList(names));
         this.subCommands = new HashSet<>(subCommands);
     }
 
@@ -34,7 +34,7 @@ public abstract class MultiTierCommandDescriptor extends BaseCommandDescriptor {
             String targetName = executionData.getParsedArguments().get(0);
 
             for (CommandDescriptor subDescriptor : subCommandDescriptors) {
-                if (Arrays.stream(subDescriptor.getNames()).anyMatch(targetName::equals)) {
+                if (subDescriptor.getNames().stream().anyMatch(targetName::equals)) {
                     return subDescriptor.getExecutor(patchExecutionDataForSubCommand(executionData));
                 }
             }

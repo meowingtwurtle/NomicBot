@@ -14,9 +14,9 @@ public class CommandDisable implements Command {
             CommandDescriptor mCommand = CommandManager.getCommandDescriptorByName(args[0]);
             try {
                 CommandManager.setCommandEnabled(event.getGuild(), mCommand, false);
-                event.getChannel().sendMessage(String.format("Command %s disabled.", CommandManager.getNameFromCommandDescriptor(mCommand))).queue();
+                event.getChannel().sendMessage(String.format("Command %s disabled.", mCommand.getPrimaryName())).queue();
             } catch (IllegalArgumentException e) {
-                event.getChannel().sendMessage(String.format("Cannot disable command %s.", CommandManager.getNameFromCommandDescriptor(mCommand))).queue();
+                event.getChannel().sendMessage(String.format("Cannot disable command %s.",mCommand.getPrimaryName())).queue();
             }
         } else {
             event.getChannel().sendMessage("Please specify a command to toggle").queue();
