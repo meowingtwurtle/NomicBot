@@ -15,11 +15,7 @@ public class BaseCommandDescriptor implements CommandDescriptor {
     protected final Function<CommandExecutionData, CommandExecutor> dataToExecutorFunction;
 
     public BaseCommandDescriptor(Function<CommandExecutionData, CommandExecutor> dataToExecutorFunction, String help, String name) {
-        this.names = new ArrayList<String>() {
-            {
-                add(name);
-            }
-        };
+        this.names = Collections.singletonList(name);
         this.help = help;
         this.dataToExecutorFunction = dataToExecutorFunction;
     }
