@@ -15,12 +15,12 @@ public abstract class MultiTierCommandDescriptor extends BaseCommandDescriptor {
 
     private final Set<CommandDescriptor> subCommands;
 
-    public MultiTierCommandDescriptor(Set<CommandDescriptor> subCommands, String help, String... names) {
+    public MultiTierCommandDescriptor(Set<CommandDescriptor> subCommands, String help, List<String> names) {
         this(subCommands, executionData -> EmptyCommandExecutor.INSTANCE, help, names);
     }
 
-    public MultiTierCommandDescriptor(Set<CommandDescriptor> subCommands, Function<CommandExecutionData, CommandExecutor> defaultExecutorFunction, String help, String... names) {
-        super(generateDataToExecutorFunction(subCommands, defaultExecutorFunction), help, Arrays.asList(names));
+    public MultiTierCommandDescriptor(Set<CommandDescriptor> subCommands, Function<CommandExecutionData, CommandExecutor> defaultExecutorFunction, String help, List<String> names) {
+        super(generateDataToExecutorFunction(subCommands, defaultExecutorFunction), help, names);
         this.subCommands = new HashSet<>(subCommands);
     }
 
