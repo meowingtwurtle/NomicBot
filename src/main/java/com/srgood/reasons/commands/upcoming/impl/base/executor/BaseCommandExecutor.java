@@ -13,8 +13,6 @@ public abstract class BaseCommandExecutor implements CommandExecutor {
         this.executionData = executionData;
     }
 
-    protected abstract void sendOutput(String message);
-
     protected void checkCallerPermissions() {} // No need to override if there is nothing to do
 
     protected void checkBotPermissions() {} // No need to override if there is nothing to do
