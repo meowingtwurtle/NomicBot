@@ -35,6 +35,8 @@ public class DiscordEventListener extends ListenerAdapter {
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 
+        if (event.getAuthor().equals(event.getJDA().getSelfUser())) return;
+
         try {
             GuildUtils.doPreMessageGuildCheck(event.getGuild());
         } catch (RateLimitedException e) {
