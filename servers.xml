@@ -172,18 +172,6 @@
                 <command name="setwelcome">
                     <isEnabled>true</isEnabled>
                 </command>
-                <command name="diceroll">
-                    <isEnabled>false</isEnabled>
-                </command>
-                <command name="getenabled">
-                    <isEnabled>true</isEnabled>
-                </command>
-                <command name="coinflip">
-                    <isEnabled>true</isEnabled>
-                </command>
-                <command name="notifyrand">
-                    <isEnabled>true</isEnabled>
-                </command>
             </commands>
             <moderation>
                 <goodbye>OFF</goodbye>

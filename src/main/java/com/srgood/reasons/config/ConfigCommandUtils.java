@@ -63,10 +63,14 @@ class ConfigCommandUtils {
                     return elem;
                 }
             }
+
+            // No command element, create one
+            Element newElement = getDocument().createElement("command");
+            newElement.setAttribute("name", commandName);
+            return (Element) commandsElement.appendChild(newElement);
         } finally {
             getDocumentLock().readLock().unlock();
         }
-        return null;
     }
 
     private static Element getCommandsElement(Guild guild) {
@@ -140,7 +144,8 @@ class ConfigCommandUtils {
     }
 
     public static boolean isCommandEnabled(Guild guild, CommandDescriptor command) {
-        return Boolean.parseBoolean(getCommandProperty(guild, command, "isEnabled"));
+        String raw = getCommandProperty(guild, command, "isEnabled");
+        return raw == null || Boolean.parseBoolean(raw); // If null, command hasn't been used yet, but will be enabled by default
     }
 
     public static void setCommandIsEnabled(Guild guild, CommandDescriptor command, boolean enabled) {
