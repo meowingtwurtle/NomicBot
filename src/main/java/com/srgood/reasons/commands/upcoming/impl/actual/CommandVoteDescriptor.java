@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class CommandVoteDescriptor extends BaseCommandDescriptor {
     public CommandVoteDescriptor() {
-        super(Executor::new, "Starts a vote", "vote");
+        super(Executor::new, "Starts a vote","<duration (seconds)> <option 1> <option 2> <...>", "vote");
     }
 
     private static class Executor extends ChannelOutputCommandExecutor {

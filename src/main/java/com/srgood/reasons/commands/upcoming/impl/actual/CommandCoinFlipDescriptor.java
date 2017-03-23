@@ -9,7 +9,7 @@ import java.util.Random;
 
 public class CommandCoinFlipDescriptor extends BaseCommandDescriptor {
     public CommandCoinFlipDescriptor() {
-        super(Executor::new, "Flips a coin", Arrays.asList("coinflip", "flip", "flipcoin", "flipacoin"));
+        super(Executor::new, "Flips a coin", "<>", Arrays.asList("coinflip", "flip", "flipcoin", "flipacoin"));
     }
 
     private static class Executor extends ChannelOutputCommandExecutor {

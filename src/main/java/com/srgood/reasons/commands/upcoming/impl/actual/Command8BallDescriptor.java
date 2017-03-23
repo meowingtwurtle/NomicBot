@@ -11,7 +11,7 @@ import static com.srgood.reasons.Reference.Strings.EIGHT_BALL;
 
 public class Command8BallDescriptor extends BaseCommandDescriptor {
     public Command8BallDescriptor() {
-        super(Executor::new, "Tells your fortune", Arrays.asList("8ball", "fortune", "magic", "idiothelper"));
+        super(Executor::new, "Tells your fortune", "<>", Arrays.asList("8ball", "fortune", "magic", "idiothelper"));
     }
 
     private static class Executor extends ChannelOutputCommandExecutor {

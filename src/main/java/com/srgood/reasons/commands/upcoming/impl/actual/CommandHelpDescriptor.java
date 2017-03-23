@@ -5,17 +5,14 @@ import com.srgood.reasons.commands.upcoming.CommandExecutionData;
 import com.srgood.reasons.commands.upcoming.CommandManager;
 import com.srgood.reasons.commands.upcoming.impl.base.descriptor.BaseCommandDescriptor;
 import com.srgood.reasons.commands.upcoming.impl.base.executor.DMOutputCommandExecutor;
-import net.dv8tion.jda.core.MessageBuilder;
-import net.dv8tion.jda.core.entities.Message;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 import java.util.stream.Collectors;
 
 public class CommandHelpDescriptor extends BaseCommandDescriptor {
     public CommandHelpDescriptor() {
-        super(Executor::new, "Provides information about all commands", "help");
+        super(Executor::new, "Provides information about all commands", "<>", "help");
     }
 
     private static class Executor extends DMOutputCommandExecutor {
@@ -31,19 +28,43 @@ public class CommandHelpDescriptor extends BaseCommandDescriptor {
                                                                        .sorted(new CommandManager.CommandComparator())
                                                                        .collect(Collectors.toList());
             StringBuilder stringBuilder = new StringBuilder();
+            String newLine = "\n";
+            stringBuilder.append("```Markdown");
+            stringBuilder.append(newLine);
             stringBuilder.append("__HELP__");
-            stringBuilder.append(System.lineSeparator());
+            stringBuilder.append(newLine);
+            List<String> messages = new ArrayList<>();
             for (CommandDescriptor command : registeredCommands) {
-                getCommandHelpLines(command).forEach(stringBuilder::append);
+                List<String> helpLines = getCommandHelpLines(command);
+                for (String line : helpLines) {
+                    if (stringBuilder.length() + line.length() + "```".length() + newLine.length() >= 2000) { // 2000 is max message length
+                        stringBuilder.append("```");
+                        messages.add(stringBuilder.toString());
+                        stringBuilder = new StringBuilder();
+                        stringBuilder.append("```Markdown");
+                        stringBuilder.append(newLine);
+                    }
+                    stringBuilder.append(line);
+                }
             }
-            String finalHelp = stringBuilder.toString();
-            Queue<Message> messageQueue = new MessageBuilder().appendCodeBlock(finalHelp, "Markdown").buildAll(MessageBuilder.SplitPolicy.NEWLINE);
-            messageQueue.forEach(this::sendOutput);
+            stringBuilder.append("```");
+            messages.add(stringBuilder.toString());
+            messages.forEach(this::sendOutput);
         }
 
         private List<String> getCommandHelpLines(CommandDescriptor command) {
             List<String> ret = new ArrayList<>();
-            String format = String.format("[%s](%s)%n", command.getPrimaryName(), command.getHelp());
+            String primaryName = command.getPrimaryName();
+            String aliases = "";
+            if (command.getNames().size() > 1) {
+                aliases = ". Aliases: " + command.getNames()
+                                               .stream()
+                                               .filter(name -> !name.equals(primaryName))
+                                               .sorted()
+                                               .collect(Collectors.joining(", "));
+            }
+            String format = String.format("[%s \"%s\"](%s%s)%n", primaryName, command.help().args(),
+                    command.help().description(), aliases);
             ret.add(format);
             if (command.hasSubCommands()) {
                 for (CommandDescriptor subCommand : command.getSubCommands()) {

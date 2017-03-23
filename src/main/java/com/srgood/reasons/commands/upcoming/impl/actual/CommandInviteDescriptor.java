@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 public class CommandInviteDescriptor extends BaseCommandDescriptor {
     public CommandInviteDescriptor() {
-        super(Executor::new, "Prints the authlink for the bot.", Arrays.asList("invite", "link", "authlink"));
+        super(Executor::new, "Prints the authlink for the bot","<>", Arrays.asList("invite", "link", "authlink"));
     }
 
     private static class Executor extends ChannelOutputCommandExecutor {

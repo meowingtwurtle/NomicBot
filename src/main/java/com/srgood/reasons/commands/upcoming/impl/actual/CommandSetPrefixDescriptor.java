@@ -7,7 +7,7 @@ import com.srgood.reasons.config.ConfigUtils;
 
 public class CommandSetPrefixDescriptor extends BaseCommandDescriptor {
     public CommandSetPrefixDescriptor() {
-        super(Executor::new, "Gets the prefix in the current Guild.", "setprefix");
+        super(Executor::new, "Gets the prefix in the current Guild", "<prefix>", "setprefix");
     }
 
     private static class Executor extends ChannelOutputCommandExecutor {

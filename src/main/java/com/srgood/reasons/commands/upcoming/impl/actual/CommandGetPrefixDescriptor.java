@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 public class CommandGetPrefixDescriptor extends BaseCommandDescriptor {
     public CommandGetPrefixDescriptor() {
-        super(Executor::new, "Gets the prefix in the current Guild.", Arrays.asList("getprefix", "whatistheprefix"));
+        super(Executor::new, "Gets the prefix in the current Guild","<>", Arrays.asList("getprefix", "whatistheprefix"));
     }
 
     private static class Executor extends ChannelOutputCommandExecutor {

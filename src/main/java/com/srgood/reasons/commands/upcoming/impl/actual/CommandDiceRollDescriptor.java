@@ -14,7 +14,7 @@ public class CommandDiceRollDescriptor extends BaseCommandDescriptor {
     private static final int MAX_DICE = 50;
 
     public CommandDiceRollDescriptor() {
-        super(Executor::new, "Rolls some dice.", "diceroll");
+        super(Executor::new, "Rolls some dice", "<>", "diceroll");
     }
 
     private static class Executor extends ChannelOutputCommandExecutor {

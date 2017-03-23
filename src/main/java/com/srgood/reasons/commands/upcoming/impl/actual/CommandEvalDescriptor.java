@@ -14,7 +14,7 @@ public class CommandEvalDescriptor extends BaseCommandDescriptor {
     private final static NumberFormat RESULT_FORMATTER = new DecimalFormat("#0.0###");
 
     public CommandEvalDescriptor() {
-        super(Executor::new, "Evaluates a math expression and prints result. Supports arithmetic operations, sin, cos, tan, abs, sqrt.", "eval");
+        super(Executor::new, "Evaluates a math expression and prints result. Supports arithmetic operations, sin, cos, tan, abs, sqrt","<math expr.>", "eval");
     }
 
     private static class Executor extends ChannelOutputCommandExecutor {

@@ -8,7 +8,7 @@ import com.srgood.reasons.commands.upcoming.impl.base.executor.ChannelOutputComm
 
 public class CommandEnableDescriptor extends BaseCommandDescriptor {
     public CommandEnableDescriptor() {
-        super(Executor::new, "Enables a command in the current Guild.", "enable");
+        super(Executor::new, "Enables a command in the current Guild", "<command>","enable");
     }
 
     private static class Executor extends ChannelOutputCommandExecutor {

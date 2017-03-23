@@ -7,7 +7,7 @@ import java.util.Set;
 public interface CommandDescriptor {
     CommandExecutor getExecutor(CommandExecutionData executionData);
 
-    String getHelp();
+    HelpData help();
 
     List<String> getNames();
 

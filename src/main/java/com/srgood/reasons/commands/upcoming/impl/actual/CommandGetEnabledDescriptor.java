@@ -9,7 +9,7 @@ import com.srgood.reasons.config.ConfigUtils;
 
 public class CommandGetEnabledDescriptor extends BaseCommandDescriptor {
     public CommandGetEnabledDescriptor() {
-        super(Executor::new, "Gets whether the command is enabled or not in the current Guild.", "getenabled");
+        super(Executor::new, "Gets whether the command is enabled or not in the current Guild", "<command>", "getenabled");
     }
 
     private static class Executor extends ChannelOutputCommandExecutor {

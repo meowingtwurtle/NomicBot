@@ -24,6 +24,7 @@ public class CommandDebugDescriptor extends MultiTierCommandDescriptor {
                         new RemoveRolesDescriptor(),
                         new UptimeDescriptor())),
               "FOR DEBUG ONLY",
+              "<deleteguild | removeroles | uptime>",
               Collections.singletonList("debug"));
     }
 
@@ -40,7 +41,7 @@ public class CommandDebugDescriptor extends MultiTierCommandDescriptor {
 
     private static class DeleteGuildDescriptor extends BaseCommandDescriptor {
         public DeleteGuildDescriptor() {
-            super(Executor::new, "", "deleteguild");
+            super(Executor::new, "Deletes the current guild from the config", "<>" ,"deleteguild");
         }
 
         private static class Executor extends BaseDebugExecutor {
@@ -57,7 +58,7 @@ public class CommandDebugDescriptor extends MultiTierCommandDescriptor {
 
     private static class RemoveRolesDescriptor extends BaseCommandDescriptor {
         public RemoveRolesDescriptor() {
-            super(Executor::new, "", "removeroles");
+            super(Executor::new, "Removes roles from old bot system.", "<>", "removeroles");
         }
 
         private static class Executor extends BaseDebugExecutor {
@@ -79,7 +80,7 @@ public class CommandDebugDescriptor extends MultiTierCommandDescriptor {
 
     private static class UptimeDescriptor extends BaseCommandDescriptor {
         public UptimeDescriptor() {
-            super(Executor::new, "", "uptime");
+            super(Executor::new, "Gets the current uptime", "<>", "uptime");
         }
 
         private static class Executor extends BaseDebugExecutor {

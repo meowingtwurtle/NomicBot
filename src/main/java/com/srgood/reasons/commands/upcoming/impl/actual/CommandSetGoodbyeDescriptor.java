@@ -8,7 +8,7 @@ import com.srgood.reasons.utils.GreetingUtils;
 
 public class CommandSetGoodbyeDescriptor extends BaseCommandDescriptor {
     public CommandSetGoodbyeDescriptor() {
-        super(Executor::new, "Sets the goodbye message for the Guild, which will be sent in the current Channel. Set it to `OFF` to disable. Use `@USER` to use the name of the leaving user.", "setgoodbye");
+        super(Executor::new, "Sets the goodbye message for the Guild, which will be sent in the current Channel. Set it to OFF to disable. Use @USER to mention the leaving user", "<message>","setgoodbye");
     }
 
     private static class Executor extends ChannelOutputCommandExecutor {

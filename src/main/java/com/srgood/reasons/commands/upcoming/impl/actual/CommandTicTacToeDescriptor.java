@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 public class CommandTicTacToeDescriptor extends BaseCommandDescriptor {
     public CommandTicTacToeDescriptor() {
-        super(Executor::new, "Displays the current status of the bot.", "tictactoe");
+        super(Executor::new, "Displays the current status of the bot","I HAVE NO WORLDLY IDEA", "tictactoe");
     }
 
     private static class Executor extends ChannelOutputCommandExecutor {

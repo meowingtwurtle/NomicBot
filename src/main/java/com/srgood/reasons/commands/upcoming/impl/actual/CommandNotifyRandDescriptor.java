@@ -16,7 +16,7 @@ import static com.srgood.reasons.utils.MemberUtils.*;
 
 public class CommandNotifyRandDescriptor extends BaseCommandDescriptor {
     public CommandNotifyRandDescriptor() {
-        super(Executor::new, "Notifies a random Member with a specified role ID and optional amount.", "notifyrand");
+        super(Executor::new, "Notifies a random Member with the specified role and optional amount","<role name> {amount}", "notifyrand");
     }
 
     private static class Executor extends ChannelOutputCommandExecutor {

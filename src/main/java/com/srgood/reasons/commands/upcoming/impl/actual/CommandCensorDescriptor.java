@@ -19,12 +19,13 @@ public class CommandCensorDescriptor extends MultiTierCommandDescriptor {
                         new AddDescriptor(),
                         new RemoveDescriptor())),
                 "Performs operations with the censorlist of the current Guild",
+                "<list | add | remove> <...>",
                 Collections.singletonList("censor"));
     }
 
     private static class ListDescriptor extends BaseCommandDescriptor {
         public ListDescriptor() {
-            super(Executor::new, "", "list");
+            super(Executor::new, "Gets the current censorlist", "<>","list");
         }
 
         private static class Executor extends DMOutputCommandExecutor {
@@ -53,7 +54,7 @@ public class CommandCensorDescriptor extends MultiTierCommandDescriptor {
 
     private static class AddDescriptor extends BaseCommandDescriptor {
         public AddDescriptor() {
-            super(Executor::new, "", "add");
+            super(Executor::new, "Adds a word to the current censorlist", "<word>", "add");
         }
 
         private static class Executor extends DMOutputCommandExecutor {
@@ -77,7 +78,7 @@ public class CommandCensorDescriptor extends MultiTierCommandDescriptor {
 
     private static class RemoveDescriptor extends BaseCommandDescriptor  {
         public RemoveDescriptor() {
-            super(Executor::new, "", "remove");
+            super(Executor::new, "Removes a word from the current censorlist", "<word>", "remove");
         }
 
         private static class Executor extends DMOutputCommandExecutor {

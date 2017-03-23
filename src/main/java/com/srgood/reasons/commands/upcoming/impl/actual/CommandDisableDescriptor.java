@@ -8,7 +8,7 @@ import com.srgood.reasons.commands.upcoming.impl.base.executor.ChannelOutputComm
 
 public class CommandDisableDescriptor extends BaseCommandDescriptor {
     public CommandDisableDescriptor() {
-        super(Executor::new, "Disables a command in the current Guild.", "disable");
+        super(Executor::new, "Disables a command in the current Guild", "<command>","disable");
     }
 
     private static class Executor extends ChannelOutputCommandExecutor {
