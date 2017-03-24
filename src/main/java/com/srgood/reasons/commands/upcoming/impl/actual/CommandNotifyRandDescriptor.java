@@ -11,8 +11,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import static com.srgood.reasons.utils.RoleUtils.*;
-import static com.srgood.reasons.utils.MemberUtils.*;
+import static com.srgood.reasons.utils.MemberUtils.getMembersWithRole;
+import static com.srgood.reasons.utils.MemberUtils.getOnlineMembers;
+import static com.srgood.reasons.utils.RoleUtils.getUniqueRole;
 
 public class CommandNotifyRandDescriptor extends BaseCommandDescriptor {
     public CommandNotifyRandDescriptor() {
@@ -26,28 +27,31 @@ public class CommandNotifyRandDescriptor extends BaseCommandDescriptor {
 
         @Override
         public void execute() {
+            doNotify(getAndCheckRole());
+        }
+
+        private Role getAndCheckRole() {
+            try {
+                return getUniqueRole(executionData.getGuild(), executionData.getParsedArguments().get(0));
+            } catch (IllegalArgumentException e) {
+                sendOutput(e.getMessage());
+                return null;
+            }
+        }
+
+        private void doNotify(Role targetRole) {
+            if (targetRole == null) {
+                return; // Error already handled in getAndCheckRole()
+            }
+
             Random random = new Random();
+            int amount = getAmount();
 
-            int amount = 1;
-
-            if (executionData.getParsedArguments().size() > 1) {
-                amount = Integer.parseInt(executionData.getParsedArguments().get(1));
-            }
-
-
-            final List<Role> foundRoles = getRolesByName(executionData.getGuild(), executionData.getParsedArguments().get(0));
-
-            if (foundRoles.size() < 1) {
-                sendOutput("Found no roles called *%s*", executionData.getParsedArguments().get(0));
-                return;
-            }
-
-            final Role targetRole = foundRoles.get(0);
             List<Member> foundMembers = getMembersWithRole(getOnlineMembers(executionData.getGuild()), targetRole);
             foundMembers.remove(executionData.getGuild().getSelfMember());
 
             if (foundMembers.size() < 1) {
-                sendOutput("Found no online members with role *%s*", targetRole.getName());
+                sendOutput("Found no online members with role `%s`", targetRole.getName());
                 return;
             }
 
@@ -80,6 +84,15 @@ public class CommandNotifyRandDescriptor extends BaseCommandDescriptor {
             }
 
             sendOutput("Notified %s", sb.toString());
+        }
+
+        private int getAmount() {
+            int amount = 1;
+
+            if (executionData.getParsedArguments().size() > 1) {
+                amount = Integer.parseInt(executionData.getParsedArguments().get(1));
+            }
+            return amount;
         }
     }
 }
