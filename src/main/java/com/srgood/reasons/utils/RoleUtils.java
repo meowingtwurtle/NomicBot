@@ -21,6 +21,10 @@ public class RoleUtils {
     }
 
     public static Role getUniqueRole(Guild guild, String nameOrID) {
+        if (nameOrID.equalsIgnoreCase("everyone")) {
+            return guild.getPublicRole();
+        }
+
         final List<Role> foundRoles = getRolesByName(guild, nameOrID);
 
         if (foundRoles.size() < 1) {
