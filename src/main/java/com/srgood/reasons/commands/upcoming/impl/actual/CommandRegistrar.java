@@ -20,6 +20,7 @@ public class CommandRegistrar {
         registerCommandDescriptor(new CommandNotifyRandDescriptor());
         registerCommandDescriptor(new CommandPingDescriptor());
         registerCommandDescriptor(new CommandPongDescriptor());
+        registerCommandDescriptor(new CommandRolesDescriptor());
         registerCommandDescriptor(new CommandSetGoodbyeDescriptor());
         registerCommandDescriptor(new CommandSetPrefixDescriptor());
         registerCommandDescriptor(new CommandSetWelcomeDescriptor());
