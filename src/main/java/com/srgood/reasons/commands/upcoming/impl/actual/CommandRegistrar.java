@@ -18,6 +18,7 @@ public class CommandRegistrar {
         registerCommandDescriptor(new CommandInfoDescriptor());
         registerCommandDescriptor(new CommandInviteDescriptor());
         registerCommandDescriptor(new CommandNotifyRandDescriptor());
+        registerCommandDescriptor(new CommandPermissionsDescriptor());
         registerCommandDescriptor(new CommandPingDescriptor());
         registerCommandDescriptor(new CommandPongDescriptor());
         registerCommandDescriptor(new CommandRolesDescriptor());
