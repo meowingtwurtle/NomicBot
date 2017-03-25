@@ -1,7 +1,7 @@
 package com.srgood.reasons.config;
 
 
-import com.srgood.reasons.commands.upcoming.CommandDescriptor;
+import com.srgood.reasons.commands.CommandDescriptor;
 import net.dv8tion.jda.core.entities.Guild;
 
 import java.io.InputStream;

@@ -1,6 +1,6 @@
 package com.srgood.reasons;
 
-import com.srgood.reasons.commands.upcoming.impl.actual.CommandRegistrar;
+import com.srgood.reasons.commands.impl.actual.CommandRegistrar;
 import com.srgood.reasons.config.ConfigUtils;
 
 import net.dv8tion.jda.core.AccountType;
