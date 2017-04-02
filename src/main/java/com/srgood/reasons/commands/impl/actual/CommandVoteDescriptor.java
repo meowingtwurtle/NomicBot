@@ -5,6 +5,8 @@ import com.srgood.reasons.commands.CommandExecutionData;
 import com.srgood.reasons.commands.impl.base.descriptor.BaseCommandDescriptor;
 import com.srgood.reasons.commands.impl.base.executor.ChannelOutputCommandExecutor;
 import com.srgood.reasons.config.ConfigUtils;
+import com.srgood.reasons.permissions.Permission;
+import com.srgood.reasons.permissions.PermissionChecker;
 import com.srgood.reasons.utils.ImageUtils;
 import com.srgood.reasons.utils.Vote;
 import net.dv8tion.jda.core.entities.Channel;
@@ -68,6 +70,11 @@ public class CommandVoteDescriptor extends BaseCommandDescriptor {
             } else {
                 sendOutput("Incorrect arguments, correct usage: " + ConfigUtils.getGuildPrefix(executionData.getGuild()) + "vote <duration (seconds)> <option 1> <option 2> ... [option 5 (up to " +  Reference.Strings.COLORS.length + " max)]");
             }
+        }
+
+        @Override
+        protected void checkCallerPermissions() {
+            PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.START_VOTE);
         }
     }
 }

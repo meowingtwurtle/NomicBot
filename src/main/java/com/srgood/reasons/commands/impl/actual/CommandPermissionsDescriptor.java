@@ -4,10 +4,7 @@ import com.srgood.reasons.commands.CommandExecutionData;
 import com.srgood.reasons.commands.impl.base.descriptor.BaseCommandDescriptor;
 import com.srgood.reasons.commands.impl.base.descriptor.MultiTierCommandDescriptor;
 import com.srgood.reasons.commands.impl.base.executor.DMOutputCommandExecutor;
-import com.srgood.reasons.permissions.GuildDataManager;
-import com.srgood.reasons.permissions.GuildPermissionSet;
-import com.srgood.reasons.permissions.Permission;
-import com.srgood.reasons.permissions.PermissionStatus;
+import com.srgood.reasons.permissions.*;
 import com.srgood.reasons.utils.RoleUtils;
 import net.dv8tion.jda.core.entities.Role;
 
@@ -126,6 +123,11 @@ public class CommandPermissionsDescriptor extends MultiTierCommandDescriptor {
                     return PermissionStatus.DEFERRED;
                 }
                 throw new IllegalArgumentException();
+            }
+
+            @Override
+            protected void checkCallerPermissions() {
+                PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.MANAGE_PERMISSIONS);
             }
         }
     }

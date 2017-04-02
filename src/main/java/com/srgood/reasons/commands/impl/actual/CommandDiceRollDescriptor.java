@@ -3,6 +3,8 @@ package com.srgood.reasons.commands.impl.actual;
 import com.srgood.reasons.commands.CommandExecutionData;
 import com.srgood.reasons.commands.impl.base.descriptor.BaseCommandDescriptor;
 import com.srgood.reasons.commands.impl.base.executor.ChannelOutputCommandExecutor;
+import com.srgood.reasons.permissions.Permission;
+import com.srgood.reasons.permissions.PermissionChecker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +53,11 @@ public class CommandDiceRollDescriptor extends BaseCommandDescriptor {
             } else {
                 sendOutput(r.nextInt(MAX_ROLL) + 1 + ".");
             }
+        }
+
+        @Override
+        protected void checkCallerPermissions() {
+            PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.DO_CHANCE_GAME);
         }
     }
 }

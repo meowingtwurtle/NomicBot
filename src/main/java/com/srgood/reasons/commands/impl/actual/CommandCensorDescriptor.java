@@ -4,12 +4,11 @@ import com.srgood.reasons.commands.CommandExecutionData;
 import com.srgood.reasons.commands.impl.base.descriptor.BaseCommandDescriptor;
 import com.srgood.reasons.commands.impl.base.descriptor.MultiTierCommandDescriptor;
 import com.srgood.reasons.commands.impl.base.executor.DMOutputCommandExecutor;
+import com.srgood.reasons.permissions.Permission;
+import com.srgood.reasons.permissions.PermissionChecker;
 import com.srgood.reasons.utils.CensorUtils;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class CommandCensorDescriptor extends MultiTierCommandDescriptor {
     public CommandCensorDescriptor() {
@@ -23,14 +22,30 @@ public class CommandCensorDescriptor extends MultiTierCommandDescriptor {
                 Collections.singletonList("censor"));
     }
 
+    private static abstract class BaseExecutor extends DMOutputCommandExecutor {
+        private final boolean checkPermissions;
+
+        public BaseExecutor(CommandExecutionData executionData, boolean checkPermissions) {
+            super(executionData);
+            this.checkPermissions = checkPermissions;
+        }
+
+        @Override
+        protected void checkCallerPermissions() {
+            if (!checkPermissions) return;
+
+            PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.MANAGE_CENSOR);
+        }
+    }
+
     private static class ListDescriptor extends BaseCommandDescriptor {
         public ListDescriptor() {
             super(Executor::new, "Gets the current censorlist", "<>","list");
         }
 
-        private static class Executor extends DMOutputCommandExecutor {
+        private static class Executor extends BaseExecutor {
             public Executor(CommandExecutionData executionData) {
-                super(executionData);
+                super(executionData, false);
             }
 
             @Override
@@ -57,14 +72,14 @@ public class CommandCensorDescriptor extends MultiTierCommandDescriptor {
             super(Executor::new, "Adds a word to the current censorlist", "<word>", "add");
         }
 
-        private static class Executor extends DMOutputCommandExecutor {
+        private static class Executor extends BaseExecutor {
             public Executor(CommandExecutionData executionData) {
-                super(executionData);
+                super(executionData, true);
             }
 
             @Override
             public void execute() {
-                List<String> censoredWords = CensorUtils.getGuildCensorList(executionData.getGuild());
+                List<String> censoredWords = new ArrayList<>(CensorUtils.getGuildCensorList(executionData.getGuild()));
 
 
                 String wordToCensor = executionData.getParsedArguments().get(0).toLowerCase();
@@ -81,9 +96,9 @@ public class CommandCensorDescriptor extends MultiTierCommandDescriptor {
             super(Executor::new, "Removes a word from the current censorlist", "<word>", "remove");
         }
 
-        private static class Executor extends DMOutputCommandExecutor {
+        private static class Executor extends BaseExecutor {
             public Executor(CommandExecutionData executionData) {
-                super(executionData);
+                super(executionData, true);
             }
 
             @Override

@@ -3,6 +3,8 @@ package com.srgood.reasons.commands.impl.actual;
 import com.srgood.reasons.commands.CommandExecutionData;
 import com.srgood.reasons.commands.impl.base.descriptor.BaseCommandDescriptor;
 import com.srgood.reasons.commands.impl.base.executor.ChannelOutputCommandExecutor;
+import com.srgood.reasons.permissions.Permission;
+import com.srgood.reasons.permissions.PermissionChecker;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -25,6 +27,11 @@ public class Command8BallDescriptor extends BaseCommandDescriptor {
             int numChoices = EIGHT_BALL.length;
             int randIndex = random.nextInt(numChoices);
             sendOutput(EIGHT_BALL[randIndex]);
+        }
+
+        @Override
+        protected void checkCallerPermissions() {
+            PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.DO_CHANCE_GAME);
         }
     }
 }

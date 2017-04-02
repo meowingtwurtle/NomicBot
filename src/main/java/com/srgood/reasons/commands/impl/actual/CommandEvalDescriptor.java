@@ -6,6 +6,8 @@ import com.meowingtwurtle.math.api.MathExpressionParseException;
 import com.srgood.reasons.commands.CommandExecutionData;
 import com.srgood.reasons.commands.impl.base.descriptor.BaseCommandDescriptor;
 import com.srgood.reasons.commands.impl.base.executor.ChannelOutputCommandExecutor;
+import com.srgood.reasons.permissions.Permission;
+import com.srgood.reasons.permissions.PermissionChecker;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -47,6 +49,11 @@ public class CommandEvalDescriptor extends BaseCommandDescriptor {
                 sendOutput("`MATH:` An error occurred during parsing: %s",
                         t == null ? "null" : t.getClass().getCanonicalName() + ": " + t.getMessage());
             }
+        }
+
+        @Override
+        protected void checkCallerPermissions() {
+            PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.EVALUATE_MATH);
         }
     }
 }

@@ -78,5 +78,10 @@ public class CommandTicTacToeDescriptor extends BaseCommandDescriptor {
                 }
             }
         }
+
+        @Override
+        protected void checkCallerPermissions() {
+            super.checkCallerPermissions();
+        }
     }
 }

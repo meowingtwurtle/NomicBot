@@ -3,6 +3,8 @@ package com.srgood.reasons.commands.impl.actual;
 import com.srgood.reasons.commands.CommandExecutionData;
 import com.srgood.reasons.commands.impl.base.descriptor.BaseCommandDescriptor;
 import com.srgood.reasons.commands.impl.base.executor.ChannelOutputCommandExecutor;
+import com.srgood.reasons.permissions.Permission;
+import com.srgood.reasons.permissions.PermissionChecker;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.User;
@@ -93,6 +95,11 @@ public class CommandNotifyRandDescriptor extends BaseCommandDescriptor {
                 amount = Integer.parseInt(executionData.getParsedArguments().get(1));
             }
             return amount;
+        }
+
+        @Override
+        protected void checkCallerPermissions() {
+            PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.NOTIFY_MEMBER);
         }
     }
 }

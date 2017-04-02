@@ -5,6 +5,8 @@ import com.srgood.reasons.commands.CommandExecutionData;
 import com.srgood.reasons.commands.CommandManager;
 import com.srgood.reasons.commands.impl.base.descriptor.BaseCommandDescriptor;
 import com.srgood.reasons.commands.impl.base.executor.ChannelOutputCommandExecutor;
+import com.srgood.reasons.permissions.Permission;
+import com.srgood.reasons.permissions.PermissionChecker;
 
 public class CommandDisableDescriptor extends BaseCommandDescriptor {
     public CommandDisableDescriptor() {
@@ -30,6 +32,11 @@ public class CommandDisableDescriptor extends BaseCommandDescriptor {
             } else {
                 sendOutput("Please specify a command to disable.");
             }
+        }
+
+        @Override
+        protected void checkCallerPermissions() {
+            PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.SET_COMMAND_ENABLED);
         }
     }
 }

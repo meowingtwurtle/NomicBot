@@ -3,6 +3,8 @@ package com.srgood.reasons.commands.impl.actual;
 import com.srgood.reasons.commands.CommandExecutionData;
 import com.srgood.reasons.commands.impl.base.descriptor.BaseCommandDescriptor;
 import com.srgood.reasons.commands.impl.base.executor.ChannelOutputCommandExecutor;
+import com.srgood.reasons.permissions.Permission;
+import com.srgood.reasons.permissions.PermissionChecker;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -28,6 +30,11 @@ public class CommandCoinFlipDescriptor extends BaseCommandDescriptor {
             } else {
                 sendOutput("Side");
             }
+        }
+
+        @Override
+        protected void checkCallerPermissions() {
+            PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.DO_CHANCE_GAME);
         }
     }
 }

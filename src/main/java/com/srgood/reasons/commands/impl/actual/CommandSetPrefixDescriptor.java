@@ -4,6 +4,8 @@ import com.srgood.reasons.commands.CommandExecutionData;
 import com.srgood.reasons.commands.impl.base.descriptor.BaseCommandDescriptor;
 import com.srgood.reasons.commands.impl.base.executor.ChannelOutputCommandExecutor;
 import com.srgood.reasons.config.ConfigUtils;
+import com.srgood.reasons.permissions.Permission;
+import com.srgood.reasons.permissions.PermissionChecker;
 
 public class CommandSetPrefixDescriptor extends BaseCommandDescriptor {
     public CommandSetPrefixDescriptor() {
@@ -23,6 +25,11 @@ public class CommandSetPrefixDescriptor extends BaseCommandDescriptor {
             } else {
                 sendOutput("Please specify a prefix.");
             }
+        }
+
+        @Override
+        protected void checkCallerPermissions() {
+            PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.SET_PREFIX);
         }
     }
 }

@@ -1,9 +1,11 @@
 package com.srgood.reasons.commands.impl.actual;
 
-import com.srgood.reasons.commands.impl.base.descriptor.BaseCommandDescriptor;
 import com.srgood.reasons.commands.CommandExecutionData;
+import com.srgood.reasons.commands.impl.base.descriptor.BaseCommandDescriptor;
 import com.srgood.reasons.commands.impl.base.executor.ChannelOutputCommandExecutor;
 import com.srgood.reasons.config.ConfigUtils;
+import com.srgood.reasons.permissions.Permission;
+import com.srgood.reasons.permissions.PermissionChecker;
 import com.srgood.reasons.utils.GreetingUtils;
 
 public class CommandSetGoodbyeDescriptor extends BaseCommandDescriptor {
@@ -29,6 +31,11 @@ public class CommandSetGoodbyeDescriptor extends BaseCommandDescriptor {
             } else {
                 sendOutput("Goodbye message set. Messages will be sent in this channel.", message);
             }
+        }
+
+        @Override
+        protected void checkCallerPermissions() {
+            PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.MANAGE_JOIN_LEAVE_MESSAGES);
         }
     }
 }

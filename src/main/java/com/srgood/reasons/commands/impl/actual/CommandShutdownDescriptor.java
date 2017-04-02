@@ -19,21 +19,21 @@ public class CommandShutdownDescriptor extends BaseCommandDescriptor {
 
         @Override
         public void execute() {
+            sendOutput("Shutting down! %s", executionData.getSender().getAsMention());
+
             try {
-                PermissionChecker.checkBotAdmin(executionData.getSender());
-                sendOutput("Shutting down! %s", executionData.getSender().getAsMention());
-
-                try {
-                    ConfigPersistenceUtils.writeXML();
-                    ReasonsMain.getJda().shutdown();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    sendOutput("Error, shutdown failed with an exception. Force exiting!");
-                    System.exit(-1);
-                }
-            } catch (Exception ignored) {
-
+                ConfigPersistenceUtils.writeXML();
+                ReasonsMain.getJda().shutdown();
+            } catch (Exception e) {
+                e.printStackTrace();
+                sendOutput("Error, shutdown failed with an exception. Force exiting!");
+                System.exit(-1);
             }
+        }
+
+        @Override
+        protected void checkCallerPermissions() {
+            PermissionChecker.checkBotAdmin(executionData.getSender());
         }
     }
 }

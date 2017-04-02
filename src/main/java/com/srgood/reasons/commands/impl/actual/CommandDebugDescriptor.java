@@ -5,6 +5,7 @@ import com.srgood.reasons.commands.CommandExecutionData;
 import com.srgood.reasons.commands.impl.base.descriptor.BaseCommandDescriptor;
 import com.srgood.reasons.commands.impl.base.descriptor.MultiTierCommandDescriptor;
 import com.srgood.reasons.commands.impl.base.executor.ChannelOutputCommandExecutor;
+import com.srgood.reasons.permissions.PermissionChecker;
 import com.srgood.reasons.utils.GuildUtils;
 import net.dv8tion.jda.core.entities.Role;
 
@@ -28,14 +29,19 @@ public class CommandDebugDescriptor extends MultiTierCommandDescriptor {
               Collections.singletonList("debug"));
     }
 
-    private static abstract class BaseDebugExecutor extends ChannelOutputCommandExecutor {
-        public BaseDebugExecutor(CommandExecutionData executionData) {
+    private static abstract class BaseExecutor extends ChannelOutputCommandExecutor {
+        public BaseExecutor(CommandExecutionData executionData) {
             super(executionData);
         }
 
         @Override
         public boolean shouldExecute() {
             return ALLOW_DEBUG;
+        }
+
+        @Override
+        protected void checkCallerPermissions() {
+            PermissionChecker.checkBotAdmin(executionData.getSender());
         }
     }
 
@@ -44,7 +50,7 @@ public class CommandDebugDescriptor extends MultiTierCommandDescriptor {
             super(Executor::new, "Deletes the current guild from the config", "<>" ,"deleteguild");
         }
 
-        private static class Executor extends BaseDebugExecutor {
+        private static class Executor extends BaseExecutor {
             public Executor(CommandExecutionData executionData) {
                 super(executionData);
             }
@@ -61,7 +67,7 @@ public class CommandDebugDescriptor extends MultiTierCommandDescriptor {
             super(Executor::new, "Removes roles from old bot system.", "<>", "removeroles");
         }
 
-        private static class Executor extends BaseDebugExecutor {
+        private static class Executor extends BaseExecutor {
             public Executor(CommandExecutionData executionData) {
                 super(executionData);
             }
@@ -83,7 +89,7 @@ public class CommandDebugDescriptor extends MultiTierCommandDescriptor {
             super(Executor::new, "Gets the current uptime", "<>", "uptime");
         }
 
-        private static class Executor extends BaseDebugExecutor {
+        private static class Executor extends BaseExecutor {
 
             public Executor(CommandExecutionData executionData) {
                 super(executionData);
