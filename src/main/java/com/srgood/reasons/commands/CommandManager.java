@@ -3,6 +3,7 @@ package com.srgood.reasons.commands;
 import com.srgood.reasons.config.ConfigUtils;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.utils.SimpleLog;
 
 import java.util.*;
 import java.util.concurrent.locks.Lock;
@@ -21,14 +22,14 @@ public class CommandManager {
         }
     }
 
-    public static void handleCommand(Message cmd) {
-        CommandExecutionData executionData = new CommandExecutionData(cmd);
-        String calledCommand = CommandUtils.getCalledCommand(cmd);
-        CommandDescriptor descriptor = getCommandDescriptorByName(calledCommand);
-        // checks if the referenced command is in the command list
-        if (descriptor != null) {
-            CommandExecutor executor = descriptor.getExecutor(executionData);
-            ConfigUtils.initCommandConfigIfNotExists(cmd.getGuild(), calledCommand);
+        public static void handleCommand(Message cmd) {
+            CommandExecutionData executionData = new CommandExecutionData(cmd);
+            String calledCommand = CommandUtils.getCalledCommand(cmd);
+            CommandDescriptor descriptor = getCommandDescriptorByName(calledCommand);
+            // checks if the referenced command is in the command list
+            if (descriptor != null) {
+                CommandExecutor executor = descriptor.getExecutor(executionData);
+                ConfigUtils.initCommandConfigIfNotExists(cmd.getGuild(), calledCommand);
             //if the command is enabled for the message's guild...
             //if the message author has the required permission level...
             if (ConfigUtils.isCommandEnabled(cmd.getGuild(), descriptor)) {
@@ -68,6 +69,7 @@ public class CommandManager {
         List<String> names = descriptor.getNames();
         for (String name : names) {
             commands.put(name, descriptor);
+            SimpleLog.getLog("Theta").info("Registered command " + name);
         }
     }
 
