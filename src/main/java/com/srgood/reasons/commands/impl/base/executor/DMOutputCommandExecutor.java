@@ -10,10 +10,10 @@ public abstract class DMOutputCommandExecutor extends BaseCommandExecutor {
 
     protected void sendOutput(String format, Object... arguments) {
         String formatted = String.format(format, (Object[]) arguments); // Prevent confusing varargs call
-        executionData.getSender().openPrivateChannel().queue(chan -> chan.sendMessage(formatted).queue());
+        executionData.getSender().getUser().openPrivateChannel().queue(chan -> chan.sendMessage(formatted).queue());
     }
 
     protected void sendOutput(Message message) {
-        executionData.getSender().openPrivateChannel().queue(chan -> chan.sendMessage(message).queue());
+        executionData.getSender().getUser().openPrivateChannel().queue(chan -> chan.sendMessage(message).queue());
     }
 }

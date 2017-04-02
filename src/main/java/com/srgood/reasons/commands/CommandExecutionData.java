@@ -1,9 +1,6 @@
 package com.srgood.reasons.commands;
 
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.MessageChannel;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.entities.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -14,7 +11,7 @@ public class CommandExecutionData {
     private final List<String> parsedArguments;
     private final MessageChannel channel;
     private final Guild guild;
-    private final User sender;
+    private final Member sender;
 
     public CommandExecutionData(Message message) {
         this(   message.getRawContent(),
@@ -26,6 +23,10 @@ public class CommandExecutionData {
     }
 
     public CommandExecutionData(String rawData, String rawArgs, List<String> parsedArguments, MessageChannel channel, Guild guild, User sender) {
+        this(rawData, rawArgs, parsedArguments, channel, guild, guild.getMember(sender));
+    }
+
+    public CommandExecutionData(String rawData, String rawArgs, List<String> parsedArguments, MessageChannel channel, Guild guild, Member sender) {
         this.rawData = rawData;
         this.rawArgs = rawArgs;
         this.parsedArguments = parsedArguments;
@@ -55,7 +56,7 @@ public class CommandExecutionData {
         return guild;
     }
 
-    public User getSender() {
+    public Member getSender() {
         return sender;
     }
 }

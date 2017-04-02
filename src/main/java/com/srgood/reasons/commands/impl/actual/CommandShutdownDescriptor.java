@@ -1,11 +1,11 @@
 package com.srgood.reasons.commands.impl.actual;
 
 import com.srgood.reasons.ReasonsMain;
-import com.srgood.reasons.Reference;
 import com.srgood.reasons.commands.CommandExecutionData;
 import com.srgood.reasons.commands.impl.base.descriptor.BaseCommandDescriptor;
 import com.srgood.reasons.commands.impl.base.executor.ChannelOutputCommandExecutor;
 import com.srgood.reasons.config.ConfigPersistenceUtils;
+import com.srgood.reasons.permissions.PermissionChecker;
 
 public class CommandShutdownDescriptor extends BaseCommandDescriptor {
     public CommandShutdownDescriptor() {
@@ -19,7 +19,8 @@ public class CommandShutdownDescriptor extends BaseCommandDescriptor {
 
         @Override
         public void execute() {
-            if (Reference.Other.BOT_DEVELOPERS.contains(executionData.getSender().getId())) {
+            try {
+                PermissionChecker.checkBotAdmin(executionData.getSender());
                 sendOutput("Shutting down! %s", executionData.getSender().getAsMention());
 
                 try {
@@ -30,6 +31,8 @@ public class CommandShutdownDescriptor extends BaseCommandDescriptor {
                     sendOutput("Error, shutdown failed with an exception. Force exiting!");
                     System.exit(-1);
                 }
+            } catch (Exception ignored) {
+
             }
         }
     }
