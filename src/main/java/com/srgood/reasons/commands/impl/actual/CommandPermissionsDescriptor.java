@@ -81,16 +81,7 @@ public class CommandPermissionsDescriptor extends MultiTierCommandDescriptor {
                     sendOutput(e.getMessage());
                     return;
                 }
-                Permission permission;
-                try {
-                    permission = Permission.valueOf(executionData.getParsedArguments()
-                                                                 .get(1)
-                                                                 .toUpperCase()
-                                                                 .replaceAll("\\s+", "_"));
-                } catch (IllegalArgumentException e) {
-                    sendOutput("Found no permission by that name.");
-                    return;
-                }
+
                 PermissionStatus status;
                 try {
                     status = getPermissionStatus(executionData.getParsedArguments().get(2));
@@ -105,7 +96,26 @@ public class CommandPermissionsDescriptor extends MultiTierCommandDescriptor {
                 }
 
                 GuildPermissionSet permissionSet = GuildDataManager.getGuildPermissionSet(executionData.getGuild());
-                permissionSet.setPermissionStatus(role, permission, status);
+
+                if (executionData.getParsedArguments().get(1).equalsIgnoreCase("all")) {
+                    for (Permission permission : Permission.values()) {
+                        permissionSet.setPermissionStatus(role, permission, status);
+                        sendOutput("Permission **`%s`** set to state **`%s`** for role **`%s`**", permission, status, role.getName());
+                    }
+                } else {
+                    try {
+                        Permission permission = Permission.valueOf(executionData.getParsedArguments()
+                                                                                .get(1)
+                                                                                .toUpperCase()
+                                                                                .replaceAll("\\s+", "_"));
+                        permissionSet.setPermissionStatus(role, permission, status);
+                        sendOutput("Permission **`%s`** set to state **`%s`** for role **`%s`**", permission, status, role.getName());
+                    } catch (IllegalArgumentException e) {
+                        sendOutput("Found no permission by that name.");
+                        return;
+                    }
+                }
+
                 GuildDataManager.setGuildPermissionSet(executionData.getGuild(), permissionSet);
             }
 
