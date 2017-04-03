@@ -82,6 +82,11 @@ public class CommandPermissionsDescriptor extends MultiTierCommandDescriptor {
                     return;
                 }
 
+                if (!executionData.getSender().canInteract(role)) {
+                    sendOutput("You cannot set permissions for the role **`%s`**!", role.getName());
+                    return;
+                }
+
                 PermissionStatus status;
                 try {
                     status = getPermissionStatus(executionData.getParsedArguments().get(2));
@@ -99,8 +104,7 @@ public class CommandPermissionsDescriptor extends MultiTierCommandDescriptor {
 
                 if (executionData.getParsedArguments().get(1).equalsIgnoreCase("all")) {
                     for (Permission permission : Permission.values()) {
-                        permissionSet.setPermissionStatus(role, permission, status);
-                        sendOutput("Permission **`%s`** set to state **`%s`** for role **`%s`**", permission, status, role.getName());
+                        setPermissionStatus(role, permission, status);
                     }
                 } else {
                     try {
@@ -108,8 +112,7 @@ public class CommandPermissionsDescriptor extends MultiTierCommandDescriptor {
                                                                                 .get(1)
                                                                                 .toUpperCase()
                                                                                 .replaceAll("\\s+", "_"));
-                        permissionSet.setPermissionStatus(role, permission, status);
-                        sendOutput("Permission **`%s`** set to state **`%s`** for role **`%s`**", permission, status, role.getName());
+                        setPermissionStatus(role, permission, status);
                     } catch (IllegalArgumentException e) {
                         sendOutput("Found no permission by that name.");
                         return;
@@ -117,6 +120,33 @@ public class CommandPermissionsDescriptor extends MultiTierCommandDescriptor {
                 }
 
                 GuildDataManager.setGuildPermissionSet(executionData.getGuild(), permissionSet);
+            }
+
+            private void setPermissionStatus(Role role, Permission permission, PermissionStatus status) {
+                GuildPermissionSet permissionSet = GuildDataManager.getGuildPermissionSet(role.getGuild());
+
+                try {
+                    PermissionChecker.checkMemberPermission(executionData.getSender(), permission);
+                } catch (InsufficientPermissionException e) {
+                    sendOutput("Not setting permission **`%s`** because you do not have it.");
+                    return;
+                }
+
+                PermissionStatus backupPermissionStatus = permissionSet.getPermissionStatus(role, permission);
+
+                permissionSet.setPermissionStatus(role, permission, status);
+
+                if (status != PermissionStatus.ALLOWED) {
+                    try {
+                        PermissionChecker.checkMemberPermission(executionData.getSender(), permission);
+                    } catch (InsufficientPermissionException e) {
+                        permissionSet.setPermissionStatus(role, permission, backupPermissionStatus);
+                        sendOutput("Not setting permission **`%s`** because doing so would deny it from you.", permission);
+                        return;
+                    }
+                }
+
+                sendOutput("Permission **`%s`** set to state **`%s`** for role **`%s`**", permission, status, role.getName());
             }
 
             private PermissionStatus getPermissionStatus(String name) {
