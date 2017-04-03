@@ -24,6 +24,7 @@ public class CommandShutdownDescriptor extends BaseCommandDescriptor {
             try {
                 ConfigPersistenceUtils.writeXML();
                 ReasonsMain.getJda().shutdown();
+                System.exit(0);
             } catch (Exception e) {
                 e.printStackTrace();
                 sendOutput("Error, shutdown failed with an exception. Force exiting!");
