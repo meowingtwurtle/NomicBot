@@ -75,51 +75,75 @@ public class CommandPermissionsDescriptor extends MultiTierCommandDescriptor {
             @Override
             public void execute() {
                 Role role;
+                PermissionStatus status;
+
                 try {
-                    role = RoleUtils.getUniqueRole(executionData.getGuild(), executionData.getParsedArguments().get(0));
+                    role = getRoleArg();
+                    //checkRoleArg(role);
+
+                    status = getPermissionStatusArg();
+                    checkPermissionStatusArg(role, status);
                 } catch (IllegalArgumentException e) {
                     sendOutput(e.getMessage());
                     return;
                 }
 
-                if (!executionData.getSender().canInteract(role)) {
-                    sendOutput("You cannot set permissions for the role **`%s`**!", role.getName());
-                    return;
-                }
-
-                PermissionStatus status;
-                try {
-                    status = getPermissionStatus(executionData.getParsedArguments().get(2));
-                } catch (IllegalArgumentException e) {
-                    sendOutput("Invalid permission state. Options are `ALLOW`, `DEFER`, `DENY`");
-                    return;
-                }
-
-                if (status == PermissionStatus.DEFERRED && role.getGuild().getPublicRole().equals(role)) {
-                    sendOutput("Cannot defer on the everyone role.");
-                    return;
-                }
-
                 GuildPermissionSet permissionSet = GuildDataManager.getGuildPermissionSet(executionData.getGuild());
-
-                if (executionData.getParsedArguments().get(1).equalsIgnoreCase("all")) {
+                if (shouldSetAll()) {
                     for (Permission permission : Permission.values()) {
-                        setPermissionStatus(role, permission, status);
+                        try {
+                            setPermissionStatus(role, permission, status);
+                        } catch (IllegalArgumentException e) {
+                            sendOutput(e.getMessage());
+                        }
                     }
                 } else {
                     try {
-                        Permission permission = Permission.valueOf(executionData.getParsedArguments()
-                                                                                .get(1)
-                                                                                .toUpperCase()
-                                                                                .replaceAll("\\s+", "_"));
-                        setPermissionStatus(role, permission, status);
+                        setPermissionStatus(role, parsePermissionArg(), status);
                     } catch (IllegalArgumentException e) {
-                        sendOutput("Found no permission by that name.");
-                        return;
+                        sendOutput(e.getMessage());
                     }
                 }
-
                 GuildDataManager.setGuildPermissionSet(executionData.getGuild(), permissionSet);
+            }
+
+            private boolean shouldSetAll() {
+                return executionData.getParsedArguments().get(1).equalsIgnoreCase("all");
+            }
+
+            private Permission parsePermissionArg() {
+                try {
+                    return Permission.valueOf(executionData.getParsedArguments()
+                                                           .get(1)
+                                                           .toUpperCase()
+                                                           .replaceAll("\\s+", "_"));
+                } catch (IllegalArgumentException e) {
+                    throw new IllegalArgumentException("Found no permission by that name", e);
+                }
+            }
+
+            private PermissionStatus getPermissionStatusArg() {
+                try {
+                    return getPermissionStatus(executionData.getParsedArguments().get(2));
+                } catch (IllegalArgumentException e) {
+                    throw new IllegalArgumentException("Invalid permission state. Options are `ALLOW`, `DEFER`, `DENY`");
+                }
+            }
+
+            private void checkPermissionStatusArg(Role role, PermissionStatus status) {
+                if (status == PermissionStatus.DEFERRED && role.getGuild().getPublicRole().equals(role)) {
+                    throw new IllegalArgumentException("Cannot defer on the everyone role!");
+                }
+            }
+
+            private Role getRoleArg() {
+                return RoleUtils.getUniqueRole(executionData.getGuild(), executionData.getParsedArguments().get(0));
+            }
+
+            private void checkRoleArg(Role role) {
+                if (!executionData.getSender().canInteract(role)) {
+                    throw new IllegalArgumentException(String.format("You cannot set permissions for the role **`%s`**!", role.getName()));
+                }
             }
 
             private void setPermissionStatus(Role role, Permission permission, PermissionStatus status) {
@@ -128,8 +152,7 @@ public class CommandPermissionsDescriptor extends MultiTierCommandDescriptor {
                 try {
                     PermissionChecker.checkMemberPermission(executionData.getSender(), permission);
                 } catch (InsufficientPermissionException e) {
-                    sendOutput("Not setting permission **`%s`** because you do not have it.");
-                    return;
+                    throw new IllegalArgumentException(String.format("Not setting permission **`%s`** because you do not have it.", permission));
                 }
 
                 PermissionStatus backupPermissionStatus = permissionSet.getPermissionStatus(role, permission);
@@ -141,10 +164,11 @@ public class CommandPermissionsDescriptor extends MultiTierCommandDescriptor {
                         PermissionChecker.checkMemberPermission(executionData.getSender(), permission);
                     } catch (InsufficientPermissionException e) {
                         permissionSet.setPermissionStatus(role, permission, backupPermissionStatus);
-                        sendOutput("Not setting permission **`%s`** because doing so would deny it from you.", permission);
-                        return;
+                        throw new IllegalArgumentException(String.format("Not setting permission **`%s`** because doing so would deny it from you.", permission));
                     }
                 }
+
+                GuildDataManager.setGuildPermissionSet(role.getGuild(), permissionSet);
 
                 sendOutput("Permission **`%s`** set to state **`%s`** for role **`%s`**", permission, status, role.getName());
             }
