@@ -1,7 +1,8 @@
 package com.srgood.reasons;
 
-import com.srgood.reasons.config.ConfigUtils;
+import com.srgood.reasons.commands.CommandManager;
 import com.srgood.reasons.utils.CensorUtils;
+import com.srgood.reasons.commands.CommandUtils;
 import com.srgood.reasons.utils.GreetingUtils;
 import com.srgood.reasons.utils.GuildUtils;
 import net.dv8tion.jda.core.events.ReadyEvent;
@@ -34,32 +35,21 @@ public class DiscordEventListener extends ListenerAdapter {
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 
+        if (event.getAuthor().equals(event.getJDA().getSelfUser())) return;
+
         try {
             GuildUtils.doPreMessageGuildCheck(event.getGuild());
         } catch (RateLimitedException e) {
             e.printStackTrace();
         }
 
-        String localPrefix = ConfigUtils.getGuildPrefix(event.getGuild());
-
         if (event.getMessage().getContent().equals(com.srgood.reasons.Reference.Strings.TABLE_FLIP)) {
             event.getChannel().sendMessage(com.srgood.reasons.Reference.Strings.TABLE_UNFLIP_JOKE).queue();
         }
 
-        if (event.getMessage().getContent().startsWith(localPrefix) && !java.util.Objects.equals(event.getMessage().getAuthor().getId(), event.getJDA().getSelfUser().getId())) {
-            com.srgood.reasons.utils.CommandUtils.handleCommand(ReasonsMain.COMMAND_PARSER.parse(event.getMessage().getContent().toLowerCase(), event, localPrefix));
-            SimpleLog.getLog("Reasons").info("Got prefixed input: " + event.getMessage().getContent());
-        } else {
-            try {
-
-                if (event.getJDA().getSelfUser().getAsMention().equals(event.getMessage().getMentionedUsers().get(0).getAsMention())) {
-
-                    SimpleLog.getLog("Reasons").info("Got prefixed input (mention): " + event.getMessage().getContent());
-                    com.srgood.reasons.utils.CommandUtils.handleCommand(ReasonsMain.COMMAND_PARSER.parse(event.getMessage().getContent().toLowerCase(), event, localPrefix));
-                }
-            } catch (Exception ignored) {
-
-            }
+        if (CommandUtils.isCommandMessage(event.getMessage())) {
+            CommandManager.handleCommand(event.getMessage());
+            SimpleLog.getLog("Reasons").info("Got command message: " + event.getMessage().getContent());
         }
 
         CensorUtils.checkCensor(event.getMessage());

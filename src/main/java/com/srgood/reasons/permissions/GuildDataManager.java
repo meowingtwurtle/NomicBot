@@ -31,7 +31,14 @@ public class GuildDataManager {
             ret = newPermissionSet;
         }
 
+        ret.clean(guild.getJDA());
+
         guildPermissionSetMap.put(guild.getId(), ret);
         return ret;
+    }
+
+    public static void setGuildPermissionSet(Guild guild, GuildPermissionSet permissionSet) {
+        guildPermissionSetMap.put(guild.getId(), permissionSet);
+        ConfigUtils.setGuildSerializedProperty(guild, "roleData", permissionSet);
     }
 }

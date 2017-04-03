@@ -1,16 +1,14 @@
 package com.srgood.reasons;
 
-import com.srgood.reasons.commands.Command;
-import com.srgood.reasons.commands.CommandParser;
+import com.srgood.reasons.commands.impl.actual.CommandRegistrar;
 import com.srgood.reasons.config.ConfigUtils;
-import com.srgood.reasons.utils.CommandUtils;
+
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import net.dv8tion.jda.core.utils.SimpleLog;
-import org.reflections.Reflections;
 
 import javax.imageio.ImageIO;
 import javax.security.auth.login.LoginException;
@@ -19,12 +17,10 @@ import java.awt.event.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.Instant;
-import java.util.Arrays;
 
 public class ReasonsMain {
 
     public static final Instant START_INSTANT = Instant.now();
-    public static final CommandParser COMMAND_PARSER = new CommandParser();
 
     public static JDA jda;
     public static String prefix;
@@ -89,23 +85,7 @@ public class ReasonsMain {
     }
 
     private void initCommands() {
-        try {
-            String[] packages = { "com.srgood.reasons" };
-
-            for (String pack : packages) {
-                Reflections mReflect = new Reflections(pack);
-                for (Class<? extends Command> cmdClass : mReflect.getSubTypesOf(Command.class)) {
-                    if (!cmdClass.isInterface()) {
-                        Command cmdInstance = cmdClass.newInstance();
-                        String[] names = (String[]) cmdClass.getMethod("names").invoke(cmdInstance);
-                        Arrays.stream(names).forEach(name -> CommandUtils.getCommandsMap().put(name, cmdInstance));
-                    }
-                }
-            }
-        } catch (Exception e) {
-            SimpleLog.getLog("Reasons").warn("One or more of the commands failed to map");
-            e.printStackTrace();
-        }
+        CommandRegistrar.registerCommands();
     }
 
     public void addToTray() {

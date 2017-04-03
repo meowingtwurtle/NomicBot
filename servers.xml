@@ -2,189 +2,8 @@
 <config>
     <default>
         <prefix>#!</prefix>
-        <roles/>
-        <commands/>
     </default>
     <servers>
-        <server id="201020472702402560">
-            <prefix>#!</prefix>
-            <roles>
-                <role name="ADMIN">239816304301834250</role>
-                <role name="MUSIC_DJ">239816309552971786</role>
-            </roles>
-            <commands>
-                <command name="ping">
-                    <isEnabled>false</isEnabled>
-                    <permLevel>0</permLevel>
-                </command>
-                <command name="version">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>0</permLevel>
-                </command>
-                <command name="shutdown">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>3</permLevel>g
-                </command>
-            </commands>
-        </server>
-        <server id="201020472702402560">
-            <prefix>#!</prefix>
-            <roles>
-            <role name="ADMIN">277610336264126466</role>
-                <role name="MUSIC_DJ">277610337677606912</role>
-            </roles>
-            <commands>
-                <command name="8ball">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>0</permLevel>
-                </command>
-                <command name="chess">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>0</permLevel>
-                </command>
-                <command name="coinflip">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>0</permLevel>
-                </command>
-                <command name="getenabled">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>0</permLevel>
-                </command>
-                <command name="debug">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>0</permLevel>
-                </command>
-                <command name="delete">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>0</permLevel>
-                </command>
-                <command name="diceroll">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>0</permLevel>
-                </command>
-                <command name="shutdown">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>3</permLevel>
-                </command>
-                <command name="disable">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>3</permLevel>
-                </command>
-                <command name="enable">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>3</permLevel>
-                </command>
-                <command name="eval">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>0</permLevel>
-                </command>
-                <command name="roles">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>0</permLevel>
-                </command>
-                <command name="getpermlevel">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>0</permLevel>
-                </command>
-                <command name="getprefix">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>0</permLevel>
-                </command>
-                <command name="help">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>0</permLevel>
-                </command>
-                <command name="info">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>0</permLevel>
-                </command>
-                <command name="invite">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>0</permLevel>
-                </command>
-                <command name="join">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>0</permLevel>
-                </command>
-                <command name="leave">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>0</permLevel>
-                </command>
-                <command name="list">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>0</permLevel>
-                </command>
-                <command name="notifyrand">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>0</permLevel>
-                </command>
-                <command name="nowplaying">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>0</permLevel>
-                </command>
-                <command name="pause">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>0</permLevel>
-                </command>git
-                <command name="play">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>0</permLevel>
-                </command>
-                <command name="poing">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>0</permLevel>
-                </command>
-                <command name="pong">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>0</permLevel>
-                </command>
-                <command name="repeat">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>0</permLevel>
-                </command>
-                <command name="setpermlevel">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>3</permLevel>
-                </command>
-                <command name="setprefix">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>3</permLevel>
-                </command>
-                <command name="skip">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>0</permLevel>
-                </command>
-                <command name="stop">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>0</permLevel>
-                </command>
-                <command name="volume">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>0</permLevel>
-                </command>
-                <command name="vote">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>3</permLevel>
-                </command>
-                <command name="execute">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>99</permLevel>
-                </command>
-                <command name="setwelcome">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>0</permLevel>
-                </command>
-                <command name="censor">
-                    <isEnabled>true</isEnabled>
-                    <permLevel>3</permLevel>
-                </command>
-            </commands>
-            <moderation>
-                <welcome>Please leave now, @USER!</welcome>
-                <welcomechannel>220039465006137345</welcomechannel>
-                <censorlist>rO0ABXNyABNqYXZhLnV0aWwuQXJyYXlMaXN0eIHSHZnHYZ0DAAFJAARzaXpleHAAAAACdwQAAAACdAAEZnVja3QABG1lb3d4</censorlist>
-            </moderation>
-        </server>
         <server id="222489916053913611">
             <prefix>#!</prefix>
             <roles>
@@ -297,6 +116,94 @@
                     <permLevel>3</permLevel>
                 </command>
             </commands>
+        </server>
+        <server id="201020472702402560">
+            <prefix>#!</prefix>
+            <roles/>
+            <commands>
+                <command name="getprefix">
+                    <isEnabled>true</isEnabled>
+                </command>
+                <command name="eval">
+                    <isEnabled>true</isEnabled>
+                </command>
+                <command name="setprefix">
+                    <isEnabled>true</isEnabled>
+                </command>
+                <command name="status">
+                    <isEnabled>true</isEnabled>
+                </command>
+                <command name="invite">
+                    <isEnabled>true</isEnabled>
+                </command>
+                <command name="pong">
+                    <isEnabled>true</isEnabled>
+                </command>
+                <command name="8ball">
+                    <isEnabled>true</isEnabled>
+                </command>
+                <command name="disable">
+                    <isEnabled>true</isEnabled>
+                </command>
+                <command name="setgoodbye">
+                    <isEnabled>true</isEnabled>
+                </command>
+                <command name="shutdown">
+                    <isEnabled>true</isEnabled>
+                </command>
+                <command name="enable">
+                    <isEnabled>true</isEnabled>
+                </command>
+                <command name="ping">
+                    <isEnabled>true</isEnabled>
+                </command>
+                <command name="info">
+                    <isEnabled>true</isEnabled>
+                </command>
+                <command name="debug">
+                    <isEnabled>true</isEnabled>
+                </command>
+                <command name="censor">
+                    <isEnabled>true</isEnabled>
+                </command>
+                <command name="execute">
+                    <isEnabled>true</isEnabled>
+                </command>
+                <command name="setwelcome">
+                    <isEnabled>true</isEnabled>
+                </command>
+                <command name="diceroll">
+                    <isEnabled>false</isEnabled>
+                </command>
+                <command name="getenabled">
+                    <isEnabled>true</isEnabled>
+                </command>
+                <command name="coinflip">
+                    <isEnabled>true</isEnabled>
+                </command>
+                <command name="notifyrand">
+                    <isEnabled>true</isEnabled>
+                </command>
+                <command name="vote">
+                    <isEnabled>true</isEnabled>
+                </command>
+                <command name="help">
+                    <isEnabled>true</isEnabled>
+                </command>
+                <command name="roles">
+                    <isEnabled>true</isEnabled>
+                </command>
+                <command name="permissions">
+                    <isEnabled>true</isEnabled>
+                </command>
+            </commands>
+            <moderation>
+                <goodbye>OFF</goodbye>
+                <goodbyechannel>251764127691833344</goodbyechannel>
+                <welcome>OFF</welcome>
+                <welcomechannel>251764127691833344</welcomechannel>
+            </moderation>
+            <roleData>rO0ABXNyADFjb20uc3Jnb29kLnJlYXNvbnMucGVybWlzc2lvbnMuR3VpbGRQZXJtaXNzaW9uU2V0FYkS6iG5LLkCAAJMAAdndWlsZElEdAASTGphdmEvbGFuZy9TdHJpbmc7TAAPcm9sZVBlcm1pc3Npb25zdAAPTGphdmEvdXRpbC9NYXA7eHB0ABIyMDEwMjA0NzI3MDI0MDI1NjBzcgARamF2YS51dGlsLkhhc2hNYXAFB9rBwxZg0QMAAkYACmxvYWRGYWN0b3JJAAl0aHJlc2hvbGR4cD9AAAAAAAAMdwgAAAAQAAAAB3QAEjIxMTk2ODg1MjA3Mjg1NzYxMHNyADFjb20uc3Jnb29kLnJlYXNvbnMucGVybWlzc2lvbnMuQmFzaWNQZXJtaXNzaW9uU2V0GGxryJyZUYUCAAFMAA1wZXJtaXNzaW9uTWFwcQB+AAJ4cHNxAH4ABT9AAAAAAAAYdwgAAAAgAAAAEX5yACljb20uc3Jnb29kLnJlYXNvbnMucGVybWlzc2lvbnMuUGVybWlzc2lvbgAAAAAAAAAAEgAAeHIADmphdmEubGFuZy5FbnVtAAAAAAAAAAASAAB4cHQAEFNFVF9HVUlMRF9QUkVGSVh+cgAvY29tLnNyZ29vZC5yZWFzb25zLnBlcm1pc3Npb25zLlBlcm1pc3Npb25TdGF0dXMAAAAAAAAAABIAAHhxAH4ADHQACERFRkVSUkVEfnEAfgALdAAQR0VUX0dVSUxEX1BSRUZJWHEAfgAQfnEAfgALdAATR0VUX0NPTU1BTkRfRU5BQkxFRHEAfgAQfnEAfgALdAATU0VUX0NPTU1BTkRfRU5BQkxFRHEAfgAQfnEAfgALdAAIR0VUX0lORk9xAH4AEH5xAH4AC3QADUdFVF9BVVRIX0xJTktxAH4AEH5xAH4AC3QADU5PVElGWV9NRU1CRVJxAH4AEH5xAH4AC3QAD0RFTEVURV9NRVNTQUdFU3EAfgAQfnEAfgALdAANRVZBTFVBVEVfTUFUSHEAfgAQfnEAfgALdAAPR0VUX0dVSUxEX1JPTEVTcQB+ABB+cQB+AAt0ABdTVEFSVF9USUNfVEFDX1RPRV9fR0FNRXEAfgAQfnEAfgALdAAORE9fQ0hBTkNFX0dBTUVxAH4AEH5xAH4AC3QAClNUQVJUX1ZPVEVxAH4AEH5xAH4AC3QAE1BBUlRJQ0lQQVRFX0lOX1ZPVEVxAH4AEH5xAH4AC3QACkNIRUNLX1BJTkdxAH4AEH5xAH4AC3QAEFNUQVJUX0NIRVNTX0dBTUVxAH4AEH5xAH4AC3QACEdFVF9IRUxQcQB+ABB4dAASMjA2NTA2ODA3NDY2Nzg2ODE3c3EAfgAIc3EAfgAFP0AAAAAAABh3CAAAACAAAAARcQB+AA1xAH4AEHEAfgAScQB+ABBxAH4AFHEAfgAQcQB+ABZxAH4AEHEAfgAYcQB+ABBxAH4AGnEAfgAQcQB+ABxxAH4AEHEAfgAecQB+ABBxAH4AIHEAfgAQcQB+ACJxAH4AEHEAfgAkcQB+ABBxAH4AJnEAfgAQcQB+AChxAH4AEHEAfgAqcQB+ABBxAH4ALHEAfgAQcQB+AC5xAH4AEHEAfgAwcQB+ABB4dAASMjA3MjIzMTU4OTAwNjU0MDgwc3EAfgAIc3EAfgAFP0AAAAAAABh3CAAAACAAAAARcQB+AA1xAH4AEHEAfgAScQB+ABBxAH4AFHEAfgAQcQB+ABZxAH4AEHEAfgAYcQB+ABBxAH4AGnEAfgAQcQB+ABxxAH4AEHEAfgAecQB+ABBxAH4AIHEAfgAQcQB+ACJxAH4AEHEAfgAkcQB+ABBxAH4AJnEAfgAQcQB+AChxAH4AEHEAfgAqcQB+ABBxAH4ALHEAfgAQcQB+AC5xAH4AEHEAfgAwcQB+ABB4dAASMjY5MzA5ODk0MzQxOTUxNDg5c3EAfgAIc3EAfgAFP0AAAAAAABh3CAAAACAAAAARcQB+AA1xAH4AEHEAfgAScQB+ABBxAH4AFHEAfgAQcQB+ABZxAH4AEHEAfgAYcQB+ABBxAH4AGnEAfgAQcQB+ABxxAH4AEHEAfgAecQB+ABBxAH4AIHEAfgAQcQB+ACJxAH4AEHEAfgAkcQB+ABBxAH4AJnEAfgAQcQB+AChxAH4AEHEAfgAqcQB+ABBxAH4ALHEAfgAQcQB+AC5xAH4AEHEAfgAwcQB+ABB4dAASMjAxMDIwNDcyNzAyNDAyNTYwc3EAfgAIc3EAfgAFP0AAAAAAABh3CAAAACAAAAARcQB+AA1+cQB+AA90AAdBTExPV0VEcQB+ABJxAH4APnEAfgAUcQB+AD5xAH4AFnEAfgA+cQB+ABhxAH4APnEAfgAacQB+AD5xAH4AHHEAfgA+cQB+AB5xAH4APnEAfgAgcQB+AD5xAH4AInEAfgA+cQB+ACRxAH4APnEAfgAmcQB+AD5xAH4AKHEAfgA+cQB+ACpxAH4APnEAfgAscQB+AD5xAH4ALnEAfgA+cQB+ADB+cQB+AA90AAZERU5JRUR4dAASMjAxODQ4NDM1MzU4MzAyMjA4c3EAfgAIc3EAfgAFP0AAAAAAABh3CAAAACAAAAARcQB+AA1xAH4AEHEAfgAScQB+ABBxAH4AFHEAfgAQcQB+ABZxAH4AEHEAfgAYcQB+ABBxAH4AGnEAfgAQcQB+ABxxAH4AEHEAfgAecQB+ABBxAH4AIHEAfgAQcQB+ACJxAH4AEHEAfgAkcQB+ABBxAH4AJnEAfgAQcQB+AChxAH4AEHEAfgAqcQB+ABBxAH4ALHEAfgAQcQB+AC5xAH4AEHEAfgAwcQB+ABB4dAASMjY5NjE0MzA0OTAxMzMyOTkyc3EAfgAIc3EAfgAFP0AAAAAAABh3CAAAACAAAAARcQB+AA1xAH4AEHEAfgAScQB+ABBxAH4AFHEAfgAQcQB+ABZxAH4AEHEAfgAYcQB+ABBxAH4AGnEAfgAQcQB+ABxxAH4AEHEAfgAecQB+ABBxAH4AIHEAfgAQcQB+ACJxAH4AEHEAfgAkcQB+ABBxAH4AJnEAfgAQcQB+AChxAH4AEHEAfgAqcQB+ABBxAH4ALHEAfgAQcQB+AC5xAH4AEHEAfgAwcQB+ABB4eA==</roleData>
         </server>
     </servers>
 </config>
