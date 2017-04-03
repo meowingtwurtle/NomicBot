@@ -74,7 +74,6 @@ public class CommandPermissionsDescriptor extends MultiTierCommandDescriptor {
 
             @Override
             public void execute() {
-                sendOutput("start");
                 Role role;
                 try {
                     role = RoleUtils.getUniqueRole(executionData.getGuild(), executionData.getParsedArguments().get(0));
@@ -108,7 +107,6 @@ public class CommandPermissionsDescriptor extends MultiTierCommandDescriptor {
                 GuildPermissionSet permissionSet = GuildDataManager.getGuildPermissionSet(executionData.getGuild());
                 permissionSet.setPermissionStatus(role, permission, status);
                 GuildDataManager.setGuildPermissionSet(executionData.getGuild(), permissionSet);
-                sendOutput("done");
             }
 
             private PermissionStatus getPermissionStatus(String name) {
