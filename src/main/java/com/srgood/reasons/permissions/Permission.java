@@ -11,7 +11,8 @@ public enum Permission {
 
     // Moderation commands
     DELETE_MESSAGES,
-    SET_COMMAND_ENABLED, SET_PREFIX,
+    SET_COMMAND_ENABLED,
+    SET_PREFIX,
     START_VOTE,
     NOTIFY_MEMBER,
     MANAGE_CENSOR,
