@@ -71,7 +71,7 @@ public class BasicPermissionSet implements Serializable {
         return getActionsByStatus(DENIED);
     }
 
-    public Set<Permission> getDefferedActions() {
+    public Set<Permission> getDeferredActions() {
         return getActionsByStatus(DEFERRED);
     }
 

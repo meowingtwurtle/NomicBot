@@ -8,6 +8,7 @@ import com.srgood.reasons.commands.impl.base.executor.DMOutputCommandExecutor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class CommandHelpDescriptor extends BaseCommandDescriptor {
@@ -59,7 +60,7 @@ public class CommandHelpDescriptor extends BaseCommandDescriptor {
             if (command.getNames().size() > 1) {
                 aliases = ". Aliases: " + command.getNames()
                                                .stream()
-                                               .filter(name -> !name.equals(primaryName))
+                                               .filter(name -> !Objects.equals(name, primaryName))
                                                .sorted()
                                                .collect(Collectors.joining(", "));
             }

@@ -11,6 +11,7 @@ import org.w3c.dom.NodeList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -59,7 +60,7 @@ class ConfigCommandUtils {
 
             for (Node n : commandList) {
                 Element elem = (Element) n;
-                if (elem.getAttribute("name").equals(commandName)) {
+                if (Objects.equals(elem.getAttribute("name"), commandName)) {
                     return elem;
                 }
             }

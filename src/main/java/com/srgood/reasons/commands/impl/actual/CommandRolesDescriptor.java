@@ -7,6 +7,7 @@ import com.srgood.reasons.commands.impl.base.executor.DMOutputCommandExecutor;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class CommandRolesDescriptor extends BaseCommandDescriptor {
@@ -25,8 +26,8 @@ public class CommandRolesDescriptor extends BaseCommandDescriptor {
                 List<String> roleList = executionData.getGuild()
                                                      .getRoles()
                                                      .stream()
-                                                     .filter(role -> !role.equals(executionData.getGuild()
-                                                                                               .getPublicRole()))
+                                                     .filter(role -> !Objects.equals(role, executionData.getGuild()
+                                                                                                        .getPublicRole()))
                                                      .sorted(Comparator.reverseOrder())
                                                      .map(role -> String.format("[%s] %s", role.getName(), role.getId()))
                                                      .collect(Collectors.toList());

@@ -12,7 +12,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 class ConfigBasicUtils {
     private static Document document;
-    private static ReadWriteLock documentLock = new ReentrantReadWriteLock();
+    private static final ReadWriteLock documentLock = new ReentrantReadWriteLock();
 
     static ReadWriteLock getDocumentLock() {
         return documentLock;

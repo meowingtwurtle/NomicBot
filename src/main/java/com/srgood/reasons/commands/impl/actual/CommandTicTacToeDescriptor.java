@@ -7,6 +7,7 @@ import com.srgood.reasons.games.TicTacToeGame;
 import net.dv8tion.jda.core.entities.MessageChannel;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class CommandTicTacToeDescriptor extends BaseCommandDescriptor {
     public CommandTicTacToeDescriptor() {
@@ -14,7 +15,7 @@ public class CommandTicTacToeDescriptor extends BaseCommandDescriptor {
     }
 
     private static class Executor extends ChannelOutputCommandExecutor {
-        private static HashMap<MessageChannel, TicTacToeGame> tictactoe = new HashMap<>();
+        private static final HashMap<MessageChannel, TicTacToeGame> tictactoe = new HashMap<>();
 
         public Executor(CommandExecutionData executionData) {
             super(executionData);
@@ -23,7 +24,8 @@ public class CommandTicTacToeDescriptor extends BaseCommandDescriptor {
         @Override
         public boolean shouldExecute() {
                 boolean o = true;
-                if(executionData.getParsedArguments().size() == 0) {} else if(executionData.getParsedArguments().size() == 1 && executionData.getParsedArguments().get(0).equals("check")) {} else if(executionData.getParsedArguments().size() == 2) {
+                if(executionData.getParsedArguments().size() == 0) {} else if(executionData.getParsedArguments().size() == 1 && Objects
+                        .equals(executionData.getParsedArguments().get(0), "check")) {} else if(executionData.getParsedArguments().size() == 2) {
                     try {
                         int n = Integer.parseInt(executionData.getParsedArguments().get(0));
                         n = Integer.parseInt(executionData.getParsedArguments().get(1));

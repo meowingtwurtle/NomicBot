@@ -5,16 +5,17 @@ import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.utils.SimpleLog;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class CommandManager {
     private static final Lock channelThreadMapLock = new ReentrantLock();
-    private static Map<String, CommandDescriptor> commands = new TreeMap<>();
-    private static Map<String, ChannelCommandThread> channelThreadMap = new java.util.HashMap<>();
+    private static final Map<String, CommandDescriptor> commands = new TreeMap<>();
+    private static final Map<String, ChannelCommandThread> channelThreadMap = new java.util.HashMap<>();
 
-    public static class CommandComparator implements Comparator<CommandDescriptor> {
+    public static class CommandComparator implements Comparator<CommandDescriptor>, Serializable {
 
         @Override
         public int compare(CommandDescriptor command0, CommandDescriptor command1) {

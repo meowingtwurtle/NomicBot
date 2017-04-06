@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GuildDataManager {
-    private static Map<String, GuildPermissionSet> guildPermissionSetMap = new HashMap<>();
+    private static final Map<String, GuildPermissionSet> guildPermissionSetMap = new HashMap<>();
 
     public static GuildPermissionSet getGuildPermissionSet(Guild guild) {
         if (guildPermissionSetMap.containsKey(guild.getId())) {

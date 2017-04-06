@@ -46,8 +46,7 @@ public class CommandVoteDescriptor extends BaseCommandDescriptor {
                         sendOutput(sb.toString());
                         try {
                             executionData.getChannel().sendFile(ImageUtils.renderVote(
-                                    executionData.getParsedArguments().get(1),
-                                    voteMap.keySet().stream().toArray(String[]::new),
+                                    executionData.getParsedArguments().get(1), voteMap.keySet().toArray(new String[0]),
                                     integerArrToIntArr(
                                             voteMap.values()
                                                     .<Integer>toArray(

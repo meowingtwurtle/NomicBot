@@ -11,6 +11,7 @@ import net.dv8tion.jda.core.entities.Role;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Objects;
 
 public class CommandPermissionsDescriptor extends MultiTierCommandDescriptor {
     public CommandPermissionsDescriptor() {
@@ -131,7 +132,7 @@ public class CommandPermissionsDescriptor extends MultiTierCommandDescriptor {
             }
 
             private void checkPermissionStatusArg(Role role, PermissionStatus status) {
-                if (status == PermissionStatus.DEFERRED && role.getGuild().getPublicRole().equals(role)) {
+                if (status == PermissionStatus.DEFERRED && Objects.equals(role.getGuild().getPublicRole(), role)) {
                     throw new IllegalArgumentException("Cannot defer on the everyone role!");
                 }
             }

@@ -9,7 +9,7 @@ public abstract class BaseCommandExecutor implements CommandExecutor {
 
     protected final CommandExecutionData executionData;
 
-    public BaseCommandExecutor(CommandExecutionData executionData) {
+    BaseCommandExecutor(CommandExecutionData executionData) {
         this.executionData = executionData;
     }
 

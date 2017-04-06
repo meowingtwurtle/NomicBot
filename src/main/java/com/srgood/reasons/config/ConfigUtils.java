@@ -12,7 +12,7 @@ public class ConfigUtils {
         ConfigPersistenceUtils.initConfig();
     }
 
-    public static void initFromStream(InputStream inputStream) throws Exception {
+    public static void initFromStream(InputStream inputStream) {
         ConfigPersistenceUtils.initConfigFromStream(inputStream);
     }
 

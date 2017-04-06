@@ -7,9 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Created by srgood on 1/18/2017.
- */
 public class RoleUtils {
 
     public static List<Role> getRolesByName(Guild guild,String name) {

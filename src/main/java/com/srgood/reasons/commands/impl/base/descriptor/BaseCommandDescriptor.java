@@ -11,17 +11,17 @@ import java.util.List;
 import java.util.function.Function;
 
 public class BaseCommandDescriptor implements CommandDescriptor {
-    protected final List<String> names;
-    protected final HelpData help;
-    protected final Function<CommandExecutionData, CommandExecutor> dataToExecutorFunction;
+    private final List<String> names;
+    private final HelpData help;
+    private final Function<CommandExecutionData, CommandExecutor> dataToExecutorFunction;
 
-    public BaseCommandDescriptor(Function<CommandExecutionData, CommandExecutor> dataToExecutorFunction, String help, String args, String name) {
+    protected BaseCommandDescriptor(Function<CommandExecutionData, CommandExecutor> dataToExecutorFunction, String help, String args, String name) {
         this.names = Collections.singletonList(name);
         this.help = new HelpDataImpl(args, help);
         this.dataToExecutorFunction = dataToExecutorFunction;
     }
 
-    public BaseCommandDescriptor(Function<CommandExecutionData, CommandExecutor> dataToExecutorFunction, String help, String args, List<String> names) {
+    protected BaseCommandDescriptor(Function<CommandExecutionData, CommandExecutor> dataToExecutorFunction, String help, String args, List<String> names) {
         this.names = new ArrayList<>(names);
         this.help = new HelpDataImpl(args, help);
         this.dataToExecutorFunction = dataToExecutorFunction;

@@ -5,6 +5,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -29,7 +30,7 @@ class ConfigRoleUtils {
             for (Node n : roleNodeList) {
                 Element elem = (Element) n;
                 String textContent = elem.getTextContent();
-                if (textContent.equals(roleID)) {
+                if (Objects.equals(textContent, roleID)) {
                     elementRole = elem;
                     break;
                 }
