@@ -31,14 +31,14 @@ public class PermissionChecker {
 
     /**
      * Fails if the {@link net.dv8tion.jda.core.entities.Member} is not an administrator for the bot.
-     * Currently, the only way to be an administrator is to be a recognized developer, as in {@link com.srgood.reasons.Reference.Other#BOT_DEVELOPERS}.
+     * Currently, the only way to be an administrator is to be a recognized developer, as in {@link com.srgood.reasons.Reference#BOT_DEVELOPERS}.
      *
      * @param member The {@link net.dv8tion.jda.core.entities.Member} to check for being a bot admin.
      *
      * @throws com.srgood.reasons.permissions.InsufficientPermissionException If the {@link net.dv8tion.jda.core.entities.Member} is not an administrator for the bot
      */
     public static void checkBotAdmin(Member member) {
-        if (!Reference.Other.BOT_DEVELOPERS.contains(member.getUser().getId())) {
+        if (!Reference.BOT_DEVELOPERS.contains(member.getUser().getId())) {
             throw new InsufficientPermissionException(String.format("%s cannot perform the action because they are not a bot owner.", member
                     .getUser()
                     .getName()));

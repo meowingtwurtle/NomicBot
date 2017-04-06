@@ -27,7 +27,7 @@ public class CommandVoteDescriptor extends BaseCommandDescriptor {
 
         @Override
         public void execute() {
-            if (executionData.getParsedArguments().size() >= 3 && executionData.getParsedArguments().size() <= Reference.Strings.COLORS.length + 2) {
+            if (executionData.getParsedArguments().size() >= 3 && executionData.getParsedArguments().size() <= Reference.COLORS.length + 2) {
                 Map<String,Integer> voteMap = new LinkedHashMap<>();
 
                 for (int i = 2; i < executionData.getParsedArguments().size(); i++) {
@@ -68,7 +68,7 @@ public class CommandVoteDescriptor extends BaseCommandDescriptor {
                     }
                 });
             } else {
-                sendOutput("Incorrect arguments, correct usage: " + ConfigUtils.getGuildPrefix(executionData.getGuild()) + "vote <duration (seconds)> <option 1> <option 2> ... [option 5 (up to " +  Reference.Strings.COLORS.length + " max)]");
+                sendOutput("Incorrect arguments, correct usage: " + ConfigUtils.getGuildPrefix(executionData.getGuild()) + "vote <duration (seconds)> <option 1> <option 2> ... [option 5 (up to " +  Reference.COLORS.length + " max)]");
             }
         }
 

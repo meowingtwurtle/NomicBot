@@ -9,7 +9,7 @@ import com.srgood.reasons.permissions.PermissionChecker;
 import java.util.Arrays;
 import java.util.Random;
 
-import static com.srgood.reasons.Reference.Strings.EIGHT_BALL;
+import static com.srgood.reasons.Reference.EIGHT_BALL;
 
 public class Command8BallDescriptor extends BaseCommandDescriptor {
     public Command8BallDescriptor() {

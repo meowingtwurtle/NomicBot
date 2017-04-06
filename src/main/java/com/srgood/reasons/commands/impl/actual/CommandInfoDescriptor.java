@@ -19,7 +19,7 @@ public class CommandInfoDescriptor extends BaseCommandDescriptor {
 
         @Override
         public void execute() {
-            sendOutput("The current version is: %s%n%s", Reference.Strings.VERSION, Reference.Strings.CREDITS);
+            sendOutput("The current version is: %s%n%s", Reference.VERSION, Reference.CREDITS);
         }
     }
 }

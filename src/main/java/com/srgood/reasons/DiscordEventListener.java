@@ -43,8 +43,8 @@ public class DiscordEventListener extends ListenerAdapter {
             e.printStackTrace();
         }
 
-        if (event.getMessage().getContent().equals(com.srgood.reasons.Reference.Strings.TABLE_FLIP)) {
-            event.getChannel().sendMessage(com.srgood.reasons.Reference.Strings.TABLE_UNFLIP_JOKE).queue();
+        if (event.getMessage().getContent().equals(Reference.TABLE_FLIP)) {
+            event.getChannel().sendMessage(Reference.TABLE_UNFLIP_JOKE).queue();
         }
 
         if (CommandUtils.isCommandMessage(event.getMessage())) {

@@ -19,7 +19,7 @@ public class CommandInviteDescriptor extends BaseCommandDescriptor {
 
         @Override
         public void execute() {
-            sendOutput("Theta authorization link: %s", Reference.Strings.INVITE_LINK);
+            sendOutput("Theta authorization link: %s", Reference.INVITE_LINK);
         }
     }
 }
