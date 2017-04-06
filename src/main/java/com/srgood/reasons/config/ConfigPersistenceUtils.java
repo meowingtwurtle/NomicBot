@@ -23,6 +23,7 @@ import static com.srgood.reasons.config.ConfigBasicUtils.getDocumentLock;
 
 public class ConfigPersistenceUtils {
     private static final String DEFAULT_CONFIG_TEXT = "<config />";
+    private static final String CONFIG_FILE_NAME = "theta.xml";
 
     public static ScheduledExecutorService EXECUTOR_SERVICE = Executors.newSingleThreadScheduledExecutor();
 
@@ -56,7 +57,7 @@ public class ConfigPersistenceUtils {
     public static void writeXML() throws TransformerException {
         String cleanXML = generateCleanXML();
 
-        try (FileWriter fileWriter = new FileWriter(new File("servers.xml")); BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
+        try (FileWriter fileWriter = new FileWriter(new File(CONFIG_FILE_NAME)); BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
             bufferedWriter.write(cleanXML);
             bufferedWriter.flush();
         } catch (IOException e) {
@@ -80,10 +81,13 @@ public class ConfigPersistenceUtils {
     }
 
     public static void initConfig() throws IOException {
-        File inputFile = new File("servers.xml");
+        File inputFile = new File(CONFIG_FILE_NAME);
 
-        try (ByteArrayInputStream byteInputStream = new ByteArrayInputStream(inputFile.exists() ? Files.readAllBytes(inputFile
-                .toPath()) : DEFAULT_CONFIG_TEXT.getBytes())) {
+        try (ByteArrayInputStream byteInputStream =
+                     new ByteArrayInputStream(
+                             inputFile.exists()
+                             ? Files.readAllBytes(inputFile.toPath())
+                             : DEFAULT_CONFIG_TEXT.getBytes())) {
             initConfigFromStream(byteInputStream);
         }
 
@@ -108,7 +112,6 @@ public class ConfigPersistenceUtils {
 
             DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder domInput = domFactory.newDocumentBuilder();
-
 
             Document doc = domInput.parse(inputStream);
             ConfigBasicUtils.setDocument(doc);
