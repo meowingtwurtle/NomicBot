@@ -36,7 +36,7 @@ public class CommandDebugDescriptor extends MultiTierCommandDescriptor {
 
         @Override
         public boolean shouldExecute() {
-            return ALLOW_DEBUG;
+            return ALLOW_DEBUG && super.shouldExecute();
         }
 
         @Override
