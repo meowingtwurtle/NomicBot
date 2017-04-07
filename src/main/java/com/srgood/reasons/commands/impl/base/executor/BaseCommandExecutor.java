@@ -1,8 +1,9 @@
 package com.srgood.reasons.commands.impl.base.executor;
 
-import com.srgood.reasons.commands.CommandExecutor;
 import com.srgood.reasons.commands.CommandExecutionData;
+import com.srgood.reasons.commands.CommandExecutor;
 import com.srgood.reasons.permissions.InsufficientPermissionException;
+import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.exceptions.PermissionException;
 
 public abstract class BaseCommandExecutor implements CommandExecutor {
@@ -37,4 +38,8 @@ public abstract class BaseCommandExecutor implements CommandExecutor {
         }
         return customPreExecuteCheck();
     }
+
+    protected abstract void sendOutput(String format, Object... arguments);
+
+    protected abstract void sendOutput(Message message);
 }
