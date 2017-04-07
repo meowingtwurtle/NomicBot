@@ -80,7 +80,7 @@ public class CommandPermissionsDescriptor extends MultiTierCommandDescriptor {
 
                 try {
                     role = getRoleArg();
-                    //checkRoleArg(role);
+                    checkRoleArg(role);
 
                     status = getPermissionStatusArg();
                     checkPermissionStatusArg(role, status);
