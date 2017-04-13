@@ -14,6 +14,7 @@ import net.dv8tion.jda.core.entities.Channel;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class CommandVoteDescriptor extends BaseCommandDescriptor {
     public CommandVoteDescriptor() {
@@ -72,8 +73,8 @@ public class CommandVoteDescriptor extends BaseCommandDescriptor {
         }
 
         @Override
-        protected void checkCallerPermissions() {
-            PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.START_VOTE);
+        protected Optional<String> checkCallerPermissions() {
+            return PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.START_VOTE);
         }
     }
 }

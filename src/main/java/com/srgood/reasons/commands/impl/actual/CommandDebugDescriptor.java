@@ -14,6 +14,7 @@ import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Optional;
 
 public class CommandDebugDescriptor extends MultiTierCommandDescriptor {
     private static final boolean ALLOW_DEBUG = true;
@@ -40,8 +41,8 @@ public class CommandDebugDescriptor extends MultiTierCommandDescriptor {
         }
 
         @Override
-        protected void checkCallerPermissions() {
-            PermissionChecker.checkBotAdmin(executionData.getSender());
+        protected Optional<String> checkCallerPermissions() {
+            return PermissionChecker.checkBotAdmin(executionData.getSender());
         }
     }
 

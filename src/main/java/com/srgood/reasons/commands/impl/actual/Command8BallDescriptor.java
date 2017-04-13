@@ -7,6 +7,7 @@ import com.srgood.reasons.permissions.Permission;
 import com.srgood.reasons.permissions.PermissionChecker;
 
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.Random;
 
 import static com.srgood.reasons.Reference.EIGHT_BALL;
@@ -30,8 +31,8 @@ public class Command8BallDescriptor extends BaseCommandDescriptor {
         }
 
         @Override
-        protected void checkCallerPermissions() {
-            PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.DO_CHANCE_GAME);
+        protected Optional<String> checkCallerPermissions() {
+            return PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.DO_CHANCE_GAME);
         }
     }
 }

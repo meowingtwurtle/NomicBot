@@ -31,10 +31,10 @@ public class CommandCensorDescriptor extends MultiTierCommandDescriptor {
         }
 
         @Override
-        protected void checkCallerPermissions() {
-            if (!checkPermissions) return;
+        protected Optional<String> checkCallerPermissions() {
+            if (!checkPermissions) return Optional.empty();
 
-            PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.MANAGE_CENSOR);
+            return PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.MANAGE_CENSOR);
         }
     }
 

@@ -8,6 +8,7 @@ import com.srgood.reasons.permissions.PermissionChecker;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -56,8 +57,8 @@ public class CommandDiceRollDescriptor extends BaseCommandDescriptor {
         }
 
         @Override
-        protected void checkCallerPermissions() {
-            PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.DO_CHANCE_GAME);
+        protected Optional<String> checkCallerPermissions() {
+            return PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.DO_CHANCE_GAME);
         }
     }
 }

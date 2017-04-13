@@ -11,6 +11,7 @@ import com.srgood.reasons.permissions.PermissionChecker;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.Optional;
 
 public class CommandEvalDescriptor extends BaseCommandDescriptor {
     private final static ThreadLocal<NumberFormat> RESULT_FORMATTER = ThreadLocal.withInitial(() -> new DecimalFormat("#0.0###"));
@@ -52,8 +53,8 @@ public class CommandEvalDescriptor extends BaseCommandDescriptor {
         }
 
         @Override
-        protected void checkCallerPermissions() {
-            PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.EVALUATE_MATH);
+        protected Optional<String> checkCallerPermissions() {
+            return PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.EVALUATE_MATH);
         }
     }
 }

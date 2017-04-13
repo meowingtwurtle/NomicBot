@@ -8,6 +8,7 @@ import net.dv8tion.jda.core.entities.MessageChannel;
 
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.Optional;
 
 public class CommandTicTacToeDescriptor extends BaseCommandDescriptor {
     public CommandTicTacToeDescriptor() {
@@ -82,8 +83,8 @@ public class CommandTicTacToeDescriptor extends BaseCommandDescriptor {
         }
 
         @Override
-        protected void checkCallerPermissions() {
-            super.checkCallerPermissions();
+        protected Optional<String> checkCallerPermissions() {
+            return super.checkCallerPermissions();
         }
     }
 }

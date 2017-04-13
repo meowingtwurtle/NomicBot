@@ -7,6 +7,8 @@ import com.srgood.reasons.config.ConfigUtils;
 import com.srgood.reasons.permissions.Permission;
 import com.srgood.reasons.permissions.PermissionChecker;
 
+import java.util.Optional;
+
 public class CommandSetPrefixDescriptor extends BaseCommandDescriptor {
     public CommandSetPrefixDescriptor() {
         super(Executor::new, "Gets the prefix in the current Guild", "<prefix>", "setprefix");
@@ -28,8 +30,8 @@ public class CommandSetPrefixDescriptor extends BaseCommandDescriptor {
         }
 
         @Override
-        protected void checkCallerPermissions() {
-            PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.SET_PREFIX);
+        protected Optional<String> checkCallerPermissions() {
+            return PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.SET_PREFIX);
         }
     }
 }

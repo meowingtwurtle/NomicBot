@@ -8,10 +8,7 @@ import com.srgood.reasons.permissions.*;
 import com.srgood.reasons.utils.RoleUtils;
 import net.dv8tion.jda.core.entities.Role;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Objects;
+import java.util.*;
 
 public class CommandPermissionsDescriptor extends MultiTierCommandDescriptor {
     public CommandPermissionsDescriptor() {
@@ -189,8 +186,8 @@ public class CommandPermissionsDescriptor extends MultiTierCommandDescriptor {
             }
 
             @Override
-            protected void checkCallerPermissions() {
-                PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.MANAGE_PERMISSIONS);
+            protected Optional<String> checkCallerPermissions() {
+                return PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.MANAGE_PERMISSIONS);
             }
         }
     }

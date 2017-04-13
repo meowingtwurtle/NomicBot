@@ -7,6 +7,8 @@ import com.srgood.reasons.commands.impl.base.executor.ChannelOutputCommandExecut
 import com.srgood.reasons.config.ConfigPersistenceUtils;
 import com.srgood.reasons.permissions.PermissionChecker;
 
+import java.util.Optional;
+
 public class CommandShutdownDescriptor extends BaseCommandDescriptor {
     public CommandShutdownDescriptor() {
         super(Executor::new, "Shuts down the bot. You SHOULD be an developer to use this", "<>","shutdown");
@@ -33,8 +35,8 @@ public class CommandShutdownDescriptor extends BaseCommandDescriptor {
         }
 
         @Override
-        protected void checkCallerPermissions() {
-            PermissionChecker.checkBotAdmin(executionData.getSender());
+        protected Optional<String> checkCallerPermissions() {
+            return PermissionChecker.checkBotAdmin(executionData.getSender());
         }
     }
 }
