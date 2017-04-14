@@ -37,7 +37,7 @@ class ConfigGuildUtils {
             Document doc = getDocument();
             Element elementDefault = getOrCreateFirstSubElement(doc.getDocumentElement(), "default");
 
-            ConfigBasicUtils.nodeListToList(elementDefault.getChildNodes()).stream().filter(n -> n instanceof Element).forEach(n -> {
+            ConfigBasicUtils.nodeListToList(elementDefault.getChildNodes()).stream().filter(Element.class::isInstance).forEach(n -> {
                 Element elem = (Element) n;
                 if (getFirstSubElement(elementServer, elem.getTagName()) == null) {
                     elementServer.appendChild(elem.cloneNode(true));
