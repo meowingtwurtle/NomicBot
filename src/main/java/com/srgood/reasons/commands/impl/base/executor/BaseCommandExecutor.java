@@ -1,40 +1,55 @@
 package com.srgood.reasons.commands.impl.base.executor;
 
-import com.srgood.reasons.commands.CommandExecutor;
 import com.srgood.reasons.commands.CommandExecutionData;
-import com.srgood.reasons.permissions.InsufficientPermissionException;
-import net.dv8tion.jda.core.exceptions.PermissionException;
+import com.srgood.reasons.commands.CommandExecutor;
+import net.dv8tion.jda.core.entities.Message;
+
+import java.util.Optional;
 
 public abstract class BaseCommandExecutor implements CommandExecutor {
 
     protected final CommandExecutionData executionData;
 
-    public BaseCommandExecutor(CommandExecutionData executionData) {
+    BaseCommandExecutor(CommandExecutionData executionData) {
         this.executionData = executionData;
     }
 
-    protected void checkCallerPermissions() {} // No need to override if there is nothing to do
+    protected Optional<String> checkCallerPermissions() {
+        return Optional.empty();
+    }
 
-    protected void checkBotPermissions() {} // No need to override if there is nothing to do
+    protected Optional<String> checkBotPermissions() {
+        return Optional.empty();
+    }
 
-    protected boolean customPreExecuteCheck() {
-        return true; // No need to override if there is nothing to do
+    protected Optional<String> customPreExecuteCheck() {
+        return Optional.empty();
     }
 
     @Override
     public boolean shouldExecute() {
-        try {
-            checkBotPermissions();
-        } catch (PermissionException e) {
-            return false; // If bot has insufficient permissions to run command, don't run it.
+        Optional<String> callerPermissionResult = checkCallerPermissions();
+        if (callerPermissionResult.isPresent()) {
+            sendOutput(callerPermissionResult.get());
+            return false;
         }
 
-        try {
-            checkCallerPermissions();
-        } catch (InsufficientPermissionException e) {
-            // TODO Send failure
-            return false; // Caller has no permission to run command, so don't run it.
+        Optional<String> botPermissionResult = checkBotPermissions();
+        if (botPermissionResult.isPresent()) {
+            sendOutput(botPermissionResult.get());
+            return false;
         }
-        return customPreExecuteCheck();
+
+        Optional<String> customCheckResult = customPreExecuteCheck();
+        if (customCheckResult.isPresent()) {
+            sendOutput(customCheckResult.get());
+            return false;
+        }
+
+        return true;
     }
+
+    protected abstract void sendOutput(String format, Object... arguments);
+
+    protected abstract void sendOutput(Message message);
 }

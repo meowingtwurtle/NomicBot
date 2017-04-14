@@ -11,6 +11,7 @@ import net.dv8tion.jda.core.entities.User;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import static com.srgood.reasons.utils.MemberUtils.getMembersWithRole;
@@ -98,8 +99,8 @@ public class CommandNotifyRandDescriptor extends BaseCommandDescriptor {
         }
 
         @Override
-        protected void checkCallerPermissions() {
-            PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.NOTIFY_MEMBER);
+        protected Optional<String> checkCallerPermissions() {
+            return PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.NOTIFY_MEMBER);
         }
     }
 }

@@ -32,8 +32,7 @@ public class CommandUtils {
             return null;
         }
         String noPrefix = removeCommandMessagePrefix(message).trim();
-        String commandName = noPrefix.split("\\s")[0];
-        return commandName;
+        return noPrefix.split("\\s")[0];
     }
 
     public static String removeCommandMessagePrefix(Message message) {
@@ -46,8 +45,7 @@ public class CommandUtils {
         String rawContent = message.getRawContent();
         String actualPrefix = rawContent.startsWith(basicPrefix) ? basicPrefix :
                 rawContent.startsWith(mention) ? mention : altMention;
-        String noPrefix = rawContent.substring(actualPrefix.length());
-        return noPrefix;
+        return rawContent.substring(actualPrefix.length());
     }
 
     public static List<String> parseCommandMessageArguments(Message message) {

@@ -16,6 +16,8 @@ import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.dv8tion.jda.core.utils.SimpleLog;
 
+import java.util.Objects;
+
 /**
  * <h1>DiscordEventListener</h1>
  * <p>
@@ -35,7 +37,7 @@ public class DiscordEventListener extends ListenerAdapter {
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 
-        if (event.getAuthor().equals(event.getJDA().getSelfUser())) return;
+        if (Objects.equals(event.getAuthor(), event.getJDA().getSelfUser())) return;
 
         try {
             GuildUtils.doPreMessageGuildCheck(event.getGuild());
@@ -43,8 +45,8 @@ public class DiscordEventListener extends ListenerAdapter {
             e.printStackTrace();
         }
 
-        if (event.getMessage().getContent().equals(com.srgood.reasons.Reference.Strings.TABLE_FLIP)) {
-            event.getChannel().sendMessage(com.srgood.reasons.Reference.Strings.TABLE_UNFLIP_JOKE).queue();
+        if (Objects.equals(event.getMessage().getContent(), Reference.TABLE_FLIP)) {
+            event.getChannel().sendMessage(Reference.TABLE_UNFLIP_JOKE).queue();
         }
 
         if (CommandUtils.isCommandMessage(event.getMessage())) {

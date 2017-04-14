@@ -11,9 +11,10 @@ import com.srgood.reasons.permissions.PermissionChecker;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.Optional;
 
 public class CommandEvalDescriptor extends BaseCommandDescriptor {
-    private final static NumberFormat RESULT_FORMATTER = new DecimalFormat("#0.0###");
+    private final static ThreadLocal<NumberFormat> RESULT_FORMATTER = ThreadLocal.withInitial(() -> new DecimalFormat("#0.0###"));
 
     public CommandEvalDescriptor() {
         super(Executor::new, "Evaluates a math expression and prints result. Supports arithmetic operations, sin, cos, tan, abs, sqrt","<math expr.>", "eval");
@@ -35,7 +36,7 @@ public class CommandEvalDescriptor extends BaseCommandDescriptor {
                 }
 
                 IMathGroup group = IMathHandler.getMathHandler().parse(exp);
-                sendOutput("`MATH:` %s", RESULT_FORMATTER.format(group.eval()));
+                sendOutput("`MATH:` %s", RESULT_FORMATTER.get().format(group.eval()));
             } catch (Exception e) {
                 e.printStackTrace();
                 Throwable t = e;
@@ -52,8 +53,8 @@ public class CommandEvalDescriptor extends BaseCommandDescriptor {
         }
 
         @Override
-        protected void checkCallerPermissions() {
-            PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.EVALUATE_MATH);
+        protected Optional<String> checkCallerPermissions() {
+            return PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.EVALUATE_MATH);
         }
     }
 }

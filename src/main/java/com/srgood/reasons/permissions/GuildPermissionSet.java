@@ -28,7 +28,7 @@ public class GuildPermissionSet implements Serializable {
         }
         for (Role role : guild.getRoles()) {
             if (!rolePermissions.containsKey(role.getId())) {
-                if (!guild.getPublicRole().equals(role)) {
+                if (!Objects.equals(guild.getPublicRole(), role)) {
                     rolePermissions.put(role.getId(), new BasicPermissionSet());
                 } else {
                     rolePermissions.put(role.getId(), new BasicPermissionSet(PERMISSIBLE_ACTION_COLLECTION));
@@ -44,14 +44,14 @@ public class GuildPermissionSet implements Serializable {
 
     public void setPermissionStatus(Role role, Permission action, PermissionStatus permissionStatus) {
         checkRole(role);
-        if (role.getGuild().getPublicRole().equals(role) && permissionStatus == PermissionStatus.DEFERRED) {
+        if (Objects.equals(role.getGuild().getPublicRole(), role) && permissionStatus == PermissionStatus.DEFERRED) {
             throw new IllegalArgumentException("Cannot defer on the everyone role");
         }
         rolePermissions.get(role.getId()).setActionStatus(action, permissionStatus);
     }
 
     public boolean checkMemberPermission(Member member, Permission action) {
-        if (!member.getGuild().getId().equals(guildID)) {
+        if (!Objects.equals(member.getGuild().getId(), guildID)) {
             throw new IllegalArgumentException("Member must be in same guild as registered");
         }
         for (Role role : member.getRoles()) {
@@ -67,7 +67,7 @@ public class GuildPermissionSet implements Serializable {
         if (role == null) {
             throw new IllegalArgumentException("Role cannot be null");
         }
-        if (!role.getGuild().getId().equals(guildID)) {
+        if (!Objects.equals(role.getGuild().getId(), guildID)) {
             throw new IllegalArgumentException("Role must be in same guild as registered");
         }
     }

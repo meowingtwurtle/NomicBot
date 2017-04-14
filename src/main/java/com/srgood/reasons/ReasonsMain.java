@@ -2,7 +2,6 @@ package com.srgood.reasons;
 
 import com.srgood.reasons.commands.impl.actual.CommandRegistrar;
 import com.srgood.reasons.config.ConfigUtils;
-
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -14,20 +13,14 @@ import javax.imageio.ImageIO;
 import javax.security.auth.login.LoginException;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.Instant;
 
 public class ReasonsMain {
-
     public static final Instant START_INSTANT = Instant.now();
 
     public static JDA jda;
     public static String prefix;
-    public static ByteArrayOutputStream out, errOut;
-
-    private boolean firstTime;
-    private TrayIcon trayIcon;
 
     public static JDA getJda() {
         return jda;
@@ -88,7 +81,7 @@ public class ReasonsMain {
         CommandRegistrar.registerCommands();
     }
 
-    public void addToTray() {
+    private void addToTray() {
         if (SystemTray.isSupported()) {
             SystemTray systemTray = SystemTray.getSystemTray();
             //load image here
@@ -99,9 +92,7 @@ public class ReasonsMain {
                 e.printStackTrace();
             }
 
-            final ActionListener closeListener = e -> {
-                System.exit(0);
-            };
+            final ActionListener closeListener = e -> System.exit(0);
 
             PopupMenu popup = new PopupMenu();
 
@@ -109,7 +100,7 @@ public class ReasonsMain {
             closeItem.addActionListener(closeListener);
             popup.add(closeItem);
 
-            trayIcon = new TrayIcon(image, "Reasons", popup);
+            TrayIcon trayIcon = new TrayIcon(image, "Reasons", popup);
 
             try {
                 systemTray.add(trayIcon);

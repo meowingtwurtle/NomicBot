@@ -6,7 +6,7 @@ import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 
 public class GuildUtils {
-    public static void initGuild(Guild guild) throws RateLimitedException {
+    public static void initGuild(Guild guild) {
         ConfigUtils.ensureGuildInitted(guild);
     }
 
@@ -25,7 +25,7 @@ public class GuildUtils {
         ConfigUtils.ensureGuildInitted(guild);
         checkForRoles(guild);
     }
-    private static void checkForRoles(Guild guild) throws RateLimitedException {
+    private static void checkForRoles(Guild guild) {
         deregisterPhantomRoles(guild);
     }
     private static void deregisterPhantomRoles(Guild guild) {

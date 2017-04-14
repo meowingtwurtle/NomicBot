@@ -8,6 +8,8 @@ import com.srgood.reasons.commands.impl.base.executor.ChannelOutputCommandExecut
 import com.srgood.reasons.permissions.Permission;
 import com.srgood.reasons.permissions.PermissionChecker;
 
+import java.util.Optional;
+
 public class CommandDisableDescriptor extends BaseCommandDescriptor {
     public CommandDisableDescriptor() {
         super(Executor::new, "Disables a command in the current Guild", "<command>","disable");
@@ -35,8 +37,8 @@ public class CommandDisableDescriptor extends BaseCommandDescriptor {
         }
 
         @Override
-        protected void checkCallerPermissions() {
-            PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.SET_COMMAND_ENABLED);
+        protected Optional<String> checkCallerPermissions() {
+            return PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.SET_COMMAND_ENABLED);
         }
     }
 }

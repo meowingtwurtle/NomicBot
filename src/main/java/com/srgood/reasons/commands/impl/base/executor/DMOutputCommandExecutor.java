@@ -8,11 +8,13 @@ public abstract class DMOutputCommandExecutor extends BaseCommandExecutor {
         super(executionData);
     }
 
+    @Override
     protected void sendOutput(String format, Object... arguments) {
         String formatted = String.format(format, (Object[]) arguments); // Prevent confusing varargs call
         executionData.getSender().getUser().openPrivateChannel().queue(chan -> chan.sendMessage(formatted).queue());
     }
 
+    @Override
     protected void sendOutput(Message message) {
         executionData.getSender().getUser().openPrivateChannel().queue(chan -> chan.sendMessage(message).queue());
     }

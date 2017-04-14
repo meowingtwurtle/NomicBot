@@ -8,6 +8,8 @@ import com.srgood.reasons.permissions.Permission;
 import com.srgood.reasons.permissions.PermissionChecker;
 import com.srgood.reasons.utils.GreetingUtils;
 
+import java.util.Optional;
+
 public class CommandSetGoodbyeDescriptor extends BaseCommandDescriptor {
     public CommandSetGoodbyeDescriptor() {
         super(Executor::new, "Sets the goodbye message for the Guild, which will be sent in the current Channel. Set it to OFF to disable. Use @USER to mention the leaving user", "<message>","setgoodbye");
@@ -34,8 +36,8 @@ public class CommandSetGoodbyeDescriptor extends BaseCommandDescriptor {
         }
 
         @Override
-        protected void checkCallerPermissions() {
-            PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.MANAGE_JOIN_LEAVE_MESSAGES);
+        protected Optional<String> checkCallerPermissions() {
+            return PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.MANAGE_JOIN_LEAVE_MESSAGES);
         }
     }
 }
