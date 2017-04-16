@@ -18,7 +18,7 @@ public class PermissionChecker {
      *
      * @return A non-empty {@link java.util.Optional} if the {@link net.dv8tion.jda.core.entities.Member} does not have the permission required, otherwise an empty {@link java.util.Optional}
      */
-    public static Optional<String> checkMemberPermission(Member member, Permission action) throws InsufficientPermissionException {
+    public static Optional<String> checkMemberPermission(Member member, Permission action) {
         if (member.isOwner()) {
             return Optional.empty();
         }

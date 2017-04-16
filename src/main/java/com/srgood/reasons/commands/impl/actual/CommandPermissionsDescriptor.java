@@ -147,9 +147,7 @@ public class CommandPermissionsDescriptor extends MultiTierCommandDescriptor {
             private void setPermissionStatus(Role role, Permission permission, PermissionStatus status) {
                 GuildPermissionSet permissionSet = GuildDataManager.getGuildPermissionSet(role.getGuild());
 
-                try {
-                    PermissionChecker.checkMemberPermission(executionData.getSender(), permission);
-                } catch (InsufficientPermissionException e) {
+                if (PermissionChecker.checkMemberPermission(executionData.getSender(), permission).isPresent()) {
                     throw new IllegalArgumentException(String.format("Not setting permission **`%s`** because you do not have it.", permission));
                 }
 
@@ -158,9 +156,7 @@ public class CommandPermissionsDescriptor extends MultiTierCommandDescriptor {
                 permissionSet.setPermissionStatus(role, permission, status);
 
                 if (status != PermissionStatus.ALLOWED) {
-                    try {
-                        PermissionChecker.checkMemberPermission(executionData.getSender(), permission);
-                    } catch (InsufficientPermissionException e) {
+                    if (PermissionChecker.checkMemberPermission(executionData.getSender(), permission).isPresent()) {
                         permissionSet.setPermissionStatus(role, permission, backupPermissionStatus);
                         throw new IllegalArgumentException(String.format("Not setting permission **`%s`** because doing so would deny it from you.", permission));
                     }
