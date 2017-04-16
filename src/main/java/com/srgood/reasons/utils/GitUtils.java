@@ -1,6 +1,5 @@
 package com.srgood.reasons.utils;
 
-import com.google.common.base.Throwables;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.ListBranchCommand;
 import org.eclipse.jgit.api.ResetCommand;
@@ -91,7 +90,7 @@ public class GitUtils {
         try {
             repository = new FileRepositoryBuilder().readEnvironment().findGitDir().setMustExist(true).build();
         } catch (IOException e) {
-            Throwables.propagate(e);
+            throw new RuntimeException(e);
         }
     }
 

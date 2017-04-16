@@ -1,6 +1,5 @@
 package com.srgood.reasons.config;
 
-import com.google.common.base.Throwables;
 import net.dv8tion.jda.core.entities.Guild;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -117,9 +116,8 @@ class ConfigGuildUtils {
             Object deserialized = objectInputStream.readObject();
             return propertyClass.cast(deserialized);
         } catch (Exception e) {
-            Throwables.propagate(e);
+            throw new RuntimeException(e);
         }
-        return null; // Should never happen, either returns within try-catch or propagates an exception
     }
 
     static void setGuildSimpleProperty(Guild guild, String property, String value) {
@@ -146,7 +144,7 @@ class ConfigGuildUtils {
             String base64 = Base64.getEncoder().encodeToString(serialized);
             setGuildSimpleProperty(guild, property, base64);
         } catch (Exception e) {
-            Throwables.propagate(e);
+            throw new RuntimeException(e);
         }
     }
 

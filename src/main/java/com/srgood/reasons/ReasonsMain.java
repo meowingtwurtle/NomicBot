@@ -50,7 +50,7 @@ public class ReasonsMain {
 
     private void initJDA(String token) {
         try {
-            jda = new JDABuilder(AccountType.BOT).addListener(new DiscordEventListener())
+            jda = new JDABuilder(AccountType.BOT).addEventListener(new DiscordEventListener())
                                                  .setToken(token)
                                                  .setGame(Game.of("Type @Theta help"))
                                                  .setAutoReconnect(true)
