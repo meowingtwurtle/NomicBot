@@ -38,18 +38,8 @@ public class GitUtils {
             return Optional.empty();
         }
 
-        Function<Repository, T> safeFunction = exceptionProofFallibleFunction(function, null);
+        Function<Repository, T> safeFunction = FallibleFunction.exceptionProofFallibleFunction(function, null);
         return Optional.ofNullable(safeFunction.apply(repository));
-    }
-
-    private static <T, R> Function<T, R> exceptionProofFallibleFunction(FallibleFunction<T, R> function, R defaultValue) {
-        return t -> {
-            try {
-                return function.apply(t);
-            } catch (Exception e) {
-                return defaultValue;
-            }
-        };
     }
 
     public static Optional<String> getCurrentRevision() {
@@ -94,8 +84,4 @@ public class GitUtils {
         }
     }
 
-    @FunctionalInterface
-    private interface FallibleFunction<T, R> {
-        R apply(T t) throws Exception;
-    }
 }
