@@ -58,7 +58,7 @@ public class CommandDiceRollDescriptor extends BaseCommandDescriptor {
 
         @Override
         protected Optional<String> checkCallerPermissions() {
-            return PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.DO_CHANCE_GAME);
+            return PermissionChecker.checkMemberPermission(executionData.getBotManager().getConfigManager(), executionData.getSender(), Permission.DO_CHANCE_GAME);
         }
     }
 }

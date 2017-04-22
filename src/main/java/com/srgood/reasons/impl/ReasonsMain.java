@@ -1,7 +1,12 @@
 package com.srgood.reasons.impl;
 
+import com.srgood.reasons.BotManager;
+import com.srgood.reasons.commands.CommandManager;
+import com.srgood.reasons.config.BotConfigManager;
+import com.srgood.reasons.impl.commands.CommandManagerImpl;
 import com.srgood.reasons.impl.commands.impl.actual.CommandRegistrar;
-import com.srgood.reasons.impl.config.ConfigUtils;
+import com.srgood.reasons.impl.config.BotConfigManagerImpl;
+import com.srgood.reasons.impl.config.ConfigFileManager;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -16,13 +21,17 @@ import java.awt.event.*;
 import java.io.IOException;
 import java.time.Instant;
 
-public class ReasonsMain {
-    public static final Instant START_INSTANT = Instant.now();
+public class ReasonsMain implements BotManager {
+    public final Instant START_INSTANT = Instant.now();
 
-    public static JDA jda;
-    public static String prefix;
+    private JDA jda;
+    private String prefix;
 
-    public static JDA getJda() {
+    private final CommandManager commandManager = new CommandManagerImpl(this);
+    private final ConfigFileManager configFileManager = new ConfigFileManager("theta.xml");
+    private final BotConfigManager configManager = new BotConfigManagerImpl(configFileManager);
+
+    public JDA getJda() {
         return jda;
     }
 
@@ -40,9 +49,9 @@ public class ReasonsMain {
         return args[0];
     }
 
+    @Override
     public void init(String token) {
         initJDA(token);
-        initConfig();
         initCommands();
 
         addToTray();
@@ -50,35 +59,27 @@ public class ReasonsMain {
 
     private void initJDA(String token) {
         try {
-            jda = new JDABuilder(AccountType.BOT).addEventListener(new DiscordEventListener())
+            jda = new JDABuilder(AccountType.BOT).addEventListener(new DiscordEventListener(this))
                                                  .setToken(token)
                                                  .setGame(Game.of("Type @Theta help"))
                                                  .setAutoReconnect(true)
                                                  .buildBlocking();
         } catch (LoginException | IllegalArgumentException e) {
             SimpleLog.getLog("Reasons").fatal("**COULD NOT LOG IN** An invalid token was provided.");
-            System.exit(-1);
+            throw new RuntimeException(e);
         } catch (RateLimitedException e) {
             SimpleLog.getLog("Reasons").fatal("**We are being ratelimited**");
             e.printStackTrace();
-            System.exit(-1);
+            throw new RuntimeException(e);
         } catch (InterruptedException e) {
             SimpleLog.getLog("Reasons").fatal("InterruptedException");
             e.printStackTrace();
-            System.exit(-1);
-        }
-    }
-
-    private void initConfig() {
-        try {
-            ConfigUtils.initConfig();
-        } catch (Exception e1) {
-            e1.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
     private void initCommands() {
-        CommandRegistrar.registerCommands();
+        CommandRegistrar.registerCommands(getCommandManager());
     }
 
     private void addToTray() {
@@ -111,8 +112,45 @@ public class ReasonsMain {
         }
     }
 
-    public void stop() {
+    @Override
+    public void shutdown() {
+        configFileManager.save();
         jda.shutdown();
     }
 
+    @Override
+    public void shutdown(boolean force) {
+        // TODO force shutdown
+        shutdown();
+    }
+
+    @Override
+    public BotConfigManager getConfigManager() {
+        return configManager;
+    }
+
+    @Override
+    public JDA getJDA() {
+        return jda;
+    }
+
+    @Override
+    public String getDefaultPrefix() {
+        return prefix;
+    }
+
+    @Override
+    public void setDefaultPrefix(String prefix) {
+        this.prefix = prefix;
+    }
+
+    @Override
+    public CommandManager getCommandManager() {
+        return commandManager;
+    }
+
+    @Override
+    public Instant getStartTime() {
+        return START_INSTANT;
+    }
 }

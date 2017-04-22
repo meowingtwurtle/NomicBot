@@ -1,34 +1,34 @@
 package com.srgood.reasons.impl.commands.impl.actual;
 
-import static com.srgood.reasons.impl.commands.CommandManager.registerCommandDescriptor;
+import com.srgood.reasons.commands.CommandManager;
 
 public class CommandRegistrar {
-    public static void registerCommands() {
-        registerCommandDescriptor(new Command8BallDescriptor());
-        registerCommandDescriptor(new CommandCensorDescriptor());
-        registerCommandDescriptor(new CommandCoinFlipDescriptor());
-        registerCommandDescriptor(new CommandDebugDescriptor());
-        registerCommandDescriptor(new CommandDiceRollDescriptor());
-        registerCommandDescriptor(new CommandDisableDescriptor());
-        registerCommandDescriptor(new CommandEnableDescriptor());
-        registerCommandDescriptor(new CommandEvalDescriptor());
-        registerCommandDescriptor(new CommandGetEnabledDescriptor());
-        registerCommandDescriptor(new CommandGetPrefixDescriptor());
-        registerCommandDescriptor(new CommandGitDescriptor());
-        registerCommandDescriptor(new CommandHelpDescriptor());
-        registerCommandDescriptor(new CommandInfoDescriptor());
-        registerCommandDescriptor(new CommandInviteDescriptor());
-        registerCommandDescriptor(new CommandNotifyRandDescriptor());
-        registerCommandDescriptor(new CommandPermissionsDescriptor());
-        registerCommandDescriptor(new CommandPingDescriptor());
-        registerCommandDescriptor(new CommandPongDescriptor());
-        registerCommandDescriptor(new CommandRolesDescriptor());
-        registerCommandDescriptor(new CommandSetGoodbyeDescriptor());
-        registerCommandDescriptor(new CommandSetPrefixDescriptor());
-        registerCommandDescriptor(new CommandSetWelcomeDescriptor());
-        registerCommandDescriptor(new CommandShutdownDescriptor());
-        registerCommandDescriptor(new CommandStatusDescriptor());
-        registerCommandDescriptor(new CommandTicTacToeDescriptor());
-        registerCommandDescriptor(new CommandVoteDescriptor());
+    public static void registerCommands(CommandManager commandManager) {
+        commandManager.registerCommand(new Command8BallDescriptor());
+        commandManager.registerCommand(new CommandCensorDescriptor());
+        commandManager.registerCommand(new CommandCoinFlipDescriptor());
+        commandManager.registerCommand(new CommandDebugDescriptor());
+        commandManager.registerCommand(new CommandDiceRollDescriptor());
+        commandManager.registerCommand(new CommandDisableDescriptor());
+        commandManager.registerCommand(new CommandEnableDescriptor());
+        commandManager.registerCommand(new CommandEvalDescriptor());
+        commandManager.registerCommand(new CommandGetEnabledDescriptor());
+        commandManager.registerCommand(new CommandGetPrefixDescriptor());
+        commandManager.registerCommand(new CommandGitDescriptor());
+        commandManager.registerCommand(new CommandHelpDescriptor());
+        commandManager.registerCommand(new CommandInfoDescriptor());
+        commandManager.registerCommand(new CommandInviteDescriptor());
+        commandManager.registerCommand(new CommandNotifyRandDescriptor());
+        commandManager.registerCommand(new CommandPermissionsDescriptor());
+        commandManager.registerCommand(new CommandPingDescriptor());
+        commandManager.registerCommand(new CommandPongDescriptor());
+        commandManager.registerCommand(new CommandRolesDescriptor());
+        commandManager.registerCommand(new CommandSetGoodbyeDescriptor());
+        commandManager.registerCommand(new CommandSetPrefixDescriptor());
+        commandManager.registerCommand(new CommandSetWelcomeDescriptor());
+        commandManager.registerCommand(new CommandShutdownDescriptor());
+        commandManager.registerCommand(new CommandStatusDescriptor());
+        commandManager.registerCommand(new CommandTicTacToeDescriptor());
+        commandManager.registerCommand(new CommandVoteDescriptor());
     }
 }

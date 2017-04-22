@@ -1,12 +1,10 @@
 package com.srgood.reasons.impl.commands.impl.actual;
 
-import com.srgood.reasons.impl.ReasonsMain;
 import com.srgood.reasons.commands.CommandExecutionData;
 import com.srgood.reasons.impl.commands.impl.base.descriptor.BaseCommandDescriptor;
 import com.srgood.reasons.impl.commands.impl.base.descriptor.MultiTierCommandDescriptor;
 import com.srgood.reasons.impl.commands.impl.base.executor.ChannelOutputCommandExecutor;
 import com.srgood.reasons.impl.permissions.PermissionChecker;
-import com.srgood.reasons.impl.utils.GuildUtils;
 import net.dv8tion.jda.core.entities.Role;
 
 import java.time.Duration;
@@ -58,7 +56,7 @@ public class CommandDebugDescriptor extends MultiTierCommandDescriptor {
 
             @Override
             public void execute() {
-                GuildUtils.deleteGuild(executionData.getGuild());
+                executionData.getBotManager().getConfigManager().getGuildConfigManager(executionData.getGuild()).delete();
             }
         }
     }
@@ -98,7 +96,7 @@ public class CommandDebugDescriptor extends MultiTierCommandDescriptor {
 
             @Override
             public void execute() {
-                long seconds = Duration.between(ReasonsMain.START_INSTANT, Instant.now()).getSeconds();
+                long seconds = Duration.between(executionData.getBotManager().getStartTime(), Instant.now()).getSeconds();
                 long absSeconds = Math.abs(seconds);
                 String positive = String.format("%d:%02d:%02d", absSeconds / 3600, (absSeconds % 3600) / 60, absSeconds % 60);
                 String x = seconds < 0 ? "-" + positive : positive;

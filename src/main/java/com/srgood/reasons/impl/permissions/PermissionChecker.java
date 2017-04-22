@@ -1,5 +1,6 @@
 package com.srgood.reasons.impl.permissions;
 
+import com.srgood.reasons.config.BotConfigManager;
 import com.srgood.reasons.impl.Reference;
 import net.dv8tion.jda.core.entities.Member;
 
@@ -18,11 +19,11 @@ public class PermissionChecker {
      *
      * @return A non-empty {@link java.util.Optional} if the {@link net.dv8tion.jda.core.entities.Member} does not have the permission required, otherwise an empty {@link java.util.Optional}
      */
-    public static Optional<String> checkMemberPermission(Member member, Permission action) {
+    public static Optional<String> checkMemberPermission(BotConfigManager botConfigManager, Member member, Permission action) {
         if (member.isOwner()) {
             return Optional.empty();
         }
-        if (!GuildDataManager.getGuildPermissionSet(member.getGuild()).checkMemberPermission(member, action)) {
+        if (!GuildDataManager.getGuildPermissionSet(botConfigManager, member.getGuild()).checkMemberPermission(member, action)) {
             return Optional.of(String.format("You do not have permission to perform the action **`%s`**", action));
         }
 

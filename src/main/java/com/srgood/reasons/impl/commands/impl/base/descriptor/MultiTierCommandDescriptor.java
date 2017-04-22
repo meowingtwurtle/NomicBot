@@ -1,12 +1,9 @@
 package com.srgood.reasons.impl.commands.impl.base.descriptor;
 
-import com.srgood.reasons.commands.CommandExecutor;
 import com.srgood.reasons.commands.CommandDescriptor;
 import com.srgood.reasons.commands.CommandExecutionData;
+import com.srgood.reasons.commands.CommandExecutor;
 import com.srgood.reasons.impl.commands.impl.base.executor.EmptyCommandExecutor;
-
-import java.util.HashSet;
-import java.util.Set;
 
 import java.util.*;
 import java.util.function.Function;
@@ -25,7 +22,7 @@ public abstract class MultiTierCommandDescriptor extends BaseCommandDescriptor {
     }
 
     private static Function<CommandExecutionData, CommandExecutor> generateDataToExecutorFunction(Collection<CommandDescriptor> subCommandDescriptors,
-                                                                                                  Function<CommandExecutionData, CommandExecutor> defaultExecutorFunction) {
+                                                                                                               Function<CommandExecutionData, CommandExecutor> defaultExecutorFunction) {
         return executionData -> {
             if (executionData.getParsedArguments().isEmpty()) {
                 return defaultExecutorFunction.apply(executionData);
@@ -48,7 +45,7 @@ public abstract class MultiTierCommandDescriptor extends BaseCommandDescriptor {
         List<String> newParsedArguments = oldParsedArguments.subList(1, oldParsedArguments.size());
 
         return new CommandExecutionData(data.getRawData(), data.getRawArguments(), newParsedArguments, data.getChannel(),
-                data.getGuild(), data.getSender());
+                data.getGuild(), data.getSender(), data.getBotManager());
     }
 
     @Override

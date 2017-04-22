@@ -2,7 +2,7 @@ package com.srgood.reasons.impl.commands.impl.actual;
 
 import com.srgood.reasons.commands.CommandDescriptor;
 import com.srgood.reasons.commands.CommandExecutionData;
-import com.srgood.reasons.impl.commands.CommandManager;
+import com.srgood.reasons.impl.commands.CommandManagerImpl;
 import com.srgood.reasons.impl.commands.impl.base.descriptor.BaseCommandDescriptor;
 import com.srgood.reasons.impl.commands.impl.base.executor.DMOutputCommandExecutor;
 
@@ -23,11 +23,11 @@ public class CommandHelpDescriptor extends BaseCommandDescriptor {
 
         @Override
         public void execute() {
-            List<CommandDescriptor> registeredCommands = CommandManager.getRegisteredCommandDescriptors()
-                                                                       .stream()
-                                                                       .distinct()
-                                                                       .sorted(new CommandManager.CommandComparator())
-                                                                       .collect(Collectors.toList());
+            List<CommandDescriptor> registeredCommands = executionData.getBotManager().getCommandManager().getRegisteredCommands()
+                                                                                            .stream()
+                                                                                            .distinct()
+                                                                                            .sorted(new CommandManagerImpl.CommandComparator())
+                                                                                            .collect(Collectors.toList());
             StringBuilder stringBuilder = new StringBuilder();
             String newLine = "\n";
             stringBuilder.append("```Markdown");

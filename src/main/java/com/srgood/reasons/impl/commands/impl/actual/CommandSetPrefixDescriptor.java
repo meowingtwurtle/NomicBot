@@ -3,7 +3,6 @@ package com.srgood.reasons.impl.commands.impl.actual;
 import com.srgood.reasons.commands.CommandExecutionData;
 import com.srgood.reasons.impl.commands.impl.base.descriptor.BaseCommandDescriptor;
 import com.srgood.reasons.impl.commands.impl.base.executor.ChannelOutputCommandExecutor;
-import com.srgood.reasons.impl.config.ConfigUtils;
 import com.srgood.reasons.impl.permissions.Permission;
 import com.srgood.reasons.impl.permissions.PermissionChecker;
 
@@ -22,7 +21,7 @@ public class CommandSetPrefixDescriptor extends BaseCommandDescriptor {
         @Override
         public void execute() {
             if (executionData.getParsedArguments().size() > 0) {
-                ConfigUtils.setGuildPrefix(executionData.getGuild(), executionData.getParsedArguments().get(0));
+                executionData.getBotManager().getConfigManager().getGuildConfigManager(executionData.getGuild()).setPrefix(executionData.getParsedArguments().get(0));
                 sendOutput("The prefix has been set.");
             } else {
                 sendOutput("Please specify a prefix.");
@@ -31,7 +30,7 @@ public class CommandSetPrefixDescriptor extends BaseCommandDescriptor {
 
         @Override
         protected Optional<String> checkCallerPermissions() {
-            return PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.SET_PREFIX);
+            return PermissionChecker.checkMemberPermission(executionData.getBotManager().getConfigManager(), executionData.getSender(), Permission.SET_PREFIX);
         }
     }
 }

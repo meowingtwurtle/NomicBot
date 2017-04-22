@@ -1,6 +1,6 @@
 package com.srgood.reasons.impl.utils;
 
-import com.srgood.reasons.impl.ReasonsMain;
+import com.srgood.reasons.BotManager;
 import net.dv8tion.jda.core.entities.Channel;
 
 import java.time.Duration;
@@ -9,16 +9,16 @@ import java.util.Map;
 
 public class Vote {
 
-    public Vote(Map<String,Integer> choiceMap, int voteDuration, Channel channel, Runnable action) {
+    public Vote(Map<String,Integer> choiceMap, int voteDuration, Channel channel, Runnable action, BotManager botManager) {
         final Instant begin = Instant.now();
         VoteListener voteListener = new VoteListener(channel,choiceMap);
-        ReasonsMain.getJda().addEventListener(voteListener);
+        botManager.getJDA().addEventListener(voteListener);
 
         Thread thread = new Thread(() -> {
             while (true) {
                 if (Duration.between(begin, Instant.now()).getSeconds() >=  voteDuration) {
                     action.run();
-                    ReasonsMain.getJda().removeEventListener(voteListener);
+                    botManager.getJDA().removeEventListener(voteListener);
                     break;
                 }
             }

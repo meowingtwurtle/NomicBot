@@ -1,74 +1,59 @@
 package com.srgood.reasons.impl.config;
 
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
-import com.srgood.reasons.commands.CommandDescriptor;
-import net.dv8tion.jda.core.entities.Guild;
-
-import java.io.InputStream;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Stream;
 
 public class ConfigUtils {
-    public static void initConfig() throws Exception {
-        ConfigPersistenceUtils.initConfig();
+    public static List<Node> nodeListToList(NodeList nodeList) {
+        List<Node> ret = new ArrayList<>();
+
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            ret.add(nodeList.item(i));
+        }
+
+        return ret;
     }
 
-    public static void initFromStream(InputStream inputStream) {
-        ConfigPersistenceUtils.initConfigFromStream(inputStream);
+    public static Stream<Element> getChildElementList(Element parent, String tagName) {
+        return nodeListToList(parent.getElementsByTagName(tagName)).stream().map(Element.class::cast);
     }
 
-    public static void deleteGuild(Guild guild) {
-        ConfigGuildUtils.deleteGuildConfig(guild);
+    public static Stream<Element> getDirectDescendants(Element parent, String tagName) {
+        return getChildElementList(parent, tagName).filter(elem -> Objects.equals(elem.getParentNode(), parent));
     }
 
-    public static void ensureGuildInitted(Guild guild) {
-        ConfigGuildUtils.ensureGuildInitted(guild);
-    }
-    
-    public static String getGuildPrefix(Guild guild) {
-        return ConfigGuildUtils.getGuildPrefix(guild);
+    public static Element getOrCreateChildElement(Element parent, String property) {
+        return getDirectDescendants(parent, property).findFirst().orElseGet(() -> createChild(parent, property));
     }
 
-    public static Set<String> getGuildRegisteredRoleIDs(Guild guild) {
-        return ConfigRoleUtils.getGuildRegisteredRoleIDs(guild);
+    public static Stream<Element> getDirectDescendantsWithAttributes(Element parent, String tagName, Map<String, String> attributeValueMap) {
+        return getDirectDescendants(parent, tagName).filter(elem -> {
+            for (Map.Entry<String, String> mapEntry : attributeValueMap.entrySet()) {
+                if (!Objects.equals(elem.getAttribute(mapEntry.getKey()), mapEntry.getValue())) {
+                    return false;
+                }
+            }
+            return true;
+        });
     }
 
-    public static void deregisterRoleConfig(Guild guild, String roleID) {
-        ConfigRoleUtils.deregisterRoleConfig(guild, roleID);
+    public static Element getOrCreateChildElementWithAttributes(Element parent, String tagName, Map<String, String> attributeValueMap) {
+        return getDirectDescendantsWithAttributes(parent, tagName, attributeValueMap).findFirst().orElseGet(() -> {
+            Element newChild = createChild(parent, tagName);
+            for (Map.Entry<String, String> mapEntry : attributeValueMap.entrySet()) {
+                newChild.setAttribute(mapEntry.getKey(), mapEntry.getValue());
+            }
+            return newChild;
+        });
     }
 
-    public static void initCommandConfigIfNotExists(Guild guild, String cmd) {
-        ConfigCommandUtils.initCommandConfigIfNotExists(guild, cmd);
+    public static Element createChild(Element parent, String childTagName) {
+        Element newElement = parent.getOwnerDocument().createElement(childTagName);
+        parent.appendChild(newElement);
+        return newElement;
     }
-
-    public static boolean isCommandEnabled(Guild guild, CommandDescriptor command) {
-        return ConfigCommandUtils.isCommandEnabled(guild, command);
-    }
-
-    public static void setCommandEnabled(Guild guild, CommandDescriptor command, boolean enabled) {
-        ConfigCommandUtils.setCommandIsEnabled(guild, command, enabled);
-    }
-
-    public static void setGuildPrefix(Guild guild, String prefix) {
-        ConfigGuildUtils.setGuildPrefix(guild, prefix);
-    }
-
-    public static boolean guildPropertyExists(Guild guild, String property) {
-        return ConfigGuildUtils.guildPropertyExists(guild, property);
-    }
-
-    public static String getGuildProperty(Guild guild, String property) {
-        return ConfigGuildUtils.getGuildSimpleProperty(guild, property);
-    }
-
-    public static <T> T getGuildSerializedProperty(Guild guild, String property, Class<T> propertyClass) {
-        return ConfigGuildUtils.getGuildSerializedProperty(guild, property, propertyClass);
-    }
-
-    public static void setGuildProperty(Guild guild, String property, String value) {
-        ConfigGuildUtils.setGuildSimpleProperty(guild, property, value);
-    }
-    public static void setGuildSerializedProperty(Guild guild, String property, Object value) {
-        ConfigGuildUtils.setGuildSerializedProperty(guild, property, value);
-    }
-
 }

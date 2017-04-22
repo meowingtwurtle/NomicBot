@@ -2,7 +2,6 @@ package com.srgood.reasons.impl.commands.impl.actual;
 
 import com.srgood.reasons.commands.CommandDescriptor;
 import com.srgood.reasons.commands.CommandExecutionData;
-import com.srgood.reasons.impl.commands.CommandManager;
 import com.srgood.reasons.impl.commands.impl.base.descriptor.BaseCommandDescriptor;
 import com.srgood.reasons.impl.commands.impl.base.executor.ChannelOutputCommandExecutor;
 import com.srgood.reasons.impl.permissions.Permission;
@@ -23,10 +22,11 @@ public class CommandDisableDescriptor extends BaseCommandDescriptor {
         @Override
         public void execute() {
             if (executionData.getParsedArguments().size() > 0) {
-                CommandDescriptor mCommand = CommandManager.getCommandDescriptorByName(executionData.getParsedArguments()
-                                                                                                    .get(0));
+                CommandDescriptor mCommand = executionData.getBotManager()
+                                                          .getCommandManager()
+                                                          .getCommandByName(executionData.getParsedArguments().get(0));
                 try {
-                    CommandManager.setCommandEnabled(executionData.getGuild(), mCommand, false);
+                    executionData.getBotManager().getCommandManager().setCommandEnabled(executionData.getGuild(), mCommand, false);
                     sendOutput("Command disabled.", mCommand.getPrimaryName());
                 } catch (IllegalArgumentException e) {
                     sendOutput("Cannot disable command %s.", mCommand.getPrimaryName());
@@ -38,7 +38,7 @@ public class CommandDisableDescriptor extends BaseCommandDescriptor {
 
         @Override
         protected Optional<String> checkCallerPermissions() {
-            return PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.SET_COMMAND_ENABLED);
+            return PermissionChecker.checkMemberPermission(executionData.getBotManager().getConfigManager(), executionData.getSender(), Permission.SET_COMMAND_ENABLED);
         }
     }
 }

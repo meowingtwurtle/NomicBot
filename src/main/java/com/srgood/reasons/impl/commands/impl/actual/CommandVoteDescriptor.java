@@ -1,10 +1,9 @@
 package com.srgood.reasons.impl.commands.impl.actual;
 
-import com.srgood.reasons.impl.Reference;
 import com.srgood.reasons.commands.CommandExecutionData;
+import com.srgood.reasons.impl.Reference;
 import com.srgood.reasons.impl.commands.impl.base.descriptor.BaseCommandDescriptor;
 import com.srgood.reasons.impl.commands.impl.base.executor.ChannelOutputCommandExecutor;
-import com.srgood.reasons.impl.config.ConfigUtils;
 import com.srgood.reasons.impl.permissions.Permission;
 import com.srgood.reasons.impl.permissions.PermissionChecker;
 import com.srgood.reasons.impl.utils.ImageUtils;
@@ -66,15 +65,15 @@ public class CommandVoteDescriptor extends BaseCommandDescriptor {
                         }
                         return ret;
                     }
-                });
+                }, executionData.getBotManager());
             } else {
-                sendOutput("Incorrect arguments, correct usage: " + ConfigUtils.getGuildPrefix(executionData.getGuild()) + "vote <duration (seconds)> <option 1> <option 2> ... [option 5 (up to " +  Reference.COLORS.length + " max)]");
+                sendOutput("Incorrect arguments, correct usage: " + executionData.getBotManager().getConfigManager().getGuildConfigManager(executionData.getGuild()).getPrefix() + "vote <duration (seconds)> <option 1> <option 2> ... [option 5 (up to " +  Reference.COLORS.length + " max)]");
             }
         }
 
         @Override
         protected Optional<String> checkCallerPermissions() {
-            return PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.START_VOTE);
+            return PermissionChecker.checkMemberPermission(executionData.getBotManager().getConfigManager(), executionData.getSender(), Permission.START_VOTE);
         }
     }
 }

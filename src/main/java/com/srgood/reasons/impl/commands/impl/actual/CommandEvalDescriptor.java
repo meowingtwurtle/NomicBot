@@ -54,7 +54,7 @@ public class CommandEvalDescriptor extends BaseCommandDescriptor {
 
         @Override
         protected Optional<String> checkCallerPermissions() {
-            return PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.EVALUATE_MATH);
+            return PermissionChecker.checkMemberPermission(executionData.getBotManager().getConfigManager(), executionData.getSender(), Permission.EVALUATE_MATH);
         }
     }
 }

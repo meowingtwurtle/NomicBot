@@ -1,10 +1,11 @@
 package com.srgood.reasons.impl.commands;
 
 
+import com.srgood.reasons.BotManager;
 import com.srgood.reasons.commands.CommandDescriptor;
 import com.srgood.reasons.commands.CommandExecutionData;
 import com.srgood.reasons.commands.CommandExecutor;
-import com.srgood.reasons.impl.config.ConfigUtils;
+import com.srgood.reasons.config.GuildConfigManager;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
 
@@ -14,13 +15,17 @@ import java.util.Deque;
 public class ChannelCommandThread extends Thread {
 
     private MessageChannel channel;
+    private final CommandManagerImpl commandManager;
+    private final BotManager botManager;
 
     private final Deque<Message> commandDeque = new ArrayDeque<>();
 
     private boolean commandWasAdded = false;
 
-    public ChannelCommandThread(MessageChannel channel) {
+    public ChannelCommandThread(MessageChannel channel, CommandManagerImpl commandManager, BotManager botManager) {
         this.channel = channel;
+        this.commandManager = commandManager;
+        this.botManager = botManager;
     }
 
     @Override
@@ -30,11 +35,14 @@ public class ChannelCommandThread extends Thread {
             for (int i = 0; i < commandDeque.size(); i++) {
                 Message message = commandDeque.getFirst();
                 try {
-                    String calledCommad = CommandUtils.getCalledCommand(message);
-                    CommandDescriptor descriptor = CommandManager.getCommandDescriptorByName(calledCommad);
-                    CommandExecutionData executionData = new CommandExecutionData(message);
+                    GuildConfigManager guildConfigManager = botManager.getConfigManager()
+                                                                      .getGuildConfigManager(message.getGuild());
+                    String calledCommad = CommandUtils.getCalledCommand(message, guildConfigManager.getPrefix());
+                    CommandDescriptor descriptor = commandManager.getCommandByName(calledCommad);
+                    CommandExecutionData executionData = new CommandExecutionData(message, botManager);
                     CommandExecutor executor = descriptor.getExecutor(executionData);
-                    if (ConfigUtils.isCommandEnabled(message.getGuild(), descriptor)) {
+                    if (guildConfigManager
+                                  .getCommandConfigManager(descriptor).isEnabled()) {
                         if (executor.shouldExecute()) {
                             //then run the command and its post execution code (see command)
                             executor.execute();
@@ -62,12 +70,12 @@ public class ChannelCommandThread extends Thread {
     }
 
     private boolean attemptEndOfLife() {
-        CommandManager.getChannelThreadMapLock().lock();
+        commandManager.getChannelThreadMapLock().lock();
         boolean shouldEnd = commandDeque.size() == 0;
         if (shouldEnd) {
-            CommandManager.deregisterThread(this);
+            commandManager.deregisterThread(this);
         }
-        CommandManager.getChannelThreadMapLock().unlock();
+        commandManager.getChannelThreadMapLock().unlock();
         return shouldEnd;
     }
 

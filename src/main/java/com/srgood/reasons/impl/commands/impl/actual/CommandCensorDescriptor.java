@@ -1,6 +1,7 @@
 package com.srgood.reasons.impl.commands.impl.actual;
 
 import com.srgood.reasons.commands.CommandExecutionData;
+import com.srgood.reasons.config.GuildConfigManager;
 import com.srgood.reasons.impl.commands.impl.base.descriptor.BaseCommandDescriptor;
 import com.srgood.reasons.impl.commands.impl.base.descriptor.MultiTierCommandDescriptor;
 import com.srgood.reasons.impl.commands.impl.base.executor.DMOutputCommandExecutor;
@@ -34,7 +35,7 @@ public class CommandCensorDescriptor extends MultiTierCommandDescriptor {
         protected Optional<String> checkCallerPermissions() {
             if (!checkPermissions) return Optional.empty();
 
-            return PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.MANAGE_CENSOR);
+            return PermissionChecker.checkMemberPermission(executionData.getBotManager().getConfigManager(), executionData.getSender(), Permission.MANAGE_CENSOR);
         }
     }
 
@@ -50,7 +51,7 @@ public class CommandCensorDescriptor extends MultiTierCommandDescriptor {
 
             @Override
             public void execute() {
-                List<String> censoredWords = CensorUtils.getGuildCensorList(executionData.getGuild());
+                List<String> censoredWords = CensorUtils.getGuildCensorList(executionData.getBotManager().getConfigManager().getGuildConfigManager(executionData.getGuild()));
 
                 StringBuilder outBuilder = new StringBuilder("__**Censored Words**__ ```\n");
                 for (String censoredWord : censoredWords) {
@@ -79,12 +80,14 @@ public class CommandCensorDescriptor extends MultiTierCommandDescriptor {
 
             @Override
             public void execute() {
-                List<String> censoredWords = new ArrayList<>(CensorUtils.getGuildCensorList(executionData.getGuild()));
-
+                GuildConfigManager guildConfigManager = executionData.getBotManager()
+                                                                     .getConfigManager()
+                                                                     .getGuildConfigManager(executionData.getGuild());
+                List<String> censoredWords = new ArrayList<>(CensorUtils.getGuildCensorList(guildConfigManager));
 
                 String wordToCensor = executionData.getParsedArguments().get(0).toLowerCase();
                 censoredWords.add(wordToCensor);
-                CensorUtils.setGuildCensorList(executionData.getGuild(), censoredWords);
+                CensorUtils.setGuildCensorList(guildConfigManager, censoredWords);
 
                 sendOutput("The word `%s` has been added to the censorlist.", wordToCensor);
             }
@@ -98,19 +101,22 @@ public class CommandCensorDescriptor extends MultiTierCommandDescriptor {
 
         private static class Executor extends BaseExecutor {
             public Executor(CommandExecutionData executionData) {
-                super(executionData, true);
+                super(executionData,true);
             }
 
             @Override
             public void execute() {
-                List<String> censoredWords = CensorUtils.getGuildCensorList(executionData.getGuild());
+                GuildConfigManager guildConfigManager = executionData.getBotManager()
+                                                                     .getConfigManager()
+                                                                     .getGuildConfigManager(executionData.getGuild());
+                List<String> censoredWords = CensorUtils.getGuildCensorList(guildConfigManager);
 
                 String wordToRemove = executionData.getParsedArguments().get(0).toLowerCase();
                 boolean inList = censoredWords.contains(wordToRemove);
 
                 if (inList) {
                     censoredWords.remove(wordToRemove);
-                    CensorUtils.setGuildCensorList(executionData.getGuild(), censoredWords);
+                    CensorUtils.setGuildCensorList(guildConfigManager, censoredWords);
                     sendOutput("The word `%s` has been removed from the censor list.", wordToRemove);
                 } else {
                     sendOutput("The word `%s` was not found in the censor list.", wordToRemove);

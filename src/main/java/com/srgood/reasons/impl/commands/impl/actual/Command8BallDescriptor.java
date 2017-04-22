@@ -1,5 +1,6 @@
 package com.srgood.reasons.impl.commands.impl.actual;
 
+import com.srgood.reasons.BotManager;
 import com.srgood.reasons.commands.CommandExecutionData;
 import com.srgood.reasons.impl.commands.impl.base.descriptor.BaseCommandDescriptor;
 import com.srgood.reasons.impl.commands.impl.base.executor.ChannelOutputCommandExecutor;
@@ -32,7 +33,7 @@ public class Command8BallDescriptor extends BaseCommandDescriptor {
 
         @Override
         protected Optional<String> checkCallerPermissions() {
-            return PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.DO_CHANCE_GAME);
+            return PermissionChecker.checkMemberPermission(executionData.getBotManager().getConfigManager(), executionData.getSender(), Permission.DO_CHANCE_GAME);
         }
     }
 }

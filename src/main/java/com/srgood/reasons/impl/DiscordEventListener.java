@@ -1,18 +1,19 @@
 package com.srgood.reasons.impl;
 
-import com.srgood.reasons.impl.commands.CommandManager;
-import com.srgood.reasons.impl.utils.CensorUtils;
+import com.srgood.reasons.BotManager;
+import com.srgood.reasons.config.GuildConfigManager;
 import com.srgood.reasons.impl.commands.CommandUtils;
+import com.srgood.reasons.impl.utils.CensorUtils;
 import com.srgood.reasons.impl.utils.GreetingUtils;
-import com.srgood.reasons.impl.utils.GuildUtils;
+import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.events.ReadyEvent;
+import net.dv8tion.jda.core.events.guild.GenericGuildEvent;
 import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent;
 import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageUpdateEvent;
-import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.dv8tion.jda.core.utils.SimpleLog;
 
@@ -29,6 +30,12 @@ import java.util.Objects;
  */
 public class DiscordEventListener extends ListenerAdapter {
 
+    private final BotManager botManager;
+
+    public DiscordEventListener(BotManager botManager) {
+        this.botManager = botManager;
+    }
+
     @Override
     public void onReady(ReadyEvent event) {
 
@@ -39,31 +46,27 @@ public class DiscordEventListener extends ListenerAdapter {
 
         if (Objects.equals(event.getAuthor(), event.getJDA().getSelfUser())) return;
 
-        try {
-            GuildUtils.doPreMessageGuildCheck(event.getGuild());
-        } catch (RateLimitedException e) {
-            e.printStackTrace();
-        }
-
         if (Objects.equals(event.getMessage().getContent(), Reference.TABLE_FLIP)) {
             event.getChannel().sendMessage(Reference.TABLE_UNFLIP_JOKE).queue();
         }
 
-        if (CommandUtils.isCommandMessage(event.getMessage())) {
-            CommandManager.handleCommand(event.getMessage());
+        GuildConfigManager guildConfigManager = getGuildConfigManager(event.getGuild());
+        if (CommandUtils.isCommandMessage(event.getMessage(), guildConfigManager
+                                                                        .getPrefix())) {
+            botManager.getCommandManager().handleCommandMessage(event.getMessage());
             SimpleLog.getLog("Reasons").info("Got command message: " + event.getMessage().getContent());
         }
 
-        CensorUtils.checkCensor(event.getMessage());
+        CensorUtils.checkCensor(CensorUtils.getGuildCensorList(guildConfigManager), event.getMessage());
     }
 
     @Override
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
-        GreetingUtils.tryGreeting(event.getMember());
+        GreetingUtils.tryGreeting(event.getMember(), getGuildConfigManager(event));
     }
     @Override
     public void onGuildMemberLeave(GuildMemberLeaveEvent event) {
-        GreetingUtils.tryGoodbye(event.getMember());
+        GreetingUtils.tryGoodbye(event.getMember(), getGuildConfigManager(event));
     }
 
 
@@ -88,4 +91,11 @@ public class DiscordEventListener extends ListenerAdapter {
         }
     }
 
+    private GuildConfigManager getGuildConfigManager(GenericGuildEvent guildEvent) {
+        return getGuildConfigManager(guildEvent.getGuild());
+    }
+
+    private GuildConfigManager getGuildConfigManager(Guild guild) {
+        return botManager.getConfigManager().getGuildConfigManager(guild);
+    }
 }

@@ -1,9 +1,9 @@
 package com.srgood.reasons.impl.commands.impl.actual;
 
 import com.srgood.reasons.commands.CommandExecutionData;
+import com.srgood.reasons.config.GuildConfigManager;
 import com.srgood.reasons.impl.commands.impl.base.descriptor.BaseCommandDescriptor;
 import com.srgood.reasons.impl.commands.impl.base.executor.ChannelOutputCommandExecutor;
-import com.srgood.reasons.impl.config.ConfigUtils;
 import com.srgood.reasons.impl.permissions.Permission;
 import com.srgood.reasons.impl.permissions.PermissionChecker;
 import com.srgood.reasons.impl.utils.GreetingUtils;
@@ -24,8 +24,11 @@ public class CommandSetWelcomeDescriptor extends BaseCommandDescriptor {
         public void execute() {
             String message = executionData.getParsedArguments().get(0);
 
-            ConfigUtils.setGuildProperty(executionData.getGuild(), GreetingUtils.formatPropertyName("welcome"), message);
-            ConfigUtils.setGuildProperty(executionData.getGuild(), GreetingUtils.formatPropertyName("welcomechannel"),
+            GuildConfigManager guildConfigManager = executionData.getBotManager()
+                                                                 .getConfigManager()
+                                                                 .getGuildConfigManager(executionData.getGuild());
+            guildConfigManager.setProperty(GreetingUtils.formatPropertyName("welcome"), message);
+            guildConfigManager.setProperty(GreetingUtils.formatPropertyName("welcomechannel"),
                     executionData.getChannel().getId());
 
             if (message.trim().equalsIgnoreCase("OFF")) {
@@ -37,7 +40,7 @@ public class CommandSetWelcomeDescriptor extends BaseCommandDescriptor {
 
         @Override
         protected Optional<String> checkCallerPermissions() {
-            return PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.MANAGE_JOIN_LEAVE_MESSAGES);
+            return PermissionChecker.checkMemberPermission(executionData.getBotManager().getConfigManager(), executionData.getSender(), Permission.MANAGE_JOIN_LEAVE_MESSAGES);
         }
     }
 }

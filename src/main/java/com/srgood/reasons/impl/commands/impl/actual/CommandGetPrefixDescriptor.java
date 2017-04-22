@@ -3,7 +3,6 @@ package com.srgood.reasons.impl.commands.impl.actual;
 import com.srgood.reasons.commands.CommandExecutionData;
 import com.srgood.reasons.impl.commands.impl.base.descriptor.BaseCommandDescriptor;
 import com.srgood.reasons.impl.commands.impl.base.executor.ChannelOutputCommandExecutor;
-import com.srgood.reasons.impl.config.ConfigUtils;
 
 import java.util.Arrays;
 
@@ -19,7 +18,7 @@ public class CommandGetPrefixDescriptor extends BaseCommandDescriptor {
 
         @Override
         public void execute() {
-            sendOutput("**Prefix:** `%s`", ConfigUtils.getGuildPrefix(executionData.getGuild()));
+            sendOutput("**Prefix:** `%s`", executionData.getBotManager().getConfigManager().getGuildConfigManager(executionData.getGuild()).getPrefix());
         }
     }
 }

@@ -100,7 +100,7 @@ public class CommandNotifyRandDescriptor extends BaseCommandDescriptor {
 
         @Override
         protected Optional<String> checkCallerPermissions() {
-            return PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.NOTIFY_MEMBER);
+            return PermissionChecker.checkMemberPermission(executionData.getBotManager().getConfigManager(), executionData.getSender(), Permission.NOTIFY_MEMBER);
         }
     }
 }

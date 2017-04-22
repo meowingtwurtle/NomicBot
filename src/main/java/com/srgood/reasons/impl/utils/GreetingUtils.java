@@ -1,7 +1,6 @@
 package com.srgood.reasons.impl.utils;
 
-import com.srgood.reasons.impl.config.ConfigUtils;
-import net.dv8tion.jda.core.entities.Guild;
+import com.srgood.reasons.config.GuildConfigManager;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.TextChannel;
 
@@ -10,19 +9,19 @@ import java.util.Arrays;
 public class GreetingUtils {
     private static final String PROP_PREFIX = "moderation";
 
-    public static void tryGreeting(Member member) {
-        tryBasic(member, "welcome");
+    public static void tryGreeting(Member member, GuildConfigManager guildConfigManager) {
+        tryBasic(member, guildConfigManager, "welcome");
     }
 
-    public static void tryGoodbye(Member member) {
-        tryBasic(member, "goodbye");
+    public static void tryGoodbye(Member member, GuildConfigManager guildConfigManager) {
+        tryBasic(member, guildConfigManager, "goodbye");
     }
 
-    private static void tryBasic(Member member, String type) {
-        String message = getPropertyContent(member.getGuild(), type);
+    private static void tryBasic(Member member, GuildConfigManager guildConfigManager, String type) {
+        String message = getPropertyContent(guildConfigManager, type);
 
         if (!Arrays.asList(null, "", "OFF").contains(message)) { // Evil wizard hax
-            String channelID = getPropertyContent(member.getGuild(), type + "channel");
+            String channelID = getPropertyContent(guildConfigManager, type + "channel");
 
             if (channelID != null) {
                 TextChannel channel = member.getGuild().getTextChannelById(channelID);
@@ -33,8 +32,8 @@ public class GreetingUtils {
         }
     }
 
-    private static String getPropertyContent(Guild guild, String basicName) {
-        return ConfigUtils.getGuildProperty(guild, formatPropertyName(basicName));
+    private static String getPropertyContent(GuildConfigManager guildConfigManager, String basicName) {
+        return guildConfigManager.getProperty(formatPropertyName(basicName));
     }
 
     private static String formatMessage(String message, Member member) {

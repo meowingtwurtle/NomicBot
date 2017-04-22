@@ -48,7 +48,7 @@ public class CommandPermissionsDescriptor extends MultiTierCommandDescriptor {
             }
 
             private String formatPermissions(Role role) {
-                GuildPermissionSet permissionSet = GuildDataManager.getGuildPermissionSet(role.getGuild());
+                GuildPermissionSet permissionSet = GuildDataManager.getGuildPermissionSet(executionData.getBotManager().getConfigManager(), role.getGuild());
                 StringBuilder builder = new StringBuilder();
                 builder.append(String.format("```Markdown\n[%s]\n", role.getName()));
                 for (Permission permission : Permission.values()) {
@@ -86,7 +86,7 @@ public class CommandPermissionsDescriptor extends MultiTierCommandDescriptor {
                     return;
                 }
 
-                GuildPermissionSet permissionSet = GuildDataManager.getGuildPermissionSet(executionData.getGuild());
+                GuildPermissionSet permissionSet = GuildDataManager.getGuildPermissionSet(executionData.getBotManager().getConfigManager(), executionData.getGuild());
                 if (shouldSetAll()) {
                     for (Permission permission : Permission.values()) {
                         try {
@@ -102,7 +102,7 @@ public class CommandPermissionsDescriptor extends MultiTierCommandDescriptor {
                         sendOutput(e.getMessage());
                     }
                 }
-                GuildDataManager.setGuildPermissionSet(executionData.getGuild(), permissionSet);
+                GuildDataManager.setGuildPermissionSet(executionData.getBotManager().getConfigManager(), executionData.getGuild(), permissionSet);
             }
 
             private boolean shouldSetAll() {
@@ -145,9 +145,9 @@ public class CommandPermissionsDescriptor extends MultiTierCommandDescriptor {
             }
 
             private void setPermissionStatus(Role role, Permission permission, PermissionStatus status) {
-                GuildPermissionSet permissionSet = GuildDataManager.getGuildPermissionSet(role.getGuild());
+                GuildPermissionSet permissionSet = GuildDataManager.getGuildPermissionSet(executionData.getBotManager().getConfigManager(), role.getGuild());
 
-                if (PermissionChecker.checkMemberPermission(executionData.getSender(), permission).isPresent()) {
+                if (PermissionChecker.checkMemberPermission(executionData.getBotManager().getConfigManager(), executionData.getSender(), permission).isPresent()) {
                     throw new IllegalArgumentException(String.format("Not setting permission **`%s`** because you do not have it.", permission));
                 }
 
@@ -156,13 +156,13 @@ public class CommandPermissionsDescriptor extends MultiTierCommandDescriptor {
                 permissionSet.setPermissionStatus(role, permission, status);
 
                 if (status != PermissionStatus.ALLOWED) {
-                    if (PermissionChecker.checkMemberPermission(executionData.getSender(), permission).isPresent()) {
+                    if (PermissionChecker.checkMemberPermission(executionData.getBotManager().getConfigManager(), executionData.getSender(), permission).isPresent()) {
                         permissionSet.setPermissionStatus(role, permission, backupPermissionStatus);
                         throw new IllegalArgumentException(String.format("Not setting permission **`%s`** because doing so would deny it from you.", permission));
                     }
                 }
 
-                GuildDataManager.setGuildPermissionSet(role.getGuild(), permissionSet);
+                GuildDataManager.setGuildPermissionSet(executionData.getBotManager().getConfigManager(), role.getGuild(), permissionSet);
 
                 sendOutput("Permission **`%s`** set to state **`%s`** for role **`%s`**", permission, status, role.getName());
             }
@@ -183,7 +183,7 @@ public class CommandPermissionsDescriptor extends MultiTierCommandDescriptor {
 
             @Override
             protected Optional<String> checkCallerPermissions() {
-                return PermissionChecker.checkMemberPermission(executionData.getSender(), Permission.MANAGE_PERMISSIONS);
+                return PermissionChecker.checkMemberPermission(executionData.getBotManager().getConfigManager(), executionData.getSender(), Permission.MANAGE_PERMISSIONS);
             }
         }
     }
