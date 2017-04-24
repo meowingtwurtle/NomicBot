@@ -1,6 +1,8 @@
 package com.srgood.reasons.config;
 
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.Map;
 
 public interface BasicConfigManager {
     default String getProperty(String property) {
