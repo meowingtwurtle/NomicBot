@@ -6,7 +6,6 @@ import com.srgood.reasons.commands.CommandManager;
 import com.srgood.reasons.config.GuildConfigManager;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.utils.SimpleLog;
 
 import java.io.Serializable;
 import java.util.*;
@@ -79,7 +78,7 @@ public class CommandManagerImpl implements CommandManager {
         List<String> names = descriptor.getNames();
         for (String name : names) {
             commands.put(name, descriptor);
-            SimpleLog.getLog("Theta").info("Registered command " + name);
+            botManager.getLogger().info("Registered command " + name);
         }
     }
 

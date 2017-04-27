@@ -5,6 +5,7 @@ import com.srgood.reasons.config.BotConfigManager;
 import net.dv8tion.jda.core.JDA;
 
 import java.time.Instant;
+import java.util.logging.Logger;
 
 public interface BotManager {
     void init(String token);
@@ -13,6 +14,7 @@ public interface BotManager {
 
     BotConfigManager getConfigManager();
     CommandManager getCommandManager();
+    Logger getLogger();
 
     JDA getJDA();
 

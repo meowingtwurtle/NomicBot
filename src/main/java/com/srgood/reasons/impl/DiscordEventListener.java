@@ -15,7 +15,6 @@ import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageUpdateEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import net.dv8tion.jda.core.utils.SimpleLog;
 
 import java.util.Objects;
 
@@ -54,7 +53,7 @@ public class DiscordEventListener extends ListenerAdapter {
         if (CommandUtils.isCommandMessage(event.getMessage(), guildConfigManager
                                                                         .getPrefix())) {
             botManager.getCommandManager().handleCommandMessage(event.getMessage());
-            SimpleLog.getLog("Reasons").info("Got command message: " + event.getMessage().getContent());
+            botManager.getLogger().info("Got command message: " + event.getMessage().getContent());
         }
 
         CensorUtils.checkCensor(CensorUtils.getGuildCensorList(guildConfigManager), event.getMessage());

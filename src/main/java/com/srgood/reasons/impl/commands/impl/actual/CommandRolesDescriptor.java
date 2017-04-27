@@ -33,7 +33,6 @@ public class CommandRolesDescriptor extends BaseCommandDescriptor {
                                                      .collect(Collectors.toList());
                 sendOutput("**`Roles in %s`**", executionData.getGuild().getName());
                 roleList.forEach(this::sendOutput);
-                roleList.forEach(System.out::println);
             }
         }
 }
