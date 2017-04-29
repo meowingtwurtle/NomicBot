@@ -41,7 +41,7 @@ public class ReasonsMain implements BotManager {
             public String format(LogRecord record) {
                 //LocalDateTime instant = LocalDateTime.ofEpochSecond(record.getMillis() / 1000, 0, TimeZone.getDefault());
                 ZonedDateTime dateTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli(record.getMillis()), ZoneOffset.systemDefault());
-                DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("H:m:s");
+                DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
                 return String.format("[%s] [%s] [%s]: %s %n", dateFormatter.format(dateTime), record.getLevel(), record.getLoggerName(), record.getMessage());
             }
         };
