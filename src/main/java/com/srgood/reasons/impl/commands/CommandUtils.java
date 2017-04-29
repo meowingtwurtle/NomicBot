@@ -9,11 +9,9 @@ import java.util.List;
 public class CommandUtils {
 
     public static boolean isCommandMessage(Message message, String guildPrefix) {
-        String normalMention = message.getGuild().getSelfMember().getAsMention();
-        String altMention = new StringBuilder(normalMention).insert(2, '!').toString(); // Discord is weird
+        String mention = message.getGuild().getSelfMember().getAsMention();
         return message.getRawContent().startsWith(guildPrefix) ||
-                message.getRawContent().startsWith(normalMention) ||
-                message.getRawContent().startsWith(altMention);
+                message.getRawContent().startsWith(mention);
     }
 
     public static String getCommandMessageArgsSection(Message message, String guildPrefix) {
@@ -38,10 +36,8 @@ public class CommandUtils {
             return null;
         }
         String mention = message.getGuild().getSelfMember().getAsMention();
-        String altMention = new StringBuilder(mention).insert(2, '!').toString();
         String rawContent = message.getRawContent();
-        String actualPrefix = rawContent.startsWith(guildPrefix) ? guildPrefix :
-                rawContent.startsWith(mention) ? mention : altMention;
+        String actualPrefix = rawContent.startsWith(guildPrefix) ? guildPrefix : mention;
         return rawContent.substring(actualPrefix.length());
     }
 
