@@ -5,7 +5,6 @@ import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Channel;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.requests.RestAction;
-import net.dv8tion.jda.core.utils.PermissionUtil;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -30,10 +29,7 @@ public class CensorUtils {
     }
 
     public static void checkCensor(List<String> censorList, Message message) {
-        if (!PermissionUtil.checkPermission(
-                ((Channel) message.getChannel()),
-                message.getGuild().getSelfMember(),
-                Permission.MESSAGE_MANAGE)) {
+        if (message.getGuild().getSelfMember().hasPermission(((Channel) message.getChannel()), Permission.MESSAGE_MANAGE)) {
             return;
         }
 
