@@ -28,7 +28,7 @@ public class GuildPermissionSet implements Serializable {
         }
         for (Role role : guild.getRoles()) {
             if (!rolePermissions.containsKey(role.getId())) {
-                if (!Objects.equals(guild.getPublicRole(), role)) {
+                if (!role.isPublicRole()) {
                     rolePermissions.put(role.getId(), new BasicPermissionSet());
                 } else {
                     rolePermissions.put(role.getId(), new BasicPermissionSet(PERMISSIBLE_ACTION_COLLECTION));
@@ -44,7 +44,7 @@ public class GuildPermissionSet implements Serializable {
 
     public void setPermissionStatus(Role role, Permission action, PermissionStatus permissionStatus) {
         checkRole(role);
-        if (Objects.equals(role.getGuild().getPublicRole(), role) && permissionStatus == PermissionStatus.DEFERRED) {
+        if (role.isPublicRole() && permissionStatus == PermissionStatus.DEFERRED) {
             throw new IllegalArgumentException("Cannot defer on the everyone role");
         }
         rolePermissions.get(role.getId()).setActionStatus(action, permissionStatus);

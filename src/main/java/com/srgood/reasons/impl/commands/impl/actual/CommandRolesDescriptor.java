@@ -3,11 +3,11 @@ package com.srgood.reasons.impl.commands.impl.actual;
 import com.srgood.reasons.commands.CommandExecutionData;
 import com.srgood.reasons.impl.commands.impl.base.descriptor.BaseCommandDescriptor;
 import com.srgood.reasons.impl.commands.impl.base.executor.DMOutputCommandExecutor;
+import net.dv8tion.jda.core.entities.Role;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class CommandRolesDescriptor extends BaseCommandDescriptor {
@@ -26,8 +26,7 @@ public class CommandRolesDescriptor extends BaseCommandDescriptor {
                 List<String> roleList = executionData.getGuild()
                                                      .getRoles()
                                                      .stream()
-                                                     .filter(role -> !Objects.equals(role, executionData.getGuild()
-                                                                                                        .getPublicRole()))
+                                                     .filter(Role::isPublicRole)
                                                      .sorted(Comparator.reverseOrder())
                                                      .map(role -> String.format("[%s] %s", role.getName(), role.getId()))
                                                      .collect(Collectors.toList());

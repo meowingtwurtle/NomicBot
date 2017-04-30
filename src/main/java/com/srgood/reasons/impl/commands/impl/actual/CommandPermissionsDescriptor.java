@@ -129,7 +129,7 @@ public class CommandPermissionsDescriptor extends MultiTierCommandDescriptor {
             }
 
             private void checkPermissionStatusArg(Role role, PermissionStatus status) {
-                if (status == PermissionStatus.DEFERRED && Objects.equals(role.getGuild().getPublicRole(), role)) {
+                if (status == PermissionStatus.DEFERRED && role.isPublicRole()) {
                     throw new IllegalArgumentException("Cannot defer on the everyone role!");
                 }
             }
