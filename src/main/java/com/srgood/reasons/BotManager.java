@@ -18,8 +18,5 @@ public interface BotManager {
 
     JDA getJDA();
 
-    String getDefaultPrefix();
-    void setDefaultPrefix(String prefix);
-
     Instant getStartTime();
 }

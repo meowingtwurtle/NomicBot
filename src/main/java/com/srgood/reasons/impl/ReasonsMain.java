@@ -166,16 +166,6 @@ public class ReasonsMain implements BotManager {
     }
 
     @Override
-    public String getDefaultPrefix() {
-        return prefix;
-    }
-
-    @Override
-    public void setDefaultPrefix(String prefix) {
-        this.prefix = prefix;
-    }
-
-    @Override
     public CommandManager getCommandManager() {
         return commandManager;
     }
