@@ -2,7 +2,6 @@ package com.srgood.reasons.impl.config;
 
 import com.srgood.reasons.config.BotConfigManager;
 import com.srgood.reasons.config.GuildConfigManager;
-import com.srgood.reasons.config.GuildDefaultsConfigManager;
 import net.dv8tion.jda.core.entities.Guild;
 import org.w3c.dom.Document;
 
@@ -20,14 +19,12 @@ public class BotConfigManagerImpl extends BasicConfigManagerImpl implements BotC
     private static String GUILD_ID_ATTRIBUTE_NAME = "id";
 
     private final ConfigFileManager fileManager;
-    private final GuildDefaultsConfigManager guildDefaultsConfigManager;
 
     private final ReadWriteLock documentLock = new ReentrantReadWriteLock();
 
     public BotConfigManagerImpl(ConfigFileManager fileManager) {
         super(fileManager.parse().getDocument().getDocumentElement());
         this.fileManager = fileManager;
-        this.guildDefaultsConfigManager = new GuildDefaultsConfigManagerImpl(this);
     }
 
     @Override
@@ -41,11 +38,6 @@ public class BotConfigManagerImpl extends BasicConfigManagerImpl implements BotC
                                 GUILDS_TAG_NAME),
                         GUILD_TAG_NAME,
                         attributeHashMap));
-    }
-
-    @Override
-    public GuildDefaultsConfigManager getGuildDefaultsConfigManager() {
-        return guildDefaultsConfigManager;
     }
 
     public <T> T applyOnDocument(Function<Document, T> function) {
