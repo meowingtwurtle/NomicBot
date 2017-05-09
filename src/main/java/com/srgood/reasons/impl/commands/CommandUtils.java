@@ -38,7 +38,7 @@ public class CommandUtils {
         String mention = message.getGuild().getSelfMember().getAsMention();
         String rawContent = message.getRawContent();
         String actualPrefix = rawContent.startsWith(guildPrefix) ? guildPrefix : mention;
-        return rawContent.substring(actualPrefix.length());
+        return rawContent.substring(actualPrefix.length()).trim();
     }
 
     public static List<String> parseCommandMessageArguments(Message message, String guildPrefix) {
