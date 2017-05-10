@@ -52,7 +52,7 @@ public class CommandHelpDescriptor extends BaseCommandDescriptor {
             for (String command : commands) {
                 List<String> helpLines = getSingleCommandOutput(command);
                 for (String line : helpLines) {
-                    if (stringBuilder.length() + line.length() + "```".length() + "\n".length() >= 2000) { // 2000 is max message length
+                    if (stringBuilder.length() + line.length() + "```".length() >= 2000) { // 2000 is max message length
                         stringBuilder.append("```");
                         messages.add(stringBuilder.toString());
                         stringBuilder = new StringBuilder();
@@ -72,7 +72,7 @@ public class CommandHelpDescriptor extends BaseCommandDescriptor {
                                                                .getCommandManager()
                                                                .getCommandByName(command);
             if (commandDescriptor == null) {
-                return Collections.singletonList(String.format("There was no command found by the name [%s]", command));
+                return Collections.singletonList(String.format("There was no command found by the name [%s]\n", command));
             }
             return getCommandHelpLines(commandDescriptor);
         }
@@ -88,7 +88,7 @@ public class CommandHelpDescriptor extends BaseCommandDescriptor {
                                                  .sorted()
                                                  .collect(Collectors.joining(", "));
             }
-            String format = String.format("[%s \"%s\"](%s%s)%n", primaryName, command.help().args(), command.help()
+            String format = String.format("[%s \"%s\"](%s%s)\n", primaryName, command.help().args(), command.help()
                                                                                                             .description(), aliases);
             ret.add(format);
             if (command.hasSubCommands()) {
