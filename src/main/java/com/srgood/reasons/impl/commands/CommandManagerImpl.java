@@ -7,7 +7,6 @@ import com.srgood.reasons.config.GuildConfigManager;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;
 
-import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -18,14 +17,6 @@ public class CommandManagerImpl implements CommandManager {
     private final Map<String, ChannelCommandThread> channelThreadMap = new java.util.HashMap<>();
 
     private final BotManager botManager;
-
-    public static class CommandComparator implements Comparator<CommandDescriptor>, Serializable {
-
-        @Override
-        public int compare(CommandDescriptor command0, CommandDescriptor command1) {
-            return command0.getPrimaryName().compareTo(command1.getPrimaryName());
-        }
-    }
 
     public CommandManagerImpl(BotManager botManager) {
         this.botManager = botManager;
