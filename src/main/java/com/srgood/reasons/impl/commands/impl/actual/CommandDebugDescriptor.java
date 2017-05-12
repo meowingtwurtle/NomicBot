@@ -34,13 +34,17 @@ public class CommandDebugDescriptor extends MultiTierCommandDescriptor {
         }
 
         @Override
-        public boolean shouldExecute() {
-            return ALLOW_DEBUG && super.shouldExecute();
+        protected Optional<String> checkCallerPermissions() {
+            return PermissionChecker.checkBotAdmin(executionData.getSender());
         }
 
         @Override
-        protected Optional<String> checkCallerPermissions() {
-            return PermissionChecker.checkBotAdmin(executionData.getSender());
+        protected Optional<String> customPreExecuteCheck() {
+            if (!ALLOW_DEBUG) {
+                return Optional.of("Debug mode is disabled in this version.");
+            } else {
+                return Optional.empty();
+            }
         }
     }
 
