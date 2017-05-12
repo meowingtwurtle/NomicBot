@@ -21,12 +21,8 @@ public class GuildDataManager {
 
     private static GuildPermissionSet loadNewGuild(BotConfigManager botConfigManager, Guild guild) {
         GuildPermissionSet ret = botConfigManager.getGuildConfigManager(guild)
-                                                 .getSerializedProperty(
-                                                         "roleData",
-                                                         GuildPermissionSet.class,
-                                                         new GuildPermissionSet(guild),
-                                                         false,
-                                                         Collections.singletonMap("com.srgood.reasons.permissions", "com.srgood.reasons.impl.permissions"));
+                                                 .getSerializedProperty("roleData", new GuildPermissionSet(guild), false, Collections
+                                                         .singletonMap("com.srgood.reasons.permissions", "com.srgood.reasons.impl.permissions"));
 
         ret.clean(guild.getJDA());
 

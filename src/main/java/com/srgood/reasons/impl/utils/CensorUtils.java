@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class CensorUtils {
 
     public static List<String> getGuildCensorList(GuildConfigManager guildConfigManager) {
-        return guildConfigManager.getSerializedProperty("moderation/censorlist", ArrayList.class, new ArrayList<>(), false);
+        return guildConfigManager.getSerializedProperty("moderation/censorlist", new ArrayList<>(), false);
     }
 
     public static void setGuildCensorList(GuildConfigManager guildConfigManager, Collection<String> newCensorList) {

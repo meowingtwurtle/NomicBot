@@ -48,7 +48,7 @@ public class BasicConfigManagerImpl implements BasicConfigManager {
     }
 
     @Override
-    public <T extends Serializable> T getSerializedProperty(String property, Class<? extends T> propertyClass, T defaultValue, boolean setIfMissing, Map<String, String> classReplacements) {
+    public <T> T getSerializedProperty(String property, T defaultValue, boolean setIfMissing, Map<String, String> classReplacements) {
         String rawText = getProperty(property);
         if (rawText == null) {
             if (setIfMissing) {
@@ -84,14 +84,14 @@ public class BasicConfigManagerImpl implements BasicConfigManager {
                     return ObjectStreamClass.lookup(Class.forName(className));
                 }
             };
-            return propertyClass.cast(objectInputStream.readObject());
+            return (T) objectInputStream.readObject();
         } catch (Exception e) {
             return defaultValue;
         }
     }
 
     @Override
-    public void setSerializedProperty(String property, Serializable value) {
+    public void setSerializedProperty(String property, Object value) {
         try {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);

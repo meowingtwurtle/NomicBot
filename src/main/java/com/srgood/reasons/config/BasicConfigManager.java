@@ -1,6 +1,5 @@
 package com.srgood.reasons.config;
 
-import java.io.Serializable;
 import java.util.Collections;
 import java.util.Map;
 
@@ -14,15 +13,15 @@ public interface BasicConfigManager {
     String getProperty(String property, String defaultValue, boolean setIfMissing);
     void setProperty(String property, String value);
 
-    default <T extends Serializable> T getSerializedProperty(String property, Class<? extends T> propertyClass) {
-        return getSerializedProperty(property, propertyClass, null);
+    default <T> T getSerializedProperty(String property) {
+        return getSerializedProperty(property,  null);
     }
-    default <T extends Serializable> T getSerializedProperty(String property, Class<? extends T> propertyClass, T defaultValue) {
-        return getSerializedProperty(property, propertyClass, defaultValue, false);
+    default <T> T getSerializedProperty(String property, T defaultValue) {
+        return getSerializedProperty(property, defaultValue, false);
     }
-    default<T extends Serializable> T getSerializedProperty(String property, Class<? extends T> propertyClass, T defaultValue, boolean setIfMissing) {
-        return getSerializedProperty(property, propertyClass, defaultValue, setIfMissing, Collections.emptyMap());
+    default<T> T getSerializedProperty(String property, T defaultValue, boolean setIfMissing) {
+        return getSerializedProperty(property, defaultValue, setIfMissing, Collections.emptyMap());
     }
-    <T extends Serializable> T getSerializedProperty(String property, Class<? extends T> propertyClass, T defaultValue, boolean setIfMissing, Map<String, String> classReplacements);
-    void setSerializedProperty(String property, Serializable value);
+    <T> T getSerializedProperty(String property, T defaultValue, boolean setIfMissing, Map<String, String> classReplacements);
+    void setSerializedProperty(String property, Object value);
 }
