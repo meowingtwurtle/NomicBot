@@ -4,7 +4,11 @@ import com.srgood.reasons.commands.CommandExecutionData;
 import com.srgood.reasons.impl.commands.impl.base.descriptor.BaseCommandDescriptor;
 import com.srgood.reasons.impl.commands.impl.base.descriptor.MultiTierCommandDescriptor;
 import com.srgood.reasons.impl.commands.impl.base.executor.DMOutputCommandExecutor;
-import com.srgood.reasons.impl.permissions.*;
+import com.srgood.reasons.impl.permissions.GuildPermissionSet;
+import com.srgood.reasons.impl.permissions.Permission;
+import com.srgood.reasons.impl.permissions.PermissionChecker;
+import com.srgood.reasons.impl.permissions.PermissionStatus;
+import com.srgood.reasons.impl.utils.GuildDataManager;
 import com.srgood.reasons.impl.utils.RoleUtils;
 import net.dv8tion.jda.core.entities.Role;
 

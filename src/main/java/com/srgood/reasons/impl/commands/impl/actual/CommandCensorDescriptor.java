@@ -7,7 +7,7 @@ import com.srgood.reasons.impl.commands.impl.base.descriptor.MultiTierCommandDes
 import com.srgood.reasons.impl.commands.impl.base.executor.DMOutputCommandExecutor;
 import com.srgood.reasons.impl.permissions.Permission;
 import com.srgood.reasons.impl.permissions.PermissionChecker;
-import com.srgood.reasons.impl.utils.CensorUtils;
+import com.srgood.reasons.impl.utils.GuildDataManager;
 
 import java.util.*;
 
@@ -51,7 +51,7 @@ public class CommandCensorDescriptor extends MultiTierCommandDescriptor {
 
             @Override
             public void execute() {
-                List<String> censoredWords = CensorUtils.getGuildCensorList(executionData.getBotManager().getConfigManager().getGuildConfigManager(executionData.getGuild()));
+                List<String> censoredWords = GuildDataManager.getGuildCensorList(executionData.getBotManager().getConfigManager(), executionData.getGuild());
 
                 StringBuilder outBuilder = new StringBuilder("__**Censored Words**__ ```\n");
                 for (String censoredWord : censoredWords) {
@@ -80,14 +80,10 @@ public class CommandCensorDescriptor extends MultiTierCommandDescriptor {
 
             @Override
             public void execute() {
-                GuildConfigManager guildConfigManager = executionData.getBotManager()
-                                                                     .getConfigManager()
-                                                                     .getGuildConfigManager(executionData.getGuild());
-                List<String> censoredWords = new ArrayList<>(CensorUtils.getGuildCensorList(guildConfigManager));
-
+                List<String> censoredWords = new ArrayList<>(GuildDataManager.getGuildCensorList(executionData.getBotManager().getConfigManager(), executionData.getGuild()));
                 String wordToCensor = executionData.getParsedArguments().get(0).toLowerCase();
                 censoredWords.add(wordToCensor);
-                CensorUtils.setGuildCensorList(guildConfigManager, censoredWords);
+                GuildDataManager.setGuildCensorList(executionData.getBotManager().getConfigManager(), executionData.getGuild(), censoredWords);
 
                 sendOutput("The word `%s` has been added to the censorlist.", wordToCensor);
             }
@@ -109,14 +105,14 @@ public class CommandCensorDescriptor extends MultiTierCommandDescriptor {
                 GuildConfigManager guildConfigManager = executionData.getBotManager()
                                                                      .getConfigManager()
                                                                      .getGuildConfigManager(executionData.getGuild());
-                List<String> censoredWords = CensorUtils.getGuildCensorList(guildConfigManager);
+                List<String> censoredWords = GuildDataManager.getGuildCensorList(executionData.getBotManager().getConfigManager(), executionData.getGuild());
 
                 String wordToRemove = executionData.getParsedArguments().get(0).toLowerCase();
                 boolean inList = censoredWords.contains(wordToRemove);
 
                 if (inList) {
                     censoredWords.remove(wordToRemove);
-                    CensorUtils.setGuildCensorList(guildConfigManager, censoredWords);
+                    GuildDataManager.setGuildCensorList(executionData.getBotManager().getConfigManager(), executionData.getGuild(), censoredWords);
                     sendOutput("The word `%s` has been removed from the censor list.", wordToRemove);
                 } else {
                     sendOutput("The word `%s` was not found in the censor list.", wordToRemove);

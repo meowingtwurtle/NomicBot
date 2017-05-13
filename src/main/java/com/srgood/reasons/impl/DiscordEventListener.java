@@ -5,6 +5,7 @@ import com.srgood.reasons.config.GuildConfigManager;
 import com.srgood.reasons.impl.commands.CommandUtils;
 import com.srgood.reasons.impl.utils.CensorUtils;
 import com.srgood.reasons.impl.utils.GreetingUtils;
+import com.srgood.reasons.impl.utils.GuildDataManager;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.ReadyEvent;
@@ -60,7 +61,7 @@ public class DiscordEventListener extends ListenerAdapter {
             botManager.getLogger().info("Got command message: " + message.getContent());
         }
 
-        CensorUtils.checkCensor(CensorUtils.getGuildCensorList(botManager.getConfigManager().getGuildConfigManager(message.getGuild())), message);
+        CensorUtils.checkCensor(GuildDataManager.getGuildCensorList(botManager.getConfigManager(), message.getGuild()), message);
     }
 
     @Override
