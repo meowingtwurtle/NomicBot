@@ -12,6 +12,7 @@ import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.imageio.ImageIO;
 import javax.security.auth.login.LoginException;
@@ -42,7 +43,7 @@ public class ReasonsMain implements BotManager {
                 //LocalDateTime instant = LocalDateTime.ofEpochSecond(record.getMillis() / 1000, 0, TimeZone.getDefault());
                 ZonedDateTime dateTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli(record.getMillis()), ZoneOffset.systemDefault());
                 DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-                return String.format("[%s] [%s] [%s]: %s %n", dateFormatter.format(dateTime), record.getLevel(), record.getLoggerName(), record.getMessage());
+                return String.format("[%s] [%s] [%s]: %s %n", dateFormatter.format(dateTime), StringUtils.capitalize(record.getLevel().toString().toLowerCase()), record.getLoggerName(), record.getMessage());
             }
         };
 
