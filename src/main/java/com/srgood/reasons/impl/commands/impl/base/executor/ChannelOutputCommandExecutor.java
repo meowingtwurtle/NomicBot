@@ -10,8 +10,7 @@ public abstract class ChannelOutputCommandExecutor extends BaseCommandExecutor {
 
     @Override
     protected void sendOutput(String format, Object... arguments) {
-        String formatted = String.format(format, (Object[]) arguments); // Prevent confusing varargs call
-        executionData.getChannel().sendMessage(formatted).queue();
+        executionData.getChannel().sendMessage(format, arguments).queue();
     }
 
     @Override
