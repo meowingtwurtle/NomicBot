@@ -3,6 +3,7 @@ package com.srgood.reasons.impl.commands.impl.actual;
 import com.srgood.reasons.commands.CommandExecutionData;
 import com.srgood.reasons.impl.commands.impl.base.descriptor.BaseCommandDescriptor;
 import com.srgood.reasons.impl.commands.impl.base.executor.DMOutputCommandExecutor;
+import com.srgood.reasons.impl.utils.StringUtils;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -22,14 +23,14 @@ public class CommandRolesDescriptor extends BaseCommandDescriptor {
 
             @Override
             public void execute() {
-                List<String> roleList = executionData.getGuild()
+                List<String> roleOutputs = executionData.getGuild()
                                                      .getRoles()
                                                      .stream()
                                                      .sorted(Comparator.reverseOrder())
                                                      .map(role -> String.format("[%s] %s", role.getName(), role.getId()))
                                                      .collect(Collectors.toList());
-                sendOutput("**`Roles in %s`**", executionData.getGuild().getName());
-                roleList.forEach(this::sendOutput);
+                roleOutputs.add(0, String.format("**`Roles in %s`**", executionData.getGuild().getName()));
+                StringUtils.groupMessagesToLength(roleOutputs, 2000, "```", "```").forEach(this::sendOutput);
             }
         }
 }

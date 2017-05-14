@@ -4,11 +4,9 @@ import com.srgood.reasons.commands.CommandDescriptor;
 import com.srgood.reasons.commands.CommandExecutionData;
 import com.srgood.reasons.impl.commands.impl.base.descriptor.BaseCommandDescriptor;
 import com.srgood.reasons.impl.commands.impl.base.executor.DMOutputCommandExecutor;
+import com.srgood.reasons.impl.utils.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class CommandHelpDescriptor extends BaseCommandDescriptor {
@@ -43,27 +41,12 @@ public class CommandHelpDescriptor extends BaseCommandDescriptor {
 
 
         private void displayCommands(List<String> commands) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("```Markdown");
-            stringBuilder.append("\n");
-            stringBuilder.append("__HELP__");
-            stringBuilder.append("\n");
-            List<String> messages = new ArrayList<>();
-            for (String command : commands) {
-                List<String> helpLines = getSingleCommandOutput(command);
-                for (String line : helpLines) {
-                    if (stringBuilder.length() + line.length() + "```".length() >= 2000) { // 2000 is max message length
-                        stringBuilder.append("```");
-                        messages.add(stringBuilder.toString());
-                        stringBuilder = new StringBuilder();
-                        stringBuilder.append("```Markdown");
-                        stringBuilder.append("\n");
-                    }
-                    stringBuilder.append(line);
-                }
-            }
-            stringBuilder.append("```");
-            messages.add(stringBuilder.toString());
+            List<String> helpLines = commands.stream()
+                                             .map(this::getSingleCommandOutput)
+                                             .flatMap(Collection::stream)
+                                             .collect(Collectors.toList());
+            helpLines.add(0, "__HELP__");
+            List<String> messages = StringUtils.groupMessagesToLength(helpLines, 2000, "```Markdown\n", "```");
             messages.forEach(this::sendOutput);
         }
 
@@ -72,7 +55,7 @@ public class CommandHelpDescriptor extends BaseCommandDescriptor {
                                                                .getCommandManager()
                                                                .getCommandByName(command);
             if (commandDescriptor == null) {
-                return Collections.singletonList(String.format("There was no command found by the name [%s]\n", command));
+                return Collections.singletonList(String.format("There was no command found by the name [%s]", command));
             }
             return getCommandHelpLines(commandDescriptor);
         }
@@ -88,7 +71,7 @@ public class CommandHelpDescriptor extends BaseCommandDescriptor {
                                                  .sorted()
                                                  .collect(Collectors.joining(", "));
             }
-            String format = String.format("[%s \"%s\"](%s%s)\n", primaryName, command.help().args(), command.help()
+            String format = String.format("[%s \"%s\"](%s%s)", primaryName, command.help().args(), command.help()
                                                                                                             .description(), aliases);
             ret.add(format);
             if (command.hasSubCommands()) {
