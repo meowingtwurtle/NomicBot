@@ -14,11 +14,7 @@ import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.imageio.ImageIO;
 import javax.security.auth.login.LoginException;
-import java.awt.*;
-import java.awt.event.*;
-import java.io.IOException;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -85,8 +81,6 @@ public class ReasonsMain implements BotManager {
     public void init(String token) {
         initJDA(token);
         initCommands();
-
-        addToTray();
     }
 
     private void initJDA(String token) {
@@ -112,36 +106,6 @@ public class ReasonsMain implements BotManager {
 
     private void initCommands() {
         CommandRegistrar.registerCommands(getCommandManager());
-    }
-
-    private void addToTray() {
-        if (SystemTray.isSupported()) {
-            SystemTray systemTray = SystemTray.getSystemTray();
-            //load image here
-            Image image = null;
-            try {
-                image = ImageIO.read(getClass().getResource("/Nicholas.gif"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            final ActionListener closeListener = e -> System.exit(0);
-
-            PopupMenu popup = new PopupMenu();
-
-            MenuItem closeItem = new MenuItem("Close");
-            closeItem.addActionListener(closeListener);
-            popup.add(closeItem);
-
-            TrayIcon trayIcon = new TrayIcon(image, "Reasons", popup);
-
-            try {
-                systemTray.add(trayIcon);
-                trayIcon.setImageAutoSize(true); // <- Sets the image size properly
-            } catch (AWTException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     @Override
