@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 public class GuildDataManager {
     private static final Map<String, GuildPermissionSet> guildPermissionSetMap = new HashMap<>();
     private static final Map<String, List<String>> guildCensorListMap = new HashMap<>();
+    private static final Map<String, List<String>> guildBlacklistMap = new HashMap<>();
 
     public static GuildPermissionSet getGuildPermissionSet(BotConfigManager botConfigManager, Guild guild) {
         if (!guildPermissionSetMap.containsKey(guild.getId())) {
@@ -43,6 +44,20 @@ public class GuildDataManager {
         botConfigManager.getGuildConfigManager(guild).setSerializedProperty("moderation/censorList", patchedCensorList);
     }
 
+    public static List<String> getGuildBlacklist(BotConfigManager botConfigManager, Guild guild) {
+        if (!guildBlacklistMap.containsKey(guild.getId())) {
+            // No guild data found, need to load from XML
+            loadNewGuild(botConfigManager, guild);
+        }
+
+        return guildBlacklistMap.get(guild.getId());
+    }
+
+    public static void setGuildBlacklist(BotConfigManager botConfigManager, Guild guild, List<String> blacklist) {
+        guildBlacklistMap.put(guild.getId(), blacklist);
+        botConfigManager.getGuildConfigManager(guild).setSerializedProperty("moderation/blacklist", blacklist);
+    }
+
     private static void loadNewGuild(BotConfigManager botConfigManager, Guild guild) {
         GuildPermissionSet permissionSet = botConfigManager.getGuildConfigManager(guild)
                                                  .getSerializedProperty("roleData", new GuildPermissionSet(guild), false, Collections
@@ -53,5 +68,9 @@ public class GuildDataManager {
         List<String> censorList = botConfigManager.getGuildConfigManager(guild)
                                                   .getSerializedProperty("moderation/censorList", new ArrayList<>());
         guildCensorListMap.put(guild.getId(), censorList);
+
+        List<String> blacklist = botConfigManager.getGuildConfigManager(guild)
+                                                 .getSerializedProperty("moderation/blacklist", new ArrayList<>());
+        guildBlacklistMap.put(guild.getId(), blacklist);
     }
 }

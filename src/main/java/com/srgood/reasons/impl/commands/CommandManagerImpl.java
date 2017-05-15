@@ -4,6 +4,8 @@ import com.srgood.reasons.BotManager;
 import com.srgood.reasons.commands.CommandDescriptor;
 import com.srgood.reasons.commands.CommandManager;
 import com.srgood.reasons.config.GuildConfigManager;
+import com.srgood.reasons.impl.utils.BlacklistUtils;
+import com.srgood.reasons.impl.utils.GuildDataManager;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;
 
@@ -26,6 +28,12 @@ public class CommandManagerImpl implements CommandManager {
         public void handleCommandMessage(Message cmd) {
             GuildConfigManager guildConfigManager = botManager.getConfigManager()
                                                               .getGuildConfigManager(cmd.getGuild());
+
+            if (BlacklistUtils.isBlacklisted(botManager.getConfigManager(), cmd.getMember(), GuildDataManager.getGuildBlacklist(botManager.getConfigManager(), cmd.getGuild()))) {
+                botManager.getLogger().info("Ignoring command, sender was directly or indirectly blacklisted");
+                return;
+            }
+
             String calledCommand = CommandUtils.getCalledCommand(cmd, guildConfigManager.getPrefix());
             CommandDescriptor descriptor = getCommandByName(calledCommand);
             if (descriptor != null) {

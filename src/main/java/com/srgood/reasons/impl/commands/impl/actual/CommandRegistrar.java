@@ -5,6 +5,7 @@ import com.srgood.reasons.commands.CommandManager;
 public class CommandRegistrar {
     public static void registerCommands(CommandManager commandManager) {
         commandManager.registerCommand(new Command8BallDescriptor());
+        commandManager.registerCommand(new CommandBlacklistDescriptor());
         commandManager.registerCommand(new CommandCensorDescriptor());
         commandManager.registerCommand(new CommandCoinFlipDescriptor());
         commandManager.registerCommand(new CommandDebugDescriptor());
