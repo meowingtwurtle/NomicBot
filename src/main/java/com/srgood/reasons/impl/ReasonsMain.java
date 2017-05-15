@@ -147,7 +147,7 @@ public class ReasonsMain implements BotManager {
     @Override
     public void shutdown() {
         configFileManager.save();
-        jda.shutdown();
+        jda.shutdown(false);
     }
 
     @Override
