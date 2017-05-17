@@ -13,7 +13,7 @@ import java.util.*;
 
 public class CommandCensorDescriptor extends MultiTierCommandDescriptor {
     public CommandCensorDescriptor() {
-        super(new HashSet<>(
+        super(new LinkedHashSet<>(
                 Arrays.asList(
                         new ListDescriptor(),
                         new AddDescriptor(),

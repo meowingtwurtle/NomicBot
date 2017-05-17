@@ -8,14 +8,14 @@ import com.srgood.reasons.impl.permissions.PermissionChecker;
 import com.srgood.reasons.impl.utils.GitUtils;
 
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Optional;
 
 import static com.srgood.reasons.impl.utils.GitUtils.localRepoExists;
 
 public class CommandGitDescriptor extends MultiTierCommandDescriptor {
     public CommandGitDescriptor() {
-        super(new HashSet<>(Arrays.asList(new InfoDescriptor(), new UpdateDescriptor())), "Manages the local git repo, if present", "<info | update>", Arrays.asList("git", "vcs"));
+        super(new LinkedHashSet<>(Arrays.asList(new InfoDescriptor(), new UpdateDescriptor())), "Manages the local git repo, if present", "<info | update>", Arrays.asList("git", "vcs"));
     }
 
     private static abstract class BaseExecutor extends ChannelOutputCommandExecutor {

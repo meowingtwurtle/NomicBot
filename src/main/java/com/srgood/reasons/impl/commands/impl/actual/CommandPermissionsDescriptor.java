@@ -12,7 +12,7 @@ import java.util.*;
 
 public class CommandPermissionsDescriptor extends MultiTierCommandDescriptor {
     public CommandPermissionsDescriptor() {
-        super(new HashSet<>(Arrays.asList(new ListDescriptor(), new SetDescriptor())), "Gets and modifies information about permissions for roles", "<list | set> <...>", Collections
+        super(new LinkedHashSet<>(Arrays.asList(new ListDescriptor(), new SetDescriptor())), "Gets and modifies information about permissions for roles", "<list | set> <...>", Collections
                 .singletonList("permissions"));
     }
 
