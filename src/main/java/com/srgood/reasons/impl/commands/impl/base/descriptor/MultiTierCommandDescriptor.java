@@ -3,6 +3,7 @@ package com.srgood.reasons.impl.commands.impl.base.descriptor;
 import com.srgood.reasons.commands.CommandDescriptor;
 import com.srgood.reasons.commands.CommandExecutionData;
 import com.srgood.reasons.commands.CommandExecutor;
+import com.srgood.reasons.impl.commands.CommandExecutionDataImpl;
 import com.srgood.reasons.impl.commands.impl.base.executor.EmptyCommandExecutor;
 
 import java.util.*;
@@ -44,7 +45,7 @@ public abstract class MultiTierCommandDescriptor extends BaseCommandDescriptor {
         List<String> oldParsedArguments = data.getParsedArguments();
         List<String> newParsedArguments = oldParsedArguments.subList(1, oldParsedArguments.size());
 
-        return new CommandExecutionData(data.getRawData(), data.getRawArguments(), newParsedArguments, data.getChannel(),
+        return new CommandExecutionDataImpl(data.getRawData(), data.getRawArguments(), newParsedArguments, data.getChannel(),
                 data.getGuild(), data.getSender(), data.getBotManager());
     }
 
