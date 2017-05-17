@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class CommandRolesDescriptor extends BaseCommandDescriptor {
     public CommandRolesDescriptor() {
-        super(Executor::new, "Performs operations with the censorlist of the current Guild", "<list | add | remove> <...>", Collections
+        super(Executor::new, "Lists the roles and their IDs in the current Guild", "<>", Collections
                 .singletonList("roles"));
     }
 
