@@ -1,6 +1,6 @@
 package com.srgood.reasons.impl;
 
-import java.awt.Color;
+import java.awt.*;
 
 public class Reference {
     public static final String TABLE_FLIP = "(\u256F\u00B0\u25A1\u00B0\uFF09\u256F\uFE35 \u253B\u2501\u253B";

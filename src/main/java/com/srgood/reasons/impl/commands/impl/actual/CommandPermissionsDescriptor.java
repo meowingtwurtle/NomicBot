@@ -8,7 +8,10 @@ import com.srgood.reasons.impl.permissions.*;
 import com.srgood.reasons.impl.utils.RoleUtils;
 import net.dv8tion.jda.core.entities.Role;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.Optional;
 
 public class CommandPermissionsDescriptor extends MultiTierCommandDescriptor {
     public CommandPermissionsDescriptor() {

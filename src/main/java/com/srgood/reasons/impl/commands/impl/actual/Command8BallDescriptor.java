@@ -1,6 +1,5 @@
 package com.srgood.reasons.impl.commands.impl.actual;
 
-import com.srgood.reasons.BotManager;
 import com.srgood.reasons.commands.CommandExecutionData;
 import com.srgood.reasons.impl.commands.impl.base.descriptor.BaseCommandDescriptor;
 import com.srgood.reasons.impl.commands.impl.base.executor.ChannelOutputCommandExecutor;
