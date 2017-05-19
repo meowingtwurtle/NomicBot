@@ -23,8 +23,6 @@ public class ImageUtils {
 
         Arrays.sort(categoryVotes);
         Arrays.sort(categoryNames);
-        //ArrayUtils.reverse(categoryVotes);
-        //ArrayUtils.reverse(categoryNames);
 
         float angle = (float) totalVotes / (float) categoryVotes.length;
         int shadowOffset = -8;

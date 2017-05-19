@@ -60,7 +60,8 @@ public class GuildPermissionSet implements Serializable {
                 return roleActionStatus == PermissionStatus.ALLOWED;
             }
         }
-        return rolePermissions.get(member.getGuild().getPublicRole().getId()).getActionStatus(action) == PermissionStatus.ALLOWED; // If no custom roles match, check everyone role
+        // If no custom roles match, check everyone role
+        return rolePermissions.get(member.getGuild().getPublicRole().getId()).getActionStatus(action) == PermissionStatus.ALLOWED;
     }
 
     private void checkRole(Role role) {

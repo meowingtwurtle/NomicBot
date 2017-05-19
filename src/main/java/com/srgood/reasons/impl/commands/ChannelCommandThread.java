@@ -31,7 +31,6 @@ public class ChannelCommandThread extends Thread {
     @Override
     public void run() {
         while (true) {
-            //if the commands get method returns true (see command.class)...
             for (int i = 0; i < commandDeque.size(); i++) {
                 Message message = commandDeque.getFirst();
                 try {
@@ -44,11 +43,9 @@ public class ChannelCommandThread extends Thread {
                     if (guildConfigManager
                                   .getCommandConfigManager(descriptor).isEnabled()) {
                         if (executor.shouldExecute()) {
-                            //then run the command and its post execution code (see command)
                             executor.execute();
                             executor.postExecution();
                         }
-                        // Otherwise do nothing
                     } else {
                         message.getChannel().sendMessage("This command is not enabled.").queue();
                     }

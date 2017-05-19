@@ -57,7 +57,6 @@ public class ConfigFileManager {
         try {
             Transformer xmlTransformer = TransformerFactory.newInstance().newTransformer();
             xmlTransformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            // Set indent amount
             xmlTransformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
             xmlTransformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
             xmlTransformer.setOutputProperty(OutputKeys.METHOD, "xml");
