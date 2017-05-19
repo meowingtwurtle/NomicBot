@@ -6,6 +6,7 @@ import com.srgood.reasons.impl.commands.CommandUtils;
 import com.srgood.reasons.impl.utils.CensorUtils;
 import com.srgood.reasons.impl.utils.GreetingUtils;
 import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.ReadyEvent;
 import net.dv8tion.jda.core.events.guild.GenericGuildEvent;
 import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
@@ -42,21 +43,24 @@ public class DiscordEventListener extends ListenerAdapter {
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
+        handleMessage(event.getMessage());
+    }
 
-        if (Objects.equals(event.getAuthor(), event.getJDA().getSelfUser())) return;
+    private void handleMessage(Message message) {
+        if (Objects.equals(message.getAuthor(), message.getJDA().getSelfUser())) return;
 
-        if (Objects.equals(event.getMessage().getContent(), Reference.TABLE_FLIP)) {
-            event.getChannel().sendMessage(Reference.TABLE_UNFLIP_JOKE).queue();
+        if (Objects.equals(message.getContent(), Reference.TABLE_FLIP)) {
+            message.getChannel().sendMessage(Reference.TABLE_UNFLIP_JOKE).queue();
         }
 
-        GuildConfigManager guildConfigManager = getGuildConfigManager(event.getGuild());
-        if (CommandUtils.isCommandMessage(event.getMessage(), guildConfigManager
+        GuildConfigManager guildConfigManager = getGuildConfigManager(message.getGuild());
+        if (CommandUtils.isCommandMessage(message, guildConfigManager
                                                                         .getPrefix())) {
-            botManager.getCommandManager().handleCommandMessage(event.getMessage());
-            botManager.getLogger().info("Got command message: " + event.getMessage().getContent());
+            botManager.getCommandManager().handleCommandMessage(message);
+            botManager.getLogger().info("Got command message: " + message.getContent());
         }
 
-        CensorUtils.checkCensor(CensorUtils.getGuildCensorList(guildConfigManager), event.getMessage());
+        CensorUtils.checkCensor(CensorUtils.getGuildCensorList(botManager.getConfigManager().getGuildConfigManager(message.getGuild())), message);
     }
 
     @Override
@@ -76,8 +80,7 @@ public class DiscordEventListener extends ListenerAdapter {
 
     @Override
     public void onGuildMessageUpdate(GuildMessageUpdateEvent event) {
-        GuildMessageReceivedEvent e = new GuildMessageReceivedEvent(event.getJDA(),event.getResponseNumber(),event.getMessage());
-        this.onGuildMessageReceived(e);
+        handleMessage(event.getMessage());
     }
 
     @Override
