@@ -19,21 +19,14 @@ public class GuildPermissionSet implements Serializable {
     }
 
     public void clean(JDA jda) {
-        if (jda.getGuildById(guildID) == null) throw new IllegalStateException("Associated Guild has been deleted");
         Guild guild = jda.getGuildById(guildID);
-        for (String roleID : rolePermissions.keySet()) {
-            if (guild.getRoleById(roleID) == null) {
-                rolePermissions.remove(roleID);
-            }
-        }
+        checkGuild(guild);
+
+        removeUnusedRoles(guild);
+
         for (Role role : guild.getRoles()) {
-            if (!rolePermissions.containsKey(role.getId())) {
-                if (!role.isPublicRole()) {
-                    rolePermissions.put(role.getId(), new BasicPermissionSet());
-                } else {
-                    rolePermissions.put(role.getId(), new BasicPermissionSet(PERMISSIBLE_ACTION_COLLECTION));
-                }
-            }
+            ensureRoleKnown(role);
+            setupNewPermissions(role);
         }
     }
 
@@ -64,6 +57,42 @@ public class GuildPermissionSet implements Serializable {
         return rolePermissions.get(member.getGuild().getPublicRole().getId()).getActionStatus(action) == PermissionStatus.ALLOWED;
     }
 
+    private void checkGuild(Guild guild) {
+        if (guild == null) throw new IllegalStateException("Associated Guild has been deleted");
+    }
+
+    private void removeUnusedRoles(Guild guild) {
+        for (String roleID : rolePermissions.keySet()) {
+            if (guild.getRoleById(roleID) == null) {
+                rolePermissions.remove(roleID);
+            }
+        }
+    }
+
+    private void ensureRoleKnown(Role role) {
+        if (!rolePermissions.containsKey(role.getId())) {
+            if (!role.isPublicRole()) {
+                rolePermissions.put(role.getId(), new BasicPermissionSet());
+            } else {
+                rolePermissions.put(role.getId(), new BasicPermissionSet(Collections.emptyList(), PERMISSIBLE_ACTION_COLLECTION));
+            }
+        }
+    }
+
+    private void setupNewPermissions(Role role) {
+        BasicPermissionSet rolePermissionSet = rolePermissions.get(role.getId());
+        Set<Permission> roleKnownPermissions = rolePermissionSet.getKnownPermissions();
+        for (Permission permission : PERMISSIBLE_ACTION_COLLECTION) {
+            if (!roleKnownPermissions.contains(permission)) {
+                if (!role.isPublicRole()) {
+                    rolePermissionSet.setActionStatus(permission, PermissionStatus.DEFERRED);
+                } else {
+                    rolePermissionSet.setActionStatus(permission, PermissionStatus.DENIED);
+                }
+            }
+        }
+    }
+
     private void checkRole(Role role) {
         if (role == null) {
             throw new IllegalArgumentException("Role cannot be null");
@@ -71,5 +100,7 @@ public class GuildPermissionSet implements Serializable {
         if (!Objects.equals(role.getGuild().getId(), guildID)) {
             throw new IllegalArgumentException("Role must be in same guild as registered");
         }
+
+        ensureRoleKnown(role);
     }
 }

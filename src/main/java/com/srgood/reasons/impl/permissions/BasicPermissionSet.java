@@ -13,8 +13,6 @@ public class BasicPermissionSet implements Serializable {
 
     private Map<Permission, PermissionStatus> permissionMap = new HashMap<>();
 
-
-
     public BasicPermissionSet(Collection<Permission> allowedActions) {
         this(allowedActions, null, null);
     }
@@ -85,6 +83,10 @@ public class BasicPermissionSet implements Serializable {
 
     public PermissionStatus getActionStatus(Permission action) {
         return permissionMap.get(action);
+    }
+
+    public Set<Permission> getKnownPermissions() {
+        return permissionMap.keySet();
     }
 
     public void setActionStatus(Permission action, PermissionStatus status) {
