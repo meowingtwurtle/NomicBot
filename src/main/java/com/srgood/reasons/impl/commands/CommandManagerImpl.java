@@ -13,6 +13,8 @@ import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import static com.srgood.reasons.impl.commands.CommandUtils.generatePossiblePrefixesForGuild;
+
 public class CommandManagerImpl implements CommandManager {
     private final Lock channelThreadMapLock = new ReentrantLock();
     private final Map<String, CommandDescriptor> commands = new TreeMap<>();
@@ -34,7 +36,7 @@ public class CommandManagerImpl implements CommandManager {
                 return;
             }
 
-            String calledCommand = CommandUtils.getCalledCommand(cmd, guildConfigManager.getPrefix());
+            String calledCommand = CommandUtils.getCalledCommand(cmd.getRawContent(), generatePossiblePrefixesForGuild(guildConfigManager, cmd.getGuild()));
             CommandDescriptor descriptor = getCommandByName(calledCommand);
             if (descriptor != null) {
                 if (guildConfigManager.getCommandConfigManager(descriptor).isEnabled()) {

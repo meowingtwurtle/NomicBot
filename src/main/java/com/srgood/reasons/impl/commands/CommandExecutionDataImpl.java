@@ -7,6 +7,8 @@ import net.dv8tion.jda.core.entities.*;
 import java.util.Collections;
 import java.util.List;
 
+import static com.srgood.reasons.impl.commands.CommandUtils.generatePossiblePrefixesForGuild;
+
 public class CommandExecutionDataImpl implements CommandExecutionData {
     private final String rawData;
     private final String rawArgs;
@@ -18,8 +20,10 @@ public class CommandExecutionDataImpl implements CommandExecutionData {
 
     public CommandExecutionDataImpl(Message message, BotManager botManager) {
         this(message.getRawContent(),
-                CommandUtils.getCommandMessageArgsSection(message, botManager.getConfigManager().getGuildConfigManager(message.getGuild()).getPrefix()),
-                CommandUtils.parseCommandMessageArguments(message, botManager.getConfigManager().getGuildConfigManager(message.getGuild()).getPrefix()),
+                CommandUtils.getCommandMessageArgsSection(message.getRawContent(),
+                        generatePossiblePrefixesForGuild(botManager.getConfigManager().getGuildConfigManager(message.getGuild()), message.getGuild())),
+                CommandUtils.parseCommandMessageArguments(message.getRawContent(),
+                        generatePossiblePrefixesForGuild(botManager.getConfigManager().getGuildConfigManager(message.getGuild()), message.getGuild())),
                 message.getChannel(),
                 message.getGuild(),
                 message.getAuthor(),

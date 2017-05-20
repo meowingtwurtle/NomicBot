@@ -12,6 +12,8 @@ import net.dv8tion.jda.core.entities.MessageChannel;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
+import static com.srgood.reasons.impl.commands.CommandUtils.generatePossiblePrefixesForGuild;
+
 public class ChannelCommandThread extends Thread {
 
     private MessageChannel channel;
@@ -36,7 +38,7 @@ public class ChannelCommandThread extends Thread {
                 try {
                     GuildConfigManager guildConfigManager = botManager.getConfigManager()
                                                                       .getGuildConfigManager(message.getGuild());
-                    String calledCommad = CommandUtils.getCalledCommand(message, guildConfigManager.getPrefix());
+                    String calledCommad = CommandUtils.getCalledCommand(message.getRawContent(), generatePossiblePrefixesForGuild(guildConfigManager, message.getGuild()));
                     CommandDescriptor descriptor = commandManager.getCommandByName(calledCommad);
                     CommandExecutionData executionData = new CommandExecutionDataImpl(message, botManager);
                     CommandExecutor executor = descriptor.getExecutor(executionData);

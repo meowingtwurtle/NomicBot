@@ -20,6 +20,8 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import java.util.Objects;
 
+import static com.srgood.reasons.impl.commands.CommandUtils.generatePossiblePrefixesForGuild;
+
 /**
  * <h1>DiscordEventListener</h1>
  * <p>
@@ -55,8 +57,7 @@ public class DiscordEventListener extends ListenerAdapter {
         }
 
         GuildConfigManager guildConfigManager = getGuildConfigManager(message.getGuild());
-        if (CommandUtils.isCommandMessage(message, guildConfigManager
-                                                                        .getPrefix())) {
+        if (CommandUtils.isCommandMessage(message.getRawContent(), generatePossiblePrefixesForGuild(guildConfigManager, message.getGuild()))) {
             botManager.getCommandManager().handleCommandMessage(message);
             botManager.getLogger().info("Got command message: " + message.getContent());
         }

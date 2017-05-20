@@ -1,51 +1,61 @@
 package com.srgood.reasons.impl.commands;
 
-import net.dv8tion.jda.core.entities.Message;
+import com.srgood.reasons.config.GuildConfigManager;
+import net.dv8tion.jda.core.entities.Guild;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 public class CommandUtils {
 
-    public static boolean isCommandMessage(Message message, String guildPrefix) {
-        String mention = message.getGuild().getSelfMember().getAsMention();
-        return message.getRawContent().startsWith(guildPrefix) ||
-                message.getRawContent().startsWith(mention);
+    public static String[] generatePossiblePrefixesForGuild(GuildConfigManager guildConfigManager, Guild guild) {
+        return new String[] { guildConfigManager.getPrefix(), guild.getSelfMember().getAsMention() };
     }
 
-    public static String getCommandMessageArgsSection(Message message, String guildPrefix) {
-        if (!isCommandMessage(message, guildPrefix)) {
+    public static boolean isCommandMessage(String content, String... potentialPrefixes) {
+        return Arrays.stream(potentialPrefixes).anyMatch(content::startsWith);
+    }
+
+    public static String getCommandMessageArgsSection(String content, String... potentialPrefixes) {
+        if (!isCommandMessage(content, potentialPrefixes)) {
             return null;
         }
-        String noPrefix = removeCommandMessagePrefix(message, guildPrefix);
-        String command = getCalledCommand(message, guildPrefix);
+        String noPrefix = removeCommandMessagePrefix(content, potentialPrefixes);
+        String command = getCalledCommand(content, potentialPrefixes);
         return noPrefix.substring(command.length());
     }
 
-    public static String getCalledCommand(Message message, String guildPrefix) {
-        if (!isCommandMessage(message, guildPrefix)) {
+    public static String getCalledCommand(String content, String... potentialPrefixes) {
+        if (!isCommandMessage(content, potentialPrefixes)) {
             return null;
         }
-        String noPrefix = removeCommandMessagePrefix(message, guildPrefix).trim();
+        String noPrefix = removeCommandMessagePrefix(content, potentialPrefixes).trim();
         return noPrefix.split("\\s")[0];
     }
 
-    public static String removeCommandMessagePrefix(Message message, String guildPrefix) {
-        if (!isCommandMessage(message, guildPrefix)) {
+    public static String removeCommandMessagePrefix(String content, String... potentialPrefixes) {
+        if (!isCommandMessage(content, potentialPrefixes)) {
             return null;
         }
-        String mention = message.getGuild().getSelfMember().getAsMention();
-        String rawContent = message.getRawContent();
-        String actualPrefix = rawContent.startsWith(guildPrefix) ? guildPrefix : mention;
-        return rawContent.substring(actualPrefix.length()).trim();
+
+        for (String prefix : potentialPrefixes) {
+            if (content.startsWith(prefix)) {
+                return content.substring(prefix.length()).trim();
+            }
+        }
+
+
+        // Just in case the laws of physics are rewritten
+        return null;
     }
 
-    public static List<String> parseCommandMessageArguments(Message message, String guildPrefix) {
-        if (!isCommandMessage(message, guildPrefix)) {
+    public static List<String> parseCommandMessageArguments(String content, String... potentialPrefixes) {
+        if (!isCommandMessage(content, potentialPrefixes)) {
             return Collections.emptyList();
         }
-        String argsOnly = getCommandMessageArgsSection(message, guildPrefix);
+        String argsOnly = getCommandMessageArgsSection(content, potentialPrefixes);
 
         boolean isEscaped = false;
         boolean inQuote = false;
