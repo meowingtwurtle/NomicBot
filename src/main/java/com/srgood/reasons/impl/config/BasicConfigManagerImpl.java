@@ -16,24 +16,33 @@ public class BasicConfigManagerImpl implements BasicConfigManager {
 
     @Override
     public String getProperty(String property, String defaultValue, boolean setIfMissing) {
-        Element propertyElement = parseProperty(property, setIfMissing);
+        Element propertyElement = parseProperty(property, setIfMissing, defaultValue);
         if (propertyElement == null) {
             return defaultValue;
         }
         return propertyElement.getTextContent();
     }
 
-    private Element parseProperty(String property, boolean createIfMissing) {
+    private Element parseProperty(String property, boolean createIfMissing, String missingValue) {
         Element currentBaseElement = operationalElement;
-        for (String propertyPart : property.split("/")) {
+        String[] split = property.split("/");
+        for (int i = 0; i < split.length; i++) {
+            String propertyPart = split[i];
             final Element finalBaseElement = currentBaseElement;
-            currentBaseElement = ConfigUtils.getDirectDescendants(currentBaseElement, propertyPart).findFirst().orElseGet(() -> {
-                if (createIfMissing) {
-                    return ConfigUtils.createChild(finalBaseElement, propertyPart);
-                } else {
-                    return null;
-                }
-            });
+            final int finalI = i;
+            currentBaseElement = ConfigUtils.getDirectDescendants(currentBaseElement, propertyPart)
+                                            .findFirst()
+                                            .orElseGet(() -> {
+                                                if (createIfMissing) {
+                                                    Element newChild = ConfigUtils.createChild(finalBaseElement, propertyPart);
+                                                    if (finalI == split.length - 1) {
+                                                        newChild.setTextContent(missingValue);
+                                                    }
+                                                    return newChild;
+                                                } else {
+                                                    return null;
+                                                }
+                                            });
             if (currentBaseElement == null) {
                 return null;
             }
@@ -44,7 +53,7 @@ public class BasicConfigManagerImpl implements BasicConfigManager {
     @Override
     public void setProperty(String property, String value) {
         //noinspection ConstantConditions Because we create if missing, we will always get a non-null Element.
-        parseProperty(property, true).setTextContent(value);
+        parseProperty(property, true, "").setTextContent(value);
     }
 
     @Override
