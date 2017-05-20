@@ -20,7 +20,7 @@ public class BasicConfigManagerImpl implements BasicConfigManager {
         if (propertyElement == null) {
             return defaultValue;
         }
-        return propertyElement.getTextContent();
+        return propertyElement.getTextContent().trim();
     }
 
     private Element parseProperty(String property, boolean createIfMissing, String missingValue) {
