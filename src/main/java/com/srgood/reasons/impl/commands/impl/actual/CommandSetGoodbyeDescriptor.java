@@ -11,8 +11,6 @@ import com.srgood.reasons.impl.utils.GreetingUtils;
 import java.util.Optional;
 
 public class CommandSetGoodbyeDescriptor extends BaseCommandDescriptor {
-    private static CommandSetGoodbyeDescriptor INSTANCE;
-
     public CommandSetGoodbyeDescriptor() {
         super(Executor::new, "Sets the goodbye message for the Guild, which will be sent in the current Channel. Set it to OFF to disable. Use @USER to mention the leaving user", "<message>", "setgoodbye");
     }
@@ -29,7 +27,7 @@ public class CommandSetGoodbyeDescriptor extends BaseCommandDescriptor {
             GuildConfigManager guildConfigManager = executionData.getBotManager().getConfigManager()
                                                                                        .getGuildConfigManager(executionData.getGuild());
 
-            guildConfigManager.getCommandConfigManager(INSTANCE).setProperty(GreetingUtils.formatPropertyName("goodbye"), message);
+            guildConfigManager.setProperty(GreetingUtils.formatPropertyName("goodbye"), message);
             guildConfigManager.setProperty(GreetingUtils.formatPropertyName("goodbyechannel"),
                     executionData.getChannel().getId());
 
