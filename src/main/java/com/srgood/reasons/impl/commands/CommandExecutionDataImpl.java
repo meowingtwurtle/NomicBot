@@ -10,6 +10,7 @@ import java.util.List;
 import static com.srgood.reasons.impl.commands.CommandUtils.generatePossiblePrefixesForGuild;
 
 public class CommandExecutionDataImpl implements CommandExecutionData {
+    private final Message message;
     private final String rawData;
     private final String rawArgs;
     private final List<String> parsedArguments;
@@ -19,7 +20,7 @@ public class CommandExecutionDataImpl implements CommandExecutionData {
     private final BotManager botManager;
 
     public CommandExecutionDataImpl(Message message, BotManager botManager) {
-        this(message.getRawContent(),
+        this(message, message.getRawContent(),
                 CommandUtils.getCommandMessageArgsSection(message.getRawContent(),
                         generatePossiblePrefixesForGuild(botManager.getConfigManager().getGuildConfigManager(message.getGuild()), message.getGuild())),
                 CommandUtils.parseCommandMessageArguments(message.getRawContent(),
@@ -30,11 +31,12 @@ public class CommandExecutionDataImpl implements CommandExecutionData {
                 botManager);
     }
 
-    public CommandExecutionDataImpl(String rawData, String rawArgs, List<String> parsedArguments, MessageChannel channel, Guild guild, User sender, BotManager botManager) {
-        this(rawData, rawArgs, parsedArguments, channel, guild, guild.getMember(sender), botManager);
+    public CommandExecutionDataImpl(Message message, String rawData, String rawArgs, List<String> parsedArguments, MessageChannel channel, Guild guild, User sender, BotManager botManager) {
+        this(message, rawData, rawArgs, parsedArguments, channel, guild, guild.getMember(sender), botManager);
     }
 
-    public CommandExecutionDataImpl(String rawData, String rawArgs, List<String> parsedArguments, MessageChannel channel, Guild guild, Member sender, BotManager botManager) {
+    public CommandExecutionDataImpl(Message message, String rawData, String rawArgs, List<String> parsedArguments, MessageChannel channel, Guild guild, Member sender, BotManager botManager) {
+        this.message = message;
         this.rawData = rawData;
         this.rawArgs = rawArgs;
         this.parsedArguments = parsedArguments;
@@ -44,6 +46,10 @@ public class CommandExecutionDataImpl implements CommandExecutionData {
         this.botManager = botManager;
     }
 
+    @Override
+    public Message getMessage() {
+        return message;
+    }
 
     @Override public String getRawData() {
         return rawData;
