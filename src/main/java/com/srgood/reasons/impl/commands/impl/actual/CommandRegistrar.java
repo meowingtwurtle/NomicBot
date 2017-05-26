@@ -13,10 +13,12 @@ public class CommandRegistrar {
         commandManager.registerCommand(new CommandDisableDescriptor());
         commandManager.registerCommand(new CommandEnableDescriptor());
         commandManager.registerCommand(new CommandEvalDescriptor());
+        commandManager.registerCommand(new CommandExportDescriptor());
         commandManager.registerCommand(new CommandGetEnabledDescriptor());
         commandManager.registerCommand(new CommandGetPrefixDescriptor());
         commandManager.registerCommand(new CommandGitDescriptor());
         commandManager.registerCommand(new CommandHelpDescriptor());
+        commandManager.registerCommand(new CommandImportDescriptor());
         commandManager.registerCommand(new CommandInfoDescriptor());
         commandManager.registerCommand(new CommandInviteDescriptor());
         commandManager.registerCommand(new CommandNotifyRandDescriptor());
