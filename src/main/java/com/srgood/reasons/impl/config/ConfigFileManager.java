@@ -1,6 +1,7 @@
 package com.srgood.reasons.impl.config;
 
 import com.google.common.io.Files;
+import com.srgood.reasons.impl.Reference;
 import org.w3c.dom.Document;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -13,7 +14,6 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 public class ConfigFileManager {
@@ -44,7 +44,7 @@ public class ConfigFileManager {
     public void save() {
         checkState();
         try {
-            Files.write(generateXML(), new File(fileName), StandardCharsets.UTF_8);
+            Files.write(generateXML(), new File(fileName), Reference.FILE_CHARSET);
         } catch (IOException e) {
             System.err.println("Exception when writing config: ");
             e.printStackTrace();

@@ -1,9 +1,9 @@
 package com.srgood.reasons.impl.commands.impl.actual;
 
-import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import com.srgood.reasons.commands.CommandDescriptor;
 import com.srgood.reasons.commands.CommandExecutionData;
+import com.srgood.reasons.impl.Reference;
 import com.srgood.reasons.impl.commands.impl.base.descriptor.BaseCommandDescriptor;
 import com.srgood.reasons.impl.commands.impl.base.executor.ChannelOutputCommandExecutor;
 import com.srgood.reasons.impl.permissions.GuildPermissionSet;
@@ -117,7 +117,7 @@ public class CommandImportDescriptor extends BaseCommandDescriptor {
                 tempFile.deleteOnExit();
 
                 attachment.download(tempFile);
-                encrypted = Files.readFirstLine(tempFile, Charsets.US_ASCII);
+                encrypted = Files.readFirstLine(tempFile, Reference.FILE_CHARSET);
 
                 ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(Base64.getDecoder().decode(encrypted));
                 ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);

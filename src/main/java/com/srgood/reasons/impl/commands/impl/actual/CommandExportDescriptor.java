@@ -1,6 +1,5 @@
 package com.srgood.reasons.impl.commands.impl.actual;
 
-import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import com.srgood.reasons.commands.CommandDescriptor;
 import com.srgood.reasons.commands.CommandExecutionData;
@@ -54,7 +53,7 @@ public class CommandExportDescriptor extends BaseCommandDescriptor {
                 File file = File.createTempFile("THETA_BACKUP_GUILD_" + executionData.getGuild().getId(), ".txt");
                 String rawOutput = output.toString();
                 String fakeEncryptedOutput = encrypt(rawOutput);
-                Files.write(fakeEncryptedOutput, file, Charsets.US_ASCII);
+                Files.write(fakeEncryptedOutput, file, Reference.FILE_CHARSET);
                 executionData.getChannel().sendFile(file, new MessageBuilder().append("Output file generated.").build()).queue();
             } catch (Exception e) {
                 sendOutput("Internal I/O error, could not generate temp file.");

@@ -1,6 +1,8 @@
 package com.srgood.reasons.impl;
 
 import java.awt.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 public class Reference {
     public static final String TABLE_FLIP = "(\u256F\u00B0\u25A1\u00B0\uFF09\u256F\uFE35 \u253B\u2501\u253B";
@@ -25,6 +27,8 @@ public class Reference {
     public static final int VOTE_IMAGE_WIDTH = 800;
     public static final int VOTE_IMAGE_HEIGHT = 600;
 
+    public static final Charset FILE_CHARSET = StandardCharsets.US_ASCII;
+
     public static final java.util.List<String> BOT_DEVELOPERS = java.util.Collections.unmodifiableList(new java.util.ArrayList<String>() {
         {
             add("138048665112543233"); // srgood
@@ -32,4 +36,5 @@ public class Reference {
             add("181061030799998977"); // HiItsMe
         }
     });
+
 }
