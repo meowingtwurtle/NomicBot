@@ -17,6 +17,8 @@ import java.io.StringWriter;
 import java.util.Objects;
 
 public class ConfigFileManager {
+    private static final String DEFAULT_FILE_CONTENT = "<theta />";
+
     private final String fileName;
 
     private boolean parseCompleted = false;
@@ -28,7 +30,12 @@ public class ConfigFileManager {
 
     public ConfigFileManager parse() {
         try {
-            parsedDocument = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new File(fileName));
+            File file = new File(fileName);
+            if (!file.exists()) {
+                file.createNewFile();
+                Files.write(DEFAULT_FILE_CONTENT, file, Reference.FILE_CHARSET);
+            }
+            parsedDocument = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file);
             parseCompleted = true;
             return this;
         } catch (Exception e) {
