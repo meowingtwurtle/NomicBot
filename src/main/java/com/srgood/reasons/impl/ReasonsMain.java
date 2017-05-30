@@ -32,32 +32,6 @@ public class ReasonsMain implements BotManager {
     private final BotConfigManager configManager = new BotConfigManagerImpl(configFileManager);
     private final Logger logger = Logger.getLogger("Theta");
 
-    {
-        Formatter loggerFormatter = new Formatter() {
-            @Override
-            public String format(LogRecord record) {
-                ZonedDateTime dateTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli(record.getMillis()), ZoneOffset.systemDefault());
-                DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-                return String.format("[%s] [%s] [%s]: %s %n", dateFormatter.format(dateTime), StringUtils.capitalize(record.getLevel().toString().toLowerCase()), record.getLoggerName(), record.getMessage());
-            }
-        };
-
-        logger.setUseParentHandlers(false);
-
-        StreamHandler streamHandler = new StreamHandler(System.out, loggerFormatter) {
-            @Override
-            public synchronized void publish(LogRecord record) {
-                super.publish(record);
-                super.flush();
-            }
-        };
-        streamHandler.flush();
-
-        logger.addHandler(streamHandler);
-
-        logger.setLevel(Level.FINEST);
-    }
-
     public JDA getJda() {
         return jda;
     }
@@ -78,8 +52,39 @@ public class ReasonsMain implements BotManager {
 
     @Override
     public void init(String token) {
+        initLogger();
+        getLogger().info("Logger initialized.");
+        getLogger().info("Initializing JDA.");
         initJDA(token);
+        getLogger().info("JDA initialized.");
+        getLogger().info("Initializing commands.");
         initCommands();
+        getLogger().info("Commands initialized.");
+        getLogger().info("Bot initialized. Ready to receive commands.");
+    }
+
+    private void initLogger() {
+        Formatter loggerFormatter = new Formatter() {
+            @Override
+            public String format(LogRecord record) {
+                ZonedDateTime dateTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli(record.getMillis()), ZoneOffset.systemDefault());
+                DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+                return String.format("[%s] [%s] [%s]: %s %n", dateFormatter.format(dateTime), StringUtils.capitalize(record.getLevel().toString().toLowerCase()), record.getLoggerName(), record.getMessage());
+            }
+        };
+
+        StreamHandler streamHandler = new StreamHandler(System.out, loggerFormatter) {
+            @Override
+            public synchronized void publish(LogRecord record) {
+                super.publish(record);
+                super.flush();
+            }
+        };
+        streamHandler.flush();
+
+        logger.setUseParentHandlers(false);
+        logger.addHandler(streamHandler);
+        logger.setLevel(Level.ALL);
     }
 
     private void initJDA(String token) {
