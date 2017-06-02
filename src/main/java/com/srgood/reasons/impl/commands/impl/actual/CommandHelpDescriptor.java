@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class CommandHelpDescriptor extends BaseCommandDescriptor {
     public CommandHelpDescriptor() {
-        super(Executor::new, "Provides information about all commands", "<>", "help");
+        super(Executor::new, "Provides information about all commands if no arguments are given, otherwise only the commands given as arguments.", "{command} {...}", "help");
     }
 
     private static class Executor extends DMOutputCommandExecutor {
