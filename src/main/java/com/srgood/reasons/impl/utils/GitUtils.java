@@ -78,7 +78,11 @@ public class GitUtils {
 
     private static void generateRepository() {
         try {
-            repository = new FileRepositoryBuilder().readEnvironment().findGitDir().setMustExist(true).build();
+            FileRepositoryBuilder repositoryBuilder = new FileRepositoryBuilder().readEnvironment().findGitDir();
+            if (repositoryBuilder.getGitDir() == null) {
+                return; // Not in a repo, just give up. Life's over... WHY SHOULD THE METHOD GO ON? I'M ENDING IT HERE!
+            }
+            repository = repositoryBuilder.setMustExist(true).build();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
