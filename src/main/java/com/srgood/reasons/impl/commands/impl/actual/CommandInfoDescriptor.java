@@ -9,6 +9,8 @@ import com.srgood.reasons.impl.utils.GitUtils;
 import java.util.Arrays;
 import java.util.Optional;
 
+import static com.srgood.reasons.impl.Reference.LIBRARIES;
+
 public class CommandInfoDescriptor extends BaseCommandDescriptor {
     public CommandInfoDescriptor() {
         super(Executor::new, "Returns information about the bot, including the current version","<>", Arrays.asList("info", "version", "about"));
@@ -23,7 +25,7 @@ public class CommandInfoDescriptor extends BaseCommandDescriptor {
         public void execute() {
             StringBuilder stringBuilder = new StringBuilder();
 
-            stringBuilder.append(String.format("The current version is: %s%n%s", Reference.VERSION, Reference.CREDITS));
+            stringBuilder.append(String.format("The current version is: %s%n%s", Reference.VERSION, getLibrariesText()));
 
             String lineSep = System.lineSeparator();
             Optional<String> branchOptional = GitUtils.getCurrentBranch();
@@ -33,6 +35,20 @@ public class CommandInfoDescriptor extends BaseCommandDescriptor {
             commitOptional.ifPresent(commit -> stringBuilder.append(lineSep).append(String.format("Local repo is on commit **`%s`**", commit)));
 
             sendOutput(stringBuilder.toString());
+        }
+
+        private String getLibrariesText() {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("**```Markdown\n");
+            stringBuilder.append("LIBRARIES USED:\n");
+            for (int i = 0; i < LIBRARIES.size(); i++) {
+                stringBuilder.append(i + 1);
+                stringBuilder.append(". ");
+                stringBuilder.append(LIBRARIES.get(i));
+                stringBuilder.append("\n");
+            }
+            stringBuilder.append("```**");
+            return stringBuilder.toString();
         }
     }
 }

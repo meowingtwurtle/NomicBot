@@ -1,8 +1,11 @@
 package com.srgood.reasons.impl;
 
-import java.awt.*;
+import java.awt.Color;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class Reference {
     public static final String TABLE_FLIP = "(\u256F\u00B0\u25A1\u00B0\uFF09\u256F\uFE35 \u253B\u2501\u253B";
@@ -13,7 +16,12 @@ public class Reference {
     //see http://stackoverflow.com/questions/396429/how-do-you-know-what-version-number-to-use
 
     public static final String VERSION = "2.0.0";
-    public static final String CREDITS = "***LIBRARIES USED:***\n\t - **Reflections (https://github.com/ronmamo/reflections)**\n\t - **JDA (https://github.com/DV8FromTheWorld/JDA)**\n\t - **ffmpeg (https://www.ffmpeg.org)**\n\t - **ffprobe (https://www.ffmpeg.org)**\n\t - **youtube-dl (https://rg3.github.io/youtube-dl)**";
+    public static final List<String> LIBRARIES = Collections.unmodifiableList(Arrays.asList(
+            "JDA (https://github.com/DV8FromTheWorld/JDA)",
+            "JGit (https://eclipse.org/jgit/)",
+            "Google Guava (https://github.com/google/guava)"
+    ));
+
     public static final String INVITE_LINK = "https://discordapp.com/oauth2/authorize?client_id=201810822131875840&scope=bot&permissions=0x8";
 
     public static final Color[] COLORS = {
@@ -29,12 +37,9 @@ public class Reference {
 
     public static final Charset FILE_CHARSET = StandardCharsets.US_ASCII;
 
-    public static final java.util.List<String> BOT_DEVELOPERS = java.util.Collections.unmodifiableList(new java.util.ArrayList<String>() {
-        {
-            add("138048665112543233"); // srgood
-            add("164117897025683456"); // MeowingTwurtle
-            add("181061030799998977"); // HiItsMe
-        }
-    });
-
+    public static final List<String> BOT_DEVELOPERS = java.util.Collections.unmodifiableList(Arrays.asList(
+            "138048665112543233", // srgood
+            "164117897025683456", // MeowingTwurtle
+            "181061030799998977" // HiItsMe
+    ));
 }
