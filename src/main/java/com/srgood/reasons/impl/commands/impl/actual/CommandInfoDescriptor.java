@@ -24,7 +24,7 @@ public class CommandInfoDescriptor extends BaseCommandDescriptor {
         public void execute() {
             StringBuilder stringBuilder = new StringBuilder();
 
-            stringBuilder.append(String.format("The current version is: %s%n%s", Reference.VERSION, getLibrariesText()));
+            stringBuilder.append(String.format("The current version is: %s%n%s", Reference.VERSION_SUPPLIER.get(), getLibrariesText()));
 
             String lineSep = System.lineSeparator();
             Optional<String> branchOptional = GitUtils.getCurrentBranch();

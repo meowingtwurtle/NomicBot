@@ -1,5 +1,7 @@
 package com.srgood.reasons.impl;
 
+import com.srgood.reasons.impl.utils.GitUtils;
+
 import java.awt.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -7,6 +9,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Supplier;
 
 public class Reference {
     public static final String TABLE_FLIP = "(\u256F\u00B0\u25A1\u00B0\uFF09\u256F\uFE35 \u253B\u2501\u253B";
@@ -16,7 +19,7 @@ public class Reference {
     public static final String[] EIGHT_BALL = {"It is certain","It is decidedly so","Without a doubt","Yes, definitely","You may rely on it","As I see it, yes","Most likely","Outlook good","Yes","Signs point to yes","Reply hazy try again","Ask again later","Better not tell you now","Cannot predict now","Concentrate and ask again","Dount count on it","My reply is no","My sources say no","Outlook not so good","Very doubtful"};
     //see http://stackoverflow.com/questions/396429/how-do-you-know-what-version-number-to-use
 
-    public static final String VERSION = "2.0.0";
+    public static final Supplier<String> VERSION_SUPPLIER = () -> GitUtils.getCurrentRevision().orElse("unknown (not in a Git repository)");
     public static final List<String> LIBRARIES = Collections.unmodifiableList(Arrays.asList(
             "JDA (https://github.com/DV8FromTheWorld/JDA)",
             "JGit (https://eclipse.org/jgit/)",
