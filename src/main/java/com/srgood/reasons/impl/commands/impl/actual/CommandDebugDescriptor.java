@@ -9,19 +9,17 @@ import net.dv8tion.jda.core.entities.Role;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
 import java.util.Optional;
+import java.util.Set;
 
 public class CommandDebugDescriptor extends MultiTierCommandDescriptor {
     private static final boolean ALLOW_DEBUG = true;
 
     public CommandDebugDescriptor() {
-        super(new LinkedHashSet<>(
-              Arrays.asList(
+        super(Set.of(
                         new DeleteGuildDescriptor(),
                         new RemoveRolesDescriptor(),
-                        new UptimeDescriptor())),
+                        new UptimeDescriptor()),
               "FOR DEBUG ONLY",
               "<deleteguild | removeroles | uptime>",
               false,

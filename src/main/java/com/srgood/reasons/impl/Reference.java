@@ -5,8 +5,6 @@ import com.srgood.reasons.impl.utils.GitUtils;
 import java.awt.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Supplier;
@@ -20,11 +18,10 @@ public class Reference {
     //see http://stackoverflow.com/questions/396429/how-do-you-know-what-version-number-to-use
 
     public static final Supplier<String> VERSION_SUPPLIER = () -> GitUtils.getCurrentRevision().orElse("unknown (not in a Git repository)");
-    public static final List<String> LIBRARIES = Collections.unmodifiableList(Arrays.asList(
+    public static final List<String> LIBRARIES = List.of(
             "JDA (https://github.com/DV8FromTheWorld/JDA)",
             "JGit (https://eclipse.org/jgit/)",
-            "Google Guava (https://github.com/google/guava)"
-    ));
+            "Google Guava (https://github.com/google/guava)");
 
     public static final Color[] COLORS = {
             new Color(58, 96, 110),
@@ -39,11 +36,10 @@ public class Reference {
 
     public static final Charset FILE_CHARSET = StandardCharsets.US_ASCII;
 
-    public static final List<String> BOT_DEVELOPERS = java.util.Collections.unmodifiableList(Arrays.asList(
+    public static final List<String> BOT_DEVELOPERS = List.of(
             "138048665112543233", // srgood
             "164117897025683456", // MeowingTwurtle
-            "181061030799998977" // HiItsMe
-    ));
+            "181061030799998977"); // HiItsMe
 
     public static final Random GLOBAL_RANDOM = new Random();
 }
