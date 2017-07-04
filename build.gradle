@@ -7,7 +7,7 @@ mainClassName = 'com.srgood.reasons.impl.ReasonsMain'
 
 description = """The Theta Discord Bot"""
 
-JavaVersion javaVersion = JavaVersion.VERSION_1_8
+JavaVersion javaVersion = JavaVersion.VERSION_1_9
 
 sourceCompatibility = javaVersion
 targetCompatibility = javaVersion
