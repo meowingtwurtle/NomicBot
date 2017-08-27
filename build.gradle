@@ -8,11 +8,12 @@ allprojects {
                 Math         : 'com.github.meowingtwurtle:mathParser:1.0.1',
                 JGit         : 'org.eclipse.jgit:org.eclipse.jgit:4.7.0.201704051617-r',
                 NoOpLogger   : 'org.slf4j:slf4j-nop:1.7.2',
+                HSQLDB       : 'org.hsqldb:hsqldb:2.4.0',
                 ApacheCommons: 'org.apache.commons:commons-lang3:3.6',
-                ThetaAPI     : project(':theta-api'),
-                ThetaBase    : project(':theta-base'),
-                ThetaCommands: project(':theta-commands'),
-                ThetaRunner  : project(':theta-runner')
+                ThetaAPI     : project(':nomic-api'),
+                ThetaBase    : project(':nomic-base'),
+                ThetaCommands: project(':nomic-commands'),
+                ThetaRunner  : project(':nomic-runner')
         ]
     }
 

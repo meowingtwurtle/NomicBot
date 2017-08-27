@@ -1,6 +1,6 @@
 rootProject.name = 'nomicbot'
-include 'theta-api'
-include 'theta-base'
-include 'theta-commands'
-include 'theta-runner'
+include 'nomic-api'
+include 'nomic-base'
+include 'nomic-commands'
+include 'nomic-runner'
 

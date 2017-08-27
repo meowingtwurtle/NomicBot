@@ -1,0 +1,10 @@
+dependencies {
+    compile botDependencies['ThetaAPI']
+    compile botDependencies['ThetaBase']
+    compile botDependencies['JDA']
+    compile botDependencies['Math']
+    compile botDependencies['JGit']
+    compile botDependencies['Guava']
+    compile botDependencies['HSQLDB']
+    compile botDependencies['ApacheCommons']
+}
