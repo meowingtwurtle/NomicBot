@@ -66,7 +66,7 @@ public class CommandHelpDescriptor extends BaseCommandDescriptor {
             String primaryName = command.getPrimaryName();
             String regexLine = !Objects.equals(command.getNameRegex(), "(" + command.getPrimaryName() + ")") ? ". Matched on Regex: \"" + command.getNameRegex() + "\"" : "";
             String format = String.format("[%s \"%s\"](%s%s)", primaryName, command.help().args(), command.help()
-                                                                                                            .description(), regexLine);
+                                                                                                          .description(), regexLine);
             ret.add(format);
             if (command.hasSubCommands()) {
                 for (CommandDescriptor subCommand : command.getSubCommands()) {
