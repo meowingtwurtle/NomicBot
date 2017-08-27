@@ -5,14 +5,11 @@ import com.srgood.reasons.BotManager;
 import com.srgood.reasons.commands.CommandDescriptor;
 import com.srgood.reasons.commands.CommandExecutionData;
 import com.srgood.reasons.commands.CommandExecutor;
-import com.srgood.reasons.config.GuildConfigManager;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-
-import static com.srgood.reasons.impl.base.commands.CommandUtils.generatePossiblePrefixesForGuild;
 
 public class ChannelCommandThread extends Thread {
 
@@ -36,20 +33,13 @@ public class ChannelCommandThread extends Thread {
             for (int i = 0; i < commandDeque.size(); i++) {
                 Message message = commandDeque.getFirst();
                 try {
-                    GuildConfigManager guildConfigManager = botManager.getConfigManager()
-                                                                      .getGuildConfigManager(message.getGuild());
-                    String calledCommad = CommandUtils.getCalledCommand(message.getRawContent(), generatePossiblePrefixesForGuild(guildConfigManager, message.getGuild()));
+                    String calledCommad = CommandUtils.getCalledCommand(message.getRawContent(), "");
                     CommandDescriptor descriptor = commandManager.getCommandByName(calledCommad);
                     CommandExecutionData executionData = new CommandExecutionDataImpl(message, botManager);
                     CommandExecutor executor = descriptor.getExecutor(executionData);
-                    if (guildConfigManager
-                                  .getCommandConfigManager(descriptor).isEnabled()) {
-                        if (executor.shouldExecute()) {
-                            executor.execute();
-                            executor.postExecution();
-                        }
-                    } else {
-                        message.getChannel().sendMessage("This command is not enabled.").queue();
+                    if (executor.shouldExecute()) {
+                        executor.execute();
+                        executor.postExecution();
                     }
                 } catch (Exception e) {
                     message.getChannel().sendMessage("A ***FATAL*** exception occurred ( `" + e.getMessage()+ "` ) , please notify us. If possible, store the date and time.").queue();

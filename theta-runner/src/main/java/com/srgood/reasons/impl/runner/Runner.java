@@ -24,10 +24,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 import java.util.logging.*;
 
-import static com.srgood.reasons.impl.runner.MessageReceivedPredicates.LISTENING_IN_CHANNEL;
-import static com.srgood.reasons.impl.runner.MessageReceivedPredicates.NOT_BLACKLISTED;
-import static com.srgood.reasons.impl.runner.MessageReceivedPredicates.NOT_BOT_SENDER;
-
 public class Runner {
     public static void main(String[] args) {
         String token = getToken(args);
@@ -49,7 +45,7 @@ public class Runner {
 
     private static JDA createJDA(String token, Logger logger, Future<BotManager> botManagerFuture) {
         try {
-            return new JDABuilder(AccountType.BOT).addEventListener(new DiscordEventListener(botManagerFuture, List.of(NOT_BOT_SENDER, LISTENING_IN_CHANNEL, NOT_BLACKLISTED))) // TODO Add messageChecks for eventlistener
+            return new JDABuilder(AccountType.BOT).addEventListener(new DiscordEventListener(botManagerFuture, List.of())) // TODO Add messageChecks for eventlistener
                                                   .setToken(token)
                                                   .setGame(Game.of("Type @Theta help"))
                                                   .setAutoReconnect(true)

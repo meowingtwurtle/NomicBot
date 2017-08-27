@@ -1,4 +1,4 @@
-rootProject.name = 'theta'
+rootProject.name = 'nomicbot'
 include 'theta-api'
 include 'theta-base'
 include 'theta-commands'
