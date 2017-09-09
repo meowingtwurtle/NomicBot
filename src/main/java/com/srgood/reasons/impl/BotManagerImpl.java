@@ -79,7 +79,7 @@ public class BotManagerImpl implements BotManager {
         checkActive();
 
         configFileManager.save();
-        jda.shutdown(false);
+        jda.shutdown();
 
         clearFields();
     }
