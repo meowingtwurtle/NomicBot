@@ -2,6 +2,7 @@ package com.srgood.reasons.impl.commands.nomic;
 
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.MessageBuilder;
+import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.exceptions.ErrorResponseException;
 import org.apache.commons.lang3.tuple.Pair;
@@ -143,6 +144,7 @@ public class MessageUtil {
         formatProposalEmbedDescription(proposal, builder);
         formatProposalStatusEmbedFields(proposal, builder);
         formatProposalVoteEmbedFields(proposal, builder);
+        formatProposalProposerInfo(proposal, builder);
         return builder;
     }
 
@@ -178,8 +180,35 @@ public class MessageUtil {
     }
 
     private static void formatProposalVoteEmbedFields(Proposal proposal, EmbedBuilder builder) {
-        builder.addField("Yea Votes", "Count: " + proposal.getYeaVoteCount(), true);
-        builder.addField("Nay Votes", "Count: " + proposal.getNayVoteCount(), true);
+        String yeaVoters = DBUtil.getVotersByVoteType(proposal.getNumber(), VoteType.YEA)
+                                 .stream()
+                                 .map(id -> {
+                                     Member member = getProposalsChannel().getGuild().getMemberById(id);
+                                     if (member != null) {
+                                         return member.getAsMention();
+                                     }
+                                     return "User ID " + id;
+                                 })
+                                 .collect(Collectors.joining("\n"));
+        String nayVoters = DBUtil.getVotersByVoteType(proposal.getNumber(), VoteType.NAY)
+                                 .stream()
+                                 .map(id -> {
+                                     Member member = getProposalsChannel().getGuild().getMemberById(id);
+                                     if (member != null) {
+                                         return member.getAsMention();
+                                     }
+                                     return "User ID " + id;
+                                 })
+                                 .collect(Collectors.joining("\n"));
+
+        builder.addField("Yea Votes", "Count: " + proposal.getYeaVoteCount() + "\n" + yeaVoters, true);
+        builder.addField("Nay Votes", "Count: " + proposal.getNayVoteCount() + "\n" + nayVoters, true);
+    }
+
+    private static void formatProposalProposerInfo(Proposal proposal, EmbedBuilder builder) {
+        Member proposer = JDAUtil.getNomicGuild().getMemberById(proposal.getProposerID());
+        String avatarUrl = proposer.getUser().getAvatarUrl();
+        builder.setFooter("Proposed by " + proposer.getEffectiveName(), avatarUrl != null ? avatarUrl : proposer.getUser().getDefaultAvatarUrl());
     }
 
     private static Message formatInitialRuleProposal(Proposal proposal) {
