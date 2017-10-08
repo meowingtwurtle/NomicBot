@@ -46,7 +46,7 @@ public class Runner {
 
     private static JDA createJDA(String token, Logger logger, Future<BotManager> botManagerFuture) {
         try {
-            JDA jda = new JDABuilder(AccountType.BOT).addEventListener(new DiscordEventListener(botManagerFuture, List.of()), new EmoteEventListener()) // TODO Add messageChecks for eventlistener
+            JDA jda = new JDABuilder(AccountType.BOT).addEventListener(new DiscordEventListener(botManagerFuture, List.of()), new EmoteEventListener(), new MemberLeaveEventListener()) // TODO Add messageChecks for eventlistener
                                                      .setToken(token)
                                                      .setGame(Game.of("DM me \"help\""))
                                                      .setAutoReconnect(true)
